@@ -1,0 +1,56 @@
+---
+name:  partial
+title: Partial Correlation
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+
+    - name: matrix
+      title: Correlation Matrix
+      type: Table
+      description: correlation matrix table
+      rows: (vars)
+      clearWith:
+          - shwSig
+          - sidSig
+      refs: cormatrix    
+
+      columns:
+          - name: .name[r]
+            title: ""
+            type: text
+            content: ($key)
+            combineBelow: true
+
+          - name: .stat[r]
+            title: ""
+            type: text
+            content: r
+
+          - name: .name[rp]
+            title: ""
+            type: text
+            content: ($key)
+            combineBelow: true
+            visible: (shwSig)
+
+          - name: .stat[rp]
+            title: ""
+            type: text
+            content: p-value
+            visible: (shwSig)
+
+    - name: plot
+      title: 'Gaussian Graphical Model'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot
+      visible: TRUE
+ 
+...
+

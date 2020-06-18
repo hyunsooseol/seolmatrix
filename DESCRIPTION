@@ -1,0 +1,25 @@
+Package: seolmatrix
+Type: Package
+Title: Correlations suite for jamovi
+Version: 0.0.3
+Date: 2020-06-17
+Author: Hyunsoo Seol
+Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
+Description:This module is a tool for calculating correlations, such as Pearson, Partial, Point-Biserial,Tetrachoric and allows users to produce 
+  Gaussian Graphical Model.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
+Imports: 
+    janitor,
+    jmvcore (>= 1.0.8),
+    knitr,
+    R6,
+    magrittr,
+    tidyverse,
+    stats,
+    qgraph,
+    psych
+  
+    

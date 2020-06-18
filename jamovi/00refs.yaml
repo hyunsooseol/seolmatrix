@@ -1,0 +1,16 @@
+refs:
+   cormatrix:
+       type: 'software'
+       author: Seol, H.
+       year: 2020
+       title: "cormatrix"
+       publisher: '[jamovi module]. Retrieved from https://github.com/hyunsooseol/cormatrix/'
+       url: https://github.com/hyunsooseol/cormatrix/
+       
+   psych:
+       type: 'software'
+       author: William Revelle
+       year: 2019
+       title: "psych: Procedures for Personality and Psychological Research"
+       publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=psych'
+       url: https://CRAN.R-project.org/package=psych

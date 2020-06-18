@@ -1,0 +1,60 @@
+---
+name:  partial
+title: Partial Correlation
+menuGroup: seolmatrix
+menuSubgroup: Partial
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+
+    - name: ctrlvars
+      title: Controlling for
+      type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+
+    - name: sidSig
+      title: Test of Significance
+      type: List
+      options:
+        - title: One-tailed
+          name:  onetailed
+        - title: Two-tailed
+          name:  twotailed
+      default: twotailed
+
+    - name: shwSig
+      title: Display significance levels
+      type: Bool
+      default: true
+
+    - name: flgSig
+      title: Flag significant correlations
+      type: Bool
+      default: true
+
+    - name: ggm
+      title: Gaussian Graphical Model
+      type: Bool
+      default: false
+
+...
+
+
+

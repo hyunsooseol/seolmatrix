@@ -1,0 +1,29 @@
+---
+name:  dichotomous
+title: Tetrachoric Correlation
+menuGroup: seolmatrix
+menuSubgroup: Dichotomous
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+        
+    - name: ggm
+      title: Show Gaussian Graphical Model
+      type: Bool
+      default: false
+
+...

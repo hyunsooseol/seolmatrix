@@ -1,0 +1,30 @@
+title: Tetrachoric Correlation
+name: dichotomous
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Variables
+        children:
+          - type: VariablesListBox
+            name: vars
+            isTarget: true
+
+  - type: LayoutBox
+    stretchFactor: 1
+    margin: large
+    children:
+      - type: Label
+        label: Plot
+        fitToGrid: true
+        cell:
+          column: 0
+          row: 0
+        children:
+          - type: CheckBox
+            name: ggm
