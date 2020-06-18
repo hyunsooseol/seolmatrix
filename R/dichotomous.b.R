@@ -116,9 +116,11 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           }
         }
         
+        res<- partial.r(tetrarho)
+        
         # Prepare Data For Plot -------
         image <- self$results$plot
-        image$setState(tetrarho)
+        image$setState(res)
         
       },
       
@@ -131,9 +133,9 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           return()
         
         
-        tetrarho <- image$state
+        res <- image$state
         
-        plot <- qgraph(tetrarho, layout = "spring", details = TRUE)
+        plot <- qgraph(res, layout = "spring", details = TRUE)
         
         print(plot)
         TRUE
