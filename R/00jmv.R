@@ -6,7 +6,7 @@
         `type`="software", 
         `author`="Seol, H.", 
         `year`=2020, 
-        `title`="cormatrix", 
+        `title`="seolmatrix", 
         `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/cormatrix/", 
         `url`="https://github.com/hyunsooseol/cormatrix/"), 
     `psych`=list(
