@@ -42,12 +42,12 @@ options:
     - name: shwSig
       title: Display significance levels
       type: Bool
-      default: true
+      default: false
 
     - name: flgSig
       title: Flag significant correlations
       type: Bool
-      default: true
+      default: false
 
     - name: ggm
       title: Gaussian Graphical Model
