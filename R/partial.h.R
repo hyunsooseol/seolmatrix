@@ -9,8 +9,8 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             vars = NULL,
             ctrlvars = NULL,
             sidSig = "twotailed",
-            shwSig = TRUE,
-            flgSig = TRUE,
+            shwSig = FALSE,
+            flgSig = FALSE,
             ggm = FALSE, ...) {
 
             super$initialize(
@@ -43,11 +43,11 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..shwSig <- jmvcore::OptionBool$new(
                 "shwSig",
                 shwSig,
-                default=TRUE)
+                default=FALSE)
             private$..flgSig <- jmvcore::OptionBool$new(
                 "flgSig",
                 flgSig,
-                default=TRUE)
+                default=FALSE)
             private$..ggm <- jmvcore::OptionBool$new(
                 "ggm",
                 ggm,
@@ -186,8 +186,8 @@ partial <- function(
     vars,
     ctrlvars,
     sidSig = "twotailed",
-    shwSig = TRUE,
-    flgSig = TRUE,
+    shwSig = FALSE,
+    flgSig = FALSE,
     ggm = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
