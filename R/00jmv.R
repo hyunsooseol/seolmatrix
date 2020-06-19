@@ -8,7 +8,7 @@
         `year`=2020, 
         `title`="seolmatrix", 
         `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/cormatrix/", 
-        `url`="https://github.com/hyunsooseol/cormatrix/"), 
+        `url`="https://github.com/hyunsooseol/seolmatrix/"), 
     `psych`=list(
         `type`="software", 
         `author`="William Revelle", 
