@@ -17,7 +17,7 @@ items:
       clearWith:
           - shwSig
           - sidSig
-      refs: cormatrix    
+      refs: seolmatrix    
 
       columns:
           - name: .name[r]
@@ -51,6 +51,6 @@ items:
       height: 500
       renderFun: .plot
       visible: TRUE
- 
+      refs: qgraph
 ...
 

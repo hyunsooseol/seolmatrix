@@ -102,7 +102,7 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "shwSig",
                     "sidSig"),
-                refs="cormatrix",
+                refs="seolmatrix",
                 columns=list(
                     list(
                         `name`=".name[r]", 
@@ -135,7 +135,8 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 width=500,
                 height=500,
                 renderFun=".plot",
-                visible=TRUE))}))
+                visible=TRUE,
+                refs="qgraph"))}))
 
 partialBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "partialBase",
