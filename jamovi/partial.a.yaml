@@ -30,7 +30,7 @@ options:
         - numeric
 
     - name: sidSig
-      title: Test of Significance
+      title: Test of significance
       type: List
       options:
         - title: One-tailed
