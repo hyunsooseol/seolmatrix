@@ -104,14 +104,13 @@ partialClass <- if (requireNamespace('jmvcore'))
             </head>
             <body>
             <div class='instructions'>
-            <p>Welcome to partial correlation. </p>
-            <p>To get started:</p>
+            <p><b>To get started:</b></p>
             
-            <p>- The input dataset require the measure type of numeric-continuous in jamovi.
-            <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p> 
-            <p>- If you don't move the variables into 'Controlling for' box, The result table shows Pearson Correlation Matrix.</p>
+            <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
+            <p>- To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p> 
+            <p>- If you move the variables into <b>'Controlling for'</b> box, the result table shows <b>Partial correlation</b>.</p>
             
-            <p> Note: When One variable is dichotomous, the other is continuous, The result table is equivalent to a Point-Biserial Correlation.</P>
+            <p> Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
             
             <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
             
