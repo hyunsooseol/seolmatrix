@@ -17,6 +17,7 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = dichotomousBase,
     private = list(
 
+      
  #==========================================================
       .init = function() {
         
@@ -48,18 +49,19 @@ self$results$instructions$setContent(
         # get variables
         
         matrix <- self$results$get('matrix')
-        vars <- self$options$get('vars')
-        nVars <- length(vars)
+        var <- self$options$get('vars')
+        nVar <- length(var)
         
         
         # add columns--------
         
-        for (i in seq_along(vars)) {
-          var <- vars[[i]]
+        for (i in seq_along(var)) {
+          
+          # var <- var[[i]]
           
           matrix$addColumn(
-            name = paste0(var, '[r]'),
-            title = var,
+            name = paste0(var[[i]], '[r]'),
+            title = var[[i]],
             type = 'number',
             format = 'zto'
           )
@@ -68,15 +70,17 @@ self$results$instructions$setContent(
         
         # empty cells above and put "-" in the main diagonal
         
-        for (i in seq_along(vars)) {
-          var <- vars[[i]]
+        for (i in seq_along(var)) {
+          
+          # var <- var[[i]]
           
           values <- list()
           
-          for (j in seq(i, nVars)) {
-            v <- vars[[j]]
+          for (j in seq(i, nVar)) {
             
-            values[[paste0(v, '[r]')]]  <- ''
+            # v <- var[[j]]
+            
+            values[[paste0(var[[j]], '[r]')]]  <- ''
             
           }
           
@@ -100,23 +104,28 @@ self$results$instructions$setContent(
         # get variables---------------------------------
         
         matrix <- self$results$get('matrix')
-        vars <- self$options$get('vars')
-        nVars <- length(vars)
+        var <- self$options$get('vars')
+        nVar <- length(var)
         
-        mydata <- self$data
+       
+        data <- self$data
         
-        # compute tetrachoric correlation with psych package--------
+        for(v in var)
+          data[[v]] <- jmvcore::toNumeric(data[[v]])
         
-        tetrarho <- psych::tetrachoric(mydata)$rho
+       
+# compute tetrachoric correlation with psych package--------
+        
+        tetrarho <- psych::tetrachoric(data)$rho
         
         
         # populate result----------------------------------------
         
-        for (i in 2:nVars) {
+        for (i in 2:nVar) {
           for (j in seq_len(i - 1)) {
             values <- list()
             
-            values[[paste0(vars[[j]], '[r]')]] <- tetrarho[i, j]
+            values[[paste0(var[[j]], '[r]')]] <- tetrarho[i, j]
             
             matrix$setRow(rowNo = i, values)
           }
