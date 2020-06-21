@@ -77,6 +77,10 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         # initialize setNote-------------------------------------------------
         
+        matrix$setNote('ctlNte', ifelse(length(varCtl) > 0, paste0('Controlling for ', paste(varCtl, collapse=", ")), 
+                                        'Not controlling for any variables, the result table shows Pearson correlation matrix'))
+        
+        
         matrix$setNote('sigNte', paste0(
           ifelse(
             self$options$get('sidSig') == 'onetailed',
