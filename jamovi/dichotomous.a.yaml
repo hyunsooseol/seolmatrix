@@ -22,7 +22,7 @@ options:
         - numeric
         
     - name: ggm
-      title: Show Gaussian Graphical Model
+      title: Gaussian graphical model
       type: Bool
       default: false
 

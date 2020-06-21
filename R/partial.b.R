@@ -1,5 +1,4 @@
 
-
 # This file is a generated template, your changes will not be overwritten
 
 
@@ -26,24 +25,51 @@ partialClass <- if (requireNamespace('jmvcore'))
     "partialClass",
     inherit = partialBase,
     private = list(
-      #==================================================================================
-      .init = function() {
-        # get variables--------------------------------------
+
+#==================================================================================
+ .init = function(){
+        
+   
+   if(is.null(self$dat) | is.null(self$options$vars)){
+     self$results$instructions$setVisible(visible = TRUE)
+     
+   }
+   
+   self$results$instructions$setContent(
+          "<html>
+            <head>
+            </head>
+            <body>
+            <div class='instructions'>
+            <p><b>To get started:</b></p>
+
+            <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
+            <p>- To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
+            <p>- If you move the variables into 'Controlling for'box, the result table shows <b>Partial correlation</b>.</p>
+
+            <p> Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
+
+            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
+
+            </div>
+            </body>
+            </html>")
+        
+
+   # get variables--------------------------------------
         
         matrix <- self$results$get('matrix')
         var <- self$options$get('vars')
         varCtl <- self$options$get('ctrlvars')
         
         
-        # whether the procedure is controlling for variables or not-----------
+ # whether the procedure is controlling for variables or not-----------
         
         matrix$setTitle(ifelse(
-          length(varCtl) > 0,
-          'Partial Correlation Matrix',
-          'Correlation Matrix'
+          length(varCtl) > 0,'Partial Correlation Matrix','Correlation Matrix'
         ))
         
-        # Add Columns----------------------------------
+# Add Columns----------------------------------
         
         for (i in seq_along(var)) {
           matrix$addColumn(
@@ -61,7 +87,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           )
         }
         
-        # Empty cells above and put "-" in the main diagonal-------------------
+ # Empty cells above and put "-" in the main diagonal-------------------
         
         for (i in seq_along(var)) {
           values <- list()
@@ -75,7 +101,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           matrix$setRow(rowKey = var[[i]], values)
         }
         
-        # initialize setNote-------------------------------------------------
+ # initialize setNote-------------------------------------------------
         
         matrix$setNote('ctlNte', ifelse(length(varCtl) > 0, paste0('Controlling for ', paste(varCtl, collapse=", ")), 
                                         'Not controlling for any variables, the result table shows Pearson correlation matrix'))
@@ -95,34 +121,14 @@ partialClass <- if (requireNamespace('jmvcore'))
         ))
         if (length(self$options$vars) <= 1)
           self$setStatus('complete')
-      },
+        },
+    
       
-      #====================================================================
+#====================================================================
       
-      .run = function() {
-        self$results$instructions$setContent(
-          "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p><b>To get started:</b></p>
-
-            <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
-            <p>- To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
-            <p>- If you move the variables into <b>'Controlling for'</b> box, the result table shows <b>Partial correlation</b>.</p>
-
-            <p> Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
-
-            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
-
-            </div>
-            </body>
-            </html>"
-        )
-        
-        
-        # get variables--------------------------------------------------
+.run = function() {
+ 
+         # get variables--------------------------------------------------
         
         matrix <- self$results$get('matrix')
         
@@ -133,15 +139,16 @@ partialClass <- if (requireNamespace('jmvcore'))
         nCtl   <- length(varCtl)
         
         
-        # data <- self$data
-        # 
-        # for(var in nVar)
-        # data[[var]] <- jmvcore::toNumeric(data[[var]])
-        # for(varCtl in nCtl)
-        # data[[varCtl]] <-jmvcore::toNumeric(data[[varCtl]])
+        data <- self$data
+         
+        for(v in var)
+         data[[v]] <- jmvcore::toNumeric(data[[v]])
+        
+        for(v in varCtl)
+         data[[v]] <-jmvcore::toNumeric(data[[v]])
          
         
-        #-- computing correlations----------
+# Computing correlations----------
         
         if (nVar > 1) {
           m  <-
@@ -165,7 +172,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           }
           Pp <- -nt *  expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
           
-          # populate results------------------------------------------------
+# populate results------------------------------------------------
           
           for (i in 2:nVar) {
             for (j in seq_len(i - 1)) {
@@ -189,7 +196,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           
         }
         
-        #Gaussian Graphical Models with partial correlation----------------
+ #Gaussian Graphical Models with partial correlation----------------
         
         data <- self$data
         partial <- psych::partial.r(data)
@@ -199,7 +206,8 @@ partialClass <- if (requireNamespace('jmvcore'))
         image$setState(partial)
       },
       
-      #================================================================
+ 
+#================================================================
       
       .plot = function(image, ...) {
         ggm <- self$options$ggm
@@ -215,8 +223,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         print(plot)
         TRUE
       }
-    )
-  )
-
+        )
+)
 
 

@@ -135,7 +135,7 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 width=500,
                 height=500,
                 renderFun=".plot",
-                visible=TRUE,
+                visible="(ggm)",
                 refs="qgraph"))}))
 
 partialBase <- if (requireNamespace('jmvcore')) R6::R6Class(

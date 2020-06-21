@@ -34,6 +34,6 @@ items:
       width:  500
       height: 500
       renderFun: .plot
-      visible: TRUE
+      visible: (ggm)
       refs: qgraph
 ...

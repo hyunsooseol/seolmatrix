@@ -19,6 +19,32 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
  #==========================================================
       .init = function() {
+        
+        
+        if(is.null(self$dat) | is.null(self$options$vars)){
+          self$results$instructions$setVisible(visible = TRUE)
+          
+        }
+        
+self$results$instructions$setContent(
+          "<html>
+            <head>
+            </head>
+            <body>
+            <div class='instructions'>
+            <p>Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
+            
+            <p><b>To get started:</b></p>
+            
+            <p>- The input dataset require dichotomous data with the type of <b>numeric-continuous</b> in jamovi.</p>
+            <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
+            
+            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
+            </div>
+            </body>
+            </html>"
+        )
+        
         # get variables
         
         matrix <- self$results$get('matrix')
@@ -69,26 +95,6 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         # `self$data` contains the data
         # `self$options` contains the options
         # `self$results` contains the results object (to populate)
-        
-        
-        self$results$instructions$setContent(
-          "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
-            
-            <p>To get started:</p>
-            
-            <p>- The input dataset require dichotomous data with the type of numeric-continuous in jamovi.</p>
-            <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
-            
-            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
-            </div>
-            </body>
-            </html>"
-        )
         
         
         # get variables---------------------------------
