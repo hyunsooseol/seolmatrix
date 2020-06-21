@@ -152,7 +152,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         if (nVar > 1) {
           m  <-
-            as.matrix(cor(self$data[, c(var, varCtl)], use = 'pairwise', method = 'pearson'))
+            as.matrix(cor(data[, c(var, varCtl)], use = 'pairwise', method = 'pearson'))
           X  <- m[var, var]
           
           if (nCtl > 0) {
@@ -163,7 +163,7 @@ partialClass <- if (requireNamespace('jmvcore'))
             Rp <- X
           }
           
-          df <- dim(self$data)[1] - nCtl
+          df <- dim(data)[1] - nCtl
           Rt <- (Rp * sqrt(df - 2)) / sqrt(1 - Rp ^ 2)
           if (self$options$sidSig == 'onetailed') {
             nt = 1
@@ -198,7 +198,6 @@ partialClass <- if (requireNamespace('jmvcore'))
         
  #Gaussian Graphical Models with partial correlation----------------
         
-        data <- self$data
         partial <- psych::partial.r(data)
         
         # Prepare Data For Plot -------
