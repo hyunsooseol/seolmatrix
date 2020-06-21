@@ -49,19 +49,19 @@ self$results$instructions$setContent(
         # get variables
         
         matrix <- self$results$get('matrix')
-        var <- self$options$get('vars')
-        nVar <- length(var)
+        vars <- self$options$get('vars')
+        nVars <- length(vars)
         
         
         # add columns--------
         
-        for (i in seq_along(var)) {
+        for (i in seq_along(vars)) {
           
-          # var <- var[[i]]
+           var <- vars[[i]]
           
           matrix$addColumn(
-            name = paste0(var[[i]], '[r]'),
-            title = var[[i]],
+            name = paste0(var, '[r]'),
+            title = var,
             type = 'number',
             format = 'zto'
           )
@@ -70,20 +70,20 @@ self$results$instructions$setContent(
         
         # empty cells above and put "-" in the main diagonal
         
-        for (i in seq_along(var)) {
+        for (i in seq_along(vars)) {
           
-          # var <- var[[i]]
+           var <- vars[[i]]
           
           values <- list()
           
-          for (j in seq(i, nVar)) {
+          for (j in seq(i, nVars)) {
             
-            # v <- var[[j]]
+             v <- vars[[j]]
             
-            values[[paste0(var[[j]], '[r]')]]  <- ''
+            values[[paste0(v, '[r]')]]  <- ''
             
           }
-          
+         values[[paste0(var, '[r]')]]  <- '\u2014'  
          matrix$setRow(rowKey = var, values)
           
         }
@@ -104,28 +104,28 @@ self$results$instructions$setContent(
         # get variables---------------------------------
         
         matrix <- self$results$get('matrix')
-        var <- self$options$get('vars')
-        nVar <- length(var)
+        vars <- self$options$get('vars')
+        nVars <- length(vars)
         
        
-        data <- self$data
+        mydata <- self$data
         
-        for(v in var)
-          data[[v]] <- jmvcore::toNumeric(data[[v]])
+        for(v in vars)
+          mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
         
        
 # compute tetrachoric correlation with psych package--------
         
-        tetrarho <- psych::tetrachoric(data)$rho
+        tetrarho <- psych::tetrachoric(mydata)$rho
         
         
         # populate result----------------------------------------
         
-        for (i in 2:nVar) {
+        for (i in 2:nVars) {
           for (j in seq_len(i - 1)) {
             values <- list()
             
-            values[[paste0(var[[j]], '[r]')]] <- tetrarho[i, j]
+            values[[paste0(vars[[j]], '[r]')]] <- tetrarho[i, j]
             
             matrix$setRow(rowNo = i, values)
           }
