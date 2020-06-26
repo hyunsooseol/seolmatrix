@@ -29,7 +29,7 @@ items:
             content: r  
             
     - name: plot
-      title: 'Show Gaussian Graphical Model'
+      title: 'Gaussian Graphical Model'
       type: Image
       width:  500
       height: 500
