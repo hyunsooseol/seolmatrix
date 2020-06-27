@@ -22,7 +22,7 @@ dichotomousClass <- if (requireNamespace('jmvcore')) R6::R6Class(
       .init = function() {
         
         
-        if(is.null(self$dat) | is.null(self$options$vars)){
+        if(is.null(self$data) | is.null(self$options$vars)){
           self$results$instructions$setVisible(visible = TRUE)
           
         }
