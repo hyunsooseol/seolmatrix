@@ -1,0 +1,44 @@
+---
+name:  rater
+title: Rater Reliability
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: 'Instructions'
+      type: Html
+      visible: True
+      refs: seolmatrix     
+    
+    - name: interrater
+      title: 'Interrater Reliability'
+      type: Table
+      rows: 1
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Light's Kappa
+        - name: n
+          type: number
+        - name: rater
+          type: number
+        - name: statistic
+        - name: z
+          type: number
+        - name: p
+          type: number
+ 
+    - name: plot
+      title: 'Gaussian Graphical Model'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot
+      visible: (ggm)
+      refs: qgraph
+...

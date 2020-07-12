@@ -40,7 +40,9 @@ self$results$instructions$setContent(
             <p>- The input dataset require dichotomous data with the type of <b>numeric-continuous</b> in jamovi.</p>
             <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
             
-            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
+             <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
+
+            <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
             </div>
             </body>
             </html>"

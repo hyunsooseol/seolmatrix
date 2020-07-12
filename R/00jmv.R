@@ -22,4 +22,10 @@
         `year`=2012, 
         `title`="qgraph: Network Visualizations of Relationships in Psychometric Data", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=qgraph", 
-        `url`="https://CRAN.R-project.org/package=qgraph"))
+        `url`="https://CRAN.R-project.org/package=qgraph"), 
+    `irr`=list(
+        `type`="software", 
+        `author`="Matthias Gamer and Jim Lemon and Ian Fellows Puspendra Singh", 
+        `year`=2019, 
+        `title`="irr: Various Coefficients of Interrater Reliability and Agreement", 
+        `url`="https://CRAN.R-project.org/package=irr"))

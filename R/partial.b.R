@@ -49,8 +49,9 @@ partialClass <- if (requireNamespace('jmvcore'))
 
             <p> Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
 
-            <p>If you encounter any errors, or have questions, please e-mail me: snow@cau.ac.kr</a></p>
+            <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
 
+            <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
             </div>
             </body>
             </html>")

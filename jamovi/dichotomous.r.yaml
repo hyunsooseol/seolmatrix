@@ -8,9 +8,10 @@ items:
       title: Instructions
       type: Html
       visible: True
-    
+      refs: seolmatrix 
+     
     - name: matrix
-      title: Tetrachoric Correlation
+      title: 'Tetrachoric Correlation'
       type: Table
       description: correlation matrix table
       rows: (vars)

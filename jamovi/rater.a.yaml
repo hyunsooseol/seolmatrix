@@ -1,0 +1,35 @@
+---
+name:  rater
+title: Rater Reliability
+menuGroup: seolmatrix
+menuSubgroup: Rater
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - nominal
+         - ordinal
+      permitted:
+        - numeric
+        
+    - name: interrater
+      title: Interrater reliability
+      type: Bool
+      default: True
+
+    - name: ggm
+      title: Gaussian graphical model
+      type: Bool
+      default: false
+...
+

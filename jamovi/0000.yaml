@@ -1,17 +1,17 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 0.0.3
+version: 1.0.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2020-06-17'
+date: '2020-07-12'
 type: R
 description: >-
   This module is a tool for calculating correlations, such as Pearson, Partial,
-  Point-Biserial,Tetrachoric and allows users to produce  Gaussian Graphical
-  Model.
+  Point-Biserial,Tetrachoricm, Rater Reliability, and allows users to produce 
+  Gaussian Graphical Model.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -25,6 +25,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Tetrachoric Correlation
     menuSubgroup: Dichotomous
+  - title: Rater Reliability
+    name: rater
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Rater Reliability
+    menuSubgroup: Rater
 usesNative: true
 minApp: 1.0.8
 
