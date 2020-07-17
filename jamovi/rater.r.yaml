@@ -28,6 +28,7 @@ items:
         - name: rater
           type: number
         - name: statistic
+          type: number
         - name: z
           type: number
         - name: p
