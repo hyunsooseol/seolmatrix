@@ -6,8 +6,8 @@
         `type`="software", 
         `author`="Seol, H.", 
         `year`=2020, 
-        `title`="seolmatrix", 
-        `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/cormatrix/", 
+        `title`="seolmatrix: Correlations suite for jamovi", 
+        `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix/", 
         `url`="https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 

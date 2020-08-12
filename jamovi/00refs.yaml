@@ -3,7 +3,7 @@ refs:
        type: 'software'
        author: Seol, H.
        year: 2020
-       title: "seolmatrix"
+       title: "seolmatrix: Correlations suite for jamovi"
        publisher: '[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix/'
        url: https://github.com/hyunsooseol/seolmatrix
        

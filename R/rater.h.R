@@ -87,7 +87,8 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="rater", 
                         `type`="number"),
                     list(
-                        `name`="statistic"),
+                        `name`="statistic", 
+                        `type`="number"),
                     list(
                         `name`="z", 
                         `type`="number"),
