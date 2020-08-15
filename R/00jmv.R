@@ -28,4 +28,10 @@
         `author`="Matthias Gamer and Jim Lemon and Ian Fellows Puspendra Singh", 
         `year`=2019, 
         `title`="irr: Various Coefficients of Interrater Reliability and Agreement", 
-        `url`="https://CRAN.R-project.org/package=irr"))
+        `url`="https://CRAN.R-project.org/package=irr"), 
+    `psy`=list(
+        `type`="software", 
+        `author`="Bruno Falissard", 
+        `year`=2012, 
+        `title`="psy: Various procedures used in psychometry", 
+        `url`="https://CRAN.R-project.org/package=psy"))

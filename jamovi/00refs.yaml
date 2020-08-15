@@ -30,4 +30,10 @@ refs:
        title: "irr: Various Coefficients of Interrater Reliability and Agreement"
        url: https://CRAN.R-project.org/package=irr
        
+   psy:
+       type: 'software'
+       author: Bruno Falissard 
+       year: 2012
+       title: "psy: Various procedures used in psychometry"
+       url: https://CRAN.R-project.org/package=psy
        

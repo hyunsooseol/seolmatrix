@@ -30,4 +30,14 @@ children:
             name: interrater
           - type: CheckBox
             name: ggm
-
+      - type: Label
+        label: ''
+        fitToGrid: true
+        cell:
+          column: 1
+          row: 0          
+        children:
+          - type: CheckBox
+            name: icc
+          - type: CheckBox
+            name: bicc

@@ -8,6 +8,8 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         initialize = function(
             vars = NULL,
             interrater = TRUE,
+            icc = TRUE,
+            bicc = FALSE,
             ggm = FALSE, ...) {
 
             super$initialize(
@@ -28,6 +30,14 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "interrater",
                 interrater,
                 default=TRUE)
+            private$..icc <- jmvcore::OptionBool$new(
+                "icc",
+                icc,
+                default=TRUE)
+            private$..bicc <- jmvcore::OptionBool$new(
+                "bicc",
+                bicc,
+                default=FALSE)
             private$..ggm <- jmvcore::OptionBool$new(
                 "ggm",
                 ggm,
@@ -35,15 +45,21 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             self$.addOption(private$..vars)
             self$.addOption(private$..interrater)
+            self$.addOption(private$..icc)
+            self$.addOption(private$..bicc)
             self$.addOption(private$..ggm)
         }),
     active = list(
         vars = function() private$..vars$value,
         interrater = function() private$..interrater$value,
+        icc = function() private$..icc$value,
+        bicc = function() private$..bicc$value,
         ggm = function() private$..ggm$value),
     private = list(
         ..vars = NA,
         ..interrater = NA,
+        ..icc = NA,
+        ..bicc = NA,
         ..ggm = NA)
 )
 
@@ -52,6 +68,8 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         interrater = function() private$.items[["interrater"]],
+        icc = function() private$.items[["icc"]],
+        bicc = function() private$.items[["bicc"]],
         plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
@@ -95,6 +113,62 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="p", 
                         `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="icc",
+                title="Intracalss correlation coefficient",
+                rows=1,
+                clearWith=list(
+                    "vars"),
+                refs="psy",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Value"),
+                    list(
+                        `name`="Subjects", 
+                        `type`="number"),
+                    list(
+                        `name`="Raters", 
+                        `type`="number"),
+                    list(
+                        `name`="Subject variance", 
+                        `type`="number"),
+                    list(
+                        `name`="Rater variance", 
+                        `type`="number"),
+                    list(
+                        `name`="Consistency", 
+                        `type`="number"),
+                    list(
+                        `name`="Agreement", 
+                        `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="bicc",
+                title="Bootstrap Agreement",
+                visible="(bicc)",
+                rows=1,
+                clearWith=list(
+                    "vars"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Agreement"),
+                    list(
+                        `name`="lower", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="upper", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -131,11 +205,15 @@ raterBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param interrater .
+#' @param icc .
+#' @param bicc .
 #' @param ggm .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -150,6 +228,8 @@ rater <- function(
     data,
     vars,
     interrater = TRUE,
+    icc = TRUE,
+    bicc = FALSE,
     ggm = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
@@ -165,6 +245,8 @@ rater <- function(
     options <- raterOptions$new(
         vars = vars,
         interrater = interrater,
+        icc = icc,
+        bicc = bicc,
         ggm = ggm)
 
     analysis <- raterClass$new(

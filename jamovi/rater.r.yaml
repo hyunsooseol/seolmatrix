@@ -34,6 +34,53 @@ items:
         - name: p
           type: number
  
+    - name: icc
+      title: 'Intracalss correlation coefficient'
+      type: Table
+      rows: 1
+      clearWith:
+        - vars
+      refs: psy    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Value
+        - name: Subjects
+          type: number
+        - name: Raters
+          type: number
+        - name: Subject variance
+          type: number
+        - name: Rater variance
+          type: number
+        - name: Consistency
+          type: number
+        - name: Agreement
+          type: number
+          
+    - name: bicc
+      title: 'Bootstrap Agreement'
+      type: Table
+      visible: (bicc)
+      rows: 1
+      clearWith:
+        - vars
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Agreement
+        - name: lower
+          title: 'Lower'
+          type: number
+          superTitle: '95% CI'
+        - name: upper
+          title: 'Upper'
+          type: number
+          superTitle: '95% CI'
+          
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
@@ -42,4 +89,5 @@ items:
       renderFun: .plot
       visible: (ggm)
       refs: qgraph
+
 ...

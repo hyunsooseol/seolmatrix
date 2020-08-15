@@ -27,9 +27,20 @@ options:
       type: Bool
       default: True
 
+    - name: icc
+      title: Intraclass correlation coefficient(ICC)
+      type: Bool
+      default: TRUE
+      
+    - name: bicc
+      title: Bootstrap agreement(n=1000)
+      type: Bool
+      default: false
+      
     - name: ggm
       title: Gaussian graphical model
       type: Bool
       default: false
+      
 ...
 
