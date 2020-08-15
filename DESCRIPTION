@@ -1,7 +1,7 @@
 Package: seolmatrix
 Type: Package
 Title: Correlations suite for jamovi
-Version: 1.1.1
+Version: 1.2.1
 Date: 2020-08-15
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
