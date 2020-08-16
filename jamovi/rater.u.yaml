@@ -5,6 +5,11 @@ stage: 0
 compilerMode: tame
 children:
   - type: VariableSupplier
+    name: variablesupplier
+    suggested:
+      - continuous
+    permitted:
+      - numeric
     persistentItems: false
     stretchFactor: 1
     children:
@@ -14,13 +19,12 @@ children:
           - type: VariablesListBox
             name: vars
             isTarget: true
-
   - type: LayoutBox
     stretchFactor: 1
     margin: large
     children:
       - type: Label
-        label: ""
+        label: "Reliability"
         fitToGrid: true
         cell:
           column: 0
@@ -29,15 +33,15 @@ children:
           - type: CheckBox
             name: interrater
           - type: CheckBox
-            name: ggm
+            name: icc
+          - type: CheckBox
+            name: bicc   
       - type: Label
-        label: ''
+        label: 'Plot'
         fitToGrid: true
         cell:
           column: 1
           row: 0          
         children:
           - type: CheckBox
-            name: icc
-          - type: CheckBox
-            name: bicc
+            name: ggm
