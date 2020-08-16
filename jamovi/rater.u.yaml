@@ -5,9 +5,9 @@ stage: 0
 compilerMode: tame
 children:
   - type: VariableSupplier
-    name: variablesupplier
     suggested:
       - continuous
+      - ordinal
     permitted:
       - numeric
     persistentItems: false
