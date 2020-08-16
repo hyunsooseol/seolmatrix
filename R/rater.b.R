@@ -105,8 +105,8 @@ raterClass <- if (requireNamespace('jmvcore'))
         vars <- self$options$get('vars')
         
         
-         for(v in vars)
-           data[[v]] <- jmvcore::toNumeric(data[[v]])
+         # for(v in vars)
+         #   data[[v]] <- jmvcore::toNumeric(data[[v]])
 
         # compute Light's Kappa-----
         
