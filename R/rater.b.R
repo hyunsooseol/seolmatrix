@@ -70,6 +70,7 @@ raterClass <- if (requireNamespace('jmvcore'))
           ready <- FALSE
         
         if (ready) {
+          
           data <- private$.cleanData()
           
           results <- private$.compute(data)

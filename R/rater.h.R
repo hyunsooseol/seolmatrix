@@ -22,8 +22,7 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "vars",
                 vars,
                 suggested=list(
-                    "nominal",
-                    "ordinal"),
+                    "continuous"),
                 permitted=list(
                     "numeric"))
             private$..interrater <- jmvcore::OptionBool$new(
