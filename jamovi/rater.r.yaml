@@ -55,6 +55,8 @@ items:
           type: number
         - name: Rater variance
           type: number
+        - name: Residual variance
+          type: number  
         - name: Consistency
           type: number
         - name: Agreement

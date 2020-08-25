@@ -139,6 +139,9 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="Rater variance", 
                         `type`="number"),
                     list(
+                        `name`="Residual variance", 
+                        `type`="number"),
+                    list(
                         `name`="Consistency", 
                         `type`="number"),
                     list(

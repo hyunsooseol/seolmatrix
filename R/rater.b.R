@@ -154,6 +154,10 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         rv <- icc$rater.variance
         
+        # residual variance
+        
+        ev <- icc$residual
+        
         # consistency
         
         ic <- icc$icc.consistency
@@ -188,6 +192,7 @@ raterClass <- if (requireNamespace('jmvcore'))
             'nr' = nr,
             'sv' = sv,
             'rv' = rv,
+            'ev'= ev,
             'ic' = ic,
             'ia' = ia,
             'bicc' = bicc
@@ -231,6 +236,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         nr <- results$nr
         sv <- results$sv
         rv <- results$rv
+        ev <- results$ev
         ic <- results$ic
         ia <- results$ia
         
@@ -241,6 +247,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         row[['Raters']] <- nr
         row[['Subject variance']] <- sv
         row[['Rater variance']] <- rv
+        row[['Residual variance']] <- ev
         row[['Consistency']] <- ic
         row[['Agreement']] <- ia
         
