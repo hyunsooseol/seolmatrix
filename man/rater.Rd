@@ -4,7 +4,7 @@
 \alias{rater}
 \title{Rater Reliability}
 \usage{
-rater(data, vars, interrater = TRUE, ggm = FALSE)
+rater(data, vars, interrater = TRUE, icc = TRUE, bicc = FALSE, ggm = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,6 +13,10 @@ rater(data, vars, interrater = TRUE, ggm = FALSE)
 
 \item{interrater}{.}
 
+\item{icc}{.}
+
+\item{bicc}{.}
+
 \item{ggm}{.}
 }
 \value{
@@ -20,6 +24,8 @@ A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
+  \code{results$icc} \tab \tab \tab \tab \tab a table \cr
+  \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 
