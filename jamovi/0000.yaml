@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 1.2.2
+version: 1.4.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2020-08-25'
+date: '2020-08-26'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Partial,
@@ -31,6 +31,22 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Rater Reliability
     menuSubgroup: Rater
+datasets:
+  - name: rater
+    path: rater.omv
+    description: Rating Big5 variable
+    tags:
+      - Rater
+  - name: partial
+    path: partial.omv
+    description: correlation data
+    tags:
+      - Partial
+  - name: dichotomous
+    path: dicho.omv
+    description: binary data
+    tags:
+      - Dichotomous
 usesNative: true
 minApp: 1.0.8
 
