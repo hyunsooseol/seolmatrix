@@ -1,12 +1,12 @@
 Package: seolmatrix
 Type: Package
 Title: Correlations suite for jamovi
-Version: 1.4.0
-Date: 2020-08-26
+Version: 1.5.0
+Date: 2020-09-28
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-Description: This module is a tool for calculating correlations such as Partial,
-  Tetrachoric, Intraclass correlation coefficients, Bootstrap agreement, and allows users to produce 
+Description: This module is a tool for calculating correlations such as Person, Partial,
+  Tetrachoric, Spearman, Intraclass correlation coefficients, Bootstrap agreement, and allows users to produce 
   Gaussian Graphical Model.
 License: GPL (>= 2)
 Encoding: UTF-8

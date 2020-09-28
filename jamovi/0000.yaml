@@ -1,17 +1,17 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 1.4.0
+version: 1.5.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2020-08-26'
+date: '2020-09-28'
 type: R
 description: >-
-  This module is a tool for calculating correlations such as Partial,
-  Tetrachoric, Intraclass correlation coefficients, Bootstrap agreement, and
-  allows users to produce  Gaussian Graphical Model.
+  This module is a tool for calculating correlations such as Pearson, Partial,
+  Tetrachoric, Spearman, Intraclass correlation coefficients, Bootstrap
+  agreement, and allows users to produce  Gaussian Graphical Model.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -25,6 +25,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Tetrachoric Correlation
     menuSubgroup: Dichotomous
+  - title: Spearman Correlation
+    name: rank
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Spearman Correlation
+    menuSubgroup: Rank
   - title: Rater Reliability
     name: rater
     ns: seolmatrix

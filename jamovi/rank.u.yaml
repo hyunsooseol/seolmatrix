@@ -1,5 +1,5 @@
-title: Tetrachoric Correlation
-name: dichotomous
+title: Spearman Correlation
+name: rank
 jus: '3.0'
 stage: 0
 compilerMode: tame
@@ -18,6 +18,6 @@ children:
     margin: large
     children:
       - type: CheckBox
-        name: tetrachoric
+        name: spearman
       - type: CheckBox
         name: ggm

@@ -5,8 +5,9 @@
 #'
 #' @importFrom R6 R6Class
 #' @import jmvcore
-#' @importFrom magrittr "%>%"
 #' @import psych
+#' @importFrom psych tetrachoric
+#' @importFrom psych partial.r
 #' @import qgraph
 #' @export
 
@@ -133,7 +134,7 @@ self$results$instructions$setContent(
           }
         }
         
-        res<- partial.r(tetrarho)
+        res<- psych::partial.r(tetrarho)
         
         # Prepare Data For Plot -------
         image <- self$results$plot

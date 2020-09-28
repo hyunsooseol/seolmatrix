@@ -1,0 +1,42 @@
+---
+name:  rank
+title: Spearman Correlation
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+      refs: seolmatrix 
+     
+    - name: matrix
+      title: 'Spearman Correlation'
+      type: Table
+      description: correlation matrix table
+      rows: (vars)
+      refs: psych    
+      
+      columns:
+          - name: .name[r]
+            title: ""
+            type: text
+            content: ($key)
+            combineBelow: true
+
+          - name: .stat[r]
+            title: ""
+            type: text
+            content: r  
+            
+    - name: plot
+      title: 'Gaussian Graphical Model'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot
+      visible: (ggm)
+      refs: qgraph
+
+
+...

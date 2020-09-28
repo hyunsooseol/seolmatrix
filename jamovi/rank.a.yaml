@@ -1,8 +1,7 @@
 ---
-name:  dichotomous
-title: Tetrachoric Correlation
+name:  rank
+title: Spearman Correlation
 menuGroup: seolmatrix
-menuSubgroup: Dichotomous
 version: '1.0.0'
 jas: '1.2'
 
@@ -21,8 +20,8 @@ options:
       permitted:
         - numeric
 
-    - name: tetrachoric
-      title: Tetrachoric 
+    - name: spearman
+      title: Spearman 
       type: Bool
       default: True
 
