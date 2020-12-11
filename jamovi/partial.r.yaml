@@ -2,7 +2,7 @@
 name:  partial
 title: Partial Correlation
 jrs:   '1.1'
-
+refs: seolmatrix 
 items:
     - name: instructions
       title: Instructions

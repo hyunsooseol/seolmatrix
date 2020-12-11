@@ -63,7 +63,7 @@ self$results$instructions$setContent(
            var <- vars[[i]]
           
           matrix$addColumn(
-            name = paste0(var, '[r]'),
+            name = paste0(var),
             title = var,
             type = 'number',
             format = 'zto'
@@ -83,10 +83,10 @@ self$results$instructions$setContent(
             
              v <- vars[[j]]
             
-            values[[paste0(v, '[r]')]]  <- ''
+            values[[paste0(v)]]  <- ''
             
           }
-         values[[paste0(var, '[r]')]]  <- '\u2014'  
+         values[[paste0(var)]]  <- '\u2014'  
          matrix$setRow(rowKey = var, values)
           
         }
@@ -128,7 +128,7 @@ self$results$instructions$setContent(
           for (j in seq_len(i - 1)) {
             values <- list()
             
-            values[[paste0(vars[[j]], '[r]')]] <- tetrarho[i, j]
+            values[[paste0(vars[[j]])]] <- tetrarho[i, j]
             
             matrix$setRow(rowNo = i, values)
           }

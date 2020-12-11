@@ -58,13 +58,13 @@ dichotomousResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Tetrachoric Correlation")
+                title="Tetrachoric Correlation",
+                refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="instructions",
                 title="Instructions",
-                visible=TRUE,
-                refs="seolmatrix"))
+                visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="matrix",
@@ -73,16 +73,11 @@ dichotomousResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 refs="psych",
                 columns=list(
                     list(
-                        `name`=".name[r]", 
+                        `name`=".name", 
                         `title`="", 
                         `type`="text", 
                         `content`="($key)", 
-                        `combineBelow`=TRUE),
-                    list(
-                        `name`=".stat[r]", 
-                        `title`="", 
-                        `type`="text", 
-                        `content`="r"))))
+                        `combineBelow`=TRUE))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",

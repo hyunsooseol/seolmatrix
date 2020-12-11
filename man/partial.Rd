@@ -9,7 +9,7 @@ partial(
   vars,
   ctrlvars,
   sidSig = "twotailed",
-  shwSig = FALSE,
+  shwSig = TRUE,
   flgSig = FALSE,
   ggm = FALSE
 )

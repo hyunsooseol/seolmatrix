@@ -42,7 +42,7 @@ options:
     - name: shwSig
       title: Display significance levels
       type: Bool
-      default: false
+      default: TRUE
 
     - name: flgSig
       title: Flag significant correlations

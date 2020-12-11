@@ -9,7 +9,7 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             vars = NULL,
             ctrlvars = NULL,
             sidSig = "twotailed",
-            shwSig = FALSE,
+            shwSig = TRUE,
             flgSig = FALSE,
             ggm = FALSE, ...) {
 
@@ -43,7 +43,7 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..shwSig <- jmvcore::OptionBool$new(
                 "shwSig",
                 shwSig,
-                default=FALSE)
+                default=TRUE)
             private$..flgSig <- jmvcore::OptionBool$new(
                 "flgSig",
                 flgSig,
@@ -88,7 +88,8 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Partial Correlation")
+                title="Partial Correlation",
+                refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="instructions",
@@ -187,7 +188,7 @@ partial <- function(
     vars,
     ctrlvars,
     sidSig = "twotailed",
-    shwSig = FALSE,
+    shwSig = TRUE,
     flgSig = FALSE,
     ggm = FALSE) {
 
