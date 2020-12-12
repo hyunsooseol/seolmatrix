@@ -6,7 +6,6 @@
 #'
 #' @importFrom R6 R6Class
 #' @import jmvcore
-#' @importFrom magrittr "%>%"
 #' @import qgraph
 #' @import psych
 #' @export
@@ -43,15 +42,14 @@ partialClass <- if (requireNamespace('jmvcore'))
             <div class='instructions'>
             <p><b>To get started:</b></p>
 
-            <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
-            <p>- To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
-            <p>- If you move the variables into 'Controlling for'box, the result table shows <b>Partial correlation</b>.</p>
+            <p>The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
+            <p>To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
+            <p>If you move the variables into 'Controlling for'box, the result table shows <b>Partial correlation</b>.</p>
 
-            <p> Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
+            <p>Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
 
-            <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
+            <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
 
-            <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
             </div>
             </body>
             </html>")

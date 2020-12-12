@@ -22,34 +22,34 @@ raterClass <- if (requireNamespace('jmvcore'))
     inherit = raterBase,
     private = list(
       #==========================================================
-      .init = function() {
-        if (is.null(self$data) | is.null(self$options$vars)) {
-          self$results$instructions$setVisible(visible = TRUE)
-          
-        }
-        
-        self$results$instructions$setContent(
-          "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>Welcome to Interrater reliability.</p>
-
-            <p><b>To get started:</b></p>
-
-            <p>- Just highlight the variables(raters) and click the arrow to move it across into the 'Variables' box.</p>
-            <p>- To produce Gaussian Graphical Model, partial correlations are calculated from a input matrix of polychoric correlations.</p>
-
-            <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
-
-            <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
-            </div>
-            </body>
-            </html>"
-        )
-        
-      },
+      # .init = function() {
+      #   if (is.null(self$data) | is.null(self$options$vars)) {
+      #     self$results$instructions$setVisible(visible = TRUE)
+      #     
+      #   }
+      #   
+      #   # self$results$instructions$setContent(
+      #   #   "<html>
+      #   #     <head>
+      #   #     </head>
+      #   #     <body>
+      #   #     <div class='instructions'>
+      #   #     <p>Welcome to Interrater reliability.</p>
+      #   # 
+      #   #     <p><b>To get started:</b></p>
+      #   # 
+      #   #     <p>- Just highlight the variables(raters) and click the arrow to move it across into the 'Variables' box.</p>
+      #   #     <p>- To produce Gaussian Graphical Model, partial correlations are calculated from a input matrix of polychoric correlations.</p>
+      #   # 
+      #   #     <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
+      #   # 
+      #   #     <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
+      #   #     </div>
+      #   #     </body>
+      #   #     </html>"
+      #   # )
+      #   
+      # },
       
       #======================================++++++++++++++++++++++
       .run = function() {

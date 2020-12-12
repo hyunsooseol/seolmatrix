@@ -2,14 +2,13 @@
 name:  rater
 title: Rater Reliability
 jrs:   '1.1'
-
+refs: seolmatrix   
 items:
     - name: instructions
       title: 'Instructions'
       type: Html
       visible: True
-      refs: seolmatrix     
-    
+
     - name: interrater
       title: 'Interrater Reliability'
       type: Table

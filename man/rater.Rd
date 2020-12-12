@@ -4,7 +4,7 @@
 \alias{rater}
 \title{Rater Reliability}
 \usage{
-rater(data, vars, interrater = TRUE, icc = TRUE, bicc = FALSE, ggm = FALSE)
+rater(data, vars, interrater = TRUE, icc = FALSE, bicc = FALSE, ggm = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}

@@ -50,7 +50,7 @@ datasets:
       - Partial
   - name: dichotomous
     path: dicho.omv
-    description: binary data
+    description: Tetrachoric Correlation
     tags:
       - Dichotomous
 usesNative: true

@@ -22,31 +22,31 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .init = function() {
             
             
-            if(is.null(self$data) | is.null(self$options$vars)){
-                self$results$instructions$setVisible(visible = TRUE)
-                
-            }
-            
-            self$results$instructions$setContent(
-                "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>Welcome to Spearman correlation for doing Gaussian graphical model</p>
-            
-            <p><b>To get started:</b></p>
-            <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
-            <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
-            
-            <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
-
-            <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
-            </div>
-            </body>
-            </html>"
-            )
-            
+            # if(is.null(self$data) | is.null(self$options$vars)){
+            #     self$results$instructions$setVisible(visible = TRUE)
+            #     
+            # }
+            # 
+            # self$results$instructions$setContent(
+            #     "<html>
+            # <head>
+            # </head>
+            # <body>
+            # <div class='instructions'>
+            # <p>Welcome to Spearman correlation for doing Gaussian graphical model</p>
+            # 
+            # <p><b>To get started:</b></p>
+            # <p>- The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
+            # <p>- Just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
+            # 
+            # <p>- Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
+            # 
+            # <p>If you have any questions, please e-mail me: snow@cau.ac.kr</a></p>
+            # </div>
+            # </body>
+            # </html>"
+            # )
+            # 
             # get variables
             
             matrix <- self$results$get('matrix')
@@ -61,7 +61,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 var <- vars[[i]]
                 
                 matrix$addColumn(
-                    name = paste0(var, '[r]'),
+                    name = paste0(var),
                     title = var,
                     type = 'number',
                     format = 'zto'
@@ -81,10 +81,10 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     v <- vars[[j]]
                     
-                    values[[paste0(v, '[r]')]]  <- ''
+                    values[[paste0(v)]]  <- ''
                     
                 }
-                values[[paste0(var, '[r]')]]  <- '\u2014'  
+                values[[paste0(var)]]  <- '\u2014'  
                 matrix$setRow(rowKey = var, values)
                 
             }
@@ -124,7 +124,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 for (j in seq_len(i - 1)) {
                     values <- list()
                     
-                    values[[paste0(vars[[j]], '[r]')]] <- spearman[i, j]
+                    values[[paste0(vars[[j]])]] <- spearman[i, j]
                     
                     matrix$setRow(rowNo = i, values)
                 }

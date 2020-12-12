@@ -8,7 +8,7 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         initialize = function(
             vars = NULL,
             interrater = TRUE,
-            icc = TRUE,
+            icc = FALSE,
             bicc = FALSE,
             ggm = FALSE, ...) {
 
@@ -32,7 +32,7 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..icc <- jmvcore::OptionBool$new(
                 "icc",
                 icc,
-                default=TRUE)
+                default=FALSE)
             private$..bicc <- jmvcore::OptionBool$new(
                 "bicc",
                 bicc,
@@ -76,13 +76,13 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Rater Reliability")
+                title="Rater Reliability",
+                refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="instructions",
                 title="Instructions",
-                visible=TRUE,
-                refs="seolmatrix"))
+                visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="interrater",
@@ -230,7 +230,7 @@ rater <- function(
     data,
     vars,
     interrater = TRUE,
-    icc = TRUE,
+    icc = FALSE,
     bicc = FALSE,
     ggm = FALSE) {
 

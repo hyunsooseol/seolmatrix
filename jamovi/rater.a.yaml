@@ -29,7 +29,7 @@ options:
     - name: icc
       title: Intraclass correlation coefficient(ICC)
       type: Bool
-      default: TRUE
+      default: FALSE
       
     - name: bicc
       title: Bootstrap agreement(n=1000)
