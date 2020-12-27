@@ -42,13 +42,10 @@ partialClass <- if (requireNamespace('jmvcore'))
             </head>
             <body>
             <div class='instructions'>
-            <p><b>To get started:</b></p>
+            
+            <p>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
 
-            <p>The input dataset require the measure type of <b>numeric-continuous</b> in jamovi.
-            <p>To get the result table of <b>Pearson correlation</b>, just highlight the variables and click the arrow to move it across into the 'Variables' box.</p>
-            <p>If you move the variables into 'Controlling for'box, the result table shows <b>Partial correlation</b>.</p>
-
-            <p>Note: When One variable is dichotomous, the other is continuous, the result table is equivalent to a <b>Point-biserial correlation</b>.</P>
+            <p>When One variable is dichotomous, the other is continuous, the result table is equivalent to a Point-biserial correlation.</P>
 
             <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub</a></p>
 
