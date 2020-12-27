@@ -45,6 +45,8 @@ children:
         children:
           - type: CheckBox
             name: ggm
+          - type: CheckBox
+            name: par  
       - type: LayoutBox
         margin: large
         children:

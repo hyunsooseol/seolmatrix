@@ -40,3 +40,5 @@ children:
         children:
           - type: CheckBox
             name: ggm
+          - type: CheckBox
+            name: par

@@ -4,11 +4,6 @@ title: Rater Reliability
 jrs:   '1.1'
 refs: seolmatrix   
 items:
-    - name: instructions
-      title: 'Instructions'
-      type: Html
-      visible: True
-
     - name: interrater
       title: 'Interrater Reliability'
       type: Table
@@ -36,6 +31,7 @@ items:
     - name: icc
       title: 'Intracalss correlation coefficient'
       type: Table
+      visible: (icc)
       rows: 1
       clearWith:
         - vars
@@ -91,4 +87,12 @@ items:
       visible: (ggm)
       refs: qgraph
 
+    - name: plot1
+      title: 'Partial plot'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot1
+      visible: (par)
+      refs: qgraph
 ...

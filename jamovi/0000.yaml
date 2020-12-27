@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 1.6.0
+version: 2.0.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2020-12-11'
+date: '2020-12-27'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -44,7 +44,7 @@ datasets:
     tags:
       - Rater
   - name: partial
-    path: partial.omv
+    path: big5.omv
     description: correlation data
     tags:
       - Partial
@@ -53,6 +53,11 @@ datasets:
     description: Tetrachoric Correlation
     tags:
       - Dichotomous
+  - name: rank
+    path: bfi.omv
+    description: Spearman Correlation
+    tags:
+      - Rank
 usesNative: true
 minApp: 1.0.8
 

@@ -8,6 +8,7 @@
 #' @import psych
 #' @importFrom psych corr.test
 #' @importFrom psych partial.r
+#' @importFrom qgraph EBICglasso
 #' @import qgraph
 #' @export
 
@@ -133,25 +134,57 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             res<- psych::partial.r(spearman)
             
             # Prepare Data For Plot -------
-            image <- self$results$plot
+            image <- self$results$plot1
             image$setState(res)
+        
             
+            ########## EBIC PLOT------------
+            
+            rank <- spear$r
+            
+            # Compute graph with tuning = 0.5 (EBIC)
+            EBICgraph <- qgraph::EBICglasso(rank,nrow(mydata), 0.5, threshold = TRUE)
+            
+            # Prepare Data For Plot -------
+            image <- self$results$plot
+            image$setState(EBICgraph)
+            
+            
+            
+                
         },
         
         #================================================================
-        
         .plot = function(image, ...) {
-            ggm <- self$options$ggm
+          ggm <- self$options$ggm
+          
+          if (!ggm)
+            return()
+          
+          
+          EBICgraph <- image$state
+          
+          plot <- qgraph(EBICgraph, layout = "spring", details = TRUE)
+          
+          print(plot)
+          TRUE
+          
+        },
+        
+        
+        
+        .plot1 = function(image, ...) {
+            par <- self$options$par
             
-            if (!ggm)
+            if (!par)
                 return()
             
             
             res <- image$state
             
-            plot <- qgraph(res, layout = "spring", details = TRUE)
+            plot1 <- qgraph(res, layout = "spring", details = TRUE)
             
-            print(plot)
+            print(plot1)
             TRUE
             
         }

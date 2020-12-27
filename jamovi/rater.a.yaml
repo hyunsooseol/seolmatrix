@@ -34,12 +34,16 @@ options:
     - name: bicc
       title: Bootstrap agreement(n=1000)
       type: Bool
-      default: false
+      default: FALSE
       
     - name: ggm
-      title: Gaussian graphical model
+      title: Gaussian graphical model(EBIC)
       type: Bool
-      default: false
-      
+      default: FALSE
+
+    - name: par
+      title: Partial plot
+      type: Bool
+      default: FALSE      
 ...
 

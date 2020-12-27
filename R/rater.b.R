@@ -9,9 +9,11 @@
 #' @import lpSolve
 #' @import qgraph
 #' @import psych
-#' @importFrom psych polychoric
-#' @importFrom  psych partial.r
 #' @importFrom  psy icc
+#' @importFrom  qgraph cor_auto
+#' @importFrom qgraph EBICglasso
+#' @importFrom qgraph qgraph
+#' @importFrom psych partial.r
 #' @import boot
 #' @export
 
@@ -83,6 +85,10 @@ raterClass <- if (requireNamespace('jmvcore'))
           # prepare plot-----
           
           private$.prepareGgmPlot(data)
+          
+          # prepare partial plot-------
+          
+          private$.prepareParPlot(data)
           
           # populate icc table-----
           
@@ -281,34 +287,66 @@ raterClass <- if (requireNamespace('jmvcore'))
       #### Plot functions ----
       
       .prepareGgmPlot = function(data) {
-        # Gaussian Graphical Models with polychoric correlation----------------
         
-        poly <- psych::polychoric(data)$rho
-        partial <- psych::partial.r(poly)
+        # Compute correlations:
+        CorMat <- qgraph::cor_auto(data)
+        
+        # Compute graph with tuning = 0.5 (EBIC)
+        EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
         
         # Prepare Data For Plot -------
         image <- self$results$plot
-        image$setState(partial)
+        image$setState(EBICgraph)
         
+       
+      },
+      
+      .prepareParPlot=function(data) {
         
+        # # Compute correlations:
+        # CorMat <- qgraph::cor_auto(data)
         
+        par <- psych::partial.r(data)
+        
+        # Prepare Data For Plot -------
+       
+        image <- self$results$plot1
+        image$setState(par)
+       
       },
       
       
       #================================================================
       
       .plot = function(image, ...) {
+        
         ggm <- self$options$ggm
         
         if (!ggm)
           return()
         
         
-        partial <- image$state
+        EBICgraph <- image$state
         
-        plot <- qgraph(partial, layout = "spring", details = TRUE)
+        plot <- qgraph::qgraph(EBICgraph, layout = "spring", title = "EBIC", details = TRUE)
         
         print(plot)
+        TRUE
+      },
+      
+      .plot1 = function(image, ...) {
+        
+        par <- self$options$par
+        
+        if (!par)
+          return()
+        
+        
+        par <- image$state
+        
+        plot1 <- qgraph::qgraph(par, layout = "spring", details = TRUE)
+        
+        print(plot1)
         TRUE
       },
       

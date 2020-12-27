@@ -8,6 +8,8 @@
 #' @import jmvcore
 #' @import qgraph
 #' @import psych
+#' @importFrom qgraph EBICglasso
+#' @importFrom qgraph cor_auto
 #' @export
 
 # `self$data` contains the data
@@ -195,30 +197,64 @@ partialClass <- if (requireNamespace('jmvcore'))
           
         }
         
- #Gaussian Graphical Models with partial correlation----------------
+ # Patial plot----------------
         
         partial <- psych::partial.r(data)
         
         # Prepare Data For Plot -------
-        image <- self$results$plot
+        image <- self$results$plot1
         image$setState(partial)
-      },
+      
+        # EBIC PLOT------------
+        
+        # Compute correlations:
+        CorMat <- qgraph::cor_auto(data)
+        
+        # Compute graph with tuning = 0.5 (EBIC)
+        EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+        
+        # Prepare Data For Plot -------
+        image <- self$results$plot
+        image$setState(EBICgraph)
+       
+       
+        },
       
  
 #================================================================
-      
-      .plot = function(image, ...) {
-        ggm <- self$options$ggm
+
+.plot = function(image, ...) {
+  ggm <- self$options$ggm
+  
+  if (!ggm)
+    return()
+  
+  
+  EBICgraph <- image$state
+  
+  plot <- qgraph( EBICgraph, layout = "spring", details = TRUE)
+  
+  print(plot)
+  TRUE
+
+  },     
+
+  
+# partial plot-----------
+
+
+.plot1 = function(image, ...) {
+        par <- self$options$par
         
-        if (!ggm)
+        if (!par)
           return()
         
         
         partial <- image$state
         
-        plot <- qgraph(partial, layout = "spring", details = TRUE)
+        plot1 <- qgraph(partial, layout = "spring", details = TRUE)
         
-        print(plot)
+        print(plot1)
         TRUE
       }
         )

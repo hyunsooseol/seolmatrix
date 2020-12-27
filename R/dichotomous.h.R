@@ -8,7 +8,8 @@ dichotomousOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         initialize = function(
             vars = NULL,
             tetrachoric = TRUE,
-            ggm = FALSE, ...) {
+            ggm = FALSE,
+            par = FALSE, ...) {
 
             super$initialize(
                 package='seolmatrix',
@@ -31,19 +32,26 @@ dichotomousOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "ggm",
                 ggm,
                 default=FALSE)
+            private$..par <- jmvcore::OptionBool$new(
+                "par",
+                par,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..tetrachoric)
             self$.addOption(private$..ggm)
+            self$.addOption(private$..par)
         }),
     active = list(
         vars = function() private$..vars$value,
         tetrachoric = function() private$..tetrachoric$value,
-        ggm = function() private$..ggm$value),
+        ggm = function() private$..ggm$value,
+        par = function() private$..par$value),
     private = list(
         ..vars = NA,
         ..tetrachoric = NA,
-        ..ggm = NA)
+        ..ggm = NA,
+        ..par = NA)
 )
 
 dichotomousResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -51,7 +59,8 @@ dichotomousResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -86,6 +95,15 @@ dichotomousResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=500,
                 renderFun=".plot",
                 visible="(ggm)",
+                refs="qgraph"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Partial plot",
+                width=500,
+                height=500,
+                renderFun=".plot1",
+                visible="(par)",
                 refs="qgraph"))}))
 
 dichotomousBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -115,11 +133,13 @@ dichotomousBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param vars .
 #' @param tetrachoric .
 #' @param ggm .
+#' @param par .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -133,7 +153,8 @@ dichotomous <- function(
     data,
     vars,
     tetrachoric = TRUE,
-    ggm = FALSE) {
+    ggm = FALSE,
+    par = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('dichotomous requires jmvcore to be installed (restart may be required)')
@@ -148,7 +169,8 @@ dichotomous <- function(
     options <- dichotomousOptions$new(
         vars = vars,
         tetrachoric = tetrachoric,
-        ggm = ggm)
+        ggm = ggm,
+        par = par)
 
     analysis <- dichotomousClass$new(
         options = options,

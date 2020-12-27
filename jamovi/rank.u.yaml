@@ -21,3 +21,5 @@ children:
         name: spearman
       - type: CheckBox
         name: ggm
+      - type: CheckBox
+        name: par

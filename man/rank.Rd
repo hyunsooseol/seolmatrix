@@ -4,7 +4,7 @@
 \alias{rank}
 \title{Spearman Correlation}
 \usage{
-rank(data, vars, spearman = TRUE, ggm = FALSE)
+rank(data, vars, spearman = TRUE, ggm = FALSE, par = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -14,6 +14,8 @@ rank(data, vars, spearman = TRUE, ggm = FALSE)
 \item{spearman}{.}
 
 \item{ggm}{.}
+
+\item{par}{.}
 }
 \value{
 A results object containing:
@@ -21,6 +23,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

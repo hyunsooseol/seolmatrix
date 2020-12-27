@@ -21,3 +21,5 @@ children:
         name: tetrachoric
       - type: CheckBox
         name: ggm
+      - type: CheckBox
+        name: par

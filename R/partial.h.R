@@ -11,7 +11,8 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             sidSig = "twotailed",
             shwSig = TRUE,
             flgSig = FALSE,
-            ggm = FALSE, ...) {
+            ggm = FALSE,
+            par = FALSE, ...) {
 
             super$initialize(
                 package='seolmatrix',
@@ -52,6 +53,10 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "ggm",
                 ggm,
                 default=FALSE)
+            private$..par <- jmvcore::OptionBool$new(
+                "par",
+                par,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
@@ -59,6 +64,7 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..shwSig)
             self$.addOption(private$..flgSig)
             self$.addOption(private$..ggm)
+            self$.addOption(private$..par)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -66,14 +72,16 @@ partialOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         sidSig = function() private$..sidSig$value,
         shwSig = function() private$..shwSig$value,
         flgSig = function() private$..flgSig$value,
-        ggm = function() private$..ggm$value),
+        ggm = function() private$..ggm$value,
+        par = function() private$..par$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
         ..sidSig = NA,
         ..shwSig = NA,
         ..flgSig = NA,
-        ..ggm = NA)
+        ..ggm = NA,
+        ..par = NA)
 )
 
 partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -81,7 +89,8 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -137,6 +146,15 @@ partialResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=500,
                 renderFun=".plot",
                 visible="(ggm)",
+                refs="qgraph"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Partial plot",
+                width=500,
+                height=500,
+                renderFun=".plot1",
+                visible="(par)",
                 refs="qgraph"))}))
 
 partialBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -169,11 +187,13 @@ partialBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param shwSig .
 #' @param flgSig .
 #' @param ggm .
+#' @param par .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -190,7 +210,8 @@ partial <- function(
     sidSig = "twotailed",
     shwSig = TRUE,
     flgSig = FALSE,
-    ggm = FALSE) {
+    ggm = FALSE,
+    par = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('partial requires jmvcore to be installed (restart may be required)')
@@ -210,7 +231,8 @@ partial <- function(
         sidSig = sidSig,
         shwSig = shwSig,
         flgSig = flgSig,
-        ggm = ggm)
+        ggm = ggm,
+        par = par)
 
     analysis <- partialClass$new(
         options = options,

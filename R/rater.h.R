@@ -10,7 +10,8 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             interrater = TRUE,
             icc = FALSE,
             bicc = FALSE,
-            ggm = FALSE, ...) {
+            ggm = FALSE,
+            par = FALSE, ...) {
 
             super$initialize(
                 package='seolmatrix',
@@ -41,35 +42,42 @@ raterOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "ggm",
                 ggm,
                 default=FALSE)
+            private$..par <- jmvcore::OptionBool$new(
+                "par",
+                par,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..interrater)
             self$.addOption(private$..icc)
             self$.addOption(private$..bicc)
             self$.addOption(private$..ggm)
+            self$.addOption(private$..par)
         }),
     active = list(
         vars = function() private$..vars$value,
         interrater = function() private$..interrater$value,
         icc = function() private$..icc$value,
         bicc = function() private$..bicc$value,
-        ggm = function() private$..ggm$value),
+        ggm = function() private$..ggm$value,
+        par = function() private$..par$value),
     private = list(
         ..vars = NA,
         ..interrater = NA,
         ..icc = NA,
         ..bicc = NA,
-        ..ggm = NA)
+        ..ggm = NA,
+        ..par = NA)
 )
 
 raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
-        instructions = function() private$.items[["instructions"]],
         interrater = function() private$.items[["interrater"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -78,11 +86,6 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 name="",
                 title="Rater Reliability",
                 refs="seolmatrix")
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="instructions",
-                title="Instructions",
-                visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="interrater",
@@ -116,6 +119,7 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="icc",
                 title="Intracalss correlation coefficient",
+                visible="(icc)",
                 rows=1,
                 clearWith=list(
                     "vars"),
@@ -179,6 +183,15 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=500,
                 renderFun=".plot",
                 visible="(ggm)",
+                refs="qgraph"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Partial plot",
+                width=500,
+                height=500,
+                renderFun=".plot1",
+                visible="(par)",
                 refs="qgraph"))}))
 
 raterBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -210,13 +223,14 @@ raterBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param icc .
 #' @param bicc .
 #' @param ggm .
+#' @param par .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -232,7 +246,8 @@ rater <- function(
     interrater = TRUE,
     icc = FALSE,
     bicc = FALSE,
-    ggm = FALSE) {
+    ggm = FALSE,
+    par = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('rater requires jmvcore to be installed (restart may be required)')
@@ -249,7 +264,8 @@ rater <- function(
         interrater = interrater,
         icc = icc,
         bicc = bicc,
-        ggm = ggm)
+        ggm = ggm,
+        par = par)
 
     analysis <- raterClass$new(
         options = options,

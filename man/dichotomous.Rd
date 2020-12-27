@@ -4,7 +4,7 @@
 \alias{dichotomous}
 \title{Tetrachoric Correlation}
 \usage{
-dichotomous(data, vars, tetrachoric = TRUE, ggm = FALSE)
+dichotomous(data, vars, tetrachoric = TRUE, ggm = FALSE, par = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -14,6 +14,8 @@ dichotomous(data, vars, tetrachoric = TRUE, ggm = FALSE)
 \item{tetrachoric}{.}
 
 \item{ggm}{.}
+
+\item{par}{.}
 }
 \value{
 A results object containing:
@@ -21,6 +23,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

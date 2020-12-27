@@ -32,5 +32,13 @@ items:
       visible: (ggm)
       refs: qgraph
 
+    - name: plot1
+      title: 'Partial plot'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot1
+      visible: (par)
+      refs: qgraph   
 
 ...
