@@ -29,7 +29,7 @@ items:
           type: number
  
     - name: icc
-      title: 'Intracalss correlation coefficient'
+      title: 'Intraclass correlation coefficient'
       type: Table
       visible: (icc)
       rows: 1

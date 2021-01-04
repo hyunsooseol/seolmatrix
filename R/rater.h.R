@@ -118,7 +118,7 @@ raterResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="icc",
-                title="Intracalss correlation coefficient",
+                title="Intraclass correlation coefficient",
                 visible="(icc)",
                 rows=1,
                 clearWith=list(
