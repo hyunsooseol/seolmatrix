@@ -47,6 +47,7 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # data <- data(iris)
             # res<- correlation::correlation(data, multilevel = TRUE)
             
+            if (length(self$options$facs)<1) return() 
             
             if(length(self$options$vars>2)){
             

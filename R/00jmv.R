@@ -7,37 +7,34 @@
         `author`="Seol, H.", 
         `year`=2020, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix/", 
-        `url`="https://github.com/hyunsooseol/seolmatrix"), 
+        `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
         `author`="William Revelle", 
         `year`=2019, 
         `title`="psych: Procedures for Personality and Psychological Research", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=psych", 
-        `url`="https://CRAN.R-project.org/package=psych"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=psych"), 
     `qgraph`=list(
         `type`="software", 
         `author`="Sacha Epskamp and Ang\\'elique O. J. Cramer and Lourens J. Waldorp and Verena D. Schmittmann and Denny Borsboom", 
         `year`=2012, 
         `title`="qgraph: Network Visualizations of Relationships in Psychometric Data", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=qgraph", 
-        `url`="https://CRAN.R-project.org/package=qgraph"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=qgraph"), 
     `irr`=list(
         `type`="software", 
         `author`="Matthias Gamer and Jim Lemon and Ian Fellows Puspendra Singh", 
         `year`=2019, 
         `title`="irr: Various Coefficients of Interrater Reliability and Agreement", 
-        `url`="https://CRAN.R-project.org/package=irr"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=irr"), 
     `psy`=list(
         `type`="software", 
         `author`="Bruno Falissard", 
         `year`=2012, 
         `title`="psy: Various procedures used in psychometry", 
-        `url`="https://CRAN.R-project.org/package=psy"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=psy"), 
     `correlation`=list(
         `type`="software", 
         `author`="Dominique Makowski and Mattan S. Ben-Shachar and Indrajeet Patil and Daniel Ludecke", 
         `year`=2020, 
         `title`="Methods and Algorithms for Correlation Analysis in R", 
-        `url`="https://CRAN.R-project.org/package=correlation"))
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=correlation"))

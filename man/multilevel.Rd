@@ -4,7 +4,7 @@
 \alias{multilevel}
 \title{Multilevel Correlation}
 \usage{
-multilevel(data, facs, vars, multi = TRUE)
+multilevel(data, facs, vars, multi = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}

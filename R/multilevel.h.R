@@ -8,7 +8,7 @@ multilevelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         initialize = function(
             facs = NULL,
             vars = NULL,
-            multi = TRUE, ...) {
+            multi = FALSE, ...) {
 
             super$initialize(
                 package='seolmatrix',
@@ -33,7 +33,7 @@ multilevelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..multi <- jmvcore::OptionBool$new(
                 "multi",
                 multi,
-                default=TRUE)
+                default=FALSE)
 
             self$.addOption(private$..facs)
             self$.addOption(private$..vars)
@@ -155,7 +155,7 @@ multilevel <- function(
     data,
     facs,
     vars,
-    multi = TRUE) {
+    multi = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multilevel requires jmvcore to be installed (restart may be required)')
