@@ -18,6 +18,7 @@ multilevel(data, facs, vars, multi = TRUE)
 \value{
 A results object containing:
 \tabular{llllll}{
+  \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
 }
 

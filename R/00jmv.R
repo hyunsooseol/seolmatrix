@@ -34,4 +34,10 @@
         `author`="Bruno Falissard", 
         `year`=2012, 
         `title`="psy: Various procedures used in psychometry", 
-        `url`="https://CRAN.R-project.org/package=psy"))
+        `url`="https://CRAN.R-project.org/package=psy"), 
+    `correlation`=list(
+        `type`="software", 
+        `author`="Dominique Makowski and Mattan S. Ben-Shachar and Indrajeet Patil and Daniel Ludecke", 
+        `year`=2020, 
+        `title`="Methods and Algorithms for Correlation Analysis in R", 
+        `url`="https://CRAN.R-project.org/package=correlation"))

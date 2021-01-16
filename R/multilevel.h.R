@@ -52,6 +52,7 @@ multilevelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
 multilevelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
+        instructions = function() private$.items[["instructions"]],
         multi = function() private$.items[["multi"]]),
     private = list(),
     public=list(
@@ -60,7 +61,13 @@ multilevelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="",
                 title="Multilevel Correlation",
-                refs="snowCluster")
+                refs="seolmatrix")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="instructions",
+                title="Instructions",
+                visible=TRUE,
+                refs="correlation"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="multi",
@@ -68,7 +75,6 @@ multilevelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 visible="(multi)",
                 clearWith=list(
                     "vars"),
-                refs="correlation",
                 columns=list(
                     list(
                         `name`="v1", 
@@ -134,6 +140,7 @@ multilevelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param multi .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'

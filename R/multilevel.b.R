@@ -13,6 +13,35 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multilevelClass",
     inherit = multilevelBase,
     private = list(
+        
+        #------------------------
+        
+        .init = function() {
+            if (is.null(self$data) | is.null(self$options$vars)) {
+                self$results$instructions$setVisible(visible = TRUE)
+                
+            }
+            
+            self$results$instructions$setContent(
+                "<html>
+            <head>
+            </head>
+            <body>
+            <div class='instructions'>
+            
+            <p> The rationale of Multilevel Correlation is described in the <a href='https://cran.r-project.org/web/packages/correlation/vignettes/multilevel.html' target = '_blank'>page.</a></p>
+            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/'  target = '_blank'>GitHub.</a></p>
+            </div>
+            </body>
+            </html>"
+            )
+            
+        },
+        
+        
+        
+        #---------------------------------
+        
         .run = function() {
 
             # data <- data(iris)

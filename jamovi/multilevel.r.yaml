@@ -2,16 +2,21 @@
 name:  multilevel
 title: Multilevel Correlation
 jrs:   '1.1'
-refs: snowCluster
+refs: seolmatrix
 items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+      refs: correlation 
+      
     - name: multi
       title: 'Multilevel Correlation'
       type: Table
       visible: (multi)
       clearWith:
         - vars
-      refs: correlation    
-
+      
       columns:
         - name: v1
           title: 'Variable1'
