@@ -1,0 +1,36 @@
+---
+name:  multilevel
+title: Multilevel Correlation
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+    - name: facs
+      title: Grouping Variable(Required)
+      type: Variable
+      suggested:
+         - nominal
+      permitted:
+        - factor
+  
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric  
+  
+    - name: multi
+      title: Multilevel Correaltion
+      type: Bool
+      default: TRUE
+
+
+...

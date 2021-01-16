@@ -1,0 +1,43 @@
+---
+name:  multilevel
+title: Multilevel Correlation
+jrs:   '1.1'
+refs: snowCluster
+items:
+    - name: multi
+      title: 'Multilevel Correlation'
+      type: Table
+      visible: (multi)
+      clearWith:
+        - vars
+      refs: correlation    
+
+      columns:
+        - name: v1
+          title: 'Variable1'
+          type: 'text'
+        - name: v2
+          title: 'Variable2'
+          type: 'text'
+        - name: r
+          type: number
+        - name: t
+          type: number
+        - name: df
+          type: integer
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: n
+          type: integer
+        - name: low
+          title: 'Lower'
+          type: number
+          superTitle: '95% CI'
+        - name: high
+          title: 'Upper'
+          type: number
+          superTitle: '95% CI'
+
+
+...
