@@ -50,9 +50,9 @@ datasets:
     description: Rating Big5 variable
     tags:
       - Rater
-  - name: partial
+  - name: big5
     path: big5.omv
-    description: correlation data
+    description: partial data
     tags:
       - Partial
   - name: dichotomous
@@ -60,13 +60,18 @@ datasets:
     description: Tetrachoric Correlation
     tags:
       - Dichotomous
-  - name: rank
+  - name: bfi
     path: bfi.omv
     description: Spearman Correlation
     tags:
       - Rank
-  - name: multilevel
+  - name: iris
     path: iris.omv
+    description: Multilevel Correlation
+    tags:
+      - Multilevel
+  - name: mtcars
+    path: mtcars.omv
     description: Multilevel Correlation
     tags:
       - Multilevel
