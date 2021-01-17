@@ -10,31 +10,31 @@
         `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
-        `author`="William Revelle", 
+        `author`="Revelle,W", 
         `year`=2019, 
         `title`="psych: Procedures for Personality and Psychological Research", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=psych"), 
     `qgraph`=list(
         `type`="software", 
-        `author`="Sacha Epskamp and Ang\\'elique O. J. Cramer and Lourens J. Waldorp and Verena D. Schmittmann and Denny Borsboom", 
+        `author`="Epskamp,S., et al.", 
         `year`=2012, 
         `title`="qgraph: Network Visualizations of Relationships in Psychometric Data", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=qgraph"), 
     `irr`=list(
         `type`="software", 
-        `author`="Matthias Gamer and Jim Lemon and Ian Fellows Puspendra Singh", 
+        `author`="Gamer, M., Jim Lemon, J., & Singh, I.", 
         `year`=2019, 
         `title`="irr: Various Coefficients of Interrater Reliability and Agreement", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=irr"), 
     `psy`=list(
         `type`="software", 
-        `author`="Bruno Falissard", 
+        `author`="Falissard, B.", 
         `year`=2012, 
         `title`="psy: Various procedures used in psychometry", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=psy"), 
     `correlation`=list(
         `type`="software", 
-        `author`="Dominique Makowski and Mattan S. Ben-Shachar and Indrajeet Patil and Daniel Ludecke", 
+        `author`="Makowski, D., Ben-Shachar, M., Patil, I., & Ludecke, D.", 
         `year`=2020, 
         `title`="Methods and Algorithms for Correlation Analysis in R", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=correlation"))
