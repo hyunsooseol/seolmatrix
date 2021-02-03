@@ -8,7 +8,8 @@ concordanceOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         initialize = function(
             dep = NULL,
             covs = NULL,
-            cc = TRUE, ...) {
+            cc = TRUE,
+            ccp = FALSE, ...) {
 
             super$initialize(
                 package='seolmatrix',
@@ -30,26 +31,34 @@ concordanceOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "cc",
                 cc,
                 default=TRUE)
+            private$..ccp <- jmvcore::OptionBool$new(
+                "ccp",
+                ccp,
+                default=FALSE)
 
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
             self$.addOption(private$..cc)
+            self$.addOption(private$..ccp)
         }),
     active = list(
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
-        cc = function() private$..cc$value),
+        cc = function() private$..cc$value,
+        ccp = function() private$..ccp$value),
     private = list(
         ..dep = NA,
         ..covs = NA,
-        ..cc = NA)
+        ..cc = NA,
+        ..ccp = NA)
 )
 
 concordanceResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        table = function() private$.items[["table"]]),
+        table = function() private$.items[["table"]],
+        plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -83,7 +92,16 @@ concordanceResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="upper", 
                         `title`="Upper", 
                         `type`="number", 
-                        `superTitle`="95% CI"))))}))
+                        `superTitle`="95% CI"))))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot",
+                title="Concordance Plot",
+                width=500,
+                height=500,
+                renderFun=".plot",
+                visible="(ccp)",
+                refs="epiR"))}))
 
 concordanceBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "concordanceBase",
@@ -112,10 +130,12 @@ concordanceBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param dep .
 #' @param covs .
 #' @param cc .
+#' @param ccp .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$table} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -129,7 +149,8 @@ concordance <- function(
     data,
     dep,
     covs,
-    cc = TRUE) {
+    cc = TRUE,
+    ccp = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('concordance requires jmvcore to be installed (restart may be required)')
@@ -146,7 +167,8 @@ concordance <- function(
     options <- concordanceOptions$new(
         dep = dep,
         covs = covs,
-        cc = cc)
+        cc = cc,
+        ccp = ccp)
 
     analysis <- concordanceClass$new(
         options = options,

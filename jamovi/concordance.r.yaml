@@ -26,4 +26,13 @@ items:
           title: Upper
           type: number
           superTitle: '95% CI'
+          
+    - name: plot
+      title: 'Concordance Plot'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot
+      visible: (ccp)
+      refs: epiR   
 ...

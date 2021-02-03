@@ -25,6 +25,11 @@ options:
     - name: cc
       type: Bool
       title: correlation coefficient
-      default: TRUE   
+      default: TRUE
+      
+    - name: ccp
+      title: Concordance Plot
+      type: Bool
+      default: false  
         
 ...

@@ -5,6 +5,7 @@
 #' @import jmvcore
 #' @import epiR
 #' @importFrom epiR epi.ccc
+#' @import ggplot2
 #' @export
 
 concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -69,7 +70,7 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     data <- na.omit(data)
                     
                     
-                    res <- epiR::epi.ccc(data[[dep]], data[[covs]])
+                    tmp.ccc <- epiR::epi.ccc(data[[dep]], data[[covs]])
                     
                     
                     # epi.ccc(x, y, ci = "z-transform", conf.level = 0.95, rep.measure = FALSE, 
@@ -78,9 +79,9 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     table<- self$results$table
                     
-                    r <- res$rho.c[[1]]
-                    lower <- res$rho.c[[2]]
-                    upper<-res$rho.c[[3]]  
+                    r <-  tmp.ccc$rho.c[[1]]
+                    lower <-  tmp.ccc$rho.c[[2]]
+                    upper<-  tmp.ccc$rho.c[[3]]  
                     
                     row <- list()
                     
@@ -90,7 +91,63 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     table$setRow(rowNo = 1, values = row)
                     
+                    tmp <- data.frame(data[[dep]], data[[covs]])
                     
-                        
-          })
+                    tmp.lab <- data.frame(lab = paste("CCC: ",
+                                                      round(tmp.ccc$rho.c[,1], digits = 2), " (95% CI ",
+                                                      round(tmp.ccc$rho.c[,2], digits = 2), " - ",
+                                                      round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = ""))
+                    
+                    z <- lm( data[[covs]] ~ data[[dep]])
+                    alpha <- summary(z)$coefficients[1,1]
+                    beta <-  summary(z)$coefficients[2,1]
+                    tmp.lm <- data.frame(alpha, beta)
+                    
+                    dep <- data[[dep]]
+                    covs <- data[[covs]]
+                    
+                    
+                    image <- self$results$plot
+                    
+                    state <- list(tmp.lab, z, alpha, beta, tmp.lm, tmp, dep,covs )
+                    
+                    image$setState(state)
+                    
+                    
+                    },
+        
+        .plot = function(image, ggtheme, theme, ...) {
+        
+            if (length(self$options$dep)<1) return()
+            
+            if (length(self$options$covs)<1) return()
+            
+            tmp.lab <- image$state[[1]]
+            z     <- image$state[[2]]
+            alpha  <- image$state[[3]]
+            beta  <- image$state[[4]]
+            tmp.lm <- image$state[[5]]
+            tmp <- image$state[[6]]
+            dep <- image$state[[7]]
+            covs <- image$state[[8]]
+            
+            
+            
+            plot <- ggplot(tmp, aes(x = dep, y = covs)) + 
+                geom_point() +
+                geom_abline(intercept = 0, slope = 1) +
+                geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 
+                            linetype = "dashed") +
+                scale_x_continuous(limits = c(0,3), name = "Measure 1") +
+                scale_y_continuous(limits = c(0,3), name = "Measure 2") +
+                geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
+                coord_fixed(ratio = 1 / 1)
+            
+            plot <- plot+ggtheme
+            print(plot)
+            TRUE
+        }
+            
+         
+         )
 )

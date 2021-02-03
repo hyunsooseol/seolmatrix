@@ -4,7 +4,7 @@
 \alias{concordance}
 \title{Concordance Correlation}
 \usage{
-concordance(data, dep, covs, cc = TRUE)
+concordance(data, dep, covs, cc = TRUE, ccp = FALSE)
 }
 \arguments{
 \item{data}{.}
@@ -14,12 +14,15 @@ concordance(data, dep, covs, cc = TRUE)
 \item{covs}{.}
 
 \item{cc}{.}
+
+\item{ccp}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$table} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

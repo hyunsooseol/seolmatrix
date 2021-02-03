@@ -27,3 +27,5 @@ children:
     children:
       - type: CheckBox
         name: cc
+      - type: CheckBox
+        name: ccp
