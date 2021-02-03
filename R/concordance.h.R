@@ -97,8 +97,8 @@ concordanceResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="plot",
                 title="Concordance Plot",
-                width=500,
-                height=500,
+                width=400,
+                height=400,
                 renderFun=".plot",
                 visible="(ccp)",
                 refs="epiR"))}))

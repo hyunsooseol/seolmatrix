@@ -133,7 +133,7 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             
             
-            plot <- ggplot(tmp, aes(x = dep, y = covs)) + 
+            plot <- ggplot(tmp,aes(x = dep, y = covs)) + 
                 geom_point() +
                 geom_abline(intercept = 0, slope = 1) +
                 geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 

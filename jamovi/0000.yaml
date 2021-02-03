@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.1.0
+version: 3.2.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: 2021-2-3
+date: 2021-2-4
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -84,6 +84,11 @@ datasets:
   - name: concordance
     path: concordance.omv
     description: Rating Big5 variable
+    tags:
+      - Concordance
+  - name: method
+    path: method.omv
+    description: comparing two methods
     tags:
       - Concordance
 usesNative: true

@@ -30,8 +30,8 @@ items:
     - name: plot
       title: 'Concordance Plot'
       type: Image
-      width:  500
-      height: 500
+      width:  400
+      height: 400
       renderFun: .plot
       visible: (ccp)
       refs: epiR   

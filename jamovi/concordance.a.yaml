@@ -30,6 +30,6 @@ options:
     - name: ccp
       title: Concordance Plot
       type: Bool
-      default: false  
+      default: FALSE  
         
 ...
