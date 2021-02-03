@@ -1,0 +1,30 @@
+---
+name:  concordance
+title: Concordance Correlation
+menuGroup: seolmatrix
+menuSubgroup: Concordance
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: dep
+      title: Measure 1
+      type: Variable
+      permitted:
+        - numeric
+
+    - name: covs
+      title: Measure 2
+      type: Variable
+      permitted:
+        - numeric
+        
+    - name: cc
+      type: Bool
+      title: correlation coefficient
+      default: TRUE   
+        
+...

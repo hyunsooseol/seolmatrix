@@ -37,4 +37,10 @@
         `author`="Makowski, D., Ben-Shachar, M., Patil, I., & Ludecke, D.", 
         `year`=2020, 
         `title`="Methods and Algorithms for Correlation Analysis in R", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=correlation"))
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=correlation"), 
+    `epiR`=list(
+        `type`="software", 
+        `author`="Stevenson, M., et al.", 
+        `year`=2021, 
+        `title`="epiR: Tools for the Analysis of Epidemiological Data", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=epiR"))

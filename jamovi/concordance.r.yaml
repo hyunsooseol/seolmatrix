@@ -1,0 +1,29 @@
+---
+name:  concordance
+title: Concordance Correlation
+jrs:   '1.1'
+refs: seolmatrix
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+
+    - name:  table
+      title: Estimated Correlation
+      type: Table
+      rows:  1
+      refs: epiR
+      columns:
+        - name: r
+          title: Concordance
+          type: number
+        - name: lower
+          title: Lower
+          type: number
+          superTitle: '95% CI'
+        - name: upper
+          title: Upper
+          type: number
+          superTitle: '95% CI'
+...

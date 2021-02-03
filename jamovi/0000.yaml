@@ -1,17 +1,17 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.0.0
+version: 3.1.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: 2021-1-16
+date: 2021-2-3
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
-  Tetrachoric, Spearman, Intraclass correlation coefficients, Bootstrap
-  agreement, Multilevel correlation, and allows users to produce  Gaussian
+  Tetrachoric, Spearman, Intraclass correlation, Bootstrap agreement, Multilevel
+  correlation, Concordance correlation, and allows users to produce Gaussian
   Graphical Model.
 analyses:
   - title: Partial Correlation
@@ -44,6 +44,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Multilevel Correlation
     menuSubgroup: Multilevel
+  - title: Concordance Correlation
+    name: concordance
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Concordance Correlation
+    menuSubgroup: Concordance
 datasets:
   - name: rater
     path: rater.omv
@@ -75,6 +81,11 @@ datasets:
     description: Multilevel Correlation
     tags:
       - Multilevel
+  - name: concordance
+    path: concordance.omv
+    description: Rating Big5 variable
+    tags:
+      - Concordance
 usesNative: true
 minApp: 1.0.8
 
