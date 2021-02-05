@@ -35,4 +35,13 @@ items:
       renderFun: .plot
       visible: (ccp)
       refs: epiR   
+  
+    - name: plot1
+      title: 'Bland-Altman Plot'
+      type: Image
+      width:  400
+      height: 400
+      renderFun: .plot1
+      visible: (bap)
+      refs: epiR       
 ...

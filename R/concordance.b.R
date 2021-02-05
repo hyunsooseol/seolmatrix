@@ -91,6 +91,8 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     table$setRow(rowNo = 1, values = row)
                     
+                    ## plot---------------------------------
+                    
                     tmp <- data.frame(data[[dep]], data[[covs]])
                     
                     tmp.lab <- data.frame(lab = paste("CCC: ",
@@ -113,8 +115,58 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     image$setState(state)
                     
+                    ## plot1-------------------------
+                    
+                   
+                    tmp1 <- data.frame(mean = tmp.ccc$blalt[,1], delta = tmp.ccc$blalt[,2])
+                    
+                    est <- tmp.ccc$sblalt$est
+                    lower <- tmp.ccc$sblalt$lower
+                    upper <- tmp.ccc$sblalt$upper     
+                    
+                    mean = tmp.ccc$blalt[,1] 
+                    delta = tmp.ccc$blalt[,2]
+                    
+                    dat<- tmp.ccc$sblalt
+                    
+                    #########
+                    
+                    image1 <- self$results$plot1
+                        
+                    state <- list(tmp1, est, lower, upper, mean, delta,dat)
+                    
+                    image1$setState(state)    
+                     
                     
                     },
+        
+        .plot1 = function(image1, ggtheme, theme, ...) {
+            
+            if (length(self$options$dep)<1) return()
+            
+            if (length(self$options$covs)<1) return()
+        
+            tmp1 <- image1$state[[1]]
+            est     <- image1$state[[2]]
+            lower  <- image1$state[[3]]
+            upper  <- image1$state[[4]]
+           mean <- image1$state[[5]]
+            delta <- image1$state[[6]]
+            dat <- image1$state[[7]]
+            
+            plot1<- ggplot(tmp1, aes(x = mean, y = delta)) + 
+                geom_point() +
+                geom_hline(data = dat, aes(yintercept = lower), linetype = 2) +
+                geom_hline(data =  dat, aes(yintercept = upper), linetype = 2) +
+                geom_hline(data =  dat, aes(yintercept = est), linetype = 1) +
+                scale_x_continuous(name = "Average between measures") +
+                scale_y_continuous(name = "Difference between measures")   
+            
+            plot1 <- plot1 + ggtheme
+            print(plot1)
+            TRUE
+        },
+        
         
         .plot = function(image, ggtheme, theme, ...) {
         

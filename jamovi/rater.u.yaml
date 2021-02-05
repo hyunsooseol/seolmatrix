@@ -32,7 +32,7 @@ children:
           - type: CheckBox
             name: bicc   
       - type: Label
-        label: 'Plot'
+        label: 'Plots'
         fitToGrid: true
         cell:
           column: 1

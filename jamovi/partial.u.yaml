@@ -37,7 +37,7 @@ children:
           - type: CheckBox
             name: flgSig
       - type: Label
-        label: Plot
+        label: Plots
         fitToGrid: true
         cell:
           column: 1

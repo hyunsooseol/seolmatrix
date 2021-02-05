@@ -25,7 +25,15 @@ children:
   - type: LayoutBox
     margin: large
     children:
-      - type: CheckBox
-        name: cc
-      - type: CheckBox
-        name: ccp
+      - type: Label
+        label: "Test"
+        children:
+          - type: CheckBox
+            name: cc
+      - type: Label
+        label: "Plots"
+        children:
+          - type: CheckBox
+            name: ccp
+          - type: CheckBox
+            name: bap
