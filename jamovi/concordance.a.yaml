@@ -28,12 +28,12 @@ options:
       default: TRUE
       
     - name: ccp
-      title: Concordance plot
+      title: Concordance 
       type: Bool
       default: FALSE
       
     - name: bap
-      title: Bland-Altman plot
+      title: Bland-Altman 
       type: Bool
       default: FALSE
             
