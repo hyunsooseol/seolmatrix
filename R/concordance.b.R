@@ -95,11 +95,11 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     tmp <- data.frame(data[[dep]], data[[covs]])
                     
-                    tmp.lab <- data.frame(lab = paste("CCC: ",
-                                                      round(tmp.ccc$rho.c[,1], digits = 2), " (95% CI ",
-                                                      round(tmp.ccc$rho.c[,2], digits = 2), " - ",
-                                                      round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = ""))
-                    
+                    # tmp.lab <- data.frame(lab = paste("CCC: ",
+                    #                                   round(tmp.ccc$rho.c[,1], digits = 2), " (95% CI ",
+                    #                                   round(tmp.ccc$rho.c[,2], digits = 2), " - ",
+                    #                                   round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = ""))
+                    # 
                     z <- lm( data[[covs]] ~ data[[dep]])
                     alpha <- summary(z)$coefficients[1,1]
                     beta <-  summary(z)$coefficients[2,1]
@@ -111,7 +111,7 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     
                     image <- self$results$plot
                     
-                    state <- list(tmp.lab, z, alpha, beta, tmp.lm, tmp, dep,covs )
+                    state <- list(z, alpha, beta, tmp.lm, tmp, dep,covs )
                     
                     image$setState(state)
                     
@@ -174,14 +174,14 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             if (length(self$options$covs)<1) return()
             
-            tmp.lab <- image$state[[1]]
-            z     <- image$state[[2]]
-            alpha  <- image$state[[3]]
-            beta  <- image$state[[4]]
-            tmp.lm <- image$state[[5]]
-            tmp <- image$state[[6]]
-            dep <- image$state[[7]]
-            covs <- image$state[[8]]
+          #  tmp.lab <- image$state[[1]]
+            z     <- image$state[[1]]
+            alpha  <- image$state[[2]]
+            beta  <- image$state[[3]]
+            tmp.lm <- image$state[[4]]
+            tmp <- image$state[[5]]
+            dep <- image$state[[6]]
+            covs <- image$state[[7]]
             
             
             
@@ -192,7 +192,7 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             linetype = "dashed") +
                 scale_x_continuous(name = "Measure 1") +
                 scale_y_continuous(name = "Measure 2") +
-                geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
+            #    geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
                 coord_fixed(ratio = 1 / 1)
             
             plot <- plot+ggtheme
