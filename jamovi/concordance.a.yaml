@@ -13,12 +13,16 @@ options:
     - name: dep
       title: Measure 1
       type: Variable
+      suggested:
+         - continuous
       permitted:
         - numeric
 
     - name: covs
       title: Measure 2
       type: Variable
+      suggested:
+         - continuous
       permitted:
         - numeric
         

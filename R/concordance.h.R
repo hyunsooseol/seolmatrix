@@ -21,11 +21,15 @@ concordanceOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..dep <- jmvcore::OptionVariable$new(
                 "dep",
                 dep,
+                suggested=list(
+                    "continuous"),
                 permitted=list(
                     "numeric"))
             private$..covs <- jmvcore::OptionVariable$new(
                 "covs",
                 covs,
+                suggested=list(
+                    "continuous"),
                 permitted=list(
                     "numeric"))
             private$..cc <- jmvcore::OptionBool$new(
