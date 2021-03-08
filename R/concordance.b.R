@@ -190,8 +190,8 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 geom_abline(intercept = 0, slope = 1) +
                 geom_abline(data = tmp.lm, aes(intercept = alpha, slope = beta), 
                             linetype = "dashed") +
-                scale_x_continuous(name = "Measure 1") +
-                scale_y_continuous(name = "Measure 2") +
+                scale_x_continuous(name = self$options$dep) +
+                scale_y_continuous(name = self$options$covs ) +
             #    geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) + 
                 coord_fixed(ratio = 1 / 1)
             
