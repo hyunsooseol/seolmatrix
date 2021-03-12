@@ -78,15 +78,16 @@ dichotomousResults <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class
                 options=options,
                 name="matrix",
                 title="Tetrachoric Correlation",
-                rows="(vars)",
+                visible="(matrix)",
                 refs="psych",
+                clearWith=list(
+                    "vars"),
                 columns=list(
                     list(
-                        `name`=".name", 
+                        `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="($key)", 
-                        `combineBelow`=TRUE))))
+                        `content`="($key)"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -137,7 +138,7 @@ dichotomousBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
+#'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }

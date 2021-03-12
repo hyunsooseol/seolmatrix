@@ -12,16 +12,16 @@ items:
     - name: matrix
       title: 'Tetrachoric Correlation'
       type: Table
-      description: correlation matrix table
-      rows: (vars)
-      refs: psych    
+      visible: (matrix)
+      refs: psych
+      clearWith:
+        - vars
       
       columns:
-          - name: .name
+          - name: name
             title: ""
-            type: text
+            type: 'text'
             content: ($key)
-            combineBelow: true
 
     - name: plot
       title: 'Gaussian Graphical Model'

@@ -42,70 +42,75 @@ self$results$instructions$setContent(
             </body>
             </html>"
         )
+
+
+},
         
-        # get variables
-        
-        matrix <- self$results$get('matrix')
-        vars <- self$options$get('vars')
-        nVars <- length(vars)
-        
+        # # get variables
+        # 
+        # matrix <- self$results$get('matrix')
+        # vars <- self$options$get('vars')
+        # nVars <- length(vars)
+        # 
         
         # add columns--------
-        
-        for (i in seq_along(vars)) {
-          
-           var <- vars[[i]]
-          
-          matrix$addColumn(
-            name = paste0(var),
-            title = var,
-            type = 'number',
-            format = 'zto'
-          )
-          
-        }
-        
+        # 
+        # for (i in seq_along(vars)) {
+        #   
+        #    var <- vars[[i]]
+        #   
+        #   matrix$addColumn(
+        #     name = paste0(var),
+        #     title = var,
+        #     type = 'number',
+        #     format = 'zto'
+        #   )
+        #   
+        # }
+     
         # empty cells above and put "-" in the main diagonal
         
-        for (i in seq_along(vars)) {
-          
-           var <- vars[[i]]
-          
-          values <- list()
-          
-          for (j in seq(i, nVars)) {
-            
-             v <- vars[[j]]
-            
-            values[[paste0(v)]]  <- ''
-            
-          }
-         values[[paste0(var)]]  <- '\u2014'  
-         matrix$setRow(rowKey = var, values)
-          
-        }
-        
-        if (length(self$options$vars) <= 1)
-          self$setStatus('complete')
-      },
+      #   for (i in seq_along(vars)) {
+      #     
+      #      var <- vars[[i]]
+      #     
+      #     values <- list()
+      #     
+      #     for (j in seq(i, nVars)) {
+      #       
+      #        v <- vars[[j]]
+      #       
+      #       values[[paste0(v)]]  <- ''
+      #       
+      #     }
+      #    values[[paste0(var)]]  <- '\u2014'  
+      #    matrix$setRow(rowKey = var, values)
+      #     
+      #   }
+      #   
+      #   if (length(self$options$vars) <= 1)
+      #     self$setStatus('complete')
+      # },
       
-      
-      
+  
 #==========================================================
       .run = function() {
-        # `self$data` contains the data
-        # `self$options` contains the options
-        # `self$results` contains the results object (to populate)
+       
+        if (length(self$options$vars)<2) return() 
         
+        
+        if(length(self$options$vars>2)){
         
         # get variables---------------------------------
         
-        matrix <- self$results$get('matrix')
-        vars <- self$options$get('vars')
+        
+        vars <- self$options$vars
         nVars <- length(vars)
         
        
         mydata <- self$data
+        
+        mydata <- jmvcore::naOmit(mydata)
         
         for(v in vars)
           mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
@@ -115,18 +120,46 @@ self$results$instructions$setContent(
         
         tetrarho <- psych::tetrachoric(mydata)$rho
         
+        names <- dimnames(tetrarho)[[1]] 
+        
+        table <- self$results$matrix
+        
+        # add columns--------
+        
+        for (i in seq_along(vars)) {
+          
+          var <- vars[[i]]
+          
+          table$addColumn(
+            name = paste0(var),
+            title = var,
+            type = 'number',
+            format = 'zto'
+          )
+          
+        }
+        
         
         # populate result----------------------------------------
         
-        for (i in 2:nVars) {
-          for (j in seq_len(i - 1)) {
-            values <- list()
+        for (name in names) {
+          
+          row <- list()
+          
+          
+          for (j in seq_along(vars)) {
             
-            values[[paste0(vars[[j]])]] <- tetrarho[i, j]
+              var <- vars[[j]]
             
-            matrix$setRow(rowNo = i, values)
+             row[[var]] <- tetrarho[name, j]
+           
           }
+          table$addRow(rowKey=name, values=row)
+          
         }
+        
+        
+        ### paritial correlation--------
         
         res<- psych::partial.r(tetrarho)
         
@@ -147,7 +180,7 @@ self$results$instructions$setContent(
         image$setState(EBICgraph)
         
         
-        
+        }
         },
       
 #================================================================
