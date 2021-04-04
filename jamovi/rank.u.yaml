@@ -16,10 +16,39 @@ children:
             isTarget: true
   - type: LayoutBox
     margin: large
+    stretchFactor: 1
     children:
-      - type: CheckBox
-        name: spearman
-      - type: CheckBox
-        name: ggm
-      - type: CheckBox
-        name: par
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: "Test"
+            children:
+              - type: CheckBox
+                name: spearman
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: "Plots"
+            children:
+              - type: CheckBox
+                name: ggm
+              - type: CheckBox
+                name: par
+
+
+
+
+
+
+
+ 

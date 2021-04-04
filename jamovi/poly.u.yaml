@@ -1,5 +1,5 @@
-title: Tetrachoric Correlation
-name: dichotomous
+title: Polychoric Correlation
+name: poly
 jus: '3.0'
 stage: 0
 compilerMode: tame
@@ -29,7 +29,7 @@ children:
             label: "Test"
             children:
               - type: CheckBox
-                name: tetrachoric
+                name: polychoric
       - type: LayoutBox
         margin: large
         cell:
@@ -55,7 +55,4 @@ children:
 
 
 
-
-
-
-
+ 

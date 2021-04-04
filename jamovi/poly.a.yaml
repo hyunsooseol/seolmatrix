@@ -1,6 +1,6 @@
 ---
-name:  dichotomous
-title: Tetrachoric Correlation
+name:  poly
+title: Polychoric Correlation
 menuGroup: seolmatrix
 menuSubgroup: Ordinal
 version: '1.0.0'
@@ -17,12 +17,12 @@ options:
       title: Variables
       type: Variables
       suggested:
-         - continuous
+         - ordinal
       permitted:
         - numeric
 
-    - name: tetrachoric
-      title: Tetrachoric 
+    - name: polychoric
+      title: Polychoric 
       type: Bool
       default: True
 
