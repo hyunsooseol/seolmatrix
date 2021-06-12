@@ -87,7 +87,7 @@ ahpResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 columns=list(
                     list(
                         `name`="name", 
-                        `title`="", 
+                        `title`="Item", 
                         `type`="text", 
                         `content`="($key)"))))
             self$add(jmvcore::Table$new(
@@ -101,7 +101,7 @@ ahpResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 columns=list(
                     list(
                         `name`="name", 
-                        `title`="", 
+                        `title`="Item", 
                         `type`="text", 
                         `content`="($key)"),
                     list(
@@ -118,7 +118,7 @@ ahpResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 columns=list(
                     list(
                         `name`="name", 
-                        `title`="", 
+                        `title`="Consistency", 
                         `type`="text", 
                         `content`="($key)"),
                     list(

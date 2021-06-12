@@ -19,7 +19,7 @@ items:
 
       columns:
         - name: name
-          title: ''
+          title: 'Item'
           type: 'text'
           content: ($key)
           
@@ -33,7 +33,7 @@ items:
 
       columns:
         - name: name
-          title: ''
+          title: 'Item'
           type: 'text'
           content: ($key)        
           
@@ -50,7 +50,7 @@ items:
 
       columns:
         - name: name
-          title: ''
+          title: 'Consistency'
           type: 'text'
           content: ($key)        
           

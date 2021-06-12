@@ -6,8 +6,8 @@ Date: 2021-6-12
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
 Description: This module is a tool for calculating correlations such as Person, Partial,
-  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap agreement, Multilevel correlation, Concordance correlation, and allows users to produce 
-  Gaussian Graphical Model.
+  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy Process, and allows users to produce 
+  Gaussian Graphical Model and Partial plot.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

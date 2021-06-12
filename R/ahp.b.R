@@ -28,9 +28,10 @@ ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             </head>
             <body>
             <div class='instructions'>
-            <p> Each row and column represents an item and a decision maker repectively for the input data format.</p>
+            <p> Each row and column represents an item and a decision maker for the input data format.</p>
             <p> More than 10 items or 20 decision makers are NOT allowed.</p>
             <p> Each item would be graded 1-9 score by each decision maker</p>
+            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             </div>
             </body>
             </html>"
@@ -128,9 +129,9 @@ ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                        # Confidence Index and Confidence Ratio--------
                        
                        
-                       Consistency_index<- res$CI
-                       Consistency_ratio<- res$CR
-                       cir<- rbind(Consistency_index, Consistency_ratio)
+                       Index<- res$CI
+                       Ratio<- res$CR
+                       cir<- rbind(Index, Ratio)
                        
                        
                        names<- dimnames(cir)[[1]]
