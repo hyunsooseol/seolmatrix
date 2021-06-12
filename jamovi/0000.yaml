@@ -1,18 +1,18 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.4.5
+version: 3.5.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: 2021-4-4
+date: 2021-6-12
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap
-  agreement, Multilevel correlation, Concordance correlation, and allows users
-  to produce Gaussian Graphical Model.
+  agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy
+  Process,and allows users to produce Gaussian Graphical Model.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -56,6 +56,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Polychoric Correlation
     menuSubgroup: Ordinal
+  - title: Analytic Hierarchy Process
+    name: ahp
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Analytic Hierarchy Process
+    menuSubgroup: AHP
 datasets:
   - name: rater
     path: rater.omv
@@ -107,6 +113,11 @@ datasets:
     description: 'from K.J. van Stralen et.al.,2012'
     tags:
       - Concordance
+  - name: ahp
+    path: ahp.omv
+    description: 4 items x 3 decision makers
+    tags:
+      - AHP
 usesNative: true
 minApp: 1.0.8
 

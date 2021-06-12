@@ -43,4 +43,10 @@
         `author`="Stevenson, M., et al.", 
         `year`=2021, 
         `title`="epiR: Tools for the Analysis of Epidemiological Data", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=epiR"))
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=epiR"), 
+    `easyAHP`=list(
+        `type`="software", 
+        `author`="Zhicheng D., & Yuantao H.", 
+        `year`=2017, 
+        `title`="Analytic Hierarchy Process (AHP)", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=easyAHP"))

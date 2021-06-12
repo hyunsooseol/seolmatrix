@@ -1,0 +1,59 @@
+---
+name:  ahp
+title: Analytic Hierarchy Process
+jrs:   '1.1'
+refs: seolmatrix
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+      
+    - name: itemmat
+      title: 'Item Matrix'
+      type: Table
+      refs: easyAHP
+      visible: (itemmat)
+      clearWith:
+        - vars
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+          
+    - name: weights
+      title: 'Item Weights'
+      type: Table
+      refs: easyAHP
+      visible: (weights)
+      clearWith:
+        - vars
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)        
+          
+        - name: value
+          title: 'Weights'  
+          
+    - name: cir
+      title: 'Consistency Index and Ratio'
+      type: Table
+      refs: easyAHP
+      visible: (cir)
+      clearWith:
+        - vars
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)        
+          
+        - name: value
+          title: 'Value'          
+...

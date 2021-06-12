@@ -1,0 +1,42 @@
+---
+name:  ahp
+title: Analytic Hierarchy Process
+menuGroup: seolmatrix
+menuSubgroup: AHP
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - nominal
+         - ordinal
+      permitted:
+        - numeric
+
+    - name: itemmat
+      title: Decision matrix 
+      type: Bool
+      default: True
+
+    - name: weights
+      title: Item weights
+      type: Bool
+      default: FALSE
+      
+    - name: cir
+      title: Consistency index & ratio
+      type: Bool
+      default: FALSE
+     
+ 
+ 
+...

@@ -1,0 +1,161 @@
+
+# This file is a generated template, your changes will not be overwritten
+
+#' @importFrom R6 R6Class
+#' @import jmvcore
+#' @import easyAHP
+#' @importFrom easyAHP easyAHP
+#' @export
+
+
+ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
+    "ahpClass",
+    inherit = ahpBase,
+    private = list(
+ 
+        #==========================================================
+        .init = function() {
+            
+            
+            if(is.null(self$data) | is.null(self$options$vars)){
+                self$results$instructions$setVisible(visible = TRUE)
+                
+            }
+            
+            self$results$instructions$setContent(
+                "<html>
+            <head>
+            </head>
+            <body>
+            <div class='instructions'>
+            <p> Each row and column represents an item and a decision maker repectively for the input data format.</p>
+            <p> More than 10 items or 20 decision makers are NOT allowed.</p>
+            <p> Each item would be graded 1-9 score by each decision maker</p>
+            </div>
+            </body>
+            </html>"
+            )
+            
+            if (self$options$cir)
+                self$results$cir$setNote(
+                    "Note",
+                    "value<0.1 is acceptable for consistency ratio."
+                )
+            
+            
+        },
+        
+ 
+         .run = function() {
+
+                   if (length(self$options$vars)<2) return() 
+                   
+                   
+                   if(length(self$options$vars>2)){
+                       
+                       # get variables---------------------------------
+                       
+                       
+                       vars <- self$options$vars
+                       nVars <- length(vars)
+                       
+                       
+                       mydata <- self$data
+                       
+                       mydata <- jmvcore::naOmit(mydata)
+                       
+                       for(v in vars)
+                           mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
+                       
+                       # compute AHP-------
+                       
+                       res <- easyAHP::easyAHP(mydata)$Makers
+                       
+                       
+                       # item matrix--------
+                       
+                       item <- res$Matrix
+                       item<- as.matrix(item)
+                       
+                       names <- dimnames(item)[[1]]
+                       dims <- dimnames(item)[[2]]
+                       
+                       table <- self$results$itemmat
+                       
+                       for (dim in dims) {
+                           
+                           table$addColumn(name = paste0(dim),
+                                           type = 'number')
+                       }
+                       
+                       
+                       for (name in names) {
+                           
+                           row <- list()
+                           
+                           for(j in seq_along(dims)){
+                               
+                               row[[dims[j]]] <- item[name,j]
+                               
+                           }
+                           
+                           table$addRow(rowKey=name, values=row)
+                           
+                       }
+                       
+                       # item weights----------------
+                       
+                       weights<- res$Weights
+                       weights<- as.data.frame(weights)
+                       
+                       names<- dimnames(weights)[[1]]
+                       
+                       
+                       # item weights table-----------
+                       
+                       table <- self$results$weights
+                       
+                       for (name in names) {
+                           
+                           row <- list()
+                           
+                           row[['value']] <- weights[name,1]
+                           
+                           table$addRow(rowKey=name, values=row)
+                           
+                       }
+                       
+                       # Confidence Index and Confidence Ratio--------
+                       
+                       
+                       Consistency_index<- res$CI
+                       Consistency_ratio<- res$CR
+                       cir<- rbind(Consistency_index, Consistency_ratio)
+                       
+                       
+                       names<- dimnames(cir)[[1]]
+                       
+                       # Confidence index and ratio table-------
+                       
+                       
+                       table <- self$results$cir
+                       
+                       for (name in names) {
+                           
+                           row <- list()
+                           
+                           row[['value']] <- cir[name,1]
+                           
+                           table$addRow(rowKey=name, values=row)
+                           
+                       }
+                       
+                     
+            
+                   }
+            
+            
+            
+            
+        })
+)
