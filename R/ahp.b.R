@@ -49,10 +49,10 @@ ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
  
          .run = function() {
 
-                   if (length(self$options$vars)<2) return() 
+                   if (length(self$options$vars)<1) return() 
                    
                    
-                   if(length(self$options$vars>2)){
+                   if(length(self$options$vars>1)){
                        
                        # get variables---------------------------------
                        
