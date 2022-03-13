@@ -69,46 +69,39 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 
                 poly <- psych::polychoric(mydata)$rho
                 
+                
+                poly<- as.data.frame(poly)
+                
+                
                 names <- dimnames(poly)[[1]] 
+                dims <- dimnames(poly)[[2]]
+                
                 
                 table <- self$results$matrix
                 
-                # add columns--------
+                # creating table----------------
                 
-                for (i in seq_along(vars)) {
-                    
-                    var <- vars[[i]]
-                    
-                    table$addColumn(
-                        name = paste0(var),
-                        title = var,
-                        type = 'number',
-                        format = 'zto'
-                    )
-                    
+                for (dim in dims) {
+                  
+                  table$addColumn(name = paste0(dim),
+                                  type = 'number')
                 }
-                
-                
-                # populate result----------------------------------------
                 
                 for (name in names) {
+                  
+                  row <- list()
+                  
+                  for(j in seq_along(dims)){
                     
-                    row <- list()
+                    row[[dims[j]]] <- poly[name,j]
                     
-                    
-                    for (j in seq_along(vars)) {
-                        
-                        var <- vars[[j]]
-                        
-                        row[[var]] <- poly[name, j]
-                        
-                    }
-                    table$addRow(rowKey=name, values=row)
-                    
+                  }
+                  
+                  table$addRow(rowKey=name, values=row)
+                  
                 }
-                
-                
-                ### paritial correlation--------
+            
+               # paritial----------------------------------------------
                 
                 res<- psych::partial.r(poly)
                 

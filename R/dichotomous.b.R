@@ -46,53 +46,7 @@ self$results$instructions$setContent(
 
 },
         
-        # # get variables
-        # 
-        # matrix <- self$results$get('matrix')
-        # vars <- self$options$get('vars')
-        # nVars <- length(vars)
-        # 
-        
-        # add columns--------
-        # 
-        # for (i in seq_along(vars)) {
-        #   
-        #    var <- vars[[i]]
-        #   
-        #   matrix$addColumn(
-        #     name = paste0(var),
-        #     title = var,
-        #     type = 'number',
-        #     format = 'zto'
-        #   )
-        #   
-        # }
-     
-        # empty cells above and put "-" in the main diagonal
-        
-      #   for (i in seq_along(vars)) {
-      #     
-      #      var <- vars[[i]]
-      #     
-      #     values <- list()
-      #     
-      #     for (j in seq(i, nVars)) {
-      #       
-      #        v <- vars[[j]]
-      #       
-      #       values[[paste0(v)]]  <- ''
-      #       
-      #     }
-      #    values[[paste0(var)]]  <- '\u2014'  
-      #    matrix$setRow(rowKey = var, values)
-      #     
-      #   }
-      #   
-      #   if (length(self$options$vars) <= 1)
-      #     self$setStatus('complete')
-      # },
-      
-  
+       
 #==========================================================
       .run = function() {
        
@@ -120,46 +74,38 @@ self$results$instructions$setContent(
         
         tetrarho <- psych::tetrachoric(mydata)$rho
         
+        tetrarho <- as.data.frame(tetrarho)
+        
+        
         names <- dimnames(tetrarho)[[1]] 
+        dims <- dimnames(tetrarho)[[2]]
+        
         
         table <- self$results$matrix
         
-        # add columns--------
+        # creating table----------------
         
-        for (i in seq_along(vars)) {
+        for (dim in dims) {
           
-          var <- vars[[i]]
-          
-          table$addColumn(
-            name = paste0(var),
-            title = var,
-            type = 'number',
-            format = 'zto'
-          )
-          
+          table$addColumn(name = paste0(dim),
+                          type = 'number')
         }
-        
-        
-        # populate result----------------------------------------
         
         for (name in names) {
           
           row <- list()
           
-          
-          for (j in seq_along(vars)) {
+          for(j in seq_along(dims)){
             
-              var <- vars[[j]]
+            row[[dims[j]]] <- tetrarho[name,j]
             
-             row[[var]] <- tetrarho[name, j]
-           
           }
+          
           table$addRow(rowKey=name, values=row)
           
         }
         
-        
-        ### paritial correlation--------
+        ### partial correlation--------
         
         res<- psych::partial.r(tetrarho)
         

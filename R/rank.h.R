@@ -79,15 +79,16 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="matrix",
                 title="Spearman Correlation",
-                rows="(vars)",
+                visible="(matrix)",
+                clearWith=list(
+                    "vars"),
                 refs="psych",
                 columns=list(
                     list(
                         `name`=".name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="($key)", 
-                        `combineBelow`=TRUE))))
+                        `content`="($key)"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",

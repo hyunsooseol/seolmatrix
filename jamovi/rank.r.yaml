@@ -13,7 +13,9 @@ items:
       title: 'Spearman Correlation'
       type: Table
       description: correlation matrix table
-      rows: (vars)
+      visible: (matrix)
+      clearWith:
+        - vars
       refs: psych    
       
       columns:
@@ -21,7 +23,6 @@ items:
             title: ""
             type: text
             content: ($key)
-            combineBelow: true
 
     - name: plot
       title: 'Gaussian Graphical Model'
