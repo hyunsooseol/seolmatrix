@@ -30,8 +30,8 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p> The rationale of Multilevel Correlation is described in the <a href='https://cran.r-project.org/web/packages/correlation/vignettes/multilevel.html' target = '_blank'>page.</a></p>
-            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p>1. The rationale of Multilevel Correlation is described in the <a href='https://cran.r-project.org/web/packages/correlation/vignettes/multilevel.html' target = '_blank'>page.</a></p>
+            <p>2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

@@ -31,10 +31,10 @@ ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p> Each row and column represents an item and a decision maker for the input data format.</p>
-            <p> More than 10 items or 20 decision makers are NOT allowed.</p>
-            <p> Each item would be graded 1-9 score by each decision maker</p>
-            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p>1. Each row and column represents an item and a decision maker for the input data format.</p>
+            <p>2. More than 10 items or 20 decision makers are NOT allowed.</p>
+            <p>3. Each item would be graded 1-9 score by each decision maker</p>
+            <p>4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

@@ -32,6 +32,7 @@ rater(
 \value{
 A results object containing:
 \tabular{llllll}{
+  \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr

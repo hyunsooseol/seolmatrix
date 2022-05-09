@@ -21,32 +21,41 @@ children:
             name: ctrlvars
             isTarget: true
 
-  - type: LayoutBox
-    stretchFactor: 1
-    margin: large
+  - type: CollapseBox
+    label: Analysis
+    margin: normal
+    collapsed: true
     children:
-      - type: Label
-        label: Options
-        fitToGrid: true
-        cell:
-          column: 0
-          row: 0
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         children:
-          - type: CheckBox
-            name: shwSig
-          - type: CheckBox
-            name: flgSig
-      - type: Label
-        label: Plots
-        fitToGrid: true
+          - type: Label
+            label: Options
+            fitToGrid: true
+            cell:
+              column: 0
+              row: 0
+            children:
+              - type: CheckBox
+                name: shwSig
+              - type: CheckBox
+                name: flgSig
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         cell:
           column: 1
-          row: 0          
+          row: 0
+        fitToGrid: true
         children:
-          - type: CheckBox
-            name: ggm
-          - type: CheckBox
-            name: par  
+          - type: Label
+            label: Plots
+            children:
+              - type: CheckBox
+                name: ggm
+              - type: CheckBox
+                name: par  
       - type: LayoutBox
         margin: large
         children:

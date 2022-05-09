@@ -30,8 +30,8 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p> The rationale of Concordance correlation is described in the <a href='https://r-bloggers.com/2020/01/concordance-correlation-coefficient/?fbclid=IwAR2Txi_QrFTuDB9jH8NiJW8dEde_lw2Td08XqxNzoWqut9m8E-bE5RHUDiI' target = '_blank'>page.</a></p>
-            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p>1. The rationale of Concordance correlation is described in the <a href='https://r-bloggers.com/2020/01/concordance-correlation-coefficient/?fbclid=IwAR2Txi_QrFTuDB9jH8NiJW8dEde_lw2Td08XqxNzoWqut9m8E-bE5RHUDiI' target = '_blank'>page.</a></p>
+            <p>2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

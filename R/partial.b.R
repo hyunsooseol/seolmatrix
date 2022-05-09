@@ -12,14 +12,6 @@
 #' @importFrom qgraph cor_auto
 #' @export
 
-# `self$data` contains the data
-# `self$options` contains the options
-# ..vars - variables to calculate correlations for
-# ..ctrlvars - variables to control for
-# ..shwSig  - show significance level for correlations (p-values)
-# ..flgSig  - flag significant correlations
-# ..sidSig  - one- or two-tailed significance calculations
-# `self$results` contains the results object (to populate)
 
 partialClass <- if (requireNamespace('jmvcore'))
   R6::R6Class(
@@ -44,11 +36,11 @@ partialClass <- if (requireNamespace('jmvcore'))
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
+            <p>1. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
 
-            <p>When One variable is dichotomous, the other is continuous, the result table is equivalent to a Point-biserial correlation.</P>
+            <p>2. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
 
-            <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a></p>
+            <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

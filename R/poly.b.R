@@ -34,8 +34,8 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p>The polychoric correlation coefficient is a measure of association for ordinal variables.</p>
-            <p>Tetrachoric correlation is a special case of the polychoric correlation applicable when both variables are dichotomous.</p>
+            <p>1. The polychoric correlation coefficient is a measure of association for ordinal variables.</p>
+            <p>2. Tetrachoric correlation is a special case of the polychoric correlation applicable when both variables are dichotomous.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

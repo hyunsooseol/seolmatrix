@@ -14,12 +14,13 @@ children:
           - type: VariablesListBox
             name: vars
             isTarget: true
-  - type: LayoutBox
-    stretchFactor: 1
-    margin: large
+  - type: CollapseBox
+    label: Analysis
+    margin: normal
+    collapsed: true
     children:
       - type: Label
-        label: "Reliability"
+        label: "Statistics"
         fitToGrid: true
         cell:
           column: 0

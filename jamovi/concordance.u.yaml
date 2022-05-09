@@ -22,9 +22,10 @@ children:
             name: covs
             maxItemCount: 1
             isTarget: true
-  - type: LayoutBox
-    margin: large
-    stretchFactor: 1
+  - type: CollapseBox
+    label: Analysis
+    margin: normal
+    collapsed: true
     children:
       - type: LayoutBox
         margin: large

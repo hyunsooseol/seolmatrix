@@ -74,6 +74,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "raterResults",
     inherit = jmvcore::Group,
     active = list(
+        instructions = function() private$.items[["instructions"]],
         interrater = function() private$.items[["interrater"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
@@ -87,6 +88,11 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="",
                 title="Rater Reliability",
                 refs="seolmatrix")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="instructions",
+                title="Instructions",
+                visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="interrater",
@@ -227,6 +233,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param par .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
