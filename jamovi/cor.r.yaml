@@ -1,0 +1,39 @@
+---
+name:  cor
+title: Correlation structure
+jrs:   '1.1'
+
+items:
+    - name:  text
+      title: Correlation structure
+      type:  Preformatted
+
+    - name:  plot
+      title: Correlation heat map 
+      type:  Image
+      visible: (plot)
+      width: 600
+      height: 600
+      renderFun: .plot
+      clearWith:
+        - vars
+        - k
+        - type
+        - method
+        - size
+
+    - name:  plot1
+      title: Dendrogram
+      type:  Image
+      visible: (plot1)
+      width: 600
+      height: 600
+      renderFun: .plot1
+      clearWith:
+        - vars
+        - k
+        - type
+        - method
+        - size
+
+...

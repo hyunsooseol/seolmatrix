@@ -1,0 +1,63 @@
+---
+name:  cor
+title: Correlation structure
+menuGroup: seolmatrix
+menuSubgroup: Item
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+    - name: vars
+      title: Variables
+      type: Variables
+
+    - name: type
+      title: Correlation
+      type: List
+      options:
+        - pearson
+        - spearman
+        - tetra
+        - poly
+      default: pearson
+
+    - name: method
+      title: Clustering
+      type: List
+      options:
+        - ward.D
+        - ward.D2
+        - single
+        - complete
+        - average
+        - mcquitty
+        - median
+        - centroid
+      default: ward.D
+
+    - name: k
+      title: Number of clusters
+      default: 2
+      type: Integer
+      min: 1
+
+    - name: size
+      title: Values display size
+      type: Integer
+      default: 3
+
+    - name: plot
+      title: Correlation heat map 
+      type: Bool
+      default: TRUE    
+      
+    - name: plot1
+      title: Dendrogram
+      type: Bool
+      default: FALSE 
+...

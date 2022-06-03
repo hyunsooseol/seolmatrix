@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.5.4
+version: 3.6.0
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2022-05-09'
+date: '2022-06-03'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -63,6 +63,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Analytic Hierarchy Process
     menuSubgroup: AHP
+  - title: Correlation structure
+    name: cor
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Correlation structure
+    menuSubgroup: Item
 datasets:
   - name: rater
     path: rater.omv
