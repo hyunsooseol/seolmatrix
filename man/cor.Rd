@@ -12,6 +12,7 @@ cor(
   k = 2,
   size = 3,
   plot = TRUE,
+  horiz = FALSE,
   plot1 = FALSE
 )
 }
@@ -30,12 +31,14 @@ cor(
 
 \item{plot}{.}
 
+\item{horiz}{.}
+
 \item{plot1}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
-  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }

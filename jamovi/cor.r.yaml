@@ -4,12 +4,13 @@ title: Correlation structure
 jrs:   '1.1'
 
 items:
-    - name:  text
-      title: Correlation structure
-      type:  Preformatted
-
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+      
     - name:  plot
-      title: Correlation heat map 
+      title: Heatmap 
       type:  Image
       visible: (plot)
       width: 600
@@ -21,6 +22,7 @@ items:
         - type
         - method
         - size
+        - horiz
 
     - name:  plot1
       title: Dendrogram
@@ -35,5 +37,5 @@ items:
         - type
         - method
         - size
-
+        - horiz
 ...

@@ -12,6 +12,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             k = 2,
             size = 3,
             plot = TRUE,
+            horiz = FALSE,
             plot1 = FALSE, ...) {
 
             super$initialize(
@@ -22,7 +23,11 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
-                vars)
+                vars,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
@@ -58,6 +63,10 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot",
                 plot,
                 default=TRUE)
+            private$..horiz <- jmvcore::OptionBool$new(
+                "horiz",
+                horiz,
+                default=FALSE)
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
                 plot1,
@@ -69,6 +78,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..k)
             self$.addOption(private$..size)
             self$.addOption(private$..plot)
+            self$.addOption(private$..horiz)
             self$.addOption(private$..plot1)
         }),
     active = list(
@@ -78,6 +88,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         k = function() private$..k$value,
         size = function() private$..size$value,
         plot = function() private$..plot$value,
+        horiz = function() private$..horiz$value,
         plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
@@ -86,6 +97,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..k = NA,
         ..size = NA,
         ..plot = NA,
+        ..horiz = NA,
         ..plot1 = NA)
 )
 
@@ -93,7 +105,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corResults",
     inherit = jmvcore::Group,
     active = list(
-        text = function() private$.items[["text"]],
+        instructions = function() private$.items[["instructions"]],
         plot = function() private$.items[["plot"]],
         plot1 = function() private$.items[["plot1"]]),
     private = list(),
@@ -103,14 +115,15 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="",
                 title="Correlation structure")
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Html$new(
                 options=options,
-                name="text",
-                title="Correlation structure"))
+                name="instructions",
+                title="Instructions",
+                visible=TRUE))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Correlation heat map",
+                title="Heatmap",
                 visible="(plot)",
                 width=600,
                 height=600,
@@ -120,7 +133,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "k",
                     "type",
                     "method",
-                    "size")))
+                    "size",
+                    "horiz")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -134,7 +148,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "k",
                     "type",
                     "method",
-                    "size")))}))
+                    "size",
+                    "horiz")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",
@@ -166,10 +181,11 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param k .
 #' @param size .
 #' @param plot .
+#' @param horiz .
 #' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
@@ -183,6 +199,7 @@ cor <- function(
     k = 2,
     size = 3,
     plot = TRUE,
+    horiz = FALSE,
     plot1 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -202,6 +219,7 @@ cor <- function(
         k = k,
         size = size,
         plot = plot,
+        horiz = horiz,
         plot1 = plot1)
 
     analysis <- corClass$new(

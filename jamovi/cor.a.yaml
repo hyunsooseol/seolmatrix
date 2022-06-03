@@ -12,9 +12,14 @@ options:
       description:
           R: >
             The data as a data frame.
+
     - name: vars
       title: Variables
       type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric  
 
     - name: type
       title: Correlation
@@ -52,10 +57,15 @@ options:
       default: 3
 
     - name: plot
-      title: Correlation heat map 
+      title: Heatmap 
       type: Bool
       default: TRUE    
       
+    - name: horiz
+      title: horizontal
+      type: Bool
+      default: FALSE
+
     - name: plot1
       title: Dendrogram
       type: Bool
