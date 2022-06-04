@@ -13,7 +13,10 @@ cor(
   size = 3,
   plot = TRUE,
   horiz = FALSE,
-  plot1 = FALSE
+  plot1 = FALSE,
+  poly = FALSE,
+  plot2 = FALSE,
+  plot3 = FALSE
 )
 }
 \arguments{
@@ -34,6 +37,12 @@ cor(
 \item{horiz}{.}
 
 \item{plot1}{.}
+
+\item{poly}{.}
+
+\item{plot2}{.}
+
+\item{plot3}{.}
 }
 \value{
 A results object containing:
@@ -41,6 +50,8 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 }
 }
 \description{

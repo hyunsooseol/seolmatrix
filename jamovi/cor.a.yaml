@@ -27,8 +27,6 @@ options:
       options:
         - pearson
         - spearman
-        - tetra
-        - poly
       default: pearson
 
     - name: method
@@ -67,7 +65,22 @@ options:
       default: FALSE
 
     - name: plot1
-      title: Dendrogram(Only for polychoric cor.)
+      title: Dendrogram
       type: Bool
       default: FALSE 
+      
+    - name: poly
+      title: Polychoric correlation    
+      type: Bool
+      default: FALSE      
+      
+    - name: plot2
+      title: Polychoric heatmap 
+      type: Bool
+      default: FALSE     
+
+    - name: plot3
+      title: Polychoric dendrogram 
+      type: Bool
+      default: FALSE        
 ...

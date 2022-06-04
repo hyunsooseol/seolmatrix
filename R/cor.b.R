@@ -58,29 +58,44 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             data <- na.omit(data)
             
-            # mat<-  stats::cor(data, method = self$options$type)
-            # mat1 <- as.dist(1-mat)
+            # pearson and spearman  correlation------
             
-            
-            corP <- psych::polychoric(data)
-
-            dis <- as.dist(1-corP$rho)
-            # 
-            # hc <- stats::hclust(as.dist(1 - corP$rho), method = self$options$method)  
+            mat<-  stats::cor(data, method = self$options$type)
+            mat1 <- as.dist(1-mat)
             
             
             # heatmap plot----------
             
             image <- self$results$plot
-            image$setState(data)
+            image$setState(mat)
             
             # dendrogram plot-------
             
             image <- self$results$plot1
+            image$setState(mat1)
+            
+ 
+            if(self$options$poly==TRUE){
+                
+            #Polychoric correlation------
+                
+                corP <- psych::polychoric(data)
+                
+                dis <- as.dist(1-corP$rho)
+                         
+       # Polychoric heatmap plot---------
+            
+            image <- self$results$plot2
+            image$setState(data)
+            
+       # Polychoric dendrogram plot---------
+            
+            image <- self$results$plot3
             image$setState(dis)
             
-              
-        },
+            }
+            
+       },
         
         .plot = function(image, ggtheme, theme, ...) {
             
@@ -88,9 +103,9 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 return()
             
             
-             data<- image$state
+             mat<- image$state
             
-            plot <- ShinyItemAnalysis::plot_corr(data, 
+            plot <- ShinyItemAnalysis::plot_corr(mat, 
                                                  cor=self$options$type,
                                                  clust_method = self$options$method,
                                                  n_clust=self$options$k, 
@@ -110,19 +125,11 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 return()
             
             
-           dis <- image$state
+           mat1 <- image$state
            
-           hc <- stats::hclust(dis, method = self$options$method) 
+           hc <- stats::hclust(mat1, method = self$options$method) 
             
-            # if(self$options$type == 'poly'){
-            # hc <- stats::hclust(as.dist(1-corP$rho), method = self$options$method) 
-            # } else {
-            #     
-            #     hc <- stats::hclust(as.dist(1-mat), method = self$options$method)
-            #     
-            # }
-            # 
-            
+           
             if(self$options$horiz == TRUE){
             
             plot1<- ggdendro::ggdendrogram(hc, rotate=TRUE)
@@ -136,9 +143,56 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
            
             print(plot1)
             TRUE
-        }
+        },
+       
+       .plot2 = function(image, ggtheme, theme, ...) {
+           
+           if (is.null(self$options$vars))
+               return()
+           
+           
+           data<- image$state
+           
+           plot2 <- ShinyItemAnalysis::plot_corr(data, 
+                                                cor='poly',
+                                                clust_method = self$options$method,
+                                                n_clust=self$options$k, 
+                                                labels_size = self$options$size,
+                                                line_col = "red",
+                                                line_size = 1.5, labels = TRUE)
+           
+           
+           
+           print(plot2)
+           TRUE
+       },
         
-        
+
+    .plot3 = function(image, ggtheme, theme, ...) {
+      
+      if (is.null(self$options$vars))
+          return()
+      
+      
+      dis <- image$state
+      
+      hc <- stats::hclust(dis, method = self$options$method) 
+      
+      
+       if(self$options$horiz == TRUE){
+      
+           plot3<- ggdendro::ggdendrogram(hc, rotate=TRUE)
+      
+       } else {
+      
+           plot3<- ggdendro::ggdendrogram(hc)
+      
+       }
+      
+      
+      print(plot3)
+      TRUE
+  } 
         
     )
 )

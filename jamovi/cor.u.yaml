@@ -36,6 +36,15 @@ children:
               - type: TextBox
                 name: size
                 format: number
+          - type: CheckBox
+            name: poly
+            children:
+              - type: CheckBox
+                name: plot2
+                enable: (poly)
+              - type: CheckBox
+                name: plot3
+                enable: (poly)
       - type: LayoutBox
         stretchFactor: 1
         margin: large

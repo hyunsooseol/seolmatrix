@@ -39,4 +39,34 @@ items:
         - method
         - size
         - horiz
+
+    - name:  plot2
+      title: Polychoric Heatmap
+      type:  Image
+      visible: (plot2)
+      width: 600
+      height: 600
+      renderFun: .plot2
+      clearWith:
+        - vars
+        - k
+        - type
+        - method
+        - size
+        - horiz
+
+    - name:  plot3
+      title: Polychoric Dendrogram
+      type:  Image
+      visible: (plot3)
+      width: 600
+      height: 600
+      renderFun: .plot3
+      clearWith:
+        - vars
+        - k
+        - type
+        - method
+        - size
+        - horiz        
 ...
