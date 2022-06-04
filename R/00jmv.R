@@ -49,4 +49,11 @@
         `author`="Zhicheng D., & Yuantao H.", 
         `year`=2017, 
         `title`="Analytic Hierarchy Process (AHP)", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=easyAHP"))
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=easyAHP"), 
+    `ShinyItemAnalysis`=list(
+        `type`="software", 
+        `author`="Martinkova, P., & Drabinova, A.", 
+        `year`=2018, 
+        `title`="ShinyItemAnalysis: for teaching psychometrics and to enforce routine analysis of educational tests", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=ShinyItemAnalysis", 
+        `url`="https://CRAN.R-project.org/package=ShinyItemAnalysis"))

@@ -12,8 +12,8 @@ description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap
   agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy
-  Process, and allows users to produce Gaussian Graphical Model and Partial
-  plot.
+  Process, Correlation structure, and allows users to produce Gaussian Graphical
+  Model and Partial plot.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -125,6 +125,11 @@ datasets:
     description: 4 items x 3 decision makers
     tags:
       - AHP
+  - name: hci
+    path: hci.omv
+    description: correlation structure with binary items.
+    tags:
+      - Correlation structure
 usesNative: true
 minApp: 1.0.8
 

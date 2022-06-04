@@ -114,7 +114,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Correlation structure")
+                title="Correlation structure",
+                refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="instructions",
@@ -127,6 +128,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(plot)",
                 width=600,
                 height=600,
+                refs="ShinyItemAnalysis",
                 renderFun=".plot",
                 clearWith=list(
                     "vars",

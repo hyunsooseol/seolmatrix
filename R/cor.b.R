@@ -32,8 +32,9 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <div class='instructions'>
            <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p> 1. The rationale of Factor Analysis of mixed data is described in the <a href='https://rpkgs.datanovia.com/factoextra/reference/fviz_famd.html' target = '_blank'>page</a>.</p>
-            <p> 2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            <p> 1. Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</p>
+            <p> 2. The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</p>
+            <p> 3. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             
             </div>

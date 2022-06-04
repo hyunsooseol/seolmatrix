@@ -2,7 +2,7 @@
 name:  cor
 title: Correlation structure
 jrs:   '1.1'
-
+refs: seolmatrix
 items:
     - name: instructions
       title: Instructions
@@ -15,6 +15,7 @@ items:
       visible: (plot)
       width: 600
       height: 600
+      refs: ShinyItemAnalysis
       renderFun: .plot
       clearWith:
         - vars
