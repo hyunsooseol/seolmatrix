@@ -57,13 +57,14 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             data <- na.omit(data)
             
-            #  mat<-  stats::cor(data, method = self$options$type)
+            # mat<-  stats::cor(data, method = self$options$type)
+            # mat1 <- as.dist(1-mat)
             
             
-            corP <- psych::polychoric(data) 
-            
+            corP <- psych::polychoric(data)
+
             dis <- as.dist(1-corP$rho)
-            
+            # 
             # hc <- stats::hclust(as.dist(1 - corP$rho), method = self$options$method)  
             
             
@@ -88,7 +89,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
              data<- image$state
             
-            plot <- ShinyItemAnalysis::plot_corr(data, cor=self$options$type,
+            plot <- ShinyItemAnalysis::plot_corr(data, 
+                                                 cor=self$options$type,
                                                  clust_method = self$options$method,
                                                  n_clust=self$options$k, 
                                                  labels_size = self$options$size,

@@ -67,7 +67,7 @@ options:
       default: FALSE
 
     - name: plot1
-      title: Dendrogram
+      title: Dendrogram(Only for polychoric cor.)
       type: Bool
       default: FALSE 
 ...
