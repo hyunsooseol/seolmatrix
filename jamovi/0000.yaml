@@ -6,7 +6,7 @@ jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2022-06-03'
+date: '2022-06-05'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
