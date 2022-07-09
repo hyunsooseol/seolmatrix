@@ -9,7 +9,28 @@ items:
       type: Html
       visible: True
       refs: correlation 
-      
+
+    - name: icc
+      title: 'Intraclass correlation coefficient from ANOVA' 
+      type: Table
+      visible: (icc)
+      rows: 1
+      clearWith:
+        - vars
+      refs: multilevel    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Value
+        - name: icc1
+          title: ICC1
+          type: number
+        - name: icc2
+          title: ICC2
+          type: number
+    
     - name: multi
       title: 'Multilevel Correlation'
       type: Table
@@ -43,6 +64,5 @@ items:
           title: 'Upper'
           type: number
           superTitle: '95% CI'
-
 
 ...

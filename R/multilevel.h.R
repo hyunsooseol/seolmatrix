@@ -6,8 +6,9 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            facs = NULL,
             vars = NULL,
+            facs = NULL,
+            icc = TRUE,
             multi = FALSE, ...) {
 
             super$initialize(
@@ -16,13 +17,6 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..facs <- jmvcore::OptionVariable$new(
-                "facs",
-                facs,
-                suggested=list(
-                    "nominal"),
-                permitted=list(
-                    "factor"))
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
                 vars,
@@ -30,22 +24,36 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..facs <- jmvcore::OptionVariable$new(
+                "facs",
+                facs,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..icc <- jmvcore::OptionBool$new(
+                "icc",
+                icc,
+                default=TRUE)
             private$..multi <- jmvcore::OptionBool$new(
                 "multi",
                 multi,
                 default=FALSE)
 
-            self$.addOption(private$..facs)
             self$.addOption(private$..vars)
+            self$.addOption(private$..facs)
+            self$.addOption(private$..icc)
             self$.addOption(private$..multi)
         }),
     active = list(
-        facs = function() private$..facs$value,
         vars = function() private$..vars$value,
+        facs = function() private$..facs$value,
+        icc = function() private$..icc$value,
         multi = function() private$..multi$value),
     private = list(
-        ..facs = NA,
         ..vars = NA,
+        ..facs = NA,
+        ..icc = NA,
         ..multi = NA)
 )
 
@@ -54,6 +62,7 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
+        icc = function() private$.items[["icc"]],
         multi = function() private$.items[["multi"]]),
     private = list(),
     public=list(
@@ -69,6 +78,29 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Instructions",
                 visible=TRUE,
                 refs="correlation"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="icc",
+                title="Intraclass correlation coefficient from ANOVA",
+                visible="(icc)",
+                rows=1,
+                clearWith=list(
+                    "vars"),
+                refs="multilevel",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Value"),
+                    list(
+                        `name`="icc1", 
+                        `title`="ICC1", 
+                        `type`="number"),
+                    list(
+                        `name`="icc2", 
+                        `title`="ICC2", 
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="multi",
@@ -136,44 +168,48 @@ multilevelBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data The data as a data frame.
-#' @param facs .
 #' @param vars .
+#' @param facs .
+#' @param icc .
 #' @param multi .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$multi$asDF}
+#' \code{results$icc$asDF}
 #'
-#' \code{as.data.frame(results$multi)}
+#' \code{as.data.frame(results$icc)}
 #'
 #' @export
 multilevel <- function(
     data,
-    facs,
     vars,
+    facs,
+    icc = TRUE,
     multi = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multilevel requires jmvcore to be installed (restart may be required)")
 
-    if ( ! missing(facs)) facs <- jmvcore::resolveQuo(jmvcore::enquo(facs))
     if ( ! missing(vars)) vars <- jmvcore::resolveQuo(jmvcore::enquo(vars))
+    if ( ! missing(facs)) facs <- jmvcore::resolveQuo(jmvcore::enquo(facs))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(facs), facs, NULL),
-            `if`( ! missing(vars), vars, NULL))
+            `if`( ! missing(vars), vars, NULL),
+            `if`( ! missing(facs), facs, NULL))
 
     for (v in facs) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multilevelOptions$new(
-        facs = facs,
         vars = vars,
+        facs = facs,
+        icc = icc,
         multi = multi)
 
     analysis <- multilevelClass$new(

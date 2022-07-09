@@ -12,6 +12,15 @@ options:
       description:
           R: >
             The data as a data frame.
+
+    - name: vars
+      title: Dependent Variables
+      type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric  
+
     - name: facs
       title: Grouping Variable(Required)
       type: Variable
@@ -20,18 +29,16 @@ options:
       permitted:
         - factor
   
-    - name: vars
-      title: Variables
-      type: Variables
-      suggested:
-         - continuous
-      permitted:
-        - numeric  
-  
-    - name: multi
-      title: Multilevel Correaltion
+    - name: icc
+      title: Intraclass correlation
       type: Bool
-      default: FALSE
+      default: TRUE
+      
+    - name: multi
+      title: Multilevel correaltion
+      type: Bool
+      default: false
+
 
 
 ...

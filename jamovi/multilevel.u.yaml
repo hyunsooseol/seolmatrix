@@ -9,7 +9,6 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: Variables
         children:
           - type: VariablesListBox
             name: vars
@@ -24,4 +23,6 @@ children:
     margin: large
     children:
       - type: CheckBox
-        name: multi
+        name: icc
+      - type: CheckBox
+        name: multi 
