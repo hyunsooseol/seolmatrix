@@ -47,7 +47,7 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             if (self$options$icc)
                 self$results$icc$setNote(
                     "Note",
-                    "ICC1: Individual-level variance that can be explained by group membership; ICC2: The reliability of the group means."
+                    "ICC1= Individual-level variance that can be explained by group membership; ICC2= The reliability of the group means."
                     
                 )
             

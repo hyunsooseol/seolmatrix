@@ -8,7 +8,6 @@ items:
       title: Instructions
       type: Html
       visible: True
-      refs: correlation 
 
     - name: icc
       title: 'Intraclass correlation coefficient from ANOVA' 

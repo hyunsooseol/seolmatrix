@@ -56,4 +56,11 @@
         `year`=2018, 
         `title`="ShinyItemAnalysis: for teaching psychometrics and to enforce routine analysis of educational tests", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=ShinyItemAnalysis", 
-        `url`="https://CRAN.R-project.org/package=ShinyItemAnalysis"))
+        `url`="https://CRAN.R-project.org/package=ShinyItemAnalysis"), 
+    `multilevel`=list(
+        `type`="software", 
+        `author`="Bliese, P., Chen, G., Downes, P., Schepker, D., & Lang, J.", 
+        `year`=2022, 
+        `title`="multilevel: Multilevel Functions", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=multilevel", 
+        `url`="https://CRAN.R-project.org/package=multilevel"))

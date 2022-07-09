@@ -4,14 +4,16 @@
 \alias{multilevel}
 \title{Multilevel Correlation}
 \usage{
-multilevel(data, facs, vars, multi = FALSE)
+multilevel(data, vars, facs, icc = TRUE, multi = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
 
+\item{vars}{.}
+
 \item{facs}{.}
 
-\item{vars}{.}
+\item{icc}{.}
 
 \item{multi}{.}
 }
@@ -19,14 +21,15 @@ multilevel(data, facs, vars, multi = FALSE)
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$multi$asDF}
+\code{results$icc$asDF}
 
-\code{as.data.frame(results$multi)}
+\code{as.data.frame(results$icc)}
 }
 \description{
 Multilevel Correlation
