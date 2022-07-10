@@ -4,10 +4,6 @@ title: Multilevel Correlation
 jrs:   '1.1'
 refs: seolmatrix
 items:
-    - name:  text
-      title: test
-      type:  Preformatted
-      
     - name: instructions
       title: Instructions
       type: Html
@@ -40,6 +36,7 @@ items:
       visible: (multi)
       clearWith:
         - vars
+      refs: correlation
       
       columns:
         - name: v1

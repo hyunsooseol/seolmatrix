@@ -36,7 +36,7 @@
         `type`="software", 
         `author`="Makowski, D., Ben-Shachar, M., Patil, I., & Ludecke, D.", 
         `year`=2020, 
-        `title`="Methods and Algorithms for Correlation Analysis in R", 
+        `title`="correlation: Methods and Algorithms for Correlation Analysis in R", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=correlation"), 
     `epiR`=list(
         `type`="software", 
@@ -48,7 +48,7 @@
         `type`="software", 
         `author`="Zhicheng D., & Yuantao H.", 
         `year`=2017, 
-        `title`="Analytic Hierarchy Process (AHP)", 
+        `title`="easyAHP: Analytic Hierarchy Process (AHP)", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=easyAHP"), 
     `ShinyItemAnalysis`=list(
         `type`="software", 

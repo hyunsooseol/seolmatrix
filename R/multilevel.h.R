@@ -61,7 +61,6 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multilevelResults",
     inherit = jmvcore::Group,
     active = list(
-        text = function() private$.items[["text"]],
         instructions = function() private$.items[["instructions"]],
         icc = function() private$.items[["icc"]],
         multi = function() private$.items[["multi"]]),
@@ -73,10 +72,6 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="",
                 title="Multilevel Correlation",
                 refs="seolmatrix")
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text",
-                title="test"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="instructions",
@@ -112,6 +107,7 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(multi)",
                 clearWith=list(
                     "vars"),
+                refs="correlation",
                 columns=list(
                     list(
                         `name`="v1", 
@@ -178,7 +174,6 @@ multilevelBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param multi .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
