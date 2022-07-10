@@ -4,6 +4,10 @@ title: Multilevel Correlation
 jrs:   '1.1'
 refs: seolmatrix
 items:
+    - name:  text
+      title: test
+      type:  Preformatted
+      
     - name: instructions
       title: Instructions
       type: Html
@@ -12,17 +16,17 @@ items:
     - name: icc
       title: 'Intraclass correlation coefficient from ANOVA' 
       type: Table
+      rows: (vars)
       visible: (icc)
-      rows: 1
       clearWith:
         - vars
       refs: multilevel    
 
       columns:
         - name: name
-          title: ''
+          title: 'Variables'
           type: 'text'
-          content: Value
+          content: ($key)
         - name: icc1
           title: ICC1
           type: number

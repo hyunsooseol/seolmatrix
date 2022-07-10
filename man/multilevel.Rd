@@ -20,6 +20,7 @@ multilevel(data, vars, facs, icc = TRUE, multi = FALSE)
 \value{
 A results object containing:
 \tabular{llllll}{
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$multi} \tab \tab \tab \tab \tab a table \cr

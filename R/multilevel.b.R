@@ -32,10 +32,9 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p>1. Only one dependent variable should be specified for Intraclass correlation.</p>
-            <p>2. More than two dependent variables should be specified for Multilevel correlation.</p>
-            <p>3. The rationale of Multilevel Correlation is described in the <a href='https://cran.r-project.org/web/packages/correlation/vignettes/multilevel.html' target = '_blank'>page.</a></p>
-            <p>4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            <p>1. More than two dependent variables should be specified for Multilevel correlation.</p>
+            <p>2. The rationale of Multilevel Correlation is described in the <a href='https://cran.r-project.org/web/packages/correlation/vignettes/multilevel.html' target = '_blank'>page.</a></p>
+            <p>3. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -59,13 +58,10 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         .run = function() {
 
-            # data <- data(iris)
-            # res<- correlation::correlation(data, multilevel = TRUE)
             
             if (length(self$options$facs)<1) return() 
             
-        #    if(length(self$options$vars>1)){
-           
+       
             # get the data------
             
             data <- self$data 
@@ -76,14 +72,7 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             if(self$options$multi==TRUE){ 
             
-           #  vars  <- self$options$vars
-           #  facs <- self$options$facs
-           #  
-           #  # get the data------
-           #  
-           # data <- self$data
-           #  
-            
+          
             # convert to appropriate data types
             
             for (i in seq_along(vars))
@@ -102,11 +91,10 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
            # data <- jmvcore::select(data, self$options$vars)
             
           
-           # multilevel correlation analysis---------
-           #############################################     
+           #############################################
             res<- correlation::correlation(data, multilevel = TRUE)
-            #############################################    
-                
+            #############################################
+
                 v1 <- res$Parameter1
                 v2 <- res$Parameter2
                 r <- res$r
@@ -116,7 +104,7 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 df <- res$df
                 p <- res$p
                 n <- res$n_Obs
-                
+
                 results <-
                     list(
                         'v1' = v1,
@@ -129,24 +117,23 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         'p' = p,
                         'n' = n
                     )
-                
-               
-                
-                # populate multilevel correlation---
-                
+
+
+                # populate multilevel table---
+
                 table <- self$results$multi
-                
+
                 nrows <- ncol(combn(self$options$vars, 2))
-                
+
                 # for (i in seq_len(nrows)) {
                 #     # add the rows in here
                 # }
-                
-                
+
+
                 for (i in seq_len(nrows)) {
-                    
+
                     row <- list()
-                    
+
                     row[['v1']] <- v1[i]
                     row[['v2']] <- v2[i]
                     row[['r']] <- r[i]
@@ -156,48 +143,101 @@ multilevelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     row[['df']] <- df[i]
                     row[['p']] <- p[i]
                     row[['n']] <- n[i]
-                    
+
                     table$addRow(rowKey =i, values = row)
                 }
-                
-            }
-            
-           
-            if(self$options$icc==TRUE) {
-               
-              
-                  for (var in self$options$vars) {
-                 
-                     dataA <- data.frame(
-                         dep = data[[var]],
-                         group = data[[facs]]
-                     )
 
-                 }
-                 
+                }
+
+
+            ##Computing ICC###############################
+            
+                 #  for (var in self$options$vars) {
+                 # 
+                 #     dataA <- data.frame(
+                 #         dep = data[[var]],
+                 #         group = data[[facs]]
+                 #     )
+                 # 
+                 # }
+
                     
-                    ##################################
-                    model <- stats::aov(dep ~ group, data=dataA)
-                    ############################
+                    ############################################
+                 #   model <- stats::aov(dep ~ group, data=dataA)
+                    ############################################
+
+                    out <- NULL
                     
-                    icc1 <- multilevel::ICC1(model)
-                    icc2 <- multilevel::ICC2(model)
+                    for(var in self$options$vars){
+                        
+                         # formula <- constructFormula(self$options$vars, self$options$facs)
+                         # formula <- as.formula(formula)
+                         # 
+                        # results <- t.test(formula, self$data)
+                         
+                        dataA <- data.frame(
+                            dep = data[[var]],
+                            group = data[[facs]]
+                        )   
+                        
+                        model<-stats::aov(dep ~ group,data=dataA)
+                        
+                        icc1<- multilevel::ICC1(model)
+                        icc2 <- multilevel::ICC2(model)
+                        
+                        df <- data.frame(icc1,icc2) 
+                         
+                       
+                        if (is.null(out)) {
+                            out <- df
+                        } else {
+                            out <- rbind(out, df)
+                        }
+                    }
+                    
+                    out <- out #data frame
+                    
+                  #  self$results$text$setContent(out)
+                    
+                    
+                    # Creating table----------
+                    
+                    table <- self$results$icc
+                    
+                    icc <- as.list(out) 
+                    
+                #  names <- dimnames(icc)[[1]]
+                    
+                    for (i in seq_along(self$options$vars)) {
+                        
+                        row <- list()
+                        
+                        row[["icc1"]] <-  icc[[1]][i]
+                        row[["icc2"]] <-  icc[[2]][i]
+                        
+                        table$setRow(rowNo=i, values=row)
+                        
+                    }  
+                    
+                    
+                    # icc1 <- multilevel::ICC1(model)
+                    # icc2 <- multilevel::ICC2(model)
                     
                     #  self$results$text$setContent(icc1)
                     
                     # populate multilevel correlation---
                     
-                    table <- self$results$icc
-                    
-                    row <- list()
-                    
-                    row[['icc1']] <- icc1
-                    row[['icc2']] <- icc2
-                    
-                    table$setRow(rowNo = 1, values = row)
-                }
-            }
+                    # table <- self$results$icc
+                    # 
+                    # row <- list()
+                    # 
+                    # row[['icc1']] <- icc1
+                    # row[['icc2']] <- icc2
+                    # 
+                    # table$setRow(rowNo = 1, values = row)
+                
             
             
+        } 
         )
 )
