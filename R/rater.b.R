@@ -6,6 +6,7 @@
 #' @import jmvcore
 #' @importFrom irr kappam.light
 #' @import irr
+#' @importFrom irr icc
 #' @import lpSolve
 #' @import qgraph
 #' @import psych
@@ -92,6 +93,15 @@ raterClass <- if (requireNamespace('jmvcore'))
           # populate Boot icc table-----
           
           private$.populateBooticcTable(results)
+          
+          # populate icc for anova table----
+          
+          private$.populateIcTable(results)
+          
+          
+          # populate ftest----
+          
+          private$.populateFtestTable(results)
           
           
         }
@@ -182,6 +192,36 @@ raterClass <- if (requireNamespace('jmvcore'))
         bicc <- quantile(bres$t, c(0.025, 0.975))
         
         
+        ########### icc using anova----------
+        
+        model <- self$options$model
+        type <- self$options$type
+        unit <- self$options$unit
+        
+        ###################################################
+        out<- irr::icc(data, model = model,
+                       type = type, unit = unit)
+        
+        #################################################
+        
+        
+        ####################
+        model <- out$model
+        type <- out$type
+        unit <- out$unit
+        sub <- out$subjects
+        raters <- out$raters
+        icc <- out$value
+        
+        ##############
+       # icc <- out$value
+        f <- out$Fvalue
+        df1 <- out$df1
+        df2 <- out$df2
+        p1 <- out$p.value
+        lower <- out$lbound
+        upper <- out$ubound
+        
         results <-
           list(
             'n' = n,
@@ -196,8 +236,19 @@ raterClass <- if (requireNamespace('jmvcore'))
             'ev'= ev,
             'ic' = ic,
             'ia' = ia,
-            'bicc' = bicc
-            
+            'bicc' = bicc,
+            'model'=model,
+            'type'=type,
+            'unit'=unit,
+            'sub'=sub,
+            'raters'=raters,
+            'icc'=icc,
+            'f'=f,
+            'df1'=df1,
+            'df2'=df2,
+            'p1'=p1,
+            'lower'=lower,
+            'upper'=upper
           )
         
       },
@@ -257,10 +308,10 @@ raterClass <- if (requireNamespace('jmvcore'))
         
       },
       
-      
       # populate Boot ICC table-------
       
       .populateBooticcTable = function(results) {
+        
         table <- self$results$bicc
         
         bicc <- results$bicc
@@ -277,7 +328,62 @@ raterClass <- if (requireNamespace('jmvcore'))
         
       },
       
+     # icc for anova table-------------- 
+     
+     .populateIcTable=function(results){
+       
+       table <- self$results$ic
+       
+       model <- results$model
+       type <- results$type
+       unit <- results$unit
+       sub <- results$sub
+       raters <- results$raters
+       icc <- results$icc
+       
+       row <- list()
+       
+       row[['model']] <- model
+       row[['type']] <- type
+       row[['unit']] <- unit
+       row[['sub']] <- sub
+       row[['raters']] <- raters
+       row[['icc']] <- icc
       
+       table$setRow(rowNo = 1, values = row)
+       
+       
+     },
+     
+     .populateFtestTable=function(results){
+       
+       table <- self$results$ftest
+       
+       icc <- results$icc
+       f <- results$f
+       df1 <- results$df1
+       df2 <- results$df2
+       p1 <- results$p1
+       lower <- results$lower
+       upper <- results$upper
+       
+      
+       row <- list()
+       
+       row[['icc']] <- icc
+       row[['f']] <- f
+       row[['df1']] <- df1
+       row[['df2']] <- df2
+       row[['p1']] <- p1
+       row[['lower']] <- lower
+       row[['upper']] <- upper
+       
+       
+       table$setRow(rowNo = 1, values = row)
+       
+       
+     },
+   
       
       #### Plot functions ----
       

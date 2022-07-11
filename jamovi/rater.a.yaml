@@ -21,6 +21,30 @@ options:
       permitted:
         - numeric
         
+    - name: model
+      title: Model
+      type: List
+      options:
+        - oneway
+        - twoway
+      default: oneway
+ 
+    - name: type
+      title: Type
+      type: List
+      options:
+        - agreement
+        - consistency
+      default: agreement
+ 
+    - name: unit
+      title: Unit
+      type: List
+      options:
+        - single
+        - average
+      default: single
+
     - name: interrater
       title: Interrater reliability
       type: Bool
@@ -33,6 +57,16 @@ options:
       
     - name: bicc
       title: Bootstrap agreement(n=1000)
+      type: Bool
+      default: FALSE
+
+    - name: ic
+      title: ICC 
+      type: Bool
+      default: FALSE
+
+    - name: ftest
+      title: F test for ICC
       type: Bool
       default: FALSE
       

@@ -7,7 +7,12 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
+            model = "oneway",
+            type = "agreement",
+            unit = "single",
             interrater = TRUE,
+            ic = FALSE,
+            ftest = FALSE,
             icc = FALSE,
             bicc = FALSE,
             ggm = FALSE,
@@ -26,10 +31,39 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..model <- jmvcore::OptionList$new(
+                "model",
+                model,
+                options=list(
+                    "oneway",
+                    "twoway"),
+                default="oneway")
+            private$..type <- jmvcore::OptionList$new(
+                "type",
+                type,
+                options=list(
+                    "agreement",
+                    "consistency"),
+                default="agreement")
+            private$..unit <- jmvcore::OptionList$new(
+                "unit",
+                unit,
+                options=list(
+                    "single",
+                    "average"),
+                default="single")
             private$..interrater <- jmvcore::OptionBool$new(
                 "interrater",
                 interrater,
                 default=TRUE)
+            private$..ic <- jmvcore::OptionBool$new(
+                "ic",
+                ic,
+                default=FALSE)
+            private$..ftest <- jmvcore::OptionBool$new(
+                "ftest",
+                ftest,
+                default=FALSE)
             private$..icc <- jmvcore::OptionBool$new(
                 "icc",
                 icc,
@@ -48,7 +82,12 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=FALSE)
 
             self$.addOption(private$..vars)
+            self$.addOption(private$..model)
+            self$.addOption(private$..type)
+            self$.addOption(private$..unit)
             self$.addOption(private$..interrater)
+            self$.addOption(private$..ic)
+            self$.addOption(private$..ftest)
             self$.addOption(private$..icc)
             self$.addOption(private$..bicc)
             self$.addOption(private$..ggm)
@@ -56,14 +95,24 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         }),
     active = list(
         vars = function() private$..vars$value,
+        model = function() private$..model$value,
+        type = function() private$..type$value,
+        unit = function() private$..unit$value,
         interrater = function() private$..interrater$value,
+        ic = function() private$..ic$value,
+        ftest = function() private$..ftest$value,
         icc = function() private$..icc$value,
         bicc = function() private$..bicc$value,
         ggm = function() private$..ggm$value,
         par = function() private$..par$value),
     private = list(
         ..vars = NA,
+        ..model = NA,
+        ..type = NA,
+        ..unit = NA,
         ..interrater = NA,
+        ..ic = NA,
+        ..ftest = NA,
         ..icc = NA,
         ..bicc = NA,
         ..ggm = NA,
@@ -226,7 +275,12 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data The data as a data frame.
 #' @param vars .
+#' @param model .
+#' @param type .
+#' @param unit .
 #' @param interrater .
+#' @param ic .
+#' @param ftest .
 #' @param icc .
 #' @param bicc .
 #' @param ggm .
@@ -251,7 +305,12 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 rater <- function(
     data,
     vars,
+    model = "oneway",
+    type = "agreement",
+    unit = "single",
     interrater = TRUE,
+    ic = FALSE,
+    ftest = FALSE,
     icc = FALSE,
     bicc = FALSE,
     ggm = FALSE,
@@ -269,7 +328,12 @@ rater <- function(
 
     options <- raterOptions$new(
         vars = vars,
+        model = model,
+        type = type,
+        unit = unit,
         interrater = interrater,
+        ic = ic,
+        ftest = ftest,
         icc = icc,
         bicc = bicc,
         ggm = ggm,

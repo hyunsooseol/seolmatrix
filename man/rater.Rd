@@ -7,7 +7,12 @@
 rater(
   data,
   vars,
+  model = "oneway",
+  type = "agreement",
+  unit = "single",
   interrater = TRUE,
+  ic = FALSE,
+  ftest = FALSE,
   icc = FALSE,
   bicc = FALSE,
   ggm = FALSE,
@@ -19,7 +24,17 @@ rater(
 
 \item{vars}{.}
 
+\item{model}{.}
+
+\item{type}{.}
+
+\item{unit}{.}
+
 \item{interrater}{.}
+
+\item{ic}{.}
+
+\item{ftest}{.}
 
 \item{icc}{.}
 

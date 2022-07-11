@@ -43,3 +43,21 @@ children:
             name: ggm
           - type: CheckBox
             name: par
+  - type: CollapseBox
+    label: ICC for ANOVA
+    margin: normal
+    collapsed: true
+    children:
+      - type: CheckBox
+        name: ic
+      - type: CheckBox
+        name: ftest        
+      - type: LayoutBox
+        margin: small
+        children:
+          - type: ComboBox
+            name: model
+          - type: ComboBox
+            name: type
+          - type: ComboBox
+            name: unit            

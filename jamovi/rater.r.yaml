@@ -8,7 +8,7 @@ items:
       title: Instructions
       type: Html
       visible: True
-      
+
     - name: interrater
       title: 'Interrater Reliability'
       type: Table
@@ -69,6 +69,7 @@ items:
       rows: 1
       clearWith:
         - vars
+
       columns:
         - name: name
           title: ''
@@ -82,7 +83,75 @@ items:
           title: 'Upper'
           type: number
           superTitle: '95% CI'
-          
+
+    - name: ic
+      title: 'Intraclass correlation'
+      type: Table
+      rows: 1
+      visible: (ic)
+      clearWith:
+        - vars
+        - model
+        - type
+        - unit
+      refs: irr    
+
+      columns:
+        - name: model
+          title: Model
+          type: 'text'
+        - name: type
+          title: Type
+          type: 'text'
+        - name: unit
+          title: Unit
+          type: 'text'
+        - name: sub
+          title: Subjects
+          type: integer
+        - name: raters
+          title: Raters
+          type: integer
+        - name: icc
+          title: ICC
+          type: number
+
+    - name: ftest
+      title: 'F test for ICC'
+      type: Table
+      rows: 1
+      clearWith:
+        - vars
+        - model
+        - type
+        - unit
+      refs: irr    
+
+      columns:
+        - name: icc
+          title: 'ICC'
+          type: number
+        - name: f
+          title: 'F'
+          type: number
+        - name: df1
+          title: 'df1'
+          type: number
+        - name: df2
+          title: 'df2'
+          type: number 
+        - name: p1
+          title: 'p'
+          type: zto, number
+        - name: lower
+          title: 'Lower'
+          type: number
+          superTitle: '95% CI'
+        - name: upper
+          title: 'Upper'
+          type: number
+          superTitle: '95% CI'
+
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
