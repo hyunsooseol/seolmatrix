@@ -11,10 +11,10 @@ rater(
   type = "agreement",
   unit = "single",
   interrater = TRUE,
-  ic = FALSE,
-  ftest = FALSE,
   icc = FALSE,
   bicc = FALSE,
+  ic = TRUE,
+  ftest = FALSE,
   ggm = FALSE,
   par = FALSE
 )
@@ -32,13 +32,13 @@ rater(
 
 \item{interrater}{.}
 
-\item{ic}{.}
-
-\item{ftest}{.}
-
 \item{icc}{.}
 
 \item{bicc}{.}
+
+\item{ic}{.}
+
+\item{ftest}{.}
 
 \item{ggm}{.}
 
@@ -51,6 +51,8 @@ A results object containing:
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
+  \code{results$ic} \tab \tab \tab \tab \tab a table \cr
+  \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }

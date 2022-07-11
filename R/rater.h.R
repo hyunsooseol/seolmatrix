@@ -11,10 +11,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             type = "agreement",
             unit = "single",
             interrater = TRUE,
-            ic = FALSE,
-            ftest = FALSE,
             icc = FALSE,
             bicc = FALSE,
+            ic = TRUE,
+            ftest = TRUE,
             ggm = FALSE,
             par = FALSE, ...) {
 
@@ -56,14 +56,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "interrater",
                 interrater,
                 default=TRUE)
-            private$..ic <- jmvcore::OptionBool$new(
-                "ic",
-                ic,
-                default=FALSE)
-            private$..ftest <- jmvcore::OptionBool$new(
-                "ftest",
-                ftest,
-                default=FALSE)
             private$..icc <- jmvcore::OptionBool$new(
                 "icc",
                 icc,
@@ -72,6 +64,14 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "bicc",
                 bicc,
                 default=FALSE)
+            private$..ic <- jmvcore::OptionBool$new(
+                "ic",
+                ic,
+                default=TRUE)
+            private$..ftest <- jmvcore::OptionBool$new(
+                "ftest",
+                ftest,
+                default=TRUE)
             private$..ggm <- jmvcore::OptionBool$new(
                 "ggm",
                 ggm,
@@ -86,10 +86,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..type)
             self$.addOption(private$..unit)
             self$.addOption(private$..interrater)
-            self$.addOption(private$..ic)
-            self$.addOption(private$..ftest)
             self$.addOption(private$..icc)
             self$.addOption(private$..bicc)
+            self$.addOption(private$..ic)
+            self$.addOption(private$..ftest)
             self$.addOption(private$..ggm)
             self$.addOption(private$..par)
         }),
@@ -99,10 +99,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         type = function() private$..type$value,
         unit = function() private$..unit$value,
         interrater = function() private$..interrater$value,
-        ic = function() private$..ic$value,
-        ftest = function() private$..ftest$value,
         icc = function() private$..icc$value,
         bicc = function() private$..bicc$value,
+        ic = function() private$..ic$value,
+        ftest = function() private$..ftest$value,
         ggm = function() private$..ggm$value,
         par = function() private$..par$value),
     private = list(
@@ -111,10 +111,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..type = NA,
         ..unit = NA,
         ..interrater = NA,
-        ..ic = NA,
-        ..ftest = NA,
         ..icc = NA,
         ..bicc = NA,
+        ..ic = NA,
+        ..ftest = NA,
         ..ggm = NA,
         ..par = NA)
 )
@@ -127,6 +127,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         interrater = function() private$.items[["interrater"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
+        ic = function() private$.items[["ic"]],
+        ftest = function() private$.items[["ftest"]],
         plot = function() private$.items[["plot"]],
         plot1 = function() private$.items[["plot1"]]),
     private = list(),
@@ -231,6 +233,87 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="Upper", 
                         `type`="number", 
                         `superTitle`="95% CI"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="ic",
+                title="Intraclass correlation",
+                rows=1,
+                visible="(ic)",
+                clearWith=list(
+                    "vars",
+                    "model",
+                    "type",
+                    "unit"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="model", 
+                        `title`="Model", 
+                        `type`="text"),
+                    list(
+                        `name`="type", 
+                        `title`="Type", 
+                        `type`="text"),
+                    list(
+                        `name`="unit", 
+                        `title`="Unit", 
+                        `type`="text"),
+                    list(
+                        `name`="sub", 
+                        `title`="Subjects", 
+                        `type`="integer"),
+                    list(
+                        `name`="raters", 
+                        `title`="Raters", 
+                        `type`="integer"),
+                    list(
+                        `name`="icc", 
+                        `title`="ICC", 
+                        `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="ftest",
+                title="F test for ICC",
+                rows=1,
+                visible="(ftest)",
+                clearWith=list(
+                    "vars",
+                    "model",
+                    "type",
+                    "unit"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="icc", 
+                        `title`="ICC", 
+                        `type`="number"),
+                    list(
+                        `name`="f", 
+                        `title`="F", 
+                        `type`="number"),
+                    list(
+                        `name`="df1", 
+                        `title`="df1", 
+                        `type`="number"),
+                    list(
+                        `name`="df2", 
+                        `title`="df2", 
+                        `type`="number"),
+                    list(
+                        `name`="p1", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto, number"),
+                    list(
+                        `name`="lower", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="upper", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -279,10 +362,10 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param type .
 #' @param unit .
 #' @param interrater .
-#' @param ic .
-#' @param ftest .
 #' @param icc .
 #' @param bicc .
+#' @param ic .
+#' @param ftest .
 #' @param ggm .
 #' @param par .
 #' @return A results object containing:
@@ -291,6 +374,8 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
@@ -309,10 +394,10 @@ rater <- function(
     type = "agreement",
     unit = "single",
     interrater = TRUE,
-    ic = FALSE,
-    ftest = FALSE,
     icc = FALSE,
     bicc = FALSE,
+    ic = TRUE,
+    ftest = TRUE,
     ggm = FALSE,
     par = FALSE) {
 
@@ -332,10 +417,10 @@ rater <- function(
         type = type,
         unit = unit,
         interrater = interrater,
-        ic = ic,
-        ftest = ftest,
         icc = icc,
         bicc = bicc,
+        ic = ic,
+        ftest = ftest,
         ggm = ggm,
         par = par)
 

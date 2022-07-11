@@ -15,7 +15,7 @@ children:
             name: vars
             isTarget: true
   - type: CollapseBox
-    label: Analysis
+    label: Rater reliability
     margin: normal
     collapsed: true
     children:
@@ -44,20 +44,31 @@ children:
           - type: CheckBox
             name: par
   - type: CollapseBox
-    label: ICC for ANOVA
+    label: ICC for oneway and twoway models
     margin: normal
     collapsed: true
     children:
-      - type: CheckBox
-        name: ic
-      - type: CheckBox
-        name: ftest        
-      - type: LayoutBox
-        margin: small
+      - type: Label
+        label: 'Options'
+        fitToGrid: true
+        cell:
+          column: 0
+          row: 0
         children:
           - type: ComboBox
             name: model
           - type: ComboBox
             name: type
           - type: ComboBox
-            name: unit            
+            name: unit      
+      - type: Label
+        label: 'Statistics'
+        fitToGrid: true
+        cell:
+          column: 1
+          row: 0          
+        children:
+          - type: CheckBox
+            name: ic
+          - type: CheckBox
+            name: ftest        

@@ -120,6 +120,7 @@ items:
       title: 'F test for ICC'
       type: Table
       rows: 1
+      visible: (ftest)
       clearWith:
         - vars
         - model
@@ -142,7 +143,8 @@ items:
           type: number 
         - name: p1
           title: 'p'
-          type: zto, number
+          type: number
+          format: zto, number
         - name: lower
           title: 'Lower'
           type: number

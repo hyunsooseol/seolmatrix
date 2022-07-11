@@ -47,6 +47,18 @@ raterClass <- if (requireNamespace('jmvcore'))
              </html>"
          )
 
+         if (self$options$ftest)
+           self$results$ftest$setNote(
+             "Note",
+             " H0: r0 = 0; H1: r0 > 0"
+             
+           )
+         
+         
+         
+         
+         
+         
       },
 
       #======================================++++++++++++++++++++++
@@ -110,7 +122,6 @@ raterClass <- if (requireNamespace('jmvcore'))
       # compute results=====================================================
       
       .compute = function(data) {
-        # get variables------
         
         data <- self$data
         
@@ -192,7 +203,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         bicc <- quantile(bres$t, c(0.025, 0.975))
         
         
-        ########### icc using anova----------
+        ########### icc using oneway and twoway----------
         
         model <- self$options$model
         type <- self$options$type
@@ -328,7 +339,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         
       },
       
-     # icc for anova table-------------- 
+     # icc for oneway and twoway table-------------- 
      
      .populateIcTable=function(results){
        
@@ -354,6 +365,8 @@ raterClass <- if (requireNamespace('jmvcore'))
        
        
      },
+     
+     # F test--------------------------
      
      .populateFtestTable=function(results){
        
