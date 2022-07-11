@@ -14,7 +14,7 @@ rater(
   icc = FALSE,
   bicc = FALSE,
   ic = TRUE,
-  ftest = FALSE,
+  ftest = TRUE,
   ggm = FALSE,
   par = FALSE
 )

@@ -85,7 +85,7 @@ items:
           superTitle: '95% CI'
 
     - name: ic
-      title: 'Intraclass correlation'
+      title: 'Intraclass correlation coefficient(ICC)'
       type: Table
       rows: 1
       visible: (ic)
