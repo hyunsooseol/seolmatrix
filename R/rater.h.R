@@ -147,7 +147,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="interrater",
-                title="Interrater Reliability",
+                title="Interrater reliability",
                 rows=1,
                 clearWith=list(
                     "vars"),
@@ -212,7 +212,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="bicc",
-                title="Bootstrap Agreement",
+                title="Bootstrap agreement",
                 visible="(bicc)",
                 rows=1,
                 clearWith=list(
@@ -236,7 +236,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="ic",
-                title="Intraclass correlation coefficient(ICC)",
+                title="Intraclass Correlation Coefficient(ICC)",
                 rows=1,
                 visible="(ic)",
                 clearWith=list(
@@ -317,7 +317,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Gaussian Graphical Model",
+                title="Gaussian graphical model",
                 width=500,
                 height=500,
                 renderFun=".plot",

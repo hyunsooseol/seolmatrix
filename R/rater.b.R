@@ -50,21 +50,21 @@ raterClass <- if (requireNamespace('jmvcore'))
          if (self$options$ftest)
            self$results$ftest$setNote(
              "Note",
-             "H0: r0 = 0; H1: r0 > 0"
+             "H0: ICC = 0; H1: ICC > 0"
              
            )
          
          if (self$options$ic)
            self$results$ic$setNote(
              "Note",
-             "The result was performed by 'irr::icc' function."
+             "The analysis was performed by 'irr::icc' function."
              
            )
          
          if (self$options$icc)
            self$results$icc$setNote(
              "Note",
-             "The result was performed by 'psy::icc' function."
+             "The analysis was performed by 'psy::icc' function."
              
            )
          

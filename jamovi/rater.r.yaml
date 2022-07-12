@@ -10,7 +10,7 @@ items:
       visible: True
 
     - name: interrater
-      title: 'Interrater Reliability'
+      title: 'Interrater reliability'
       type: Table
       rows: 1
       clearWith:
@@ -63,7 +63,7 @@ items:
           type: number
           
     - name: bicc
-      title: 'Bootstrap Agreement'
+      title: 'Bootstrap agreement'
       type: Table
       visible: (bicc)
       rows: 1
@@ -85,7 +85,7 @@ items:
           superTitle: '95% CI'
 
     - name: ic
-      title: 'Intraclass correlation coefficient(ICC)'
+      title: 'Intraclass Correlation Coefficient(ICC)'
       type: Table
       rows: 1
       visible: (ic)
@@ -155,7 +155,7 @@ items:
           superTitle: '95% CI'
 
     - name: plot
-      title: 'Gaussian Graphical Model'
+      title: 'Gaussian graphical model'
       type: Image
       width:  500
       height: 500

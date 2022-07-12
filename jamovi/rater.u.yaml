@@ -20,7 +20,7 @@ children:
     collapsed: true
     children:
       - type: Label
-        label: "Statistics"
+        label: Statistics
         fitToGrid: true
         cell:
           column: 0
@@ -31,13 +31,13 @@ children:
           - type: CheckBox
             name: icc
           - type: CheckBox
-            name: bicc   
+            name: bicc
       - type: Label
-        label: 'Plots'
+        label: Plots
         fitToGrid: true
         cell:
           column: 1
-          row: 0          
+          row: 0
         children:
           - type: CheckBox
             name: ggm
@@ -48,27 +48,32 @@ children:
     margin: normal
     collapsed: true
     children:
-      - type: Label
-        label: 'Options'
-        fitToGrid: true
-        cell:
-          column: 0
-          row: 0
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         children:
-          - type: ComboBox
-            name: model
-          - type: ComboBox
-            name: type
-          - type: ComboBox
-            name: unit      
-      - type: Label
-        label: 'Statistics'
-        fitToGrid: true
+          - type: Label
+            label: Options
+            children:
+              - type: ComboBox
+                name: model
+              - type: ComboBox
+                name: type
+              - type: ComboBox
+                name: unit
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         cell:
           column: 1
-          row: 0          
+          row: 0
+        fitToGrid: true
         children:
-          - type: CheckBox
-            name: ic
-          - type: CheckBox
-            name: ftest        
+          - type: Label
+            label: Statistics
+            children:
+              - type: CheckBox
+                name: ic
+              - type: CheckBox
+                name: ftest
+ 
