@@ -24,8 +24,10 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "vars",
                 vars,
                 suggested=list(
+                    "nominal",
                     "continuous"),
                 permitted=list(
+                    "factor",
                     "numeric"))
             private$..ctrlvars <- jmvcore::OptionVariables$new(
                 "ctrlvars",

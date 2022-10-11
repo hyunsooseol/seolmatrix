@@ -17,8 +17,10 @@ options:
       title: Variables
       type: Variables
       suggested:
+         - nominal
          - continuous
       permitted:
+        - factor
         - numeric
 
     - name: ctrlvars
