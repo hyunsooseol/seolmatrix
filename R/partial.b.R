@@ -8,6 +8,7 @@
 #' @import jmvcore
 #' @import qgraph
 #' @import psych
+#' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph cor_auto
 #' @export
@@ -121,13 +122,14 @@ partialClass <- if (requireNamespace('jmvcore'))
  
          # get variables--------------------------------------------------
         
-        matrix <- self$results$get('matrix')
-        
-        var <- self$options$get('vars')
-        nVar <- length(var)
-        
-        varCtl <- self$options$get('ctrlvars')
-        nCtl   <- length(varCtl)
+            matrix <- self$results$get('matrix')
+  
+            var <- self$options$get('vars')
+            nVar <- length(var)
+  
+            varCtl <- self$options$get('ctrlvars')
+             nCtl   <- length(varCtl)
+  
         
         
         data <- self$data
@@ -143,7 +145,9 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         if (nVar > 1) {
           m  <-
-            as.matrix(cor(data[, c(var, varCtl)], use = 'pairwise', method = 'pearson'))
+            as.matrix(stats::cor(data[, c(var, varCtl)], 
+                                 use="pairwise.complete.obs",
+                                 method = 'pearson'))
           X  <- m[var, var]
           
           if (nCtl > 0) {

@@ -31,8 +31,10 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ctrlvars",
                 ctrlvars,
                 suggested=list(
+                    "nominal",
                     "continuous"),
                 permitted=list(
+                    "factor",
                     "numeric"))
             private$..sidSig <- jmvcore::OptionList$new(
                 "sidSig",

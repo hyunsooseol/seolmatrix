@@ -9,7 +9,7 @@ Correlation Analysis
 Correlation Analysis
 }
 \section{Super classes}{
-\code{\link[jmvcore:Analysis]{jmvcore::Analysis}} -> \code{\link[seolmatrix:partialBase]{seolmatrix::partialBase}} -> \code{partialClass}
+\code{\link[jmvcore:Analysis]{jmvcore::Analysis}} -> \code{seolmatrix::partialBase} -> \code{partialClass}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -20,34 +20,34 @@ Correlation Analysis
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createImage"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createImage'><code>jmvcore::Analysis$.createImage()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createImages"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createImages'><code>jmvcore::Analysis$.createImages()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createPlotObject"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createPlotObject'><code>jmvcore::Analysis$.createPlotObject()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".load"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.load'><code>jmvcore::Analysis$.load()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".render"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.render'><code>jmvcore::Analysis$.render()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".save"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.save'><code>jmvcore::Analysis$.save()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".savePart"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.savePart'><code>jmvcore::Analysis$.savePart()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setCheckpoint"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setCheckpoint'><code>jmvcore::Analysis$.setCheckpoint()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setParent"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setParent'><code>jmvcore::Analysis$.setParent()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setReadDatasetHeaderSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setReadDatasetHeaderSource'><code>jmvcore::Analysis$.setReadDatasetHeaderSource()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setReadDatasetSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setReadDatasetSource'><code>jmvcore::Analysis$.setReadDatasetSource()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setResourcesPathSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setResourcesPathSource'><code>jmvcore::Analysis$.setResourcesPathSource()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setStatePathSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setStatePathSource'><code>jmvcore::Analysis$.setStatePathSource()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="addAddon"><a href='../../jmvcore/html/Analysis.html#method-Analysis-addAddon'><code>jmvcore::Analysis$addAddon()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="asProtoBuf"><a href='../../jmvcore/html/Analysis.html#method-Analysis-asProtoBuf'><code>jmvcore::Analysis$asProtoBuf()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="asSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-asSource'><code>jmvcore::Analysis$asSource()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="check"><a href='../../jmvcore/html/Analysis.html#method-Analysis-check'><code>jmvcore::Analysis$check()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="init"><a href='../../jmvcore/html/Analysis.html#method-Analysis-init'><code>jmvcore::Analysis$init()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="optionsChangedHandler"><a href='../../jmvcore/html/Analysis.html#method-Analysis-optionsChangedHandler'><code>jmvcore::Analysis$optionsChangedHandler()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="postInit"><a href='../../jmvcore/html/Analysis.html#method-Analysis-postInit'><code>jmvcore::Analysis$postInit()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="print"><a href='../../jmvcore/html/Analysis.html#method-Analysis-print'><code>jmvcore::Analysis$print()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="readDataset"><a href='../../jmvcore/html/Analysis.html#method-Analysis-readDataset'><code>jmvcore::Analysis$readDataset()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="run"><a href='../../jmvcore/html/Analysis.html#method-Analysis-run'><code>jmvcore::Analysis$run()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="serialize"><a href='../../jmvcore/html/Analysis.html#method-Analysis-serialize'><code>jmvcore::Analysis$serialize()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="setError"><a href='../../jmvcore/html/Analysis.html#method-Analysis-setError'><code>jmvcore::Analysis$setError()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="setStatus"><a href='../../jmvcore/html/Analysis.html#method-Analysis-setStatus'><code>jmvcore::Analysis$setStatus()</code></a></li>
-<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="translate"><a href='../../jmvcore/html/Analysis.html#method-Analysis-translate'><code>jmvcore::Analysis$translate()</code></a></li>
-<li><span class="pkg-link" data-pkg="seolmatrix" data-topic="partialBase" data-id="initialize"><a href='../../seolmatrix/html/partialBase.html#method-partialBase-initialize'><code>seolmatrix::partialBase$initialize()</code></a></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createImage"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createImage'><code>jmvcore::Analysis$.createImage()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createImages"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createImages'><code>jmvcore::Analysis$.createImages()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".createPlotObject"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.createPlotObject'><code>jmvcore::Analysis$.createPlotObject()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".load"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.load'><code>jmvcore::Analysis$.load()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".render"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.render'><code>jmvcore::Analysis$.render()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".save"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.save'><code>jmvcore::Analysis$.save()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".savePart"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.savePart'><code>jmvcore::Analysis$.savePart()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setCheckpoint"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setCheckpoint'><code>jmvcore::Analysis$.setCheckpoint()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setParent"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setParent'><code>jmvcore::Analysis$.setParent()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setReadDatasetHeaderSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setReadDatasetHeaderSource'><code>jmvcore::Analysis$.setReadDatasetHeaderSource()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setReadDatasetSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setReadDatasetSource'><code>jmvcore::Analysis$.setReadDatasetSource()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setResourcesPathSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setResourcesPathSource'><code>jmvcore::Analysis$.setResourcesPathSource()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id=".setStatePathSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-.setStatePathSource'><code>jmvcore::Analysis$.setStatePathSource()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="addAddon"><a href='../../jmvcore/html/Analysis.html#method-Analysis-addAddon'><code>jmvcore::Analysis$addAddon()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="asProtoBuf"><a href='../../jmvcore/html/Analysis.html#method-Analysis-asProtoBuf'><code>jmvcore::Analysis$asProtoBuf()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="asSource"><a href='../../jmvcore/html/Analysis.html#method-Analysis-asSource'><code>jmvcore::Analysis$asSource()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="check"><a href='../../jmvcore/html/Analysis.html#method-Analysis-check'><code>jmvcore::Analysis$check()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="init"><a href='../../jmvcore/html/Analysis.html#method-Analysis-init'><code>jmvcore::Analysis$init()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="optionsChangedHandler"><a href='../../jmvcore/html/Analysis.html#method-Analysis-optionsChangedHandler'><code>jmvcore::Analysis$optionsChangedHandler()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="postInit"><a href='../../jmvcore/html/Analysis.html#method-Analysis-postInit'><code>jmvcore::Analysis$postInit()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="print"><a href='../../jmvcore/html/Analysis.html#method-Analysis-print'><code>jmvcore::Analysis$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="readDataset"><a href='../../jmvcore/html/Analysis.html#method-Analysis-readDataset'><code>jmvcore::Analysis$readDataset()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="run"><a href='../../jmvcore/html/Analysis.html#method-Analysis-run'><code>jmvcore::Analysis$run()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="serialize"><a href='../../jmvcore/html/Analysis.html#method-Analysis-serialize'><code>jmvcore::Analysis$serialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="setError"><a href='../../jmvcore/html/Analysis.html#method-Analysis-setError'><code>jmvcore::Analysis$setError()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="setStatus"><a href='../../jmvcore/html/Analysis.html#method-Analysis-setStatus'><code>jmvcore::Analysis$setStatus()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="jmvcore" data-topic="Analysis" data-id="translate"><a href='../../jmvcore/html/Analysis.html#method-Analysis-translate'><code>jmvcore::Analysis$translate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="seolmatrix" data-topic="partialBase" data-id="initialize"><a href='../../seolmatrix/html/partialBase.html#method-partialBase-initialize'><code>seolmatrix::partialBase$initialize()</code></a></span></li>
 </ul>
 </details>
 }}
