@@ -37,8 +37,7 @@ self$results$instructions$setContent(
             <div class='instructions'>
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p>1. Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
-            <p>2. The input dataset require dichotomous data with the type of <b>numeric-continuous</b> in jamovi.</p>
+            <p>Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

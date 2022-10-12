@@ -21,9 +21,9 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "vars",
                 vars,
                 suggested=list(
-                    "continuous"),
+                    "nominal"),
                 permitted=list(
-                    "numeric"))
+                    "factor"))
             private$..tetrachoric <- jmvcore::OptionBool$new(
                 "tetrachoric",
                 tetrachoric,
@@ -167,6 +167,7 @@ dichotomous <- function(
             parent.frame(),
             `if`( ! missing(vars), vars, NULL))
 
+    for (v in vars) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- dichotomousOptions$new(
         vars = vars,

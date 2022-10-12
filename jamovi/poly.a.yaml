@@ -18,7 +18,9 @@ options:
       type: Variables
       suggested:
          - ordinal
+         - nominal
       permitted:
+        - factor
         - numeric
 
     - name: polychoric

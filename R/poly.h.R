@@ -21,8 +21,10 @@ polyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "vars",
                 vars,
                 suggested=list(
-                    "ordinal"),
+                    "ordinal",
+                    "nominal"),
                 permitted=list(
+                    "factor",
                     "numeric"))
             private$..polychoric <- jmvcore::OptionBool$new(
                 "polychoric",

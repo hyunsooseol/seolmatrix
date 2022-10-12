@@ -21,8 +21,10 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "vars",
                 vars,
                 suggested=list(
+                    "ordinal",
                     "continuous"),
                 permitted=list(
+                    "factor",
                     "numeric"))
             private$..spearman <- jmvcore::OptionBool$new(
                 "spearman",

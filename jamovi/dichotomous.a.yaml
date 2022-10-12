@@ -17,9 +17,9 @@ options:
       title: Variables
       type: Variables
       suggested:
-         - continuous
+         - nominal
       permitted:
-        - numeric
+        - factor
 
     - name: tetrachoric
       title: Tetrachoric 
