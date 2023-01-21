@@ -29,6 +29,10 @@ children:
           - type: CheckBox
             name: interrater
           - type: CheckBox
+            name: fk
+          - type: CheckBox
+            name: cw
+          - type: CheckBox
             name: icc
           - type: CheckBox
             name: bicc

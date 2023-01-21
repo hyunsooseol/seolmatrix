@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.6.3
+version: 3.6.5
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2022-10-11'
+date: '2023-01-21'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -69,6 +69,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Correlation structure
     menuSubgroup: Item
+  - title: Fleiss Kappa
+    name: kappa
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Fleiss Kappa
+    menuSubgroup: Rater
 datasets:
   - name: rater
     path: rater.omv
@@ -76,6 +82,12 @@ datasets:
     tags:
       - Rater
       - ICC
+  - name: kappa
+    path: diagnoses.omv
+    description: Fleiss' Kappa
+    tags:
+      - Rater
+      - kappa
   - name: big5
     path: big5.omv
     description: partial data

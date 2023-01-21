@@ -1,0 +1,85 @@
+---
+name:  kappa
+title: Fleiss Kappa
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+
+    - name: fk
+      title: 'Fleiss Kappa'
+      type: Table
+      rows: 1
+      visible: (fk)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Fleiss' Kappa
+        - name: n
+          type: number
+        - name: rater
+          type: number
+        - name: statistic
+          type: number
+        - name: z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+
+    - name: ek
+      title: 'Exact Kappa'
+      type: Table
+      rows: 1
+      visible: (ek)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Exact Kappa
+        - name: n
+          type: number
+        - name: rater
+          type: number
+        - name: statistic
+          type: number
+
+    - name: cw
+      title: 'Category-wise kappas'
+      type: Table
+      visible: (cw)
+      refs: irr
+      clearWith:
+        - vars
+ 
+      columns:
+        - name: name
+          title: 'Category'
+          type: 'text'
+          content: ($key)
+
+        - name: k
+          title: 'Kappa'
+          type: number
+        - name: z
+          title: 'Z'
+          type: number
+        - name: p
+          title: 'p'
+          type: number
+          format: zto,pvalue
+
+
+...

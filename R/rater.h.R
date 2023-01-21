@@ -16,7 +16,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ic = TRUE,
             ftest = TRUE,
             ggm = FALSE,
-            par = FALSE, ...) {
+            par = FALSE,
+            fk = FALSE,
+            cw = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -80,6 +82,14 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "par",
                 par,
                 default=FALSE)
+            private$..fk <- jmvcore::OptionBool$new(
+                "fk",
+                fk,
+                default=FALSE)
+            private$..cw <- jmvcore::OptionBool$new(
+                "cw",
+                cw,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..model)
@@ -92,6 +102,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ftest)
             self$.addOption(private$..ggm)
             self$.addOption(private$..par)
+            self$.addOption(private$..fk)
+            self$.addOption(private$..cw)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -104,7 +116,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ic = function() private$..ic$value,
         ftest = function() private$..ftest$value,
         ggm = function() private$..ggm$value,
-        par = function() private$..par$value),
+        par = function() private$..par$value,
+        fk = function() private$..fk$value,
+        cw = function() private$..cw$value),
     private = list(
         ..vars = NA,
         ..model = NA,
@@ -116,7 +130,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ic = NA,
         ..ftest = NA,
         ..ggm = NA,
-        ..par = NA)
+        ..par = NA,
+        ..fk = NA,
+        ..cw = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -125,6 +141,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         interrater = function() private$.items[["interrater"]],
+        fk = function() private$.items[["fk"]],
+        cw = function() private$.items[["cw"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
         ic = function() private$.items[["ic"]],
@@ -172,7 +190,66 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="p", 
-                        `type`="number"))))
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="fk",
+                title="Fleiss Kappa",
+                rows=1,
+                visible="(fk)",
+                clearWith=list(
+                    "vars"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Fleiss' Kappa"),
+                    list(
+                        `name`="n", 
+                        `type`="number"),
+                    list(
+                        `name`="rater", 
+                        `type`="number"),
+                    list(
+                        `name`="statistic", 
+                        `type`="number"),
+                    list(
+                        `name`="z", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="cw",
+                title="Category-wise kappas",
+                visible="(cw)",
+                refs="irr",
+                clearWith=list(
+                    "vars"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="Category", 
+                        `type`="text", 
+                        `content`="($key)"),
+                    list(
+                        `name`="k", 
+                        `title`="Kappa", 
+                        `type`="number"),
+                    list(
+                        `name`="z", 
+                        `title`="Z", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="icc",
@@ -368,10 +445,14 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ftest .
 #' @param ggm .
 #' @param par .
+#' @param fk .
+#' @param cw .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
@@ -399,7 +480,9 @@ rater <- function(
     ic = TRUE,
     ftest = TRUE,
     ggm = FALSE,
-    par = FALSE) {
+    par = FALSE,
+    fk = FALSE,
+    cw = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -422,7 +505,9 @@ rater <- function(
         ic = ic,
         ftest = ftest,
         ggm = ggm,
-        par = par)
+        par = par,
+        fk = fk,
+        cw = cw)
 
     analysis <- raterClass$new(
         options = options,

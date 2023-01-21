@@ -15,6 +15,7 @@
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph qgraph
 #' @importFrom psych partial.r
+#' @importFrom irr kappam.fleiss
 #' @import boot
 #' @export
 
@@ -99,6 +100,14 @@ raterClass <- if (requireNamespace('jmvcore'))
           private$.populateRaterTable(results)
           
           
+          # populate Fleiss' kappa table-----
+          
+          private$.populateKapTable(results)
+          
+          # populate Fleiss' category-wise table-----
+          
+         # private$.populateCwTable(results)
+          
           # prepare plot-----
           
           private$.prepareGgmPlot(data)
@@ -164,8 +173,64 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         p <- res$p.value
         
+    #################################################
+    ###Fleiss' kappa================
         
-        ### compute icc table-------
+        kap<- irr::kappam.fleiss(ratings = data)
+        
+        #self$results$text$setContent(kap)
+        
+        
+        # get subjects-------
+
+        nk <- kap$subjects
+
+        # get raters--------
+
+        raterk <- kap$raters
+
+        # get statistic------------
+
+        statistick <- kap$value
+
+        # z value----------------
+
+        zk <- kap$statistic
+
+        # p value-------------------
+
+        pk <- kap$p.value
+
+######################################################
+
+if(isTRUE(self$options$cw)){
+  
+  cw<- irr::kappam.fleiss(ratings=data, detail=TRUE)
+  
+  c<- cw[["detail"]]
+  
+  names<- dimnames(c)[[1]]
+
+  table <- self$results$cw  
+  
+  #self$results$text$setContent(names)
+  
+    for (name in names) {
+
+      row <- list()
+      
+      row[['k']] <- c[name,1]
+      row[['z']] <- c[name,2]
+      row[['p']] <- c[name,3]
+
+      table$addRow(rowKey=name, values=row)
+
+    }
+}        
+     
+        
+        
+## compute icc table-------
         
         icc <- psy::icc(data = data)
         
@@ -268,8 +333,15 @@ raterClass <- if (requireNamespace('jmvcore'))
             'df2'=df2,
             'p1'=p1,
             'lower'=lower,
-            'upper'=upper
-          )
+            'upper'=upper,
+            'nk' = nk,
+            'raterk' = raterk,
+            'statistick' = statistick,
+            'zk' = zk,
+            'pk' = pk,
+            'kap'=kap
+           # 'cw'=cw
+            )
         
       },
       
@@ -299,7 +371,63 @@ raterClass <- if (requireNamespace('jmvcore'))
       },
       
       
-      # populate icc table-----
+     # populate Fleiss' kappa table-----
+     
+     .populateKapTable = function(results) {
+       
+       table <- self$results$fk
+       
+       if(is.null(self$options$fk))
+       return()
+       
+       
+       nk <- results$nk
+       raterk <- results$raterk
+       statistick <- results$statistick
+       zk <- results$zk
+       pk <- results$pk
+       
+       
+       row <- list()
+       
+       row[['n']] <- nk
+       row[['rater']] <- raterk
+       row[['statistic']] <- statistick
+       row[['z']] <- zk
+       row[['p']] <- pk
+       
+       table$setRow(rowNo = 1, values = row)
+       
+     },
+     
+ # populate Category wise table-----
+
+# .populateCwTable = function(results) {
+#   
+#   table <- self$results$cw
+#   
+#   if(!self$options$cw)
+#     return()
+#   
+#   c<- results$cw[["detail"]]
+#   
+#   names<- dimnames(c)[[1]]
+#    
+#   for (name in names) {
+#     
+#     row <- list()
+#     
+#     row[['z']] <- c[name,1]
+#     row[['p']] <- c[name,2]
+#     
+#     table$addRow(rowKey=name, values=row)
+#     
+#   }
+#   
+# },
+#   
+  
+  # populate icc table-----
       
       .populateIccTable = function(results) {
         table <- self$results$icc

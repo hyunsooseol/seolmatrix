@@ -17,7 +17,7 @@ options:
       title: Variables
       type: Variables
       suggested:
-         - continuous
+        - continuous
       permitted:
         - numeric
         
@@ -79,5 +79,15 @@ options:
       title: Partial plot
       type: Bool
       default: FALSE      
+
+    - name: fk
+      title: Fleiss' Kappa 
+      type: Bool
+      default: FALSE
+
+    - name: cw
+      title: Category-wise Kappas 
+      type: Bool
+      default: FALSE
 ...
 

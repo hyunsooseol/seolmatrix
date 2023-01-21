@@ -1,0 +1,39 @@
+---
+name:  kappa
+title: Fleiss Kappa
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: fk
+      title: Fleiss' Kappa 
+      type: Bool
+      default: TRUE
+
+    - name: ek
+      title: Exact Kappa
+      type: Bool
+      default: TRUE
+      
+    - name: cw
+      title: Category-wise Kappas 
+      type: Bool
+      default: FALSE
+
+
+...

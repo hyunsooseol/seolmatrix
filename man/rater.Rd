@@ -16,7 +16,9 @@ rater(
   ic = TRUE,
   ftest = TRUE,
   ggm = FALSE,
-  par = FALSE
+  par = FALSE,
+  fk = FALSE,
+  cw = FALSE
 )
 }
 \arguments{
@@ -43,12 +45,18 @@ rater(
 \item{ggm}{.}
 
 \item{par}{.}
+
+\item{fk}{.}
+
+\item{cw}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
+  \code{results$fk} \tab \tab \tab \tab \tab a table \cr
+  \code{results$cw} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
   \code{results$ic} \tab \tab \tab \tab \tab a table \cr

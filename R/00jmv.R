@@ -5,9 +5,9 @@
     `seolmatrix`=list(
         `type`="software", 
         `author`="Seol, H.", 
-        `year`=2022, 
+        `year`=2023, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="[jamovi module]. Retrieved from https://github.com/hyunsooseol/seolmatrix"), 
+        `publisher`="(Version 3.6.5)[jamovi module]. URL https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
         `author`="Revelle,W", 
