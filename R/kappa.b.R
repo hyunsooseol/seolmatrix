@@ -54,7 +54,9 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 data <- self$data
                 data <- jmvcore::naOmit(data)
                 
-                
+                if(is.null(self$options$vars))
+                return()
+                  
                 ###Fleiss' kappa================
                 
                 kap<- irr::kappam.fleiss(ratings = data)
