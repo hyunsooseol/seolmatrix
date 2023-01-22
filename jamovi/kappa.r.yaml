@@ -2,7 +2,7 @@
 name:  kappa
 title: Fleiss Kappa
 jrs:   '1.1'
-
+refs: seolmatrix 
 items:
     - name: instructions
       title: Instructions
