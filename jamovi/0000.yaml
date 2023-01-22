@@ -11,9 +11,9 @@ type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap
-  agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy
-  Process, Correlation structure, and allows users to produce Gaussian Graphical
-  Model and Partial plot.
+  agreement,  Rater Reliability, Fleiss Kappa, Multilevel correlation,
+  Concordance correlation, Analytic Hierarchy Process, Correlation structure,
+  and allows users to produce Gaussian Graphical Model and Partial plot.
 analyses:
   - title: Partial Correlation
     name: partial
