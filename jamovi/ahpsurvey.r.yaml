@@ -2,7 +2,7 @@
 name:  ahpsurvey
 title: AHP for survey data
 jrs:   '1.1'
-
+refs: seolmatrix
 items:
     - name: instructions
       title: Instructions

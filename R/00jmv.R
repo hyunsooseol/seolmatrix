@@ -63,4 +63,10 @@
         `year`=2022, 
         `title`="multilevel: Multilevel Functions", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=multilevel", 
-        `url`="https://CRAN.R-project.org/package=multilevel"))
+        `url`="https://CRAN.R-project.org/package=multilevel"), 
+    `ahpsurvey`=list(
+        `type`="software", 
+        `author`="Cho, F.", 
+        `year`=2019, 
+        `title`="ahpsurvey: Analytic Hierarchy Process for Survey Data", 
+        `publisher`="(Version 0.4.1)[R package]. Retrieved from https://CRAN.R-project.org/package=ahpsurvey"))

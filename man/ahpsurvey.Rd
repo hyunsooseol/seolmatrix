@@ -7,7 +7,7 @@
 ahpsurvey(
   data,
   vars,
-  atts = "c('cult, fam, house, jobs, trans')",
+  atts = "cult, fam, house, jobs, trans",
   itemmat = TRUE,
   weights = FALSE,
   cir = FALSE

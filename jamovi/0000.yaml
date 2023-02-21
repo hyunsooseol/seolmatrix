@@ -144,6 +144,11 @@ datasets:
     description: 4 items x 3 decision makers
     tags:
       - AHP
+  - name: ahp_survey
+    path: ahp_survey.omv
+    description: Ahp for survey data
+    tags:
+      - AHP for survey data
   - name: hci
     path: hci.omv
     description: correlation structure with binary items.
