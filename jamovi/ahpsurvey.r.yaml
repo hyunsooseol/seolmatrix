@@ -1,0 +1,29 @@
+---
+name:  ahpsurvey
+title: AHP for survey data
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+      
+    - name:  text
+      title: AHP for survey data
+      type:  Preformatted
+
+    - name: itemmat
+      title: 'Item Matrix'
+      type: Table
+      refs: easyAHP
+      visible: (itemmat)
+      clearWith:
+        - vars
+
+      columns:
+        - name: name
+          title: 'Item'
+          type: 'text'
+          content: ($key)
+...

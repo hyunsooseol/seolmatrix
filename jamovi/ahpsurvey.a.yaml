@@ -1,0 +1,46 @@
+---
+name:  ahpsurvey
+title: AHP for survey data
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - nominal
+         - ordinal
+      permitted:
+        - numeric
+
+    - name: atts
+      title: Attributes
+      type: String
+      default: 'cult, fam, house, jobs, trans'
+
+    - name: itemmat
+      title: Decision matrix 
+      type: Bool
+      default: True
+
+    - name: weights
+      title: Item weights
+      type: Bool
+      default: FALSE
+      
+    - name: cir
+      title: Consistency index & ratio
+      type: Bool
+      default: FALSE
+     
+ 
+ 
+...
