@@ -4,14 +4,7 @@
 \alias{ahpsurvey}
 \title{AHP for survey data}
 \usage{
-ahpsurvey(
-  data,
-  vars,
-  atts = "cult, fam, house, jobs, trans",
-  itemmat = TRUE,
-  weights = FALSE,
-  cir = FALSE
-)
+ahpsurvey(data, vars, atts = "cult, fam, house, jobs, trans", plot1 = TRUE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -20,25 +13,15 @@ ahpsurvey(
 
 \item{atts}{.}
 
-\item{itemmat}{.}
-
-\item{weights}{.}
-
-\item{cir}{.}
+\item{plot1}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-  \code{results$itemmat} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
-
-Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
-
-\code{results$itemmat$asDF}
-
-\code{as.data.frame(results$itemmat)}
 }
 \description{
 AHP for survey data

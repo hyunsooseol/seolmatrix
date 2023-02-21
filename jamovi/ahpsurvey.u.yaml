@@ -39,16 +39,12 @@ children:
         margin: large
         children:
           - type: Label
-            label: Tables
+            label: Plot
             fitToGrid: true
             cell:
               column: 0
               row: 0
             children:
               - type: CheckBox
-                name: itemmat
-              - type: CheckBox
-                name: weights
-              - type: CheckBox
-                name: cir            
-            
+                name: plot1
+    

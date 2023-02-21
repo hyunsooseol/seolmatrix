@@ -13,17 +13,16 @@ items:
       title: AHP for survey data
       type:  Preformatted
 
-    - name: itemmat
-      title: 'Item Matrix'
-      type: Table
-      refs: easyAHP
-      visible: (itemmat)
+    - name:  plot1
+      title:  "Individual preference weights"
+      type:  Image
+      visible: (plot1)
+      width: 600
+      height: 400
+      renderFun: .plot1
+      refs: ahpsurvey
       clearWith:
         - vars
+     
 
-      columns:
-        - name: name
-          title: 'Item'
-          type: 'text'
-          content: ($key)
 ...

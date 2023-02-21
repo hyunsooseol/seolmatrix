@@ -8,9 +8,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             atts = "cult, fam, house, jobs, trans",
-            itemmat = TRUE,
-            weights = FALSE,
-            cir = FALSE, ...) {
+            plot1 = TRUE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -30,37 +28,23 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "atts",
                 atts,
                 default="cult, fam, house, jobs, trans")
-            private$..itemmat <- jmvcore::OptionBool$new(
-                "itemmat",
-                itemmat,
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
                 default=TRUE)
-            private$..weights <- jmvcore::OptionBool$new(
-                "weights",
-                weights,
-                default=FALSE)
-            private$..cir <- jmvcore::OptionBool$new(
-                "cir",
-                cir,
-                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..atts)
-            self$.addOption(private$..itemmat)
-            self$.addOption(private$..weights)
-            self$.addOption(private$..cir)
+            self$.addOption(private$..plot1)
         }),
     active = list(
         vars = function() private$..vars$value,
         atts = function() private$..atts$value,
-        itemmat = function() private$..itemmat$value,
-        weights = function() private$..weights$value,
-        cir = function() private$..cir$value),
+        plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
-        ..itemmat = NA,
-        ..weights = NA,
-        ..cir = NA)
+        ..plot1 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -69,7 +53,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
-        itemmat = function() private$.items[["itemmat"]]),
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -87,20 +71,17 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="text",
                 title="AHP for survey data"))
-            self$add(jmvcore::Table$new(
+            self$add(jmvcore::Image$new(
                 options=options,
-                name="itemmat",
-                title="Item Matrix",
-                refs="easyAHP",
-                visible="(itemmat)",
+                name="plot1",
+                title="Individual preference weights",
+                visible="(plot1)",
+                width=600,
+                height=400,
+                renderFun=".plot1",
+                refs="ahpsurvey",
                 clearWith=list(
-                    "vars"),
-                columns=list(
-                    list(
-                        `name`="name", 
-                        `title`="Item", 
-                        `type`="text", 
-                        `content`="($key)"))))}))
+                    "vars")))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -128,30 +109,20 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param atts .
-#' @param itemmat .
-#' @param weights .
-#' @param cir .
+#' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$itemmat} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
-#'
-#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
-#'
-#' \code{results$itemmat$asDF}
-#'
-#' \code{as.data.frame(results$itemmat)}
 #'
 #' @export
 ahpsurvey <- function(
     data,
     vars,
     atts = "cult, fam, house, jobs, trans",
-    itemmat = TRUE,
-    weights = FALSE,
-    cir = FALSE) {
+    plot1 = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -166,9 +137,7 @@ ahpsurvey <- function(
     options <- ahpsurveyOptions$new(
         vars = vars,
         atts = atts,
-        itemmat = itemmat,
-        weights = weights,
-        cir = cir)
+        plot1 = plot1)
 
     analysis <- ahpsurveyClass$new(
         options = options,

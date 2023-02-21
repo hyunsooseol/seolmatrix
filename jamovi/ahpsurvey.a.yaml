@@ -26,21 +26,10 @@ options:
       type: String
       default: 'cult, fam, house, jobs, trans'
 
-    - name: itemmat
-      title: Decision matrix 
+    - name: plot1
+      title: Preference weights
       type: Bool
       default: True
 
-    - name: weights
-      title: Item weights
-      type: Bool
-      default: FALSE
-      
-    - name: cir
-      title: Consistency index & ratio
-      type: Bool
-      default: FALSE
-     
- 
  
 ...
