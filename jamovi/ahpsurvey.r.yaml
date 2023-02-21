@@ -28,6 +28,7 @@ items:
       title: 'Aggregated priorities' 
       type: Table
       visible: (ap)
+      refs: ahpsurvey
       clearWith:
         - vars
         - method
@@ -40,4 +41,22 @@ items:
 
         - name: value
           title: 'Value'
+
+    - name: aj
+      title: 'Aggregated individual judgements'
+      type: Table
+      refs: ahpsurvey
+      visible: (aj)
+      clearWith:
+        - vars
+        - method1
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+
+
+
 ...

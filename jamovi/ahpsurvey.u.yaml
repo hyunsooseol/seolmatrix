@@ -53,3 +53,9 @@ children:
                   - type: ComboBox
                     name: method
                     enable: (ap)
+              - type: CheckBox
+                name: aj    
+                children:
+                  - type: ComboBox
+                    name: method1
+                    enable: (aj)

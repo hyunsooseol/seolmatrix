@@ -9,6 +9,7 @@
 #' @importFrom ahpsurvey ahp.mat
 #' @importFrom ahpsurvey ahp.indpref
 #' @importFrom ahpsurvey ahp.aggpref
+#' @importFrom ahpsurvey ahp.aggjudge
 #' @export
 
 
@@ -66,6 +67,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         vars <- self$options$vars
         #nVars <- length(vars)
         method <- self$options$method
+        method1 <- self$options$method1
         
         mydata <- self$data
         mydata <- jmvcore::naOmit(mydata)
@@ -123,8 +125,41 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           
         }
         
+        # Aggregated individual judgements table--------
         
-                
+        aj<- ahpsurvey::ahp.aggjudge(matahp, 
+                                     atts, 
+                                     aggmethod = method1)
+        
+        item<- as.matrix(aj)
+        
+        names <- dimnames(item)[[1]]
+        dims <- dimnames(item)[[2]]
+        
+        table <- self$results$aj
+        
+        for (dim in dims) {
+          
+          table$addColumn(name = paste0(dim),
+                          type = 'number')
+        }
+        
+        
+        for (name in names) {
+          
+          row <- list()
+          
+          for(j in seq_along(dims)){
+            
+            row[[dims[j]]] <- item[name,j]
+            
+          }
+          
+          table$addRow(rowKey=name, values=row)
+          
+        }
+        
+        
               },
     
     .plot1 = function(image,ggtheme, theme,...) {

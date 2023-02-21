@@ -10,7 +10,9 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             atts = "cult, fam, house, jobs, trans",
             plot1 = TRUE,
             ap = TRUE,
-            method = "geomatric", ...) {
+            method = "geomatric",
+            aj = TRUE,
+            method1 = "geomatric", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -47,25 +49,43 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "arithmetic",
                     "rootmean"),
                 default="geomatric")
+            private$..aj <- jmvcore::OptionBool$new(
+                "aj",
+                aj,
+                default=TRUE)
+            private$..method1 <- jmvcore::OptionList$new(
+                "method1",
+                method1,
+                options=list(
+                    "geometric",
+                    "arithmetic",
+                    "rootmean"),
+                default="geomatric")
 
             self$.addOption(private$..vars)
             self$.addOption(private$..atts)
             self$.addOption(private$..plot1)
             self$.addOption(private$..ap)
             self$.addOption(private$..method)
+            self$.addOption(private$..aj)
+            self$.addOption(private$..method1)
         }),
     active = list(
         vars = function() private$..vars$value,
         atts = function() private$..atts$value,
         plot1 = function() private$..plot1$value,
         ap = function() private$..ap$value,
-        method = function() private$..method$value),
+        method = function() private$..method$value,
+        aj = function() private$..aj$value,
+        method1 = function() private$..method1$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
         ..plot1 = NA,
         ..ap = NA,
-        ..method = NA)
+        ..method = NA,
+        ..aj = NA,
+        ..method1 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -75,7 +95,8 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
         plot1 = function() private$.items[["plot1"]],
-        ap = function() private$.items[["ap"]]),
+        ap = function() private$.items[["ap"]],
+        aj = function() private$.items[["aj"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -109,6 +130,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="ap",
                 title="Aggregated priorities",
                 visible="(ap)",
+                refs="ahpsurvey",
                 clearWith=list(
                     "vars",
                     "method"),
@@ -120,7 +142,22 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `content`="($key)"),
                     list(
                         `name`="value", 
-                        `title`="Value"))))}))
+                        `title`="Value"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="aj",
+                title="Aggregated individual judgements",
+                refs="ahpsurvey",
+                visible="(aj)",
+                clearWith=list(
+                    "vars",
+                    "method1"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -151,12 +188,15 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot1 .
 #' @param ap .
 #' @param method .
+#' @param aj .
+#' @param method1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -172,7 +212,9 @@ ahpsurvey <- function(
     atts = "cult, fam, house, jobs, trans",
     plot1 = TRUE,
     ap = TRUE,
-    method = "geomatric") {
+    method = "geomatric",
+    aj = TRUE,
+    method1 = "geomatric") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -189,7 +231,9 @@ ahpsurvey <- function(
         atts = atts,
         plot1 = plot1,
         ap = ap,
-        method = method)
+        method = method,
+        aj = aj,
+        method1 = method1)
 
     analysis <- ahpsurveyClass$new(
         options = options,
