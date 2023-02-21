@@ -4,7 +4,14 @@
 \alias{ahpsurvey}
 \title{AHP for survey data}
 \usage{
-ahpsurvey(data, vars, atts = "cult, fam, house, jobs, trans", plot1 = TRUE)
+ahpsurvey(
+  data,
+  vars,
+  atts = "cult, fam, house, jobs, trans",
+  plot1 = TRUE,
+  ap = TRUE,
+  method = "geomatric"
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -14,6 +21,10 @@ ahpsurvey(data, vars, atts = "cult, fam, house, jobs, trans", plot1 = TRUE)
 \item{atts}{.}
 
 \item{plot1}{.}
+
+\item{ap}{.}
+
+\item{method}{.}
 }
 \value{
 A results object containing:
@@ -21,7 +32,14 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$ap} \tab \tab \tab \tab \tab a table \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$ap$asDF}
+
+\code{as.data.frame(results$ap)}
 }
 \description{
 AHP for survey data

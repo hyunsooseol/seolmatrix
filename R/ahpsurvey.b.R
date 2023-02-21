@@ -8,6 +8,7 @@
 #' @importFrom ahpsurvey ahp
 #' @importFrom ahpsurvey ahp.mat
 #' @importFrom ahpsurvey ahp.indpref
+#' @importFrom ahpsurvey ahp.aggpref
 #' @export
 
 
@@ -63,8 +64,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         
         vars <- self$options$vars
-        nVars <- length(vars)
-        
+        #nVars <- length(vars)
+        method <- self$options$method
         
         mydata <- self$data
         mydata <- jmvcore::naOmit(mydata)
@@ -85,6 +86,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         #self$results$text$setContent(res)       
          
         matahp<- ahpsurvey::ahp.mat(mydata,atts, negconvert = T)
+        
+        ############################
         eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
         geom <- ahpsurvey::ahp.indpref(matahp, atts, method = "arithmetic")
         error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(eigentrue - geom), 1, max))
@@ -95,6 +98,32 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         image <- self$results$plot1
         image$setState(error)
+        
+        # 'Aggregated priorities'  table----------
+        
+        geo <- ahpsurvey::ahp.aggpref(matahp, 
+                                      atts, 
+                                      method = method)
+        df <- data.frame(Value = geo)
+        
+        
+        
+        names<- dimnames(df)[[1]]
+        
+        table <- self$results$ap
+       
+        
+        for (name in names) {
+          
+          row <- list()
+          
+          row[['value']] <- df[name,1]
+          
+          table$addRow(rowKey=name, values=row)
+          
+        }
+        
+        
                 
               },
     

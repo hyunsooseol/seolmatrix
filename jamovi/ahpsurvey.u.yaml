@@ -47,4 +47,9 @@ children:
             children:
               - type: CheckBox
                 name: plot1
-    
+              - type: CheckBox
+                name: ap    
+                children:
+                  - type: ComboBox
+                    name: method
+                    enable: (ap)

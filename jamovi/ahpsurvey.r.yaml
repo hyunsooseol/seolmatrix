@@ -24,5 +24,20 @@ items:
       clearWith:
         - vars
      
+    - name: ap
+      title: 'Aggregated priorities' 
+      type: Table
+      visible: (ap)
+      clearWith:
+        - vars
+        - method
+      
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
 
+        - name: value
+          title: 'Value'
 ...

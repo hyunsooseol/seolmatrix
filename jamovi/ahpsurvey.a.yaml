@@ -31,5 +31,25 @@ options:
       type: Bool
       default: True
 
- 
+    - name: ap
+      title: 'Aggregated priorities' 
+      type: Bool
+      default: True 
+      
+    - name: method
+      title: Method
+      type: List
+      options:
+        - title: eigen
+          name:  'eigen'
+        - title: geometric
+          name:  'geometric'
+        - title: arithmetic
+          name:  'arithmetic'      
+        - title: rootmean
+          name:  'rootmean'
+      default: 'geomatric' 
+          
+          
+          
 ...
