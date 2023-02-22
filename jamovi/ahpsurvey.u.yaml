@@ -53,6 +53,8 @@ children:
                   - type: ComboBox
                     name: method1
                     enable: (aj)
+              - type: Output
+                name: cr                 
       - type: LayoutBox
         stretchFactor: 1
         margin: large

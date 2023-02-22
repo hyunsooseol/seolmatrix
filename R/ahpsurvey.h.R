@@ -57,6 +57,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "arithmetic",
                     "rootmean"),
                 default="geometric")
+            private$..cr <- jmvcore::OptionOutput$new(
+                "cr")
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
                 plot1,
@@ -68,6 +70,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..method)
             self$.addOption(private$..aj)
             self$.addOption(private$..method1)
+            self$.addOption(private$..cr)
             self$.addOption(private$..plot1)
         }),
     active = list(
@@ -77,6 +80,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         method = function() private$..method$value,
         aj = function() private$..aj$value,
         method1 = function() private$..method1$value,
+        cr = function() private$..cr$value,
         plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
@@ -85,6 +89,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..method = NA,
         ..aj = NA,
         ..method1 = NA,
+        ..cr = NA,
         ..plot1 = NA)
 )
 
@@ -96,7 +101,8 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         text = function() private$.items[["text"]],
         plot1 = function() private$.items[["plot1"]],
         ap = function() private$.items[["ap"]],
-        aj = function() private$.items[["aj"]]),
+        aj = function() private$.items[["aj"]],
+        cr = function() private$.items[["cr"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -156,7 +162,15 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="($key)"))))}))
+                        `content`="($key)"))))
+            self$add(jmvcore::Output$new(
+                options=options,
+                name="cr",
+                title="CR",
+                varTitle="CR",
+                measureType="continuous",
+                clearWith=list(
+                    "vars")))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -196,6 +210,7 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$cr} \tab \tab \tab \tab \tab an output \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

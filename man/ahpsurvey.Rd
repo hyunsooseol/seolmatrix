@@ -8,11 +8,11 @@ ahpsurvey(
   data,
   vars,
   atts = "cult, fam, house, jobs, trans",
-  plot1 = TRUE,
-  ap = TRUE,
-  method = "geomatric",
-  aj = TRUE,
-  method1 = "geomatric"
+  ap = FALSE,
+  method = "geometric",
+  aj = FALSE,
+  method1 = "geometric",
+  plot1 = TRUE
 )
 }
 \arguments{
@@ -22,8 +22,6 @@ ahpsurvey(
 
 \item{atts}{.}
 
-\item{plot1}{.}
-
 \item{ap}{.}
 
 \item{method}{.}
@@ -31,6 +29,8 @@ ahpsurvey(
 \item{aj}{.}
 
 \item{method1}{.}
+
+\item{plot1}{.}
 }
 \value{
 A results object containing:
@@ -40,6 +40,7 @@ A results object containing:
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
+  \code{results$cr} \tab \tab \tab \tab \tab an output \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

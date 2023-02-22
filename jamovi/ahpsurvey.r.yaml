@@ -56,6 +56,12 @@ items:
           type: 'text'
           content: ($key)
 
-
+    - name: cr
+      title: CR
+      type: Output
+      varTitle: CR
+      measureType: continuous
+      clearWith:
+        - vars
 
 ...

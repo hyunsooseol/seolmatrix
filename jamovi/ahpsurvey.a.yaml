@@ -62,6 +62,10 @@ options:
           name:  'rootmean'
       default: 'geometric'   
 
+    - name: cr
+      title: 'Consistency ratio'
+      type: Output  
+
     - name: plot1
       title: 'Individual preference weights'
       type: Bool

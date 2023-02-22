@@ -10,6 +10,7 @@
 #' @importFrom ahpsurvey ahp.indpref
 #' @importFrom ahpsurvey ahp.aggpref
 #' @importFrom ahpsurvey ahp.aggjudge
+#' @importFrom ahpsurvey ahp.cr
 #' @export
 
 
@@ -77,6 +78,12 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         private$.populateAjTable(results)
         
+        # Consistency ratio of each decision-maker---------
+        
+        private$.populateCrOutputs(results)
+        
+        
+        
       }
     },
     
@@ -92,7 +99,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
           ############################################################   
           atts <- strsplit(self$options$atts, ',')[[1]]
-          matahp<- ahpsurvey::ahp.mat(df=data,
+          
+        matahp<- ahpsurvey::ahp.mat(df=data,
                                       atts=atts,
                                       negconvert = T)
           
@@ -113,9 +121,15 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         item<- as.matrix(aj)
         
+        # Consistency ratio of each decision-maker-------
+        
+        cr <- ahpsurvey::ahp.cr(matahp, atts)
+        
+        #self$results$text$setContent(cr)  
+       
+        # Individual preference plot1----------   
         if(self$options$plot1==TRUE){
         
-        # Individual preference plot1----------     
         eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
         geom <- ahpsurvey::ahp.indpref(matahp, atts, method = "arithmetic")
         error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(eigentrue - geom), 1, max))
@@ -131,7 +145,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         results <-
           list(
             'df' = df,
-            'item' = item
+            'item' = item,
+            'cr'=cr
           )
           
     },  
@@ -193,8 +208,27 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       table$addRow(rowKey=name, values=row)
       
     }
+    
     },
+    
+    # COnsistency ration of each decision-maker-----
+    
+    .populateCrOutputs= function(results) {
+      
+      
+      cr <- results$cr
+    
+      if (self$options$cr
+          && self$results$cr$isNotFilled()) {
         
+        
+        self$results$cr$setValues(cr)
+        
+        self$results$cr$setRowNums(rownames(data))
+        
+      }
+    },
+    
      
     .plot1 = function(image,ggtheme, theme,...) {
       
