@@ -63,6 +63,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Analytic Hierarchy Process
     menuSubgroup: AHP
+  - title: AHP for survey data
+    name: ahpsurvey
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: AHP for survey data
+    menuSubgroup: AHP
   - title: Correlation structure
     name: cor
     ns: seolmatrix
@@ -75,11 +81,6 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Fleiss Kappa
     menuSubgroup: Rater
-  - title: AHP for survey data
-    name: ahpsurvey
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: AHP for survey data
 datasets:
   - name: rater
     path: rater.omv

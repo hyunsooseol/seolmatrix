@@ -9,7 +9,7 @@ ahpsurvey(
   vars,
   atts = "cult, fam, house, jobs, trans",
   ap = FALSE,
-  method = "geometric",
+  method = "eigen",
   aj = FALSE,
   method1 = "geometric",
   plot1 = TRUE

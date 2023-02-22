@@ -9,7 +9,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             atts = "cult, fam, house, jobs, trans",
             ap = FALSE,
-            method = "geometric",
+            method = "eigen",
             aj = FALSE,
             method1 = "geometric",
             plot1 = TRUE, ...) {
@@ -44,7 +44,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "geometric",
                     "arithmetic",
                     "rootmean"),
-                default="geometric")
+                default="eigen")
             private$..aj <- jmvcore::OptionBool$new(
                 "aj",
                 aj,
@@ -225,7 +225,7 @@ ahpsurvey <- function(
     vars,
     atts = "cult, fam, house, jobs, trans",
     ap = FALSE,
-    method = "geometric",
+    method = "eigen",
     aj = FALSE,
     method1 = "geometric",
     plot1 = TRUE) {

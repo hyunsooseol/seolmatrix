@@ -43,7 +43,7 @@ options:
           name:  'arithmetic'      
         - title: rootmean
           name:  'rootmean'
-      default: 'geometric' 
+      default: 'eigen' 
           
     - name: aj
       title: 'Aggregated judgements' 

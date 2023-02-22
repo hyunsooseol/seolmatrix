@@ -53,6 +53,9 @@ children:
                   - type: ComboBox
                     name: method1
                     enable: (aj)
+          - type: Label
+            label: Save
+            children:      
               - type: Output
                 name: cr                 
       - type: LayoutBox
