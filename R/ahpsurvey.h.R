@@ -8,11 +8,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             atts = "cult, fam, house, jobs, trans",
-            plot1 = TRUE,
-            ap = TRUE,
-            method = "geomatric",
-            aj = TRUE,
-            method1 = "geomatric", ...) {
+            ap = FALSE,
+            method = "geometric",
+            aj = FALSE,
+            method1 = "geometric",
+            plot1 = TRUE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -32,14 +32,10 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "atts",
                 atts,
                 default="cult, fam, house, jobs, trans")
-            private$..plot1 <- jmvcore::OptionBool$new(
-                "plot1",
-                plot1,
-                default=TRUE)
             private$..ap <- jmvcore::OptionBool$new(
                 "ap",
                 ap,
-                default=TRUE)
+                default=FALSE)
             private$..method <- jmvcore::OptionList$new(
                 "method",
                 method,
@@ -48,11 +44,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "geometric",
                     "arithmetic",
                     "rootmean"),
-                default="geomatric")
+                default="geometric")
             private$..aj <- jmvcore::OptionBool$new(
                 "aj",
                 aj,
-                default=TRUE)
+                default=FALSE)
             private$..method1 <- jmvcore::OptionList$new(
                 "method1",
                 method1,
@@ -60,32 +56,36 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "geometric",
                     "arithmetic",
                     "rootmean"),
-                default="geomatric")
+                default="geometric")
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
+                default=TRUE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..atts)
-            self$.addOption(private$..plot1)
             self$.addOption(private$..ap)
             self$.addOption(private$..method)
             self$.addOption(private$..aj)
             self$.addOption(private$..method1)
+            self$.addOption(private$..plot1)
         }),
     active = list(
         vars = function() private$..vars$value,
         atts = function() private$..atts$value,
-        plot1 = function() private$..plot1$value,
         ap = function() private$..ap$value,
         method = function() private$..method$value,
         aj = function() private$..aj$value,
-        method1 = function() private$..method1$value),
+        method1 = function() private$..method1$value,
+        plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
-        ..plot1 = NA,
         ..ap = NA,
         ..method = NA,
         ..aj = NA,
-        ..method1 = NA)
+        ..method1 = NA,
+        ..plot1 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -150,8 +150,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="ahpsurvey",
                 visible="(aj)",
                 clearWith=list(
-                    "vars",
-                    "method1"),
+                    "vars"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -185,11 +184,11 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param atts .
-#' @param plot1 .
 #' @param ap .
 #' @param method .
 #' @param aj .
 #' @param method1 .
+#' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -210,11 +209,11 @@ ahpsurvey <- function(
     data,
     vars,
     atts = "cult, fam, house, jobs, trans",
-    plot1 = TRUE,
-    ap = TRUE,
-    method = "geomatric",
-    aj = TRUE,
-    method1 = "geomatric") {
+    ap = FALSE,
+    method = "geometric",
+    aj = FALSE,
+    method1 = "geometric",
+    plot1 = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -229,11 +228,11 @@ ahpsurvey <- function(
     options <- ahpsurveyOptions$new(
         vars = vars,
         atts = atts,
-        plot1 = plot1,
         ap = ap,
         method = method,
         aj = aj,
-        method1 = method1)
+        method1 = method1,
+        plot1 = plot1)
 
     analysis <- ahpsurveyClass$new(
         options = options,

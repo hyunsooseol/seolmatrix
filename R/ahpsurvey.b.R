@@ -35,10 +35,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
-            <p>1. Each row and column represents an item and a decision maker for the input data format.</p>
-            <p>2. More than 10 items or 20 decision makers are NOT allowed.</p>
-            <p>3. Each item would be graded 1-9 score by each decision maker</p>
-            <p>4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p>1. The R package <b>ahpsurvey</b> is described in the <a href='https://cran.r-project.org/web/packages/ahpsurvey/vignettes/my-vignette.html' target = '_blank'>page</a>.</p>
+            <p>2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -56,76 +54,58 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
     .run = function() {
 
-          
-      if (length(self$options$vars)<1) 
-        return() 
+      # Ready--------
       
+      ready <- TRUE
       
-        # get variables---------------------------------
+      if (is.null(self$options$vars) ||
+          length(self$options$vars) < 2)
+        
+        ready <- FALSE
+      
+      if (ready) {
+        
+        data <- private$.cleanData()
+        results <- private$.compute(data)
+        
+        #populate 'Aggregated priorities'------------ 
+        
+        private$.populateApTable(results)
+        
+        
+        # populate 'Aggregated individual judgements' table----
+        
+        private$.populateAjTable(results)
+        
+      }
+    },
+    
+    
+    .compute = function(data) {
+      
+       # get variables---------------------------------
         
         
         vars <- self$options$vars
-        #nVars <- length(vars)
         method <- self$options$method
         method1 <- self$options$method1
         
-        mydata <- self$data
-        mydata <- jmvcore::naOmit(mydata)
-        
-        for(v in vars)
-          mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
-
-        
-        #atts <- self$options$atts
-        atts <- strsplit(self$options$atts, ',')[[1]]
+          ############################################################   
+          atts <- strsplit(self$options$atts, ',')[[1]]
+          matahp<- ahpsurvey::ahp.mat(df=data,
+                                      atts=atts,
+                                      negconvert = T)
+          
+          ##########################################################
        
-        # compute AHP-------
-        
-        # res <- ahpsurvey::ahp(df=mydata,
-        #                       atts = atts,
-        #                       negconvert = TRUE)
-                              
-        #self$results$text$setContent(res)       
-         
-        matahp<- ahpsurvey::ahp.mat(mydata,atts, negconvert = T)
-        
-        ############################
-        eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
-        geom <- ahpsurvey::ahp.indpref(matahp, atts, method = "arithmetic")
-        error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(eigentrue - geom), 1, max))
-        
-        #self$results$text$setContent(error)   
-        
-        # Individual preference plot1----------
-        
-        image <- self$results$plot1
-        image$setState(error)
-        
-        # 'Aggregated priorities'  table----------
+        # 'Aggregated priorities' table----------
         
         geo <- ahpsurvey::ahp.aggpref(matahp, 
                                       atts, 
                                       method = method)
         df <- data.frame(Value = geo)
         
-        
-        
-        names<- dimnames(df)[[1]]
-        
-        table <- self$results$ap
-       
-        
-        for (name in names) {
-          
-          row <- list()
-          
-          row[['value']] <- df[name,1]
-          
-          table$addRow(rowKey=name, values=row)
-          
-        }
-        
-        # Aggregated individual judgements table--------
+       # Aggregated individual judgements table--------
         
         aj<- ahpsurvey::ahp.aggjudge(matahp, 
                                      atts, 
@@ -133,35 +113,89 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         item<- as.matrix(aj)
         
-        names <- dimnames(item)[[1]]
-        dims <- dimnames(item)[[2]]
+        if(self$options$plot1==TRUE){
         
-        table <- self$results$aj
+        # Individual preference plot1----------     
+        eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
+        geom <- ahpsurvey::ahp.indpref(matahp, atts, method = "arithmetic")
+        error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(eigentrue - geom), 1, max))
         
-        for (dim in dims) {
-          
-          table$addColumn(name = paste0(dim),
-                          type = 'number')
+        #self$results$text$setContent(error)   
+        
+        image <- self$results$plot1
+        image$setState(error)
+    
         }
         
         
-        for (name in names) {
+        results <-
+          list(
+            'df' = df,
+            'item' = item
+          )
           
-          row <- list()
-          
-          for(j in seq_along(dims)){
-            
-            row[[dims[j]]] <- item[name,j]
-            
-          }
-          
-          table$addRow(rowKey=name, values=row)
-          
-        }
+    },  
+        
+        #Populate table----------------------------
+        
+            .populateApTable = function(results) {
+              
+              table <- self$results$ap
+              df <- results$df  
+        
+        
+              names<- dimnames(df)[[1]]
+              
+              table <- self$results$ap
+              
+              
+              for (name in names) {
+                
+                row <- list()
+                
+                row[['value']] <- df[name,1]
+                
+                table$addRow(rowKey=name, values=row)
+                
+              }
         
         
               },
+        
+        
+    .populateAjTable = function(results) {
     
+      table <- self$results$aj
+      item <- results$item
+    
+    names <- dimnames(item)[[1]]
+    dims <- dimnames(item)[[2]]
+    
+    table <- self$results$aj
+    
+    for (dim in dims) {
+      
+      table$addColumn(name = paste0(dim),
+                      type = 'number')
+    }
+    
+    
+    for (name in names) {
+      
+      row <- list()
+      
+      for(j in seq_along(dims)){
+        
+        row[[dims[j]]] <- item[name,j]
+        
+      }
+      
+      table$addRow(rowKey=name, values=row)
+      
+    }
+    },
+        
+     
     .plot1 = function(image,ggtheme, theme,...) {
       
       if (is.null(image$state))
@@ -182,7 +216,28 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       print(plot1)
       TRUE
           
+    },
+    
+    ### Helper functions =================================
+    
+    .cleanData = function() {
+      items <- self$options$vars
+      
+      data <- list()
+      
+      for (item in items)
+        data[[item]] <-
+        jmvcore::toNumeric(self$data[[item]])
+      
+      attr(data, 'row.names') <-
+        seq_len(length(data[[1]]))
+      attr(data, 'class') <- 'data.frame'
+      data <- jmvcore::naOmit(data)
+      
+      return(data)
     }
+    
+    
     
         )
 )

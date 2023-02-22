@@ -26,15 +26,10 @@ options:
       type: String
       default: 'cult, fam, house, jobs, trans'
 
-    - name: plot1
-      title: 'Individual preference weights'
-      type: Bool
-      default: True
-
     - name: ap
       title: 'Aggregated priorities' 
       type: Bool
-      default: True 
+      default: false
       
     - name: method
       title: Method
@@ -48,12 +43,12 @@ options:
           name:  'arithmetic'      
         - title: rootmean
           name:  'rootmean'
-      default: 'geomatric' 
+      default: 'geometric' 
           
     - name: aj
       title: 'Aggregated judgements' 
       type: Bool
-      default: True   
+      default: false  
 
     - name: method1
       title: Method
@@ -65,5 +60,10 @@ options:
           name:  'arithmetic'      
         - title: rootmean
           name:  'rootmean'
-      default: 'geomatric'       
+      default: 'geometric'   
+
+    - name: plot1
+      title: 'Individual preference weights'
+      type: Bool
+      default: TRUE    
 ...

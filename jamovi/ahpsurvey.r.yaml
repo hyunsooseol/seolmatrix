@@ -49,7 +49,6 @@ items:
       visible: (aj)
       clearWith:
         - vars
-        - method1
 
       columns:
         - name: name

@@ -39,14 +39,8 @@ children:
         margin: large
         children:
           - type: Label
-            label: Plot
-            fitToGrid: true
-            cell:
-              column: 0
-              row: 0
+            label: Tables
             children:
-              - type: CheckBox
-                name: plot1
               - type: CheckBox
                 name: ap    
                 children:
@@ -59,3 +53,16 @@ children:
                   - type: ComboBox
                     name: method1
                     enable: (aj)
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        fitToGrid: true
+        children:
+          - type: Label
+            label: Plots
+            children:
+              - type: CheckBox
+                name: plot1
