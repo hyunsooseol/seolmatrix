@@ -5,12 +5,17 @@
 #' @import jmvcore
 #' @import ahpsurvey
 #' @import ggplot2
+#' @importFrom magrittr %>%
 #' @importFrom ahpsurvey ahp
 #' @importFrom ahpsurvey ahp.mat
 #' @importFrom ahpsurvey ahp.indpref
 #' @importFrom ahpsurvey ahp.aggpref
 #' @importFrom ahpsurvey ahp.aggjudge
 #' @importFrom ahpsurvey ahp.cr
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom dplyr left_join
+#' @importFrom tidyr gather
 #' @export
 
 
@@ -141,6 +146,41 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     
         }
         
+        if(self$options$plot2==TRUE){
+          
+          eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
+        
+          cr <- data %>%
+            ahpsurvey::ahp.mat(atts, negconvert = T) %>%
+            ahpsurvey::ahp.cr(atts)
+          
+          thres <- 0.1
+          
+          cr.df <- data %>%
+            ahp.mat(atts, negconvert = TRUE) %>% 
+            ahp.cr(atts) %>% 
+            data.frame() %>%
+            dplyr::mutate(rowid = 1:length(cr), cr.dum = as.factor(ifelse(cr <= thres, 1, 0))) %>%
+            dplyr::select(cr.dum, rowid)
+          
+          #self$results$text$setContent(cr.df) 
+          
+          
+          d<- data %>%
+            ahpsurvey::ahp.mat(atts = atts, negconvert = TRUE) %>% 
+            ahpsurvey::ahp.indpref(atts, method = "eigen") %>% 
+            dplyr::mutate(rowid = 1:nrow(eigentrue)) %>%
+            dplyr::left_join(cr.df, by = 'rowid') %>%
+            tidyr::gather(atts, key = "var", value = "pref")  
+          
+          #self$results$text$setContent(d) 
+          
+         state<-list(d, cr)
+          
+          
+          image <- self$results$plot2
+          image$setState(state)
+        }
         
         results <-
           list(
@@ -250,6 +290,41 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       print(plot1)
       TRUE
           
+    },
+    
+    
+    .plot2 = function(image,ggtheme, theme,...) {
+      
+      if (is.null(image$state))
+        return(FALSE)
+    
+      atts <- strsplit(self$options$atts, ',')[[1]]
+      thres <- 0.1
+        
+      d <- image$state[[1]]
+      cr <- image$state[[2]]
+    
+      plot2<- ggplot(d,aes(x = var, y = pref)) + 
+        geom_violin(alpha = 0.6, width = 0.8, color = "transparent", fill = "gray") +
+        geom_jitter(alpha = 0.6, height = 0, width = 0.1, aes(color = cr.dum)) +
+        geom_boxplot(alpha = 0, width = 0.3, color = "#808080") +
+        scale_x_discrete("Attribute", label = atts) +
+        scale_y_continuous("Weight (dominant eigenvalue)", 
+                           labels = scales::percent, 
+                           breaks = c(seq(0,0.7,0.1))) +
+        guides(color=guide_legend(title=NULL))+
+        scale_color_discrete(breaks = c(0,1), 
+                             labels = c(paste("CR >", thres), 
+                                        paste("CR <", thres))) +
+        labs(NULL, caption = paste("n =", nrow(data), ",", "Mean CR =",
+                                   round(mean(cr),3)))+
+        theme_minimal()
+    
+      plot2+ggtheme
+      
+      print(plot2)
+      TRUE
+      
     },
     
     ### Helper functions =================================

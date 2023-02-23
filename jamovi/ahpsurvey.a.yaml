@@ -70,4 +70,10 @@ options:
       title: 'Individual preference weights'
       type: Bool
       default: TRUE    
+
+    - name: plot2
+      title: 'Individual priorities and consistency'
+      type: Bool
+      default: TRUE  
+
 ...

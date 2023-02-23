@@ -13,17 +13,6 @@ items:
       title: AHP for survey data
       type:  Preformatted
 
-    - name:  plot1
-      title:  "Individual preference weights"
-      type:  Image
-      visible: (plot1)
-      width: 600
-      height: 400
-      renderFun: .plot1
-      refs: ahpsurvey
-      clearWith:
-        - vars
-     
     - name: ap
       title: 'Aggregated priorities' 
       type: Table
@@ -49,6 +38,7 @@ items:
       visible: (aj)
       clearWith:
         - vars
+        - method1
 
       columns:
         - name: name
@@ -64,4 +54,29 @@ items:
       clearWith:
         - vars
 
+    - name:  plot1
+      title:  "Individual preference weights"
+      type:  Image
+      visible: (plot1)
+      width: 600
+      height: 400
+      renderFun: .plot1
+      refs: ahpsurvey
+      clearWith:
+        - vars
+        - method
+        - method1
+ 
+    - name:  plot2
+      title: 'Individual priorities and consistency'
+      type:  Image
+      visible: (plot2)
+      width: 600
+      height: 400
+      renderFun: .plot2
+      refs: ahpsurvey
+      clearWith:
+        - vars
+        - method
+        - method1
 ...

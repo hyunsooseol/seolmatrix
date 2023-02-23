@@ -12,7 +12,8 @@ ahpsurvey(
   method = "eigen",
   aj = FALSE,
   method1 = "geometric",
-  plot1 = TRUE
+  plot1 = TRUE,
+  plot2 = TRUE
 )
 }
 \arguments{
@@ -31,16 +32,19 @@ ahpsurvey(
 \item{method1}{.}
 
 \item{plot1}{.}
+
+\item{plot2}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
   \code{results$cr} \tab \tab \tab \tab \tab an output \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

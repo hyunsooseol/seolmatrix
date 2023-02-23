@@ -30,4 +30,6 @@ Imports:
     ggdendro,
     multilevel,
     ShinyItemAnalysis,
-    ahpsurvey
+    ahpsurvey,
+    magrittr,
+    tidyverse

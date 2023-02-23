@@ -12,7 +12,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             method = "eigen",
             aj = FALSE,
             method1 = "geometric",
-            plot1 = TRUE, ...) {
+            plot1 = TRUE,
+            plot2 = TRUE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -63,6 +64,10 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot1",
                 plot1,
                 default=TRUE)
+            private$..plot2 <- jmvcore::OptionBool$new(
+                "plot2",
+                plot2,
+                default=TRUE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..atts)
@@ -72,6 +77,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..method1)
             self$.addOption(private$..cr)
             self$.addOption(private$..plot1)
+            self$.addOption(private$..plot2)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -81,7 +87,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         aj = function() private$..aj$value,
         method1 = function() private$..method1$value,
         cr = function() private$..cr$value,
-        plot1 = function() private$..plot1$value),
+        plot1 = function() private$..plot1$value,
+        plot2 = function() private$..plot2$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
@@ -90,7 +97,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..aj = NA,
         ..method1 = NA,
         ..cr = NA,
-        ..plot1 = NA)
+        ..plot1 = NA,
+        ..plot2 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -99,10 +107,11 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
-        plot1 = function() private$.items[["plot1"]],
         ap = function() private$.items[["ap"]],
         aj = function() private$.items[["aj"]],
-        cr = function() private$.items[["cr"]]),
+        cr = function() private$.items[["cr"]],
+        plot1 = function() private$.items[["plot1"]],
+        plot2 = function() private$.items[["plot2"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -120,17 +129,6 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="text",
                 title="AHP for survey data"))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot1",
-                title="Individual preference weights",
-                visible="(plot1)",
-                width=600,
-                height=400,
-                renderFun=".plot1",
-                refs="ahpsurvey",
-                clearWith=list(
-                    "vars")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="ap",
@@ -156,7 +154,8 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="ahpsurvey",
                 visible="(aj)",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "method1"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -170,7 +169,33 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 varTitle="CR",
                 measureType="continuous",
                 clearWith=list(
-                    "vars")))}))
+                    "vars")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Individual preference weights",
+                visible="(plot1)",
+                width=600,
+                height=400,
+                renderFun=".plot1",
+                refs="ahpsurvey",
+                clearWith=list(
+                    "vars",
+                    "method",
+                    "method1")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot2",
+                title="Individual priorities and consistency",
+                visible="(plot2)",
+                width=600,
+                height=400,
+                renderFun=".plot2",
+                refs="ahpsurvey",
+                clearWith=list(
+                    "vars",
+                    "method",
+                    "method1")))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -203,14 +228,16 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param aj .
 #' @param method1 .
 #' @param plot1 .
+#' @param plot2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cr} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -228,7 +255,8 @@ ahpsurvey <- function(
     method = "eigen",
     aj = FALSE,
     method1 = "geometric",
-    plot1 = TRUE) {
+    plot1 = TRUE,
+    plot2 = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -247,7 +275,8 @@ ahpsurvey <- function(
         method = method,
         aj = aj,
         method1 = method1,
-        plot1 = plot1)
+        plot1 = plot1,
+        plot2 = plot2)
 
     analysis <- ahpsurveyClass$new(
         options = options,
