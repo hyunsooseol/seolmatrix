@@ -63,7 +63,7 @@ options:
       default: 'geometric'   
 
     - name: cr
-      title: 'Consistency ratio'
+      title: 'Individual consistency ratio'
       type: Output  
 
     - name: plot1
