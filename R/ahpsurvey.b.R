@@ -282,8 +282,9 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
         geom_hline(yintercept = 0, color = "gray50") +
         scale_x_continuous("Respondent ID") +
-        scale_y_continuous("Maximum difference") +
-        theme_minimal()
+        scale_y_continuous("Maximum difference") 
+        
+      #theme_minimal()
        
       plot1+ggtheme
       
@@ -318,9 +319,23 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                         paste("CR <", thres))) +
         labs(NULL, caption = paste("n =", nrow(data), ",", "Mean CR =",
                                    round(mean(cr),3)))+
-        theme_minimal()
-    
+     
+       # theme_minimal() + 
+        theme(
+          axis.text.x = element_text(size = 12, color = "black")  # adjust size and darkness of x-axis text
+          #axis.text.x.bottom = element_text(angle = 90, hjust = 1)  # rotate x-axis text by 90 degrees
+        )
+      
       plot2+ggtheme
+      
+        if (self$options$angle > 0) {
+        plot2 <- plot2 + ggplot2::theme(
+          axis.text.x = ggplot2::element_text(
+            angle = self$options$angle, hjust = 1
+          )
+        )
+      }
+      
       
       print(plot2)
       TRUE

@@ -39,7 +39,7 @@ children:
         margin: large
         children:
           - type: Label
-            label: Tables
+            label: Aggregated Tests
             children:
               - type: CheckBox
                 name: ap    
@@ -73,3 +73,14 @@ children:
                 name: plot1
               - type: CheckBox
                 name: plot2
+                children:
+                  - type: TextBox
+                    name: angle
+                    format: number
+                    enable: (plot2)
+                    suggestedValues:
+                      - value: 0
+                      - value: 45
+                      - value: 90
+
+

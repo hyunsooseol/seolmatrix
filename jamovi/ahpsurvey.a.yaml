@@ -27,7 +27,7 @@ options:
       default: 'cult, fam, house, jobs, trans'
 
     - name: ap
-      title: 'Aggregated priorities' 
+      title: 'Priorities' 
       type: Bool
       default: false
       
@@ -46,7 +46,7 @@ options:
       default: 'eigen' 
           
     - name: aj
-      title: 'Aggregated judgements' 
+      title: 'Judgements' 
       type: Bool
       default: false  
 
@@ -67,13 +67,23 @@ options:
       type: Output  
 
     - name: plot1
-      title: 'Individual preference weights'
+      title: 'Preference weights'
       type: Bool
       default: TRUE    
 
     - name: plot2
-      title: 'Individual priorities and consistency'
+      title: 'Priorities and consistency'
       type: Bool
       default: TRUE  
 
+    - name: angle
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 0
+      description:
+          R: >
+            a number from 0 to 90 defining the angle of the x-axis labels, 
+            where 0 degrees represents completely horizontal labels.
 ...
