@@ -116,11 +116,13 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         #================================================================
         .plot = function(image, ...) {
-          ggm <- self$options$ggm
+          # ggm <- self$options$ggm
+          # 
+          # if (!ggm)
+          #   return()
           
-          if (!ggm)
-            return()
-          
+          if (is.null(image$state))
+            return(FALSE)
           
           EBICgraph <- image$state
           
@@ -134,11 +136,12 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         
         .plot1 = function(image, ...) {
-            par <- self$options$par
-            
-            if (!par)
-                return()
-            
+            # par <- self$options$par
+            # 
+            # if (!par)
+            #     return()
+          if (is.null(image$state))
+            return(FALSE)
             
             res <- image$state
             

@@ -99,8 +99,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         .plot = function(image, ggtheme, theme, ...) {
             
-            if (is.null(self$options$vars))
-                return()
+          if (is.null(image$state))
+            return(FALSE)
             
             
              mat<- image$state
@@ -121,9 +121,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         .plot1 = function(image, ggtheme, theme, ...) {
             
-            if (is.null(self$options$vars))
-                return()
-            
+          if (is.null(image$state))
+            return(FALSE)
             
            mat1 <- image$state
            
@@ -147,10 +146,9 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
        
        .plot2 = function(image, ggtheme, theme, ...) {
            
-           if (is.null(self$options$vars))
-               return()
-           
-           
+         if (is.null(image$state))
+           return(FALSE)
+         
            data<- image$state
            
            plot2 <- ShinyItemAnalysis::plot_corr(data, 
@@ -170,9 +168,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
     .plot3 = function(image, ggtheme, theme, ...) {
       
-      if (is.null(self$options$vars))
-          return()
-      
+      if (is.null(image$state))
+        return(FALSE)
       
       dis <- image$state
       

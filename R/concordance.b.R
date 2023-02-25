@@ -144,9 +144,8 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         .plot1 = function(image1, ggtheme, theme, ...) {
             
-            if (length(self$options$dep)<1) return()
-            
-            if (length(self$options$covs)<1) return()
+          if (is.null(image1$state))
+            return(FALSE)
         
             tmp1 <- image1$state[[1]]
             est     <- image1$state[[2]]
@@ -171,10 +170,9 @@ concordanceClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         
         .plot = function(image, ggtheme, theme, ...) {
-        
-            if (length(self$options$dep)<1) return()
-            
-            if (length(self$options$covs)<1) return()
+          
+          if (is.null(image$state))
+            return(FALSE)
             
           #  tmp.lab <- image$state[[1]]
             z     <- image$state[[1]]

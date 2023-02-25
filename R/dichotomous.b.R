@@ -132,11 +132,15 @@ self$results$instructions$setContent(
       
 #================================================================
 .plot = function(image, ...) {
-  ggm <- self$options$ggm
   
-  if (!ggm)
-    return()
+  if (is.null(image$state))
+    return(FALSE)
   
+  # ggm <- self$options$ggm
+  # 
+  # if (!ggm)
+  #   return()
+  # 
   
   EBICgraph <- image$state
   

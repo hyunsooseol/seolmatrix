@@ -571,11 +571,12 @@ if(isTRUE(self$options$cw)){
       
       .plot = function(image, ...) {
         
-        ggm <- self$options$ggm
-        
-        if (!ggm)
-          return()
-        
+        # ggm <- self$options$ggm
+        # 
+        # if (!ggm)
+        #   return()
+        if (is.null(image$state))
+          return(FALSE)
         
         EBICgraph <- image$state
         
@@ -587,11 +588,13 @@ if(isTRUE(self$options$cw)){
       
       .plot1 = function(image, ...) {
         
-        par <- self$options$par
+        # par <- self$options$par
+        # 
+        # if (!par)
+        #   return()
         
-        if (!par)
-          return()
-        
+        if (is.null(image$state))
+          return(FALSE)
         
         par <- image$state
         
