@@ -2,6 +2,7 @@
 name:  rank
 title: Spearman Correlation
 menuGroup: seolmatrix
+menuSubgroup: Correlation
 version: '1.0.0'
 jas: '1.2'
 

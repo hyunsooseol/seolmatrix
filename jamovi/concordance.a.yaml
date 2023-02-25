@@ -2,7 +2,7 @@
 name:  concordance
 title: Concordance Correlation
 menuGroup: seolmatrix
-menuSubgroup: Concordance
+menuSubgroup: Correlation
 version: '1.0.0'
 jas: '1.2'
 

@@ -20,43 +20,55 @@ analyses:
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Partial Correlation
-    menuSubgroup: Partial
-  - title: Tetrachoric Correlation
-    name: dichotomous
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Tetrachoric Correlation
-    menuSubgroup: Ordinal
+    menuSubgroup: Correlation
   - title: Spearman Correlation
     name: rank
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Spearman Correlation
-    menuSubgroup: Rank
+    menuSubgroup: Correlation
+  - title: Polychoric Correlation
+    name: poly
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Polychoric Correlation
+    menuSubgroup: Correlation
+  - title: Tetrachoric Correlation
+    name: dichotomous
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Tetrachoric Correlation
+    menuSubgroup: Correlation
+  - title: Multilevel Correlation
+    name: multilevel
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Multilevel Correlation
+    menuSubgroup: Correlation
+  - title: Concordance Correlation
+    name: concordance
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Concordance Correlation
+    menuSubgroup: Correlation
+  - title: Correlation structure
+    name: cor
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Correlation structure
+    menuSubgroup: Correlation
   - title: Rater Reliability
     name: rater
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Rater Reliability
     menuSubgroup: Rater
-  - title: Multilevel Correlation
-    name: multilevel
+  - title: Fleiss Kappa
+    name: kappa
     ns: seolmatrix
     menuGroup: seolmatrix
-    menuTitle: Multilevel Correlation
-    menuSubgroup: Multilevel
-  - title: Concordance Correlation
-    name: concordance
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Concordance Correlation
-    menuSubgroup: Concordance
-  - title: Polychoric Correlation
-    name: poly
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Polychoric Correlation
-    menuSubgroup: Ordinal
+    menuTitle: Fleiss Kappa
+    menuSubgroup: Rater
   - title: Analytic Hierarchy Process
     name: ahp
     ns: seolmatrix
@@ -69,25 +81,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: AHP for survey data
     menuSubgroup: AHP
-  - title: Correlation structure
-    name: cor
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Correlation structure
-    menuSubgroup: Item
-  - title: Fleiss Kappa
-    name: kappa
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Fleiss Kappa
-    menuSubgroup: Rater
 datasets:
   - name: rater
     path: rater.omv
     description: Rating Big5 variable
     tags:
       - Rater
-      - ICC
   - name: kappa
     path: diagnoses.omv
     description: Fleiss' Kappa
@@ -103,17 +102,17 @@ datasets:
     path: dicho.omv
     description: Tetrachoric Correlation
     tags:
-      - Ordinal
+      - Tetrachoric
   - name: polychoric
     path: poly.omv
     description: Dataset with ordered values of 3 indicators.
     tags:
-      - Ordinal
+      - Polychoric
   - name: bfi
     path: bfi.omv
     description: Spearman Correlation
     tags:
-      - Rank
+      - Spearman
   - name: iris
     path: iris.omv
     description: Multilevel Correlation
@@ -124,7 +123,6 @@ datasets:
     description: Multilevel Correlation
     tags:
       - Multilevel
-      - ICC
   - name: concordance
     path: concordance.omv
     description: Rating Big5 variable

@@ -2,7 +2,7 @@
 name:  partial
 title: Partial Correlation
 menuGroup: seolmatrix
-menuSubgroup: Partial
+menuSubgroup: Correlation
 version: '1.0.0'
 jas: '1.2'
 

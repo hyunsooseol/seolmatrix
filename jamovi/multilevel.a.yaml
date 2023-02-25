@@ -2,7 +2,7 @@
 name:  multilevel
 title: Multilevel Correlation
 menuGroup: seolmatrix
-menuSubgroup: Multilevel
+menuSubgroup: Correlation
 version: '1.0.0'
 jas: '1.2'
 
