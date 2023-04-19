@@ -1,6 +1,6 @@
 ---
 name:  kappa
-title: Fleiss Kappa
+title: Fleiss Kappa and Krippendorff alpha 
 jrs:   '1.1'
 refs: seolmatrix 
 items:
@@ -81,5 +81,25 @@ items:
           type: number
           format: zto,pvalue
 
+    - name: krip
+      title: 'Krippendorff alpha'
+      type: Table
+      rows: 1
+      visible: (krip)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Krippendorff alpha
+        - name: Subjects
+          type: number
+        - name: Raters
+          type: number
+        - name: alpha
+          type: number
 
 ...

@@ -9,7 +9,9 @@ kappaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             fk = TRUE,
             ek = TRUE,
-            cw = FALSE, ...) {
+            cw = FALSE,
+            krip = FALSE,
+            method = "nominal", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -36,22 +38,41 @@ kappaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "cw",
                 cw,
                 default=FALSE)
+            private$..krip <- jmvcore::OptionBool$new(
+                "krip",
+                krip,
+                default=FALSE)
+            private$..method <- jmvcore::OptionList$new(
+                "method",
+                method,
+                options=list(
+                    "nominal",
+                    "ordinal",
+                    "interval",
+                    "ratio"),
+                default="nominal")
 
             self$.addOption(private$..vars)
             self$.addOption(private$..fk)
             self$.addOption(private$..ek)
             self$.addOption(private$..cw)
+            self$.addOption(private$..krip)
+            self$.addOption(private$..method)
         }),
     active = list(
         vars = function() private$..vars$value,
         fk = function() private$..fk$value,
         ek = function() private$..ek$value,
-        cw = function() private$..cw$value),
+        cw = function() private$..cw$value,
+        krip = function() private$..krip$value,
+        method = function() private$..method$value),
     private = list(
         ..vars = NA,
         ..fk = NA,
         ..ek = NA,
-        ..cw = NA)
+        ..cw = NA,
+        ..krip = NA,
+        ..method = NA)
 )
 
 kappaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -61,14 +82,15 @@ kappaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         fk = function() private$.items[["fk"]],
         ek = function() private$.items[["ek"]],
-        cw = function() private$.items[["cw"]]),
+        cw = function() private$.items[["cw"]],
+        krip = function() private$.items[["krip"]]),
     private = list(),
     public=list(
         initialize=function(options) {
             super$initialize(
                 options=options,
                 name="",
-                title="Fleiss Kappa",
+                title="Fleiss Kappa and Krippendorff alpha",
                 refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
@@ -156,7 +178,31 @@ kappaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="p", 
                         `title`="p", 
                         `type`="number", 
-                        `format`="zto,pvalue"))))}))
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="krip",
+                title="Krippendorff alpha",
+                rows=1,
+                visible="(krip)",
+                clearWith=list(
+                    "vars"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Krippendorff alpha"),
+                    list(
+                        `name`="Subjects", 
+                        `type`="number"),
+                    list(
+                        `name`="Raters", 
+                        `type`="number"),
+                    list(
+                        `name`="alpha", 
+                        `type`="number"))))}))
 
 kappaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "kappaBase",
@@ -178,7 +224,7 @@ kappaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresMissings = FALSE)
         }))
 
-#' Fleiss Kappa
+#' Fleiss Kappa and Krippendorff alpha
 #'
 #' 
 #' @param data The data as a data frame.
@@ -186,12 +232,15 @@ kappaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param fk .
 #' @param ek .
 #' @param cw .
+#' @param krip .
+#' @param method .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -206,7 +255,9 @@ kappa <- function(
     vars,
     fk = TRUE,
     ek = TRUE,
-    cw = FALSE) {
+    cw = FALSE,
+    krip = FALSE,
+    method = "nominal") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("kappa requires jmvcore to be installed (restart may be required)")
@@ -223,7 +274,9 @@ kappa <- function(
         vars = vars,
         fk = fk,
         ek = ek,
-        cw = cw)
+        cw = cw,
+        krip = krip,
+        method = method)
 
     analysis <- kappaClass$new(
         options = options,

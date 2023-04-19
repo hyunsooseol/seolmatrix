@@ -89,5 +89,6 @@ options:
       title: Category-wise Kappas 
       type: Bool
       default: FALSE
+
 ...
 

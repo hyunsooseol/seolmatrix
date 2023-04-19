@@ -1,6 +1,6 @@
 ---
 name:  kappa
-title: Fleiss Kappa
+title: Fleiss Kappa and Krippendorff alpha 
 menuGroup: seolmatrix
 version: '1.0.0'
 jas: '1.2'
@@ -35,5 +35,18 @@ options:
       type: Bool
       default: FALSE
 
+    - name: krip
+      title: Krippendorff alpha 
+      type: Bool
+      default: FALSE
 
+    - name: method
+      title: Method
+      type: List
+      options:
+        - nominal
+        - ordinal
+        - interval
+        - ratio
+      default: nominal      
 ...

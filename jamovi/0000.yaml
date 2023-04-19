@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.7.1
+version: 3.7.2
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2023-02-25'
+date: '2023-04-19'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -63,11 +63,11 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Rater Reliability
     menuSubgroup: Rater
-  - title: Fleiss Kappa
+  - title: Fleiss Kappa and Krippendorff alpha
     name: kappa
     ns: seolmatrix
     menuGroup: seolmatrix
-    menuTitle: Fleiss Kappa
+    menuTitle: Fleiss Kappa and Krippendorff alpha
     menuSubgroup: Rater
   - title: Analytic Hierarchy Process
     name: ahp
@@ -93,6 +93,11 @@ datasets:
     tags:
       - Rater
       - kappa
+  - name: Krippendorff
+    path: krip.omv
+    description: Krippendorff's alpha
+    tags:
+      - Krippendorff's alpha
   - name: big5
     path: big5.omv
     description: partial data

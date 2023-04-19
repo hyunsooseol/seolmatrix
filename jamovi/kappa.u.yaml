@@ -1,4 +1,4 @@
-title: Fleiss Kappa
+title: Fleiss Kappa and Krippendorff alpha 
 name: kappa
 jus: '3.0'
 stage: 0
@@ -32,3 +32,21 @@ children:
             name: ek
           - type: CheckBox
             name: cw
+  - type: CollapseBox
+    label: Krippendorff alpha 
+    margin: normal
+    collapsed: true
+    children:
+      - type: Label
+        label: Statistics
+        fitToGrid: true
+        cell:
+          column: 0
+          row: 0
+        children:
+          - type: CheckBox
+            name: krip
+            children:
+              - type: ComboBox
+                name: method
+                enable: (krip)

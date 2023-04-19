@@ -10,6 +10,9 @@
 #' @import qgraph
 #' @import psych
 #' @importFrom irr kappam.fleiss
+#' @importFrom irr kripp.alpha
+#' @importFrom reshape melt
+#' @importFrom tidyr pivot_wider
 #' @export
 
 
@@ -34,8 +37,9 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              <p><b>Instructions</b></p>
              <p>___________________________________________________________________________________
              <p>1. Fleiss' kappa can be used with binary or nominal-scale.</p> 
-             <p>2. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
-             <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p>2. Currently, the Krippendorff alpha analysis in jamovi cannot handle missing values.</p>  
+             <p>3. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
+             <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
@@ -151,8 +155,43 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                   }
                 }        
                 
-               
+                if(isTRUE(self$options$krip)){
+                  
+                  method <- self$options$method
+                  
+                  sample<- t(data)
+                  dat<- reshape::melt(sample)
+                  colnames(dat) <-c("n", "rater", "value")
+                  dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
+                  dat2 <- select(dat1, -rater)
+                  dat2<- as.matrix(dat2)
+                  
+                  krip<- irr::kripp.alpha(dat2, method=method)
+                  
+                  # get subjects-------
+                  
+                  nkrip <- krip$subjects
+                  
+                  # get raters--------
+                  
+                  raterkrip <- krip$raters
+                  
+                  # get statistic------------
+                  
+                  statistickrip <- krip$value
+                  
+                  #-----------------------------------
+                  table <- self$results$krip
+                  
+                  row <- list()
+                  
+                  row[['Subjects']] <- nkrip
+                  row[['Raters']] <- raterkrip
+                  row[['alpha']] <- statistickrip
+                 
+                  table$setRow(rowNo = 1, values = row)
+                  
           
-          
+                }
         })
 )

@@ -2,9 +2,17 @@
 % Please edit documentation in R/kappa.h.R
 \name{kappa}
 \alias{kappa}
-\title{Fleiss Kappa}
+\title{Fleiss Kappa and Krippendorff alpha}
 \usage{
-kappa(data, vars, fk = TRUE, ek = TRUE, cw = FALSE)
+kappa(
+  data,
+  vars,
+  fk = TRUE,
+  ek = TRUE,
+  cw = FALSE,
+  krip = FALSE,
+  method = "nominal"
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -16,6 +24,10 @@ kappa(data, vars, fk = TRUE, ek = TRUE, cw = FALSE)
 \item{ek}{.}
 
 \item{cw}{.}
+
+\item{krip}{.}
+
+\item{method}{.}
 }
 \value{
 A results object containing:
@@ -24,6 +36,7 @@ A results object containing:
   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
+  \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -33,5 +46,5 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$fk)}
 }
 \description{
-Fleiss Kappa
+Fleiss Kappa and Krippendorff alpha
 }
