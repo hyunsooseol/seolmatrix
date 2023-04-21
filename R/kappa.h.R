@@ -7,8 +7,8 @@ kappaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
-            fk = TRUE,
-            ek = TRUE,
+            fk = FALSE,
+            ek = FALSE,
             cw = FALSE,
             krip = FALSE,
             method = "nominal", ...) {
@@ -29,11 +29,11 @@ kappaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..fk <- jmvcore::OptionBool$new(
                 "fk",
                 fk,
-                default=TRUE)
+                default=FALSE)
             private$..ek <- jmvcore::OptionBool$new(
                 "ek",
                 ek,
-                default=TRUE)
+                default=FALSE)
             private$..cw <- jmvcore::OptionBool$new(
                 "cw",
                 cw,
@@ -253,8 +253,8 @@ kappaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 kappa <- function(
     data,
     vars,
-    fk = TRUE,
-    ek = TRUE,
+    fk = FALSE,
+    ek = FALSE,
     cw = FALSE,
     krip = FALSE,
     method = "nominal") {

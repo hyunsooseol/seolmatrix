@@ -23,12 +23,12 @@ options:
     - name: fk
       title: Fleiss' Kappa 
       type: Bool
-      default: TRUE
+      default: FALSE
 
     - name: ek
       title: Exact Kappa
       type: Bool
-      default: TRUE
+      default: FALSE
       
     - name: cw
       title: Category-wise Kappas 
