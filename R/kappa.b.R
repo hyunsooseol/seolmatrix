@@ -37,9 +37,8 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              <p><b>Instructions</b></p>
              <p>___________________________________________________________________________________
              <p>1. Fleiss' kappa can be used with binary or nominal-scale.</p> 
-             <p>2. Currently, the Krippendorff alpha analysis in jamovi cannot handle missing values.</p>  
-             <p>3. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
-             <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p>2. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
+             <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
@@ -159,12 +158,15 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                   
                   method <- self$options$method
                   
-                  sample<- t(data)
-                  dat<- reshape::melt(sample)
-                  colnames(dat) <-c("n", "rater", "value")
-                  dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
-                  dat2 <- select(dat1, -rater)
-                  dat2<- as.matrix(dat2)
+                  # sample<- t(data)
+                  # dat<- reshape::melt(sample)
+                  # colnames(dat) <-c("n", "rater", "value")
+                  # dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
+                  # dat2 <- select(dat1, -rater)
+                  # dat2<- as.matrix(dat2)
+                  # 
+                  
+                  dat2 <- as.matrix(data)
                   
                   krip<- irr::kripp.alpha(dat2, method=method)
                   
