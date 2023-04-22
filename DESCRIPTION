@@ -32,6 +32,5 @@ Imports:
     ShinyItemAnalysis,
     ahpsurvey,
     magrittr,
-    tidyverse,
-    reshape,
-    tidyr
+    tidyverse
+   

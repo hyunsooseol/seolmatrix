@@ -11,8 +11,6 @@
 #' @import psych
 #' @importFrom irr kappam.fleiss
 #' @importFrom irr kripp.alpha
-#' @importFrom reshape melt
-#' @importFrom tidyr pivot_wider
 #' @export
 
 
