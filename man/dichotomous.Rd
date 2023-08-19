@@ -4,7 +4,7 @@
 \alias{dichotomous}
 \title{Tetrachoric Correlation}
 \usage{
-dichotomous(data, vars, tetrachoric = TRUE, ggm = FALSE, par = FALSE)
+dichotomous(data, vars, tetrachoric = TRUE, plot = FALSE, plot1 = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,9 +13,9 @@ dichotomous(data, vars, tetrachoric = TRUE, ggm = FALSE, par = FALSE)
 
 \item{tetrachoric}{.}
 
-\item{ggm}{.}
+\item{plot}{.}
 
-\item{par}{.}
+\item{plot1}{.}
 }
 \value{
 A results object containing:

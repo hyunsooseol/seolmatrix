@@ -53,15 +53,20 @@ options:
       type: Bool
       default: false
 
-    - name: ggm
-      title: Gaussian graphical model(EBIC)
+    - name: plot
+      title: Gaussian graphical model
       type: Bool
       default: false
 
-    - name: par
+    - name: plot1
       title: Partial plot
       type: Bool
       default: FALSE    
+
+    - name: plot2
+      title: Centrality 
+      type: Bool
+      default: FALSE   
 
 ...
 

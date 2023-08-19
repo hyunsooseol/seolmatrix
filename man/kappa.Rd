@@ -7,8 +7,8 @@
 kappa(
   data,
   vars,
-  fk = TRUE,
-  ek = TRUE,
+  fk = FALSE,
+  ek = FALSE,
   cw = FALSE,
   krip = FALSE,
   method = "nominal"

@@ -8,8 +8,8 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         initialize = function(
             vars = NULL,
             tetrachoric = TRUE,
-            ggm = FALSE,
-            par = FALSE, ...) {
+            plot = FALSE,
+            plot1 = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -28,30 +28,30 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "tetrachoric",
                 tetrachoric,
                 default=TRUE)
-            private$..ggm <- jmvcore::OptionBool$new(
-                "ggm",
-                ggm,
+            private$..plot <- jmvcore::OptionBool$new(
+                "plot",
+                plot,
                 default=FALSE)
-            private$..par <- jmvcore::OptionBool$new(
-                "par",
-                par,
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
                 default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..tetrachoric)
-            self$.addOption(private$..ggm)
-            self$.addOption(private$..par)
+            self$.addOption(private$..plot)
+            self$.addOption(private$..plot1)
         }),
     active = list(
         vars = function() private$..vars$value,
         tetrachoric = function() private$..tetrachoric$value,
-        ggm = function() private$..ggm$value,
-        par = function() private$..par$value),
+        plot = function() private$..plot$value,
+        plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
         ..tetrachoric = NA,
-        ..ggm = NA,
-        ..par = NA)
+        ..plot = NA,
+        ..plot1 = NA)
 )
 
 dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -96,8 +96,10 @@ dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 width=500,
                 height=500,
                 renderFun=".plot",
-                visible="(ggm)",
-                refs="qgraph"))
+                visible="(plot)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -105,8 +107,10 @@ dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 width=500,
                 height=500,
                 renderFun=".plot1",
-                visible="(par)",
-                refs="qgraph"))}))
+                visible="(plot1)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars")))}))
 
 dichotomousBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "dichotomousBase",
@@ -125,7 +129,8 @@ dichotomousBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 revision = revision,
                 pause = NULL,
                 completeWhenFilled = FALSE,
-                requiresMissings = FALSE)
+                requiresMissings = FALSE,
+                weightsSupport = 'auto')
         }))
 
 #' Tetrachoric Correlation
@@ -134,8 +139,8 @@ dichotomousBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param tetrachoric .
-#' @param ggm .
-#' @param par .
+#' @param plot .
+#' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -155,8 +160,8 @@ dichotomous <- function(
     data,
     vars,
     tetrachoric = TRUE,
-    ggm = FALSE,
-    par = FALSE) {
+    plot = FALSE,
+    plot1 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("dichotomous requires jmvcore to be installed (restart may be required)")
@@ -172,8 +177,8 @@ dichotomous <- function(
     options <- dichotomousOptions$new(
         vars = vars,
         tetrachoric = tetrachoric,
-        ggm = ggm,
-        par = par)
+        plot = plot,
+        plot1 = plot1)
 
     analysis <- dichotomousClass$new(
         options = options,

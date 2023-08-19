@@ -15,6 +15,8 @@ items:
       description: correlation matrix table
       rows: (vars)
       clearWith:
+          - vars
+          - ctrlvars
           - shwSig
           - sidSig
       refs: seolmatrix    
@@ -50,16 +52,34 @@ items:
       width:  500
       height: 500
       renderFun: .plot
-      visible: (ggm)
+      visible: (plot)
       refs: qgraph
-      
+      clearWith:
+          - vars
+          - ctrlvars
+
+    - name: plot2
+      title: 'Centrality plot '
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot2
+      visible: (plot2)
+      refs: qgraph
+      clearWith:
+          - vars
+          - ctrlvars
+
     - name: plot1
       title: 'Partial plot'
       type: Image
       width:  500
       height: 500
       renderFun: .plot1
-      visible: (par)
-      refs: qgraph      
+      visible: (plot1)
+      refs: qgraph 
+      clearWith:
+          - vars
+          - ctrlvars      
 ...
 

@@ -42,9 +42,9 @@ children:
             label: "Plots"
             children:
               - type: CheckBox
-                name: ggm
+                name: plot
               - type: CheckBox
-                name: par
+                name: plot1
 
 
 

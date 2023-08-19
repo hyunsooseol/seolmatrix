@@ -4,7 +4,7 @@
 \alias{rank}
 \title{Spearman Correlation}
 \usage{
-rank(data, vars, spearman = TRUE, ggm = FALSE, par = FALSE)
+rank(data, vars, spearman = TRUE, plot = FALSE, plot1 = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,9 +13,9 @@ rank(data, vars, spearman = TRUE, ggm = FALSE, par = FALSE)
 
 \item{spearman}{.}
 
-\item{ggm}{.}
+\item{plot}{.}
 
-\item{par}{.}
+\item{plot1}{.}
 }
 \value{
 A results object containing:

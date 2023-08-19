@@ -29,8 +29,10 @@ items:
       width:  500
       height: 500
       renderFun: .plot
-      visible: (ggm)
+      visible: (plot)
       refs: qgraph
+      clearWith:
+        - vars
 
     - name: plot1
       title: 'Partial plot'
@@ -38,6 +40,8 @@ items:
       width:  500
       height: 500
       renderFun: .plot1
-      visible: (par)
-      refs: qgraph      
+      visible: (plot1)
+      refs: qgraph
+      clearWith:
+        - vars
 ...

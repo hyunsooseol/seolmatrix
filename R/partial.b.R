@@ -10,6 +10,7 @@
 #' @import psych
 #' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
+#' @importFrom qgraph centralityPlot
 #' @importFrom qgraph cor_auto
 #' @export
 
@@ -196,8 +197,8 @@ partialClass <- if (requireNamespace('jmvcore'))
         partial <- psych::partial.r(data)
         
         # Prepare Data For Plot -------
-        image <- self$results$plot1
-        image$setState(partial)
+        image1 <- self$results$plot1
+        image1$setState(partial)
       
         # EBIC PLOT------------
         
@@ -211,18 +212,18 @@ partialClass <- if (requireNamespace('jmvcore'))
         image <- self$results$plot
         image$setState(EBICgraph)
        
+        # Centrality plot-------
+        image2 <- self$results$plot2
+        image2$setState(EBICgraph)
+        
        
         },
       
  
 #================================================================
 
-.plot = function(image, ...) {
-  # ggm <- self$options$ggm
-  # 
-  # if (!ggm)
-  #   return()
-  # 
+.plot = function(image, ggtheme, theme,...) {
+  
   
   if (is.null(image$state))
     return(FALSE)
@@ -231,27 +232,46 @@ partialClass <- if (requireNamespace('jmvcore'))
   
   plot <- qgraph( EBICgraph, layout = "spring", details = TRUE)
   
+ # plot <- plot+ggtheme
+  
   print(plot)
   TRUE
 
   },     
 
+# Centrality plot for EBIC------------
+
+.plot2 = function(image2, ggtheme, theme,...) {
+  
+  if (is.null(image2$state))
+    return(FALSE)
+  
+  EBICgraph <- image2$state
+
+  plot2<- qgraph::centralityPlot(EBIC = EBICgraph)
+
+  plot2 <- plot2+ggtheme
+  
+  print(plot2)
+  TRUE
+  
+},
+  
   
 # partial plot-----------
 
 
-.plot1 = function(image, ...) {
-        # par <- self$options$par
-        # 
-        # if (!par)
-        #   return()
+.plot1 = function(image1,ggtheme, theme, ...) {
+      
         
-  if (is.null(image$state))
+  if (is.null(image1$state))
     return(FALSE)
         
-        partial <- image$state
+        partial <- image1$state
         
         plot1 <- qgraph(partial, layout = "spring", details = TRUE)
+        
+      #  plot1 <- plot1+ggtheme
         
         print(plot1)
         TRUE

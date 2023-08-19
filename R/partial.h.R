@@ -11,8 +11,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             sidSig = "twotailed",
             shwSig = TRUE,
             flgSig = FALSE,
-            ggm = FALSE,
-            par = FALSE, ...) {
+            plot = FALSE,
+            plot1 = FALSE,
+            plot2 = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -53,13 +54,17 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "flgSig",
                 flgSig,
                 default=FALSE)
-            private$..ggm <- jmvcore::OptionBool$new(
-                "ggm",
-                ggm,
+            private$..plot <- jmvcore::OptionBool$new(
+                "plot",
+                plot,
                 default=FALSE)
-            private$..par <- jmvcore::OptionBool$new(
-                "par",
-                par,
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
+                default=FALSE)
+            private$..plot2 <- jmvcore::OptionBool$new(
+                "plot2",
+                plot2,
                 default=FALSE)
 
             self$.addOption(private$..vars)
@@ -67,8 +72,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..sidSig)
             self$.addOption(private$..shwSig)
             self$.addOption(private$..flgSig)
-            self$.addOption(private$..ggm)
-            self$.addOption(private$..par)
+            self$.addOption(private$..plot)
+            self$.addOption(private$..plot1)
+            self$.addOption(private$..plot2)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -76,16 +82,18 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         sidSig = function() private$..sidSig$value,
         shwSig = function() private$..shwSig$value,
         flgSig = function() private$..flgSig$value,
-        ggm = function() private$..ggm$value,
-        par = function() private$..par$value),
+        plot = function() private$..plot$value,
+        plot1 = function() private$..plot1$value,
+        plot2 = function() private$..plot2$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
         ..sidSig = NA,
         ..shwSig = NA,
         ..flgSig = NA,
-        ..ggm = NA,
-        ..par = NA)
+        ..plot = NA,
+        ..plot1 = NA,
+        ..plot2 = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -95,6 +103,7 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
+        plot2 = function() private$.items[["plot2"]],
         plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
@@ -115,6 +124,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Correlation Matrix",
                 rows="(vars)",
                 clearWith=list(
+                    "vars",
+                    "ctrlvars",
                     "shwSig",
                     "sidSig"),
                 refs="seolmatrix",
@@ -150,8 +161,23 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 width=500,
                 height=500,
                 renderFun=".plot",
-                visible="(ggm)",
-                refs="qgraph"))
+                visible="(plot)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "ctrlvars")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot2",
+                title="Centrality plot ",
+                width=500,
+                height=500,
+                renderFun=".plot2",
+                visible="(plot2)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "ctrlvars")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -159,8 +185,11 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 width=500,
                 height=500,
                 renderFun=".plot1",
-                visible="(par)",
-                refs="qgraph"))}))
+                visible="(plot1)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "ctrlvars")))}))
 
 partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "partialBase",
@@ -179,7 +208,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 revision = revision,
                 pause = NULL,
                 completeWhenFilled = FALSE,
-                requiresMissings = FALSE)
+                requiresMissings = FALSE,
+                weightsSupport = 'auto')
         }))
 
 #' Partial Correlation
@@ -191,13 +221,15 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param sidSig .
 #' @param shwSig .
 #' @param flgSig .
-#' @param ggm .
-#' @param par .
+#' @param plot .
+#' @param plot1 .
+#' @param plot2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -215,8 +247,9 @@ partial <- function(
     sidSig = "twotailed",
     shwSig = TRUE,
     flgSig = FALSE,
-    ggm = FALSE,
-    par = FALSE) {
+    plot = FALSE,
+    plot1 = FALSE,
+    plot2 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -236,8 +269,9 @@ partial <- function(
         sidSig = sidSig,
         shwSig = shwSig,
         flgSig = flgSig,
-        ggm = ggm,
-        par = par)
+        plot = plot,
+        plot1 = plot1,
+        plot2 = plot2)
 
     analysis <- partialClass$new(
         options = options,

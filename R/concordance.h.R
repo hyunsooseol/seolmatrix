@@ -92,6 +92,9 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 title="Estimated Correlation",
                 rows=1,
                 refs="epiR",
+                clearWith=list(
+                    "dep",
+                    "covs"),
                 columns=list(
                     list(
                         `name`="r", 
@@ -115,6 +118,9 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 height=400,
                 renderFun=".plot",
                 visible="(ccp)",
+                clearWith=list(
+                    "dep",
+                    "covs"),
                 refs="epiR"))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -124,6 +130,9 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 height=400,
                 renderFun=".plot1",
                 visible="(bap)",
+                clearWith=list(
+                    "dep",
+                    "covs"),
                 refs="epiR"))}))
 
 concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -143,7 +152,8 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 revision = revision,
                 pause = NULL,
                 completeWhenFilled = FALSE,
-                requiresMissings = FALSE)
+                requiresMissings = FALSE,
+                weightsSupport = 'auto')
         }))
 
 #' Concordance Correlation

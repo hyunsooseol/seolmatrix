@@ -4,7 +4,7 @@
 \alias{poly}
 \title{Polychoric Correlation}
 \usage{
-poly(data, vars, polychoric = TRUE, ggm = FALSE, par = FALSE)
+poly(data, vars, polychoric = TRUE, plot = FALSE, plot1 = FALSE)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,9 +13,9 @@ poly(data, vars, polychoric = TRUE, ggm = FALSE, par = FALSE)
 
 \item{polychoric}{.}
 
-\item{ggm}{.}
+\item{plot}{.}
 
-\item{par}{.}
+\item{plot1}{.}
 }
 \value{
 A results object containing:

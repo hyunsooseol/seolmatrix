@@ -26,12 +26,12 @@ options:
       type: Bool
       default: True
 
-    - name: ggm
+    - name: plot
       title: Gaussian graphical model(EBIC)
       type: Bool
       default: false
       
-    - name: par
+    - name: plot1
       title: Partial plot
       type: Bool
       default: FALSE    

@@ -14,6 +14,9 @@ items:
       type: Table
       rows:  1
       refs: epiR
+      clearWith:
+        - dep
+        - covs
       columns:
         - name: r
           title: Concordance
@@ -34,6 +37,9 @@ items:
       height: 400
       renderFun: .plot
       visible: (ccp)
+      clearWith:
+        - dep
+        - covs
       refs: epiR   
   
     - name: plot1
@@ -43,5 +49,8 @@ items:
       height: 400
       renderFun: .plot1
       visible: (bap)
+      clearWith:
+        - dep
+        - covs
       refs: epiR       
 ...
