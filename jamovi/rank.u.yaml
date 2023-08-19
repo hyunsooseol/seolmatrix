@@ -27,7 +27,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Test"
+            label: Test
             children:
               - type: CheckBox
                 name: spearman
@@ -39,17 +39,18 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Plots"
+            label: Plots
             children:
               - type: CheckBox
                 name: plot
               - type: CheckBox
+                name: plot2
+                children:
+                  - type: ComboBox
+                    name: scale
+                    enable: (plot2)              
+          - type: Label
+            label: ''
+            children:
+              - type: CheckBox
                 name: plot1
-
-
-
-
-
-
-
- 

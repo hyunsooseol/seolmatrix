@@ -69,6 +69,7 @@ items:
       clearWith:
           - vars
           - ctrlvars
+          - scale
 
     - name: plot1
       title: 'Partial plot'

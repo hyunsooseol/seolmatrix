@@ -246,9 +246,12 @@ partialClass <- if (requireNamespace('jmvcore'))
   if (is.null(image2$state))
     return(FALSE)
   
+  scale <- self$options$scale
+  
   EBICgraph <- image2$state
 
-  plot2<- qgraph::centralityPlot(EBIC = EBICgraph)
+  plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
+                                 scale=scale)
 
   plot2 <- plot2+ggtheme
   

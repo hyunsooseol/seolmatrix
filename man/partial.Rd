@@ -9,6 +9,7 @@ partial(
   vars,
   ctrlvars,
   sidSig = "twotailed",
+  scale = "raw",
   shwSig = TRUE,
   flgSig = FALSE,
   plot = FALSE,
@@ -24,6 +25,8 @@ partial(
 \item{ctrlvars}{.}
 
 \item{sidSig}{.}
+
+\item{scale}{.}
 
 \item{shwSig}{.}
 

@@ -43,6 +43,18 @@ options:
           name:  twotailed
       default: twotailed
 
+    - name: scale
+      title: Scale
+      type: List
+      options:
+        - title: raw
+          name:  raw
+        - title: z-scores
+          name:  z-scores
+        - title: relative
+          name:  relative      
+      default: raw
+
     - name: shwSig
       title: Display significance levels
       type: Bool

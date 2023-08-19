@@ -9,6 +9,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             ctrlvars = NULL,
             sidSig = "twotailed",
+            scale = "raw",
             shwSig = TRUE,
             flgSig = FALSE,
             plot = FALSE,
@@ -46,6 +47,14 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "onetailed",
                     "twotailed"),
                 default="twotailed")
+            private$..scale <- jmvcore::OptionList$new(
+                "scale",
+                scale,
+                options=list(
+                    "raw",
+                    "z-scores",
+                    "relative"),
+                default="raw")
             private$..shwSig <- jmvcore::OptionBool$new(
                 "shwSig",
                 shwSig,
@@ -70,6 +79,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
             self$.addOption(private$..sidSig)
+            self$.addOption(private$..scale)
             self$.addOption(private$..shwSig)
             self$.addOption(private$..flgSig)
             self$.addOption(private$..plot)
@@ -80,6 +90,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         vars = function() private$..vars$value,
         ctrlvars = function() private$..ctrlvars$value,
         sidSig = function() private$..sidSig$value,
+        scale = function() private$..scale$value,
         shwSig = function() private$..shwSig$value,
         flgSig = function() private$..flgSig$value,
         plot = function() private$..plot$value,
@@ -89,6 +100,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..vars = NA,
         ..ctrlvars = NA,
         ..sidSig = NA,
+        ..scale = NA,
         ..shwSig = NA,
         ..flgSig = NA,
         ..plot = NA,
@@ -177,7 +189,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="qgraph",
                 clearWith=list(
                     "vars",
-                    "ctrlvars")))
+                    "ctrlvars",
+                    "scale")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -219,6 +232,7 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param ctrlvars .
 #' @param sidSig .
+#' @param scale .
 #' @param shwSig .
 #' @param flgSig .
 #' @param plot .
@@ -245,6 +259,7 @@ partial <- function(
     vars,
     ctrlvars,
     sidSig = "twotailed",
+    scale = "raw",
     shwSig = TRUE,
     flgSig = FALSE,
     plot = FALSE,
@@ -267,6 +282,7 @@ partial <- function(
         vars = vars,
         ctrlvars = ctrlvars,
         sidSig = sidSig,
+        scale = scale,
         shwSig = shwSig,
         flgSig = flgSig,
         plot = plot,
