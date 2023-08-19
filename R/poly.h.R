@@ -8,7 +8,9 @@ polyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             polychoric = TRUE,
+            scale = "raw",
             plot = FALSE,
+            plot2 = FALSE,
             plot1 = FALSE, ...) {
 
             super$initialize(
@@ -30,9 +32,21 @@ polyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "polychoric",
                 polychoric,
                 default=TRUE)
+            private$..scale <- jmvcore::OptionList$new(
+                "scale",
+                scale,
+                options=list(
+                    "raw",
+                    "z-scores",
+                    "relative"),
+                default="raw")
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
+                default=FALSE)
+            private$..plot2 <- jmvcore::OptionBool$new(
+                "plot2",
+                plot2,
                 default=FALSE)
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
@@ -41,18 +55,24 @@ polyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             self$.addOption(private$..vars)
             self$.addOption(private$..polychoric)
+            self$.addOption(private$..scale)
             self$.addOption(private$..plot)
+            self$.addOption(private$..plot2)
             self$.addOption(private$..plot1)
         }),
     active = list(
         vars = function() private$..vars$value,
         polychoric = function() private$..polychoric$value,
+        scale = function() private$..scale$value,
         plot = function() private$..plot$value,
+        plot2 = function() private$..plot2$value,
         plot1 = function() private$..plot1$value),
     private = list(
         ..vars = NA,
         ..polychoric = NA,
+        ..scale = NA,
         ..plot = NA,
+        ..plot2 = NA,
         ..plot1 = NA)
 )
 
@@ -63,6 +83,7 @@ polyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
+        plot2 = function() private$.items[["plot2"]],
         plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
@@ -104,6 +125,18 @@ polyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars")))
             self$add(jmvcore::Image$new(
                 options=options,
+                name="plot2",
+                title="Centrality plot ",
+                width=500,
+                height=500,
+                renderFun=".plot2",
+                visible="(plot2)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "scale")))
+            self$add(jmvcore::Image$new(
+                options=options,
                 name="plot1",
                 title="Partial plot",
                 width=500,
@@ -141,13 +174,16 @@ polyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param polychoric .
+#' @param scale .
 #' @param plot .
+#' @param plot2 .
 #' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -162,7 +198,9 @@ poly <- function(
     data,
     vars,
     polychoric = TRUE,
+    scale = "raw",
     plot = FALSE,
+    plot2 = FALSE,
     plot1 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -178,7 +216,9 @@ poly <- function(
     options <- polyOptions$new(
         vars = vars,
         polychoric = polychoric,
+        scale = scale,
         plot = plot,
+        plot2 = plot2,
         plot1 = plot1)
 
     analysis <- polyClass$new(

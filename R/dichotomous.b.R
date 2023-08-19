@@ -9,6 +9,7 @@
 #' @importFrom psych tetrachoric
 #' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
+#' @importFrom qgraph centralityPlot
 #' @import qgraph
 #' @export
 
@@ -111,8 +112,8 @@ self$results$instructions$setContent(
         res<- psych::partial.r(tetrarho)
         
         # Prepare Data For Plot -------
-        image <- self$results$plot1
-        image$setState(res)
+        image1 <- self$results$plot1
+        image1$setState(res)
         
       
         # EBIC PLOT------------
@@ -127,6 +128,10 @@ self$results$instructions$setContent(
         image$setState(EBICgraph)
         
         
+        # Centrality plot-------
+        image2 <- self$results$plot2
+        image2$setState(EBICgraph)
+        
         }
         },
       
@@ -136,12 +141,7 @@ self$results$instructions$setContent(
   if (is.null(image$state))
     return(FALSE)
   
-  # ggm <- self$options$ggm
-  # 
-  # if (!ggm)
-  #   return()
-  # 
-  
+ 
   EBICgraph <- image$state
   
   plot <- qgraph(EBICgraph, layout = "spring", details = TRUE)
@@ -151,17 +151,41 @@ self$results$instructions$setContent(
   
 },
 
+
+# Centrality plot for EBIC------------
+
+.plot2 = function(image2, ggtheme, theme,...) {
+  
+  if (is.null(image2$state))
+    return(FALSE)
+  
+  scale <- self$options$scale
+  
+  EBICgraph <- image2$state
+  
+  plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
+                                 scale=scale)
+  
+  plot2 <- plot2+ggtheme
+  
+  print(plot2)
+  TRUE
+  
+},
+
+
+
 # partial plot-------------
 
 
-      .plot1 = function(image, ...) {
-        par <- self$options$par
+      .plot1 = function(image1, ...) {
         
-        if (!par)
-          return()
+       
+        if (is.null(image1$state))
+          return(FALSE)
         
         
-        res <- image$state
+        res <- image1$state
         
         plot1 <- qgraph(res, layout = "spring", details = TRUE)
         

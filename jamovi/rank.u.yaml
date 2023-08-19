@@ -39,7 +39,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Plots
+            label: EBIC plots
             children:
               - type: CheckBox
                 name: plot

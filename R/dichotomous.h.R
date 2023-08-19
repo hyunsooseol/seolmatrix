@@ -8,8 +8,10 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         initialize = function(
             vars = NULL,
             tetrachoric = TRUE,
+            scale = "raw",
             plot = FALSE,
-            plot1 = FALSE, ...) {
+            plot1 = FALSE,
+            plot2 = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -28,6 +30,14 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "tetrachoric",
                 tetrachoric,
                 default=TRUE)
+            private$..scale <- jmvcore::OptionList$new(
+                "scale",
+                scale,
+                options=list(
+                    "raw",
+                    "z-scores",
+                    "relative"),
+                default="raw")
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -36,22 +46,32 @@ dichotomousOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "plot1",
                 plot1,
                 default=FALSE)
+            private$..plot2 <- jmvcore::OptionBool$new(
+                "plot2",
+                plot2,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..tetrachoric)
+            self$.addOption(private$..scale)
             self$.addOption(private$..plot)
             self$.addOption(private$..plot1)
+            self$.addOption(private$..plot2)
         }),
     active = list(
         vars = function() private$..vars$value,
         tetrachoric = function() private$..tetrachoric$value,
+        scale = function() private$..scale$value,
         plot = function() private$..plot$value,
-        plot1 = function() private$..plot1$value),
+        plot1 = function() private$..plot1$value,
+        plot2 = function() private$..plot2$value),
     private = list(
         ..vars = NA,
         ..tetrachoric = NA,
+        ..scale = NA,
         ..plot = NA,
-        ..plot1 = NA)
+        ..plot1 = NA,
+        ..plot2 = NA)
 )
 
 dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -61,6 +81,7 @@ dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
+        plot2 = function() private$.items[["plot2"]],
         plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
@@ -102,6 +123,18 @@ dichotomousResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "vars")))
             self$add(jmvcore::Image$new(
                 options=options,
+                name="plot2",
+                title="Centrality plot ",
+                width=500,
+                height=500,
+                renderFun=".plot2",
+                visible="(plot2)",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "scale")))
+            self$add(jmvcore::Image$new(
+                options=options,
                 name="plot1",
                 title="Partial plot",
                 width=500,
@@ -139,13 +172,16 @@ dichotomousBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param tetrachoric .
+#' @param scale .
 #' @param plot .
 #' @param plot1 .
+#' @param plot2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -160,8 +196,10 @@ dichotomous <- function(
     data,
     vars,
     tetrachoric = TRUE,
+    scale = "raw",
     plot = FALSE,
-    plot1 = FALSE) {
+    plot1 = FALSE,
+    plot2 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("dichotomous requires jmvcore to be installed (restart may be required)")
@@ -177,8 +215,10 @@ dichotomous <- function(
     options <- dichotomousOptions$new(
         vars = vars,
         tetrachoric = tetrachoric,
+        scale = scale,
         plot = plot,
-        plot1 = plot1)
+        plot1 = plot1,
+        plot2 = plot2)
 
     analysis <- dichotomousClass$new(
         options = options,

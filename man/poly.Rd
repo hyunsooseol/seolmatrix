@@ -4,7 +4,15 @@
 \alias{poly}
 \title{Polychoric Correlation}
 \usage{
-poly(data, vars, polychoric = TRUE, plot = FALSE, plot1 = FALSE)
+poly(
+  data,
+  vars,
+  polychoric = TRUE,
+  scale = "raw",
+  plot = FALSE,
+  plot2 = FALSE,
+  plot1 = FALSE
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,7 +21,11 @@ poly(data, vars, polychoric = TRUE, plot = FALSE, plot1 = FALSE)
 
 \item{polychoric}{.}
 
+\item{scale}{.}
+
 \item{plot}{.}
+
+\item{plot2}{.}
 
 \item{plot1}{.}
 }
@@ -23,6 +35,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 

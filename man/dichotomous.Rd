@@ -4,7 +4,15 @@
 \alias{dichotomous}
 \title{Tetrachoric Correlation}
 \usage{
-dichotomous(data, vars, tetrachoric = TRUE, plot = FALSE, plot1 = FALSE)
+dichotomous(
+  data,
+  vars,
+  tetrachoric = TRUE,
+  scale = "raw",
+  plot = FALSE,
+  plot1 = FALSE,
+  plot2 = FALSE
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -13,9 +21,13 @@ dichotomous(data, vars, tetrachoric = TRUE, plot = FALSE, plot1 = FALSE)
 
 \item{tetrachoric}{.}
 
+\item{scale}{.}
+
 \item{plot}{.}
 
 \item{plot1}{.}
+
+\item{plot2}{.}
 }
 \value{
 A results object containing:
@@ -23,6 +35,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 

@@ -34,6 +34,18 @@ items:
       clearWith:
         - vars
 
+    - name: plot2
+      title: 'Centrality plot '
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot2
+      visible: (plot2)
+      refs: qgraph
+      clearWith:
+          - vars
+          - scale
+
     - name: plot1
       title: 'Partial plot'
       type: Image

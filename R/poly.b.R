@@ -7,6 +7,7 @@
 #' @importFrom psych polychoric
 #' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
+#' @importFrom qgraph centralityPlot
 #' @import qgraph
 #' @export
 
@@ -108,8 +109,8 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 res<- psych::partial.r(poly)
                 
                 # Prepare Data For Plot -------
-                image <- self$results$plot1
-                image$setState(res)
+                image1 <- self$results$plot1
+                image1$setState(res)
                 
                 
                 # EBIC PLOT------------
@@ -122,6 +123,10 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 # Prepare Data For Plot -------
                 image <- self$results$plot
                 image$setState(EBICgraph)
+                
+                # Centrality plot-------
+                image2 <- self$results$plot2
+                image2$setState(EBICgraph)
                 
                       }
                   },
@@ -145,19 +150,39 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
         },
         
+        # Centrality plot for EBIC------------
+        
+        .plot2 = function(image2, ggtheme, theme,...) {
+          
+          if (is.null(image2$state))
+            return(FALSE)
+          
+          scale <- self$options$scale
+          
+          EBICgraph <- image2$state
+          
+          plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
+                                         scale=scale)
+          
+          plot2 <- plot2+ggtheme
+          
+          print(plot2)
+          TRUE
+          
+        },
+        
+        
+        
         # partial plot-------------
         
         
-        .plot1 = function(image, ...) {
-            # par <- self$options$par
-            # 
-            # if (!par)
-            #     return()
+        .plot1 = function(image1, ...) {
+          
             
-          if (is.null(image$state))
+          if (is.null(image1$state))
             return(FALSE)
             
-            res <- image$state
+            res <- image1$state
             
             plot1 <- qgraph(res, layout = "spring", details = TRUE)
             

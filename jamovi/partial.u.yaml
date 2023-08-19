@@ -53,7 +53,7 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: EBIC Plots
+            label: EBIC plots
             children:
               - type: CheckBox
                 name: plot

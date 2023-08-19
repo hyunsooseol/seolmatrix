@@ -26,8 +26,20 @@ options:
       type: Bool
       default: True
 
+    - name: scale
+      title: Scale
+      type: List
+      options:
+        - title: raw
+          name:  raw
+        - title: z-scores
+          name:  z-scores
+        - title: relative
+          name:  relative      
+      default: raw
+
     - name: plot
-      title: Gaussian graphical model(EBIC)
+      title: Gaussian graphical model
       type: Bool
       default: false
       
@@ -36,4 +48,8 @@ options:
       type: Bool
       default: FALSE    
 
+    - name: plot2
+      title: Centrality 
+      type: Bool
+      default: FALSE   
 ...

@@ -41,7 +41,7 @@ options:
       default: True
 
     - name: plot
-      title: Gaussian graphical model(EBIC)
+      title: Gaussian graphical model
       type: Bool
       default: false
       

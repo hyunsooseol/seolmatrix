@@ -44,7 +44,17 @@ children:
               - type: CheckBox
                 name: plot
               - type: CheckBox
+                name: plot2
+                children:
+                  - type: ComboBox
+                    name: scale
+                    enable: (plot2)
+          - type: Label
+            label: ''
+            children:
+              - type: CheckBox
                 name: plot1
+ 
 
 
 
