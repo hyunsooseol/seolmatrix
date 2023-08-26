@@ -202,6 +202,7 @@ partialClass <- if (requireNamespace('jmvcore'))
       
         # EBIC PLOT------------
         
+        if(self$options$plot | self$options$plot2==TRUE){
         # Compute correlations:
         CorMat <- qgraph::cor_auto(data)
         
@@ -215,7 +216,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         # Centrality plot-------
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
-        
+        }
        
         },
       

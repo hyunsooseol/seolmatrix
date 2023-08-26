@@ -99,6 +99,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             image1$setState(res)
         
             
+            if(self$options$plot | self$options$plot2==TRUE){
             ########## EBIC PLOT------------
             
             rank <- spear$r
@@ -113,7 +114,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Centrality plot-------
             image2 <- self$results$plot2
             image2$setState(EBICgraph)  
-            
+            }
                 
         },
         

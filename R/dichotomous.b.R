@@ -39,6 +39,7 @@ self$results$instructions$setContent(
             <p><b>Instructions</b></p>
             <p>____________________________________________________________________________________</p>
             <p>Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
+            <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -115,6 +116,7 @@ self$results$instructions$setContent(
         image1 <- self$results$plot1
         image1$setState(res)
         
+        if(self$options$plot | self$options$plot2==TRUE){
       
         # EBIC PLOT------------
         
@@ -132,6 +134,7 @@ self$results$instructions$setContent(
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
         
+        }
         }
         },
       

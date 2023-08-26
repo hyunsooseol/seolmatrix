@@ -37,6 +37,7 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <p>____________________________________________________________________________________</p>
             <p>1. The polychoric correlation coefficient is a measure of association for ordinal variables.</p>
             <p>2. Tetrachoric correlation is a special case of the polychoric correlation applicable when both variables are dichotomous.</p>
+            <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -113,6 +114,7 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 image1$setState(res)
                 
                 
+                if(self$options$plot | self$options$plot2==TRUE){
                 # EBIC PLOT------------
                 
                 poly <- psych::polychoric(mydata)$rho
@@ -127,6 +129,8 @@ polyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 # Centrality plot-------
                 image2 <- self$results$plot2
                 image2$setState(EBICgraph)
+                
+                }
                 
                       }
                   },

@@ -110,11 +110,11 @@ raterClass <- if (requireNamespace('jmvcore'))
           
           # prepare plot-----
           
-          private$.prepareGgmPlot(data)
+         # private$.prepareGgmPlot(data)
           
           # prepare partial plot-------
           
-          private$.prepareParPlot(data)
+          #private$.prepareParPlot(data)
           
           # populate icc table-----
           
@@ -306,6 +306,34 @@ if(isTRUE(self$options$cw)){
         p1 <- out$p.value
         lower <- out$lbound
         upper <- out$ubound
+        
+        if(self$options$ggm==TRUE){
+        
+          # Compute correlations:
+          CorMat <- qgraph::cor_auto(data)
+          
+          # Compute graph with tuning = 0.5 (EBIC)
+          EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+          
+          # Prepare Data For Plot -------
+          image <- self$results$plot
+          image$setState(EBICgraph)
+          
+        }
+          
+        if(self$options$par==TRUE){
+        
+          
+          par <- psych::partial.r(data)
+          
+          # partial Plot -------
+          
+          image <- self$results$plot1
+          image$setState(par)
+          
+        }
+          
+         
         
         results <-
           list(
@@ -536,45 +564,42 @@ if(isTRUE(self$options$cw)){
    
       
       #### Plot functions ----
+      # 
+      # .prepareGgmPlot = function(data) {
+      #   
+      #   # Compute correlations:
+      #   CorMat <- qgraph::cor_auto(data)
+      #   
+      #   # Compute graph with tuning = 0.5 (EBIC)
+      #   EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+      #   
+      #   # Prepare Data For Plot -------
+      #   image <- self$results$plot
+      #   image$setState(EBICgraph)
+      #   
+      #  
+      # },
       
-      .prepareGgmPlot = function(data) {
-        
-        # Compute correlations:
-        CorMat <- qgraph::cor_auto(data)
-        
-        # Compute graph with tuning = 0.5 (EBIC)
-        EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-        
-        # Prepare Data For Plot -------
-        image <- self$results$plot
-        image$setState(EBICgraph)
-        
-       
-      },
-      
-      .prepareParPlot=function(data) {
-        
-        # # Compute correlations:
-        # CorMat <- qgraph::cor_auto(data)
-        
-        par <- psych::partial.r(data)
-        
-        # Prepare Data For Plot -------
-       
-        image <- self$results$plot1
-        image$setState(par)
-       
-      },
-      
+      # .prepareParPlot=function(data) {
+      #   
+      #   # # Compute correlations:
+      #   # CorMat <- qgraph::cor_auto(data)
+      #   
+      #   par <- psych::partial.r(data)
+      #   
+      #   # Prepare Data For Plot -------
+      #  
+      #   image <- self$results$plot1
+      #   image$setState(par)
+      #  
+      # },
+      # 
       
       #================================================================
       
       .plot = function(image, ...) {
         
-        # ggm <- self$options$ggm
-        # 
-        # if (!ggm)
-        #   return()
+       
         if (is.null(image$state))
           return(FALSE)
         
@@ -588,10 +613,6 @@ if(isTRUE(self$options$cw)){
       
       .plot1 = function(image, ...) {
         
-        # par <- self$options$par
-        # 
-        # if (!par)
-        #   return()
         
         if (is.null(image$state))
           return(FALSE)
