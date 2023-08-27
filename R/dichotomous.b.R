@@ -36,7 +36,7 @@ self$results$instructions$setContent(
             </head>
             <body>
             <div class='instructions'>
-            <p><b>Instructions</b></p>
+            <h2><b>Instructions</b></h2>
             <p>____________________________________________________________________________________</p>
             <p>Welcome to Tetrachoric Correlation for doing factor analysis as an input data.</p>
             <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>

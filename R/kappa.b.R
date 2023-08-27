@@ -32,7 +32,7 @@ kappaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              </head>
              <body>
              <div class='instructions'>
-             <p><b>Instructions</b></p>
+             <h2><b>Instructions</b></h2>
              <p>___________________________________________________________________________________
              <p>1. Fleiss' kappa can be used with binary or nominal-scale.</p> 
              <p>2. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
