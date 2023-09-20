@@ -33,6 +33,7 @@ options:
       title: Clustering
       type: List
       options:
+        - none
         - ward.D
         - ward.D2
         - single
@@ -41,13 +42,13 @@ options:
         - mcquitty
         - median
         - centroid
-      default: ward.D
+      default: none
 
     - name: k
       title: Number of clusters
-      default: 2
+      default: 0
       type: Integer
-      min: 1
+      min: 0
 
     - name: size
       title: Values display size
@@ -75,12 +76,18 @@ options:
       default: FALSE      
       
     - name: plot2
-      title: Polychoric heatmap 
+      title: Heatmap
       type: Bool
       default: FALSE     
 
     - name: plot3
-      title: Polychoric dendrogram 
+      title: Dendrogram 
       type: Bool
       default: FALSE        
+
+    - name: horiz1
+      title: horizontal
+      type: Bool
+      default: FALSE
+
 ...

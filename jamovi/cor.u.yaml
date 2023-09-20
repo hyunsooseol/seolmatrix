@@ -45,6 +45,10 @@ children:
               - type: CheckBox
                 name: plot3
                 enable: (poly)
+                children:
+                  - type: CheckBox
+                    name: horiz1
+                    enable: (poly1)
       - type: LayoutBox
         stretchFactor: 1
         margin: large

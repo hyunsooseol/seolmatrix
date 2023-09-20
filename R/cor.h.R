@@ -8,15 +8,16 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             type = "pearson",
-            method = "ward.D",
-            k = 2,
+            method = "none",
+            k = 0,
             size = 3,
             plot = TRUE,
             horiz = FALSE,
             plot1 = FALSE,
             poly = FALSE,
             plot2 = FALSE,
-            plot3 = FALSE, ...) {
+            plot3 = FALSE,
+            horiz1 = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -42,6 +43,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "method",
                 method,
                 options=list(
+                    "none",
                     "ward.D",
                     "ward.D2",
                     "single",
@@ -50,12 +52,12 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "mcquitty",
                     "median",
                     "centroid"),
-                default="ward.D")
+                default="none")
             private$..k <- jmvcore::OptionInteger$new(
                 "k",
                 k,
-                default=2,
-                min=1)
+                default=0,
+                min=0)
             private$..size <- jmvcore::OptionInteger$new(
                 "size",
                 size,
@@ -84,6 +86,10 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot3",
                 plot3,
                 default=FALSE)
+            private$..horiz1 <- jmvcore::OptionBool$new(
+                "horiz1",
+                horiz1,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
@@ -96,6 +102,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..poly)
             self$.addOption(private$..plot2)
             self$.addOption(private$..plot3)
+            self$.addOption(private$..horiz1)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -108,7 +115,8 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot1 = function() private$..plot1$value,
         poly = function() private$..poly$value,
         plot2 = function() private$..plot2$value,
-        plot3 = function() private$..plot3$value),
+        plot3 = function() private$..plot3$value,
+        horiz1 = function() private$..horiz1$value),
     private = list(
         ..vars = NA,
         ..type = NA,
@@ -120,7 +128,8 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..plot1 = NA,
         ..poly = NA,
         ..plot2 = NA,
-        ..plot3 = NA)
+        ..plot3 = NA,
+        ..horiz1 = NA)
 )
 
 corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -243,6 +252,7 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param poly .
 #' @param plot2 .
 #' @param plot3 .
+#' @param horiz1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -257,15 +267,16 @@ cor <- function(
     data,
     vars,
     type = "pearson",
-    method = "ward.D",
-    k = 2,
+    method = "none",
+    k = 0,
     size = 3,
     plot = TRUE,
     horiz = FALSE,
     plot1 = FALSE,
     poly = FALSE,
     plot2 = FALSE,
-    plot3 = FALSE) {
+    plot3 = FALSE,
+    horiz1 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("cor requires jmvcore to be installed (restart may be required)")
@@ -288,7 +299,8 @@ cor <- function(
         plot1 = plot1,
         poly = poly,
         plot2 = plot2,
-        plot3 = plot3)
+        plot3 = plot3,
+        horiz1 = horiz1)
 
     analysis <- corClass$new(
         options = options,

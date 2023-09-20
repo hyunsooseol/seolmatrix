@@ -34,7 +34,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <p>____________________________________________________________________________________</p>
             <p> 1. Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</p>
             <p> 2. The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</p>
-            <p> 3. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            <p> 3. When clustering method is <b>none</b>, dendrogram will not be drawn.</p>
+            <p> 4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             
             </div>
@@ -70,10 +71,12 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             image$setState(mat)
             
             # dendrogram plot-------
+           
+            if(!self$options$method=='none'){
             
             image <- self$results$plot1
             image$setState(mat1)
-            
+            }
  
             if(self$options$poly==TRUE){
                 
@@ -89,9 +92,12 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             image$setState(data)
             
        # Polychoric dendrogram plot---------
-            
+           
+            if(!self$options$method=='none'){
+              
             image <- self$results$plot3
             image$setState(dis)
+            }
             
             }
             
@@ -120,13 +126,14 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         },
         
         .plot1 = function(image, ggtheme, theme, ...) {
-            
-          if (is.null(image$state))
-            return(FALSE)
-            
-           mat1 <- image$state
+         
+           if (is.null(image$state))
+             return(FALSE)
+          
+           mat1 <- image$state  
            
-           hc <- stats::hclust(mat1, method = self$options$method) 
+           
+          hc <- stats::hclust(mat1, method = self$options$method) 
             
            
             if(self$options$horiz == TRUE){
@@ -145,7 +152,8 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         },
        
        .plot2 = function(image, ggtheme, theme, ...) {
-           
+      
+          
          if (is.null(image$state))
            return(FALSE)
          
@@ -176,7 +184,7 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       hc <- stats::hclust(dis, method = self$options$method) 
       
       
-       if(self$options$horiz == TRUE){
+       if(self$options$horiz1 == TRUE){
       
            plot3<- ggdendro::ggdendrogram(hc, rotate=TRUE)
       

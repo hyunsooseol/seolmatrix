@@ -8,15 +8,16 @@ cor(
   data,
   vars,
   type = "pearson",
-  method = "ward.D",
-  k = 2,
+  method = "none",
+  k = 0,
   size = 3,
   plot = TRUE,
   horiz = FALSE,
   plot1 = FALSE,
   poly = FALSE,
   plot2 = FALSE,
-  plot3 = FALSE
+  plot3 = FALSE,
+  horiz1 = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ cor(
 \item{plot2}{.}
 
 \item{plot3}{.}
+
+\item{horiz1}{.}
 }
 \value{
 A results object containing:
