@@ -199,7 +199,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz")))
+                    "horiz",
+                    "horiz1")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -214,7 +215,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz")))}))
+                    "horiz1")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",

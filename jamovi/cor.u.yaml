@@ -48,7 +48,7 @@ children:
                 children:
                   - type: CheckBox
                     name: horiz1
-                    enable: (poly1)
+                    enable: (poly)
       - type: LayoutBox
         stretchFactor: 1
         margin: large

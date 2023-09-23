@@ -54,6 +54,7 @@ items:
         - method
         - size
         - horiz
+        - horiz1
 
     - name:  plot3
       title: Polychoric Dendrogram
@@ -68,5 +69,5 @@ items:
         - type
         - method
         - size
-        - horiz        
+        - horiz1        
 ...
