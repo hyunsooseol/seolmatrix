@@ -1,8 +1,8 @@
 Package: seolmatrix
 Type: Package
 Title: Correlations suite for jamovi
-Version: 3.7.6
-Date: 2023-09-20
+Version: 3.7.7
+Date: 2023-09-25
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
 Description: This module is a tool for calculating correlations such as Person, Partial,
@@ -32,4 +32,5 @@ Imports:
     ShinyItemAnalysis,
     ahpsurvey,
     magrittr,
-    tidyverse
+    dplyr,
+    tidyr
