@@ -13,6 +13,16 @@ options:
           R: >
             The data as a data frame.
 
+    - name: mode
+      title: ""
+      type: List
+      options:
+            - name: simple
+              title: 'Rater Reliability'
+            - name: complex
+              title: 'Krippendorff alpha'
+      default: simple
+
     - name: vars
       title: Variables
       type: Variables
@@ -21,6 +31,14 @@ options:
       permitted:
         - numeric
         
+    - name: vars1
+      title: Variables
+      type: Variables
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
     - name: model
       title: Model
       type: List
@@ -63,17 +81,17 @@ options:
     - name: ic
       title: ICC 
       type: Bool
-      default: TRUE
+      default: false
 
     - name: ftest
       title: F test for ICC 
       type: Bool
-      default: TRUE
+      default: false
       
     - name: ggm
       title: Gaussian graphical model(EBIC)
       type: Bool
-      default: FALSE
+      default: false
 
     - name: par
       title: Partial plot
@@ -89,6 +107,36 @@ options:
       title: Category-wise Kappas 
       type: Bool
       default: FALSE
+
+    - name: fk1
+      title: Fleiss' Kappa 
+      type: Bool
+      default: false
+
+    - name: cw1
+      title: Category-wise Kappas 
+      type: Bool
+      default: FALSE
+
+    - name: ek
+      title: Exact Kappa
+      type: Bool
+      default: FALSE
+      
+    - name: krip
+      title: Krippendorff alpha 
+      type: Bool
+      default: FALSE
+
+    - name: method
+      title: Method
+      type: List
+      options:
+        - nominal
+        - ordinal
+        - interval
+        - ratio
+      default: nominal      
 
 ...
 

@@ -6,25 +6,36 @@
 \usage{
 rater(
   data,
+  mode = "simple",
   vars,
+  vars1,
   model = "oneway",
   type = "agreement",
   unit = "single",
   interrater = TRUE,
   icc = FALSE,
   bicc = FALSE,
-  ic = TRUE,
-  ftest = TRUE,
+  ic = FALSE,
+  ftest = FALSE,
   ggm = FALSE,
   par = FALSE,
   fk = FALSE,
-  cw = FALSE
+  cw = FALSE,
+  fk1 = FALSE,
+  cw1 = FALSE,
+  ek = FALSE,
+  krip = FALSE,
+  method = "nominal"
 )
 }
 \arguments{
 \item{data}{The data as a data frame.}
 
+\item{mode}{.}
+
 \item{vars}{.}
+
+\item{vars1}{.}
 
 \item{model}{.}
 
@@ -49,6 +60,16 @@ rater(
 \item{fk}{.}
 
 \item{cw}{.}
+
+\item{fk1}{.}
+
+\item{cw1}{.}
+
+\item{ek}{.}
+
+\item{krip}{.}
+
+\item{method}{.}
 }
 \value{
 A results object containing:
@@ -63,6 +84,11 @@ A results object containing:
   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$instructions1} \tab \tab \tab \tab \tab a html \cr
+  \code{results$fk1} \tab \tab \tab \tab \tab a table \cr
+  \code{results$ek} \tab \tab \tab \tab \tab a table \cr
+  \code{results$cw1} \tab \tab \tab \tab \tab a table \cr
+  \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

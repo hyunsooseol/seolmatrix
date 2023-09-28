@@ -4,80 +4,140 @@ jus: '3.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    persistentItems: false
+  - type: ModeSelector
+    name: mode
     stretchFactor: 1
     children:
-      - type: TargetLayoutBox
-        label: Variables
+      - type: Content
+        name: simple
         children:
-          - type: VariablesListBox
-            name: vars
-            isTarget: true
-  - type: CollapseBox
-    label: Rater reliability
-    margin: normal
-    collapsed: true
-    children:
-      - type: Label
-        label: Statistics
-        fitToGrid: true
-        cell:
-          column: 0
-          row: 0
-        children:
-          - type: CheckBox
-            name: interrater
-          - type: CheckBox
-            name: fk
-          - type: CheckBox
-            name: cw
-          - type: CheckBox
-            name: icc
-          - type: CheckBox
-            name: bicc
-      - type: Label
-        label: Plots
-        fitToGrid: true
-        cell:
-          column: 1
-          row: 0
-        children:
-          - type: CheckBox
-            name: ggm
-          - type: CheckBox
-            name: par
-  - type: CollapseBox
-    label: ICC for oneway and twoway models
-    margin: normal
-    collapsed: true
-    children:
-      - type: LayoutBox
-        stretchFactor: 1
-        margin: large
-        children:
-          - type: Label
-            label: Options
+          - type: LayoutBox
+            margin: large
+            stretchFactor: 1
             children:
-              - type: ComboBox
-                name: model
-              - type: ComboBox
-                name: type
-              - type: ComboBox
-                name: unit
-      - type: LayoutBox
-        stretchFactor: 1
-        margin: large
-        cell:
-          column: 1
-          row: 0
-        fitToGrid: true
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Variables
+                    children:
+                      - type: VariablesListBox
+                        name: vars
+                        isTarget: true
+              - type: CollapseBox
+                label: Rater reliability
+                margin: normal
+                collapsed: true
+                children:
+                  - type: Label
+                    label: Statistics
+                    fitToGrid: true
+                    cell:
+                      column: 0
+                      row: 0
+                    children:
+                      - type: CheckBox
+                        name: interrater
+                      - type: CheckBox
+                        name: fk
+                      - type: CheckBox
+                        name: cw
+                      - type: CheckBox
+                        name: icc
+                      - type: CheckBox
+                        name: bicc
+                  - type: Label
+                    label: Plots
+                    fitToGrid: true
+                    cell:
+                      column: 1
+                      row: 0
+                    children:
+                      - type: CheckBox
+                        name: ggm
+                      - type: CheckBox
+                        name: par
+              - type: CollapseBox
+                label: ICC for oneway and twoway models
+                margin: normal
+                collapsed: true
+                children:
+                  - type: LayoutBox
+                    stretchFactor: 1
+                    margin: large
+                    children:
+                      - type: Label
+                        label: Options
+                        children:
+                          - type: ComboBox
+                            name: model
+                          - type: ComboBox
+                            name: type
+                          - type: ComboBox
+                            name: unit
+                  - type: LayoutBox
+                    stretchFactor: 1
+                    margin: large
+                    cell:
+                      column: 1
+                      row: 0
+                    fitToGrid: true
+                    children:
+                      - type: Label
+                        label: Statistics
+                        children:
+                          - type: CheckBox
+                            name: ic
+                          - type: CheckBox
+                            name: ftest
+      - type: Content
+        name: complex
         children:
-          - type: Label
-            label: Statistics
+          - type: VariableSupplier
+            persistentItems: false
+            stretchFactor: 1
             children:
-              - type: CheckBox
-                name: ic
-              - type: CheckBox
-                name: ftest
- 
+              - type: TargetLayoutBox
+                label: Variables
+                stretchFactor: 1
+                children:
+                  - type: VariablesListBox
+                    name: vars1
+                    isTarget: true
+          - type: CollapseBox
+            label: Fleiss' kappa
+            margin: normal
+            collapsed: true
+            children:
+              - type: Label
+                label: Statistics
+                fitToGrid: true
+                cell:
+                  column: 0
+                  row: 0
+                children:
+                  - type: CheckBox
+                    name: fk1
+                  - type: CheckBox
+                    name: cw1
+                  - type: CheckBox
+                    name: ek
+          - type: CollapseBox
+            label: Krippendorff alpha 
+            margin: normal
+            collapsed: true
+            children:
+              - type: Label
+                label: Statistics
+                fitToGrid: true
+                cell:
+                  column: 0
+                  row: 0
+                children:
+                  - type: CheckBox
+                    name: krip
+                    children:
+                      - type: ComboBox
+                        name: method
+                        enable: (krip)

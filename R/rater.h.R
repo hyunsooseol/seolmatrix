@@ -6,19 +6,26 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
+            mode = "simple",
             vars = NULL,
+            vars1 = NULL,
             model = "oneway",
             type = "agreement",
             unit = "single",
             interrater = TRUE,
             icc = FALSE,
             bicc = FALSE,
-            ic = TRUE,
-            ftest = TRUE,
+            ic = FALSE,
+            ftest = FALSE,
             ggm = FALSE,
             par = FALSE,
             fk = FALSE,
-            cw = FALSE, ...) {
+            cw = FALSE,
+            fk1 = FALSE,
+            cw1 = FALSE,
+            ek = FALSE,
+            krip = FALSE,
+            method = "nominal", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -26,6 +33,13 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
+            private$..mode <- jmvcore::OptionList$new(
+                "mode",
+                mode,
+                options=list(
+                    "simple",
+                    "complex"),
+                default="simple")
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
                 vars,
@@ -33,6 +47,13 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..vars1 <- jmvcore::OptionVariables$new(
+                "vars1",
+                vars1,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..model <- jmvcore::OptionList$new(
                 "model",
                 model,
@@ -69,11 +90,11 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ic <- jmvcore::OptionBool$new(
                 "ic",
                 ic,
-                default=TRUE)
+                default=FALSE)
             private$..ftest <- jmvcore::OptionBool$new(
                 "ftest",
                 ftest,
-                default=TRUE)
+                default=FALSE)
             private$..ggm <- jmvcore::OptionBool$new(
                 "ggm",
                 ggm,
@@ -90,8 +111,35 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "cw",
                 cw,
                 default=FALSE)
+            private$..fk1 <- jmvcore::OptionBool$new(
+                "fk1",
+                fk1,
+                default=FALSE)
+            private$..cw1 <- jmvcore::OptionBool$new(
+                "cw1",
+                cw1,
+                default=FALSE)
+            private$..ek <- jmvcore::OptionBool$new(
+                "ek",
+                ek,
+                default=FALSE)
+            private$..krip <- jmvcore::OptionBool$new(
+                "krip",
+                krip,
+                default=FALSE)
+            private$..method <- jmvcore::OptionList$new(
+                "method",
+                method,
+                options=list(
+                    "nominal",
+                    "ordinal",
+                    "interval",
+                    "ratio"),
+                default="nominal")
 
+            self$.addOption(private$..mode)
             self$.addOption(private$..vars)
+            self$.addOption(private$..vars1)
             self$.addOption(private$..model)
             self$.addOption(private$..type)
             self$.addOption(private$..unit)
@@ -104,9 +152,16 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..par)
             self$.addOption(private$..fk)
             self$.addOption(private$..cw)
+            self$.addOption(private$..fk1)
+            self$.addOption(private$..cw1)
+            self$.addOption(private$..ek)
+            self$.addOption(private$..krip)
+            self$.addOption(private$..method)
         }),
     active = list(
+        mode = function() private$..mode$value,
         vars = function() private$..vars$value,
+        vars1 = function() private$..vars1$value,
         model = function() private$..model$value,
         type = function() private$..type$value,
         unit = function() private$..unit$value,
@@ -118,9 +173,16 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ggm = function() private$..ggm$value,
         par = function() private$..par$value,
         fk = function() private$..fk$value,
-        cw = function() private$..cw$value),
+        cw = function() private$..cw$value,
+        fk1 = function() private$..fk1$value,
+        cw1 = function() private$..cw1$value,
+        ek = function() private$..ek$value,
+        krip = function() private$..krip$value,
+        method = function() private$..method$value),
     private = list(
+        ..mode = NA,
         ..vars = NA,
+        ..vars1 = NA,
         ..model = NA,
         ..type = NA,
         ..unit = NA,
@@ -132,7 +194,12 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ggm = NA,
         ..par = NA,
         ..fk = NA,
-        ..cw = NA)
+        ..cw = NA,
+        ..fk1 = NA,
+        ..cw1 = NA,
+        ..ek = NA,
+        ..krip = NA,
+        ..method = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -148,7 +215,12 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ic = function() private$.items[["ic"]],
         ftest = function() private$.items[["ftest"]],
         plot = function() private$.items[["plot"]],
-        plot1 = function() private$.items[["plot1"]]),
+        plot1 = function() private$.items[["plot1"]],
+        instructions1 = function() private$.items[["instructions1"]],
+        fk1 = function() private$.items[["fk1"]],
+        ek = function() private$.items[["ek"]],
+        cw1 = function() private$.items[["cw1"]],
+        krip = function() private$.items[["krip"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -408,7 +480,118 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 height=500,
                 renderFun=".plot1",
                 visible="(par)",
-                refs="qgraph"))}))
+                refs="qgraph"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="instructions1",
+                title="Krippendorff Alpha",
+                visible=TRUE))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="fk1",
+                title="Fleiss Kappa",
+                rows=1,
+                visible="(fk1)",
+                clearWith=list(
+                    "vars"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Fleiss' Kappa"),
+                    list(
+                        `name`="n", 
+                        `type`="number"),
+                    list(
+                        `name`="rater", 
+                        `type`="number"),
+                    list(
+                        `name`="statistic", 
+                        `type`="number"),
+                    list(
+                        `name`="z", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="ek",
+                title="Exact Kappa",
+                rows=1,
+                visible="(ek)",
+                clearWith=list(
+                    "vars"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Exact Kappa"),
+                    list(
+                        `name`="n", 
+                        `type`="number"),
+                    list(
+                        `name`="rater", 
+                        `type`="number"),
+                    list(
+                        `name`="statistic", 
+                        `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="cw1",
+                title="Category-wise kappas",
+                visible="(cw1)",
+                refs="irr",
+                clearWith=list(
+                    "vars"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="Category", 
+                        `type`="text", 
+                        `content`="($key)"),
+                    list(
+                        `name`="k", 
+                        `title`="Kappa", 
+                        `type`="number"),
+                    list(
+                        `name`="z", 
+                        `title`="Z", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="krip",
+                title="`Krippendorff alpha - ${method}`",
+                rows=1,
+                visible="(krip)",
+                clearWith=list(
+                    "vars"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Krippendorff alpha"),
+                    list(
+                        `name`="Subjects", 
+                        `type`="number"),
+                    list(
+                        `name`="Raters", 
+                        `type`="number"),
+                    list(
+                        `name`="alpha", 
+                        `type`="number"))))}))
 
 raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "raterBase",
@@ -435,7 +618,9 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data The data as a data frame.
+#' @param mode .
 #' @param vars .
+#' @param vars1 .
 #' @param model .
 #' @param type .
 #' @param unit .
@@ -448,6 +633,11 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param par .
 #' @param fk .
 #' @param cw .
+#' @param fk1 .
+#' @param cw1 .
+#' @param ek .
+#' @param krip .
+#' @param method .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -460,6 +650,11 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$instructions1} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$fk1} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$cw1} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -471,32 +666,44 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @export
 rater <- function(
     data,
+    mode = "simple",
     vars,
+    vars1,
     model = "oneway",
     type = "agreement",
     unit = "single",
     interrater = TRUE,
     icc = FALSE,
     bicc = FALSE,
-    ic = TRUE,
-    ftest = TRUE,
+    ic = FALSE,
+    ftest = FALSE,
     ggm = FALSE,
     par = FALSE,
     fk = FALSE,
-    cw = FALSE) {
+    cw = FALSE,
+    fk1 = FALSE,
+    cw1 = FALSE,
+    ek = FALSE,
+    krip = FALSE,
+    method = "nominal") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(vars)) vars <- jmvcore::resolveQuo(jmvcore::enquo(vars))
+    if ( ! missing(vars1)) vars1 <- jmvcore::resolveQuo(jmvcore::enquo(vars1))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(vars), vars, NULL))
+            `if`( ! missing(vars), vars, NULL),
+            `if`( ! missing(vars1), vars1, NULL))
 
+    for (v in vars1) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- raterOptions$new(
+        mode = mode,
         vars = vars,
+        vars1 = vars1,
         model = model,
         type = type,
         unit = unit,
@@ -508,7 +715,12 @@ rater <- function(
         ggm = ggm,
         par = par,
         fk = fk,
-        cw = cw)
+        cw = cw,
+        fk1 = fk1,
+        cw1 = cw1,
+        ek = ek,
+        krip = krip,
+        method = method)
 
     analysis <- raterClass$new(
         options = options,

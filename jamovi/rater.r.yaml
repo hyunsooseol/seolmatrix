@@ -223,4 +223,104 @@ items:
       renderFun: .plot1
       visible: (par)
       refs: qgraph
+
+    - name: instructions1
+      title: Krippendorff Alpha 
+      type: Html
+      visible: True
+
+    - name: fk1
+      title: 'Fleiss Kappa'
+      type: Table
+      rows: 1
+      visible: (fk1)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Fleiss' Kappa
+        - name: n
+          type: number
+        - name: rater
+          type: number
+        - name: statistic
+          type: number
+        - name: z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+
+    - name: ek
+      title: 'Exact Kappa'
+      type: Table
+      rows: 1
+      visible: (ek)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Exact Kappa
+        - name: n
+          type: number
+        - name: rater
+          type: number
+        - name: statistic
+          type: number
+
+    - name: cw1
+      title: 'Category-wise kappas'
+      type: Table
+      visible: (cw1)
+      refs: irr
+      clearWith:
+        - vars
+ 
+      columns:
+        - name: name
+          title: 'Category'
+          type: 'text'
+          content: ($key)
+
+        - name: k
+          title: 'Kappa'
+          type: number
+        - name: z
+          title: 'Z'
+          type: number
+        - name: p
+          title: 'p'
+          type: number
+          format: zto,pvalue
+
+    - name: krip
+      title:  '`Krippendorff alpha - ${method}`'
+      type: Table
+      rows: 1
+      visible: (krip)
+      clearWith:
+        - vars
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Krippendorff alpha
+        - name: Subjects
+          type: number
+        - name: Raters
+          type: number
+        - name: alpha
+          type: number
+
+
 ...

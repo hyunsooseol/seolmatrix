@@ -17,6 +17,8 @@
 #' @importFrom psych partial.r
 #' @importFrom irr kappam.fleiss
 #' @import boot
+#' @importFrom irr kappam.fleiss
+#' @importFrom irr kripp.alpha
 #' @export
 
 
@@ -27,11 +29,16 @@ raterClass <- if (requireNamespace('jmvcore'))
     private = list(
      # ==========================================================
       .init = function() {
-        if (is.null(self$data) | is.null(self$options$vars)) {
-          self$results$instructions$setVisible(visible = TRUE)
+       
 
-        }
-
+        if(self$options$mode=='simple'){
+       
+          if (is.null(self$data) | is.null(self$options$vars)) {
+            self$results$instructions$setVisible(visible = TRUE)
+            
+          }
+          
+          
          self$results$instructions$setContent(
            "<html>
              <head>
@@ -68,11 +75,193 @@ raterClass <- if (requireNamespace('jmvcore'))
              "The analysis was performed by 'psy::icc' function."
              
            )
-         
+
+        }
+        
+        if(self$options$mode=="complex"){
+  
+          
+          if (is.null(self$data) | is.null(self$options$vars1)) {
+            self$results$instructions1$setVisible(visible = TRUE)
+            
+          }
+          
+          self$results$instructions1$setContent(
+            "<html>
+             <head>
+             </head>
+             <body>
+             <div class='instructions'>
+             <h2><b>Krippendorff Alpha</b></h2>
+             <p>___________________________________________________________________________________
+             <p>1. Fleiss' kappa can be used with binary or nominal-scale.</p> 
+             <p>2. The <b>irr</b> R package is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
+             <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p>___________________________________________________________________________________
+             </div>
+             </body>
+             </html>"
+          )
+       
+    
+        }
       },
 
       #======================================++++++++++++++++++++++
       .run = function() {
+        
+       
+        if(self$options$mode=='complex'){
+          
+          if(is.null(self$options$vars1))
+            return()
+          
+          
+          vars1 <- self$options$vars1
+          data <- self$data
+          data <- jmvcore::naOmit(data)
+          
+          
+          
+          ###Fleiss' kappa================
+          
+          kap<- irr::kappam.fleiss(ratings = data)
+          
+          # get subjects-------
+          
+          nk <- kap$subjects
+          
+          # get raters--------
+          
+          raterk <- kap$raters
+          
+          # get statistic------------
+          
+          statistick <- kap$value
+          
+          # z value----------------
+          
+          zk <- kap$statistic
+          
+          # p value-------------------
+          
+          pk <- kap$p.value
+          
+          #-----------------------------------
+          table <- self$results$fk1
+          
+          row <- list()
+          
+          row[['n']] <- nk
+          row[['rater']] <- raterk
+          row[['statistic']] <- statistick
+          row[['z']] <- zk
+          row[['p']] <- pk
+          
+          table$setRow(rowNo = 1, values = row)
+          
+          
+          if(isTRUE(self$options$ek)){
+            
+            ###Fleiss' Exact kappa================
+            
+            kae<- irr::kappam.fleiss(ratings = data, exact = TRUE)
+            
+            # get subjects-------
+            
+            nke <- kae$subjects
+            
+            # get raters--------
+            
+            raterke <- kae$raters
+            
+            # get statistic------------
+            
+            statisticke <- kae$value
+            
+            #-----------------------------------
+            table <- self$results$ek
+            
+            row <- list()
+            
+            row[['n']] <- nke
+            row[['rater']] <- raterke
+            row[['statistic']] <- statisticke
+            
+            table$setRow(rowNo = 1, values = row)
+            
+          }
+          
+          
+          if(isTRUE(self$options$cw1)){
+            
+            cw<- irr::kappam.fleiss(ratings=data, detail=TRUE)
+            
+            c<- cw[["detail"]]
+            
+            names<- dimnames(c)[[1]]
+            
+            table <- self$results$cw1  
+            
+            
+            for (name in names) {
+              
+              row <- list()
+              
+              row[['k']] <- c[name,1]
+              row[['z']] <- c[name,2]
+              row[['p']] <- c[name,3]
+              
+              table$addRow(rowKey=name, values=row)
+              
+            }
+          }        
+          
+          if(isTRUE(self$options$krip)){
+            
+            method <- self$options$method
+            
+            # sample<- t(data)
+            # dat<- reshape::melt(sample)
+            # colnames(dat) <-c("n", "rater", "value")
+            # dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
+            # dat2 <- select(dat1, -rater)
+            # dat2<- as.matrix(dat2)
+            # 
+            
+            dat2 <- as.matrix(data)
+            
+            krip<- irr::kripp.alpha(dat2, method=method)
+            
+            # get subjects-------
+            
+            nkrip <- krip$subjects
+            
+            # get raters--------
+            
+            raterkrip <- krip$raters
+            
+            # get statistic------------
+            
+            statistickrip <- krip$value
+            
+            #-----------------------------------
+            table <- self$results$krip
+            
+            row <- list()
+            
+            row[['Subjects']] <- nkrip
+            row[['Raters']] <- raterkrip
+            row[['alpha']] <- statistickrip
+            
+            table$setRow(rowNo = 1, values = row)
+            
+            
+          }
+        }
+        
+        
+        
         # get variables-------
         
         data <- self$data
@@ -140,6 +329,7 @@ raterClass <- if (requireNamespace('jmvcore'))
       # compute results=====================================================
       
       .compute = function(data) {
+        
         
         data <- self$data
         
@@ -428,33 +618,7 @@ if(isTRUE(self$options$cw)){
        
      },
      
- # populate Category wise table-----
 
-# .populateCwTable = function(results) {
-#   
-#   table <- self$results$cw
-#   
-#   if(!self$options$cw)
-#     return()
-#   
-#   c<- results$cw[["detail"]]
-#   
-#   names<- dimnames(c)[[1]]
-#    
-#   for (name in names) {
-#     
-#     row <- list()
-#     
-#     row[['z']] <- c[name,1]
-#     row[['p']] <- c[name,2]
-#     
-#     table$addRow(rowKey=name, values=row)
-#     
-#   }
-#   
-# },
-#   
-  
   # populate icc table-----
       
       .populateIccTable = function(results) {
