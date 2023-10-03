@@ -8,12 +8,12 @@ ahpsurvey(
   data,
   vars,
   atts = "cult, fam, house, jobs, trans",
-  ap = FALSE,
+  ap = TRUE,
   method = "eigen",
   aj = FALSE,
   method1 = "geometric",
-  plot1 = TRUE,
-  plot2 = TRUE,
+  plot1 = FALSE,
+  plot2 = FALSE,
   angle = 0
 )
 }

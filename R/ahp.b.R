@@ -29,7 +29,7 @@ ahpClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <body>
             <div class='instructions'>
             
-            <h2><b>Instructions</b></h2>
+           
             <p>____________________________________________________________________________________</p>
             <p>1. Each row and column represents an item and a decision maker for the input data format.</p>
             <p>2. More than 10 items or 20 decision makers are NOT allowed.</p>

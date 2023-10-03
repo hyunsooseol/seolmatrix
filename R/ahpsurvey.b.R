@@ -38,8 +38,6 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             </head>
             <body>
             <div class='instructions'>
-            
-            <h2><b>Instructions</b></h2>
             <p>____________________________________________________________________________________</p>
             <p>1. The R package <b>ahpsurvey</b> is described in the <a href='https://cran.r-project.org/web/packages/ahpsurvey/vignettes/my-vignette.html' target = '_blank'>page</a>.</p>
             <p>2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>

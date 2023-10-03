@@ -8,12 +8,12 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             atts = "cult, fam, house, jobs, trans",
-            ap = FALSE,
+            ap = TRUE,
             method = "eigen",
             aj = FALSE,
             method1 = "geometric",
-            plot1 = TRUE,
-            plot2 = TRUE,
+            plot1 = FALSE,
+            plot2 = FALSE,
             angle = 0, ...) {
 
             super$initialize(
@@ -37,7 +37,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ap <- jmvcore::OptionBool$new(
                 "ap",
                 ap,
-                default=FALSE)
+                default=TRUE)
             private$..method <- jmvcore::OptionList$new(
                 "method",
                 method,
@@ -64,11 +64,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
                 plot1,
-                default=TRUE)
+                default=FALSE)
             private$..plot2 <- jmvcore::OptionBool$new(
                 "plot2",
                 plot2,
-                default=TRUE)
+                default=FALSE)
             private$..angle <- jmvcore::OptionNumber$new(
                 "angle",
                 angle,
@@ -138,11 +138,11 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="AHP for survey data"))
+                title=""))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="ap",
-                title="Aggregated priorities",
+                title="`Aggregated priorities - ${method}`",
                 visible="(ap)",
                 refs="ahpsurvey",
                 clearWith=list(
@@ -160,7 +160,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="aj",
-                title="Aggregated individual judgements",
+                title="`Aggregated individual judgements - ${method1}`",
                 refs="ahpsurvey",
                 visible="(aj)",
                 clearWith=list(
@@ -265,12 +265,12 @@ ahpsurvey <- function(
     data,
     vars,
     atts = "cult, fam, house, jobs, trans",
-    ap = FALSE,
+    ap = TRUE,
     method = "eigen",
     aj = FALSE,
     method1 = "geometric",
-    plot1 = TRUE,
-    plot2 = TRUE,
+    plot1 = FALSE,
+    plot2 = FALSE,
     angle = 0) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))

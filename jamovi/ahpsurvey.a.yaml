@@ -29,7 +29,7 @@ options:
     - name: ap
       title: 'Priorities' 
       type: Bool
-      default: false
+      default: TRUE
       
     - name: method
       title: Method
@@ -69,12 +69,12 @@ options:
     - name: plot1
       title: 'Preference weights'
       type: Bool
-      default: TRUE    
+      default: false   
 
     - name: plot2
       title: 'Priorities and consistency'
       type: Bool
-      default: TRUE  
+      default: false 
 
     - name: angle
       title: Angle of x-axis labels

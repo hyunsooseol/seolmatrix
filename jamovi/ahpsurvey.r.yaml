@@ -10,11 +10,11 @@ items:
       visible: True
       
     - name:  text
-      title: AHP for survey data
+      title: ""
       type:  Preformatted
 
     - name: ap
-      title: 'Aggregated priorities' 
+      title: '`Aggregated priorities - ${method}`' 
       type: Table
       visible: (ap)
       refs: ahpsurvey
@@ -32,7 +32,7 @@ items:
           title: 'Value'
 
     - name: aj
-      title: 'Aggregated individual judgements'
+      title: '`Aggregated individual judgements - ${method1}`' 
       type: Table
       refs: ahpsurvey
       visible: (aj)
