@@ -20,15 +20,21 @@ children:
             isTarget: true
             maxItemCount: 1
 
-  - type: CollapseBox
-    label: Analysis
-    margin: normal
-    collapsed: true
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
     children:
       - type: LayoutBox
         margin: large
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
         children:
-          - type: CheckBox
-            name: icc
-          - type: CheckBox
-            name: multi 
+          - type: Label
+            label: 'Test'
+            children:
+              - type: CheckBox
+                name: icc
+              - type: CheckBox
+                name: multi 

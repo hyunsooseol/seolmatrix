@@ -20,30 +20,35 @@ children:
           - type: VariablesListBox
             name: ctrlvars
             isTarget: true
-  - type: CollapseBox
-    label: Analysis
-    margin: normal
-    collapsed: true
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
     children:
       - type: LayoutBox
-        stretchFactor: 1
         margin: large
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
         children:
           - type: Label
+            label: Test of significance
+            children: 
+              - type: RadioButton
+                name: sidSig_onetailed
+                optionName: sidSig
+                optionPart: onetailed
+              - type: RadioButton
+                name: sidSig_twotailed
+                optionName: sidSig
+                optionPart: twotailed          
+          - type: Label
             label: Options
-            fitToGrid: true
-            cell:
-              column: 0
-              row: 0
             children:
               - type: CheckBox
                 name: shwSig
               - type: CheckBox
                 name: flgSig
-          - type: LayoutBox
-            children:
-              - type: ComboBox
-                name: sidSig
       - type: LayoutBox
         stretchFactor: 1
         margin: large

@@ -14,17 +14,19 @@ children:
           - type: VariablesListBox
             name: vars
             isTarget: true
-  - type: CollapseBox
-    label: Analysis 
-    margin: normal
-    collapsed: true
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
     children:
       - type: LayoutBox
-        stretchFactor: 1
         margin: large
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
         children:
           - type: Label
-            label: Options
+            label: 'Options'
             children:
               - type: ComboBox
                 name: type
