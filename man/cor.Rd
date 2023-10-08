@@ -2,7 +2,7 @@
 % Please edit documentation in R/cor.h.R
 \name{cor}
 \alias{cor}
-\title{Correlation structure}
+\title{Correlation Structure}
 \usage{
 cor(
   data,
@@ -58,5 +58,5 @@ A results object containing:
 }
 }
 \description{
-Correlation structure
+Correlation Structure
 }

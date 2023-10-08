@@ -69,7 +69,7 @@ children:
                     name: scale
                     enable: (plot2)
           - type: Label
-            label: ''
+            label: 'Partial plot'
             children:
               - type: CheckBox
                 name: plot1

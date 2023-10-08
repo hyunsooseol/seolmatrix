@@ -30,7 +30,6 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             </head>
             <body>
             <div class='instructions'>
-           <h2><b>Instructions</b></h2>
             <p>____________________________________________________________________________________</p>
             <p> 1. Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</p>
             <p> 2. The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</p>

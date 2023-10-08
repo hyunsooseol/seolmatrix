@@ -32,7 +32,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Test'
+            label: 'Tables'
             children:
               - type: CheckBox
                 name: icc

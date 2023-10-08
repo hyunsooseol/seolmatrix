@@ -71,7 +71,7 @@ options:
       default: FALSE 
       
     - name: poly
-      title: Polychoric correlation    
+      title: Polychoric     
       type: Bool
       default: FALSE      
       

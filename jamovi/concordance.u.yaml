@@ -34,7 +34,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Test"
+            label: "Table"
             children:
               - type: CheckBox
                 name: cc

@@ -31,7 +31,7 @@ children:
                 collapsed: true
                 children:
                   - type: Label
-                    label: Statistics
+                    label: 'Tables'
                     fitToGrid: true
                     cell:
                       column: 0
@@ -48,7 +48,7 @@ children:
                       - type: CheckBox
                         name: bicc
                   - type: Label
-                    label: Plots
+                    label: 'Plots'
                     fitToGrid: true
                     cell:
                       column: 1
@@ -85,7 +85,7 @@ children:
                     fitToGrid: true
                     children:
                       - type: Label
-                        label: Statistics
+                        label: 'Tables'
                         children:
                           - type: CheckBox
                             name: ic

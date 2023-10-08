@@ -2,7 +2,7 @@
 % Please edit documentation in R/concordance.h.R
 \name{concordance}
 \alias{concordance}
-\title{Concordance correlation}
+\title{Concordance Correlation}
 \usage{
 concordance(data, dep, covs, cc = TRUE, ccp = FALSE, bap = FALSE)
 }
@@ -35,5 +35,5 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$table)}
 }
 \description{
-Concordance correlation
+Concordance Correlation
 }
