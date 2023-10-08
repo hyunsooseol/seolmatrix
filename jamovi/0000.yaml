@@ -21,23 +21,11 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Partial Correlation
     menuSubgroup: Correlation
-  - title: Spearman Correlation
+  - title: Ordinal Correlation
     name: rank
     ns: seolmatrix
     menuGroup: seolmatrix
-    menuTitle: Spearman Correlation
-    menuSubgroup: Correlation
-  - title: Polychoric Correlation
-    name: poly
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Polychoric Correlation
-    menuSubgroup: Correlation
-  - title: Tetrachoric Correlation
-    name: dichotomous
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Tetrachoric Correlation
+    menuTitle: Ordinal Correlation
     menuSubgroup: Correlation
   - title: Multilevel Correlation
     name: multilevel
@@ -51,11 +39,11 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Concordance Correlation
     menuSubgroup: Correlation
-  - title: Correlation structure
+  - title: Correlation Structure
     name: cor
     ns: seolmatrix
     menuGroup: seolmatrix
-    menuTitle: Correlation structure
+    menuTitle: Correlation Structure
     menuSubgroup: Correlation
   - title: Rater Reliability
     name: rater

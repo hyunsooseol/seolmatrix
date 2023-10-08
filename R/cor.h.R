@@ -147,7 +147,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Correlation structure",
+                title="Correlation Structure",
                 refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
@@ -238,7 +238,7 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Correlation structure
+#' Correlation Structure
 #'
 #' 
 #' @param data The data as a data frame.

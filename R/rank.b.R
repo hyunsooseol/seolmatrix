@@ -8,6 +8,7 @@
 #' @import psych
 #' @importFrom psych corr.test
 #' @importFrom psych partial.r
+#' @importFrom psych tetrachoric
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph centralityPlot
 #' @import qgraph
@@ -28,6 +29,23 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           if(is.null(self$data) | is.null(self$options$vars)){
             self$results$instructions$setVisible(visible = TRUE)
             
+            self$results$instructions$setContent(
+              "<html>
+            <head>
+            </head>
+            <body>
+            <div class='instructions'>
+            <p>____________________________________________________________________________________</p>
+            <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            <p>____________________________________________________________________________________</p>
+            </div>
+            </body>
+            </html>"
+            )
+            
+            
+            
+            
           }
         },
             
@@ -35,17 +53,16 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         #==========================================================
         .run = function() {
             
+          
           if (length(self$options$vars)<2) return() 
-          
-          
+        
           if(length(self$options$vars>2)){
             
             # get variables---------------------------------
             
-            
             vars <- self$options$vars
-            nVars <- length(vars)
-            
+            #nVars <- length(vars)
+            type <- self$options$type
             
             mydata <- self$data
             
@@ -54,18 +71,19 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             for(v in vars)
               mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
             
+            
+            if(self$options$type=='spearman'){
             #  compute spearman correlation with psych package--------
-             
+            
             spear <- psych::corr.test(mydata, method="spearman")
             spearman <- spear$r
-                
+            
             spearman<- as.data.frame(spearman)
-           
+            
             
             names <- dimnames(spearman)[[1]] 
             dims <- dimnames(spearman)[[2]]
             
-           
             table <- self$results$matrix
             
             # creating table----------------
@@ -89,49 +107,181 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               table$addRow(rowKey=name, values=row)
               
             }
-          }
             
-           
-           res<- psych::partial.r(spearman)
+            res<- psych::partial.r(spearman)
             
             # Prepare Data For Plot -------
             image1 <- self$results$plot1
             image1$setState(res)
-        
-            
-            if(self$options$plot | self$options$plot2==TRUE){
-            ########## EBIC PLOT------------
-            
-            rank <- spear$r
-            
-            # Compute graph with tuning = 0.5 (EBIC)
-            EBICgraph <- qgraph::EBICglasso(rank,nrow(mydata), 0.5, threshold = TRUE)
-            
-            # Prepare Data For Plot -------
-            image <- self$results$plot
-            image$setState(EBICgraph)
-            
-            # Centrality plot-------
-            image2 <- self$results$plot2
-            image2$setState(EBICgraph)  
+           
+              ########## EBIC PLOT------------
+              
+              rank <- spear$r
+              
+              # Compute graph with tuning = 0.5 (EBIC)
+              EBICgraph <- qgraph::EBICglasso(rank,nrow(mydata), 0.5, threshold = TRUE)
+              
+              # Prepare Data For Plot -------
+              image <- self$results$plot
+              image$setState(EBICgraph)
+              
+              # Centrality plot-------
+              image2 <- self$results$plot2
+              image2$setState(EBICgraph)  
+           
+              
+           
             }
+            
+            if(self$options$type=='polychoric'){
+            
+              # compute polychoric correlation-------
+              
+              poly <- psych::polychoric(mydata)$rho
+              poly<- as.data.frame(poly)
+              
+              
+              names <- dimnames(poly)[[1]] 
+              dims <- dimnames(poly)[[2]]
+            
+              
+              table <- self$results$matrix
+              
+              # creating table----------------
+              
+              for (dim in dims) {
                 
+                table$addColumn(name = paste0(dim),
+                                type = 'number')
+              }
+              
+              for (name in names) {
+                
+                row <- list()
+                
+                for(j in seq_along(dims)){
+                  
+                  row[[dims[j]]] <- poly[name,j]
+                  
+                }
+                
+                table$addRow(rowKey=name, values=row)
+                
+              }
+              
+              # paritial----------------------------------------------
+              
+              res<- psych::partial.r(poly)
+              
+              # Prepare Data For Plot -------
+              image1 <- self$results$plot1
+              image1$setState(res)
+              
+              # EBIC PLOT------------
+                
+                poly <- psych::polychoric(mydata)$rho
+                
+                # Compute graph with tuning = 0.5 (EBIC)
+                EBICgraph <- qgraph::EBICglasso(poly,nrow(mydata), 0.5, threshold = TRUE)
+                
+                # Prepare Data For Plot -------
+                image <- self$results$plot
+                image$setState(EBICgraph)
+                
+                # Centrality plot-------
+                image2 <- self$results$plot2
+                image2$setState(EBICgraph)
+                
+                
+              }
+              
+            
+            if(self$options$type=='tetrachoric'){
+              
+              # compute tetrachoric correlation with psych package--------
+              
+              tetrarho <- psych::tetrachoric(mydata)$rho
+              
+              tetrarho <- as.data.frame(tetrarho)
+              
+              
+              names <- dimnames(tetrarho)[[1]] 
+              dims <- dimnames(tetrarho)[[2]]
+              
+              
+              table <- self$results$matrix
+              
+              # creating table----------------
+              
+              for (dim in dims) {
+                
+                table$addColumn(name = paste0(dim),
+                                type = 'number')
+              }
+              
+              for (name in names) {
+                
+                row <- list()
+                
+                for(j in seq_along(dims)){
+                  
+                  row[[dims[j]]] <- tetrarho[name,j]
+                  
+                }
+                
+                table$addRow(rowKey=name, values=row)
+                
+              }
+              
+              ### partial correlation--------
+              
+              res<- psych::partial.r(tetrarho)
+              
+              # Prepare Data For Plot -------
+              image1 <- self$results$plot1
+              image1$setState(res)
+              
+              
+                
+                # EBIC PLOT------------
+                
+                tetrarho <- psych::tetrachoric(mydata)$rho
+                
+                # Compute graph with tuning = 0.5 (EBIC)
+                EBICgraph <- qgraph::EBICglasso(tetrarho,nrow(mydata), 0.5, threshold = TRUE)
+                
+                # Prepare Data For Plot -------
+                image <- self$results$plot
+                image$setState(EBICgraph)
+                
+                
+                # Centrality plot-------
+                image2 <- self$results$plot2
+                image2$setState(EBICgraph)
+                
+              
+              
+           
+          }
+          
+          }
         },
         
         #================================================================
         .plot = function(image, ...) {
-         
-          
+
+        
           if (is.null(image$state))
             return(FALSE)
-          
+
           EBICgraph <- image$state
-          
+
           plot <- qgraph(EBICgraph, layout = "spring", details = TRUE)
-          
+
           print(plot)
           TRUE
-          
+
+
         },
         
         
@@ -158,27 +308,21 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         
         
         .plot1 = function(image1, ...) {
-            
+          
           if (is.null(image1$state))
             return(FALSE)
-            
-            res <- image1$state
-            
-            plot1 <- qgraph(res, layout = "spring", details = TRUE)
-            
-            print(plot1)
-            TRUE
-            
+          
+          res <- image1$state
+          
+          plot1 <- qgraph(res, layout = "spring", details = TRUE)
+          
+          print(plot1)
+          TRUE
+          
         }
+        
+        
+        
     ))
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      
+ 

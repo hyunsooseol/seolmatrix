@@ -1,6 +1,6 @@
 ---
 name:  rank
-title: Spearman Correlation
+title: Ordinal Correlation
 jrs:   '1.1'
 refs: seolmatrix 
 items:
@@ -10,16 +10,16 @@ items:
       visible: True
 
     - name: matrix
-      title: 'Spearman Correlation'
+      title:  '`Correlation matrix - ${type}`'
       type: Table
-      description: correlation matrix table
       visible: (matrix)
       clearWith:
         - vars
+        - type
       refs: psych    
       
       columns:
-          - name: .name
+          - name: name
             title: ""
             type: text
             content: ($key)

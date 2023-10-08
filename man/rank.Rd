@@ -2,13 +2,14 @@
 % Please edit documentation in R/rank.h.R
 \name{rank}
 \alias{rank}
-\title{Spearman Correlation}
+\title{Ordinal Correlation}
 \usage{
 rank(
   data,
   vars,
+  type = "spearman",
   scale = "raw",
-  spearman = TRUE,
+  cor = TRUE,
   plot = FALSE,
   plot1 = FALSE,
   plot2 = FALSE
@@ -19,9 +20,11 @@ rank(
 
 \item{vars}{.}
 
+\item{type}{.}
+
 \item{scale}{.}
 
-\item{spearman}{.}
+\item{cor}{.}
 
 \item{plot}{.}
 
@@ -33,7 +36,7 @@ rank(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-  \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
+  \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
@@ -46,5 +49,5 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$matrix)}
 }
 \description{
-Spearman Correlation
+Ordinal Correlation
 }

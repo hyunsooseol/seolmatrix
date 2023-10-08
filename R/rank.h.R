@@ -7,8 +7,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
+            type = "spearman",
             scale = "raw",
-            spearman = TRUE,
+            cor = TRUE,
             plot = FALSE,
             plot1 = FALSE,
             plot2 = FALSE, ...) {
@@ -21,13 +22,15 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
-                vars,
-                suggested=list(
-                    "ordinal",
-                    "continuous"),
-                permitted=list(
-                    "factor",
-                    "numeric"))
+                vars)
+            private$..type <- jmvcore::OptionList$new(
+                "type",
+                type,
+                options=list(
+                    "spearman",
+                    "polychoric",
+                    "tetrachoric"),
+                default="spearman")
             private$..scale <- jmvcore::OptionList$new(
                 "scale",
                 scale,
@@ -36,9 +39,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "z-scores",
                     "relative"),
                 default="raw")
-            private$..spearman <- jmvcore::OptionBool$new(
-                "spearman",
-                spearman,
+            private$..cor <- jmvcore::OptionBool$new(
+                "cor",
+                cor,
                 default=TRUE)
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
@@ -54,23 +57,26 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=FALSE)
 
             self$.addOption(private$..vars)
+            self$.addOption(private$..type)
             self$.addOption(private$..scale)
-            self$.addOption(private$..spearman)
+            self$.addOption(private$..cor)
             self$.addOption(private$..plot)
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
         }),
     active = list(
         vars = function() private$..vars$value,
+        type = function() private$..type$value,
         scale = function() private$..scale$value,
-        spearman = function() private$..spearman$value,
+        cor = function() private$..cor$value,
         plot = function() private$..plot$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value),
     private = list(
         ..vars = NA,
+        ..type = NA,
         ..scale = NA,
-        ..spearman = NA,
+        ..cor = NA,
         ..plot = NA,
         ..plot1 = NA,
         ..plot2 = NA)
@@ -91,7 +97,7 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Spearman Correlation",
+                title="Ordinal Correlation",
                 refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
@@ -101,14 +107,15 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="matrix",
-                title="Spearman Correlation",
+                title="`Correlation matrix - ${type}`",
                 visible="(matrix)",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "type"),
                 refs="psych",
                 columns=list(
                     list(
-                        `name`=".name", 
+                        `name`="name", 
                         `title`="", 
                         `type`="text", 
                         `content`="($key)"))))
@@ -168,20 +175,21 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Spearman Correlation
+#' Ordinal Correlation
 #'
 #' 
 #' @param data The data as a data frame.
 #' @param vars .
+#' @param type .
 #' @param scale .
-#' @param spearman .
+#' @param cor .
 #' @param plot .
 #' @param plot1 .
 #' @param plot2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
+#'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
@@ -197,8 +205,9 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 rank <- function(
     data,
     vars,
+    type = "spearman",
     scale = "raw",
-    spearman = TRUE,
+    cor = TRUE,
     plot = FALSE,
     plot1 = FALSE,
     plot2 = FALSE) {
@@ -215,8 +224,9 @@ rank <- function(
 
     options <- rankOptions$new(
         vars = vars,
+        type = type,
         scale = scale,
-        spearman = spearman,
+        cor = cor,
         plot = plot,
         plot1 = plot1,
         plot2 = plot2)

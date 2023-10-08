@@ -493,7 +493,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows=1,
                 visible="(fk1)",
                 clearWith=list(
-                    "vars"),
+                    "vars1"),
                 refs="irr",
                 columns=list(
                     list(
@@ -524,7 +524,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows=1,
                 visible="(ek)",
                 clearWith=list(
-                    "vars"),
+                    "vars1"),
                 refs="irr",
                 columns=list(
                     list(
@@ -548,7 +548,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(cw1)",
                 refs="irr",
                 clearWith=list(
-                    "vars"),
+                    "vars1"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -575,7 +575,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows=1,
                 visible="(krip)",
                 clearWith=list(
-                    "vars"),
+                    "vars1"),
                 refs="irr",
                 columns=list(
                     list(

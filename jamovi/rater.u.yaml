@@ -111,7 +111,7 @@ children:
             collapsed: true
             children:
               - type: Label
-                label: Statistics
+                label: 'Tables'
                 fitToGrid: true
                 cell:
                   column: 0
@@ -129,7 +129,7 @@ children:
             collapsed: true
             children:
               - type: Label
-                label: Statistics
+                label: 'Table'
                 fitToGrid: true
                 cell:
                   column: 0

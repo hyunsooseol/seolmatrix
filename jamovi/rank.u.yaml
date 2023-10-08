@@ -1,4 +1,4 @@
-title: Spearman Correlation
+title: Ordinal Correlation
 name: rank
 jus: '3.0'
 stage: 0
@@ -26,10 +26,25 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Test'
+            label: Type of correlation
+            children:
+              - type: RadioButton
+                name: type_spearman
+                optionName: type
+                optionPart: spearman
+              - name: type_polychoric
+                type: RadioButton
+                optionName: type
+                optionPart: polychoric
+              - name: type_tetrachoric
+                type: RadioButton
+                optionName: type
+                optionPart: tetrachoric
+          - type: Label
+            label: Table
             children:
               - type: CheckBox
-                name: spearman
+                name: cor
       - type: LayoutBox
         margin: large
         cell:
@@ -47,9 +62,9 @@ children:
                 children:
                   - type: ComboBox
                     name: scale
-                    enable: (plot2)              
+                    enable: (plot2)
           - type: Label
-            label: ''
+            label: Partial plot
             children:
               - type: CheckBox
                 name: plot1

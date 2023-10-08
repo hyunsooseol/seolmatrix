@@ -1,6 +1,6 @@
 ---
 name:  rank
-title: Spearman Correlation
+title: Ordinal Correlation
 menuGroup: seolmatrix
 menuSubgroup: Correlation
 version: '1.0.0'
@@ -16,12 +16,18 @@ options:
     - name: vars
       title: Variables
       type: Variables
-      suggested:
-         - ordinal
-         - continuous
-      permitted:
-        - factor
-        - numeric
+ 
+    - name: type
+      title: Type of correlation
+      type: List
+      options:
+        - title: Spearman
+          name:  spearman
+        - title: Polychoric
+          name:  polychoric
+        - title: Tetrachoric
+          name:  tetrachoric     
+      default: spearman    
 
     - name: scale
       title: Scale
@@ -35,10 +41,10 @@ options:
           name:  relative      
       default: raw
 
-    - name: spearman
-      title: Spearman 
+    - name: cor
+      title: Correlation matrix
       type: Bool
-      default: True
+      default: TRUE
 
     - name: plot
       title: Gaussian graphical model
@@ -54,4 +60,6 @@ options:
       title: Centrality 
       type: Bool
       default: FALSE   
+
+
 ...

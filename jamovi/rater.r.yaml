@@ -235,7 +235,7 @@ items:
       rows: 1
       visible: (fk1)
       clearWith:
-        - vars
+        - vars1
       refs: irr    
 
       columns:
@@ -261,7 +261,7 @@ items:
       rows: 1
       visible: (ek)
       clearWith:
-        - vars
+        - vars1
       refs: irr    
 
       columns:
@@ -282,7 +282,7 @@ items:
       visible: (cw1)
       refs: irr
       clearWith:
-        - vars
+        - vars1
  
       columns:
         - name: name
@@ -307,7 +307,7 @@ items:
       rows: 1
       visible: (krip)
       clearWith:
-        - vars
+        - vars1
       refs: irr    
 
       columns:
