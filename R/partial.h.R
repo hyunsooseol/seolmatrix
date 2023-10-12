@@ -10,7 +10,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ctrlvars = NULL,
             sidSig = "twotailed",
             scale = "raw",
-            shwSig = TRUE,
+            shwSig = FALSE,
             flgSig = FALSE,
             plot = FALSE,
             plot1 = FALSE,
@@ -59,7 +59,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..shwSig <- jmvcore::OptionBool$new(
                 "shwSig",
                 shwSig,
-                default=TRUE)
+                default=FALSE)
             private$..flgSig <- jmvcore::OptionBool$new(
                 "flgSig",
                 flgSig,
@@ -161,7 +161,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`=".stat[r]", 
                         `title`="", 
                         `type`="text", 
-                        `content`="r"),
+                        `content`="r", 
+                        `visible`="(shwSig)"),
                     list(
                         `name`=".name[rp]", 
                         `title`="", 
@@ -215,7 +216,7 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
-                title="Matrix plot",
+                title="Partial matrix plot",
                 width=500,
                 height=500,
                 renderFun=".plot3",
@@ -283,7 +284,7 @@ partial <- function(
     ctrlvars,
     sidSig = "twotailed",
     scale = "raw",
-    shwSig = TRUE,
+    shwSig = FALSE,
     flgSig = FALSE,
     plot = FALSE,
     plot1 = FALSE,

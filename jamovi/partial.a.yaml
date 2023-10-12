@@ -58,7 +58,7 @@ options:
     - name: shwSig
       title: Display significance levels
       type: Bool
-      default: TRUE
+      default: false
 
     - name: flgSig
       title: Flag significant correlations
@@ -81,7 +81,7 @@ options:
       default: FALSE   
 
     - name: plot3
-      title: Matrix plot 
+      title: Partial matrix plot 
       type: Bool
       default: FALSE   
 ...

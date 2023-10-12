@@ -10,7 +10,7 @@ partial(
   ctrlvars,
   sidSig = "twotailed",
   scale = "raw",
-  shwSig = TRUE,
+  shwSig = FALSE,
   flgSig = FALSE,
   plot = FALSE,
   plot1 = FALSE,

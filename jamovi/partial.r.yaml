@@ -32,6 +32,7 @@ items:
             title: ""
             type: text
             content: r
+            visible: (shwSig)
 
           - name: .name[rp]
             title: ""
@@ -84,7 +85,7 @@ items:
           - ctrlvars      
 
     - name: plot3
-      title: 'Matrix plot'
+      title: 'Partial matrix plot'
       type: Image
       width:  500
       height: 500
