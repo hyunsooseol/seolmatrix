@@ -8,6 +8,7 @@
 #' @import jmvcore
 #' @import qgraph
 #' @import psych
+#' @importFrom corrgram corrgram
 #' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph centralityPlot
@@ -191,17 +192,49 @@ partialClass <- if (requireNamespace('jmvcore'))
         
  # Patial plot----------------
         
-        partial <- psych::partial.r(data)
+        var <- self$options$vars
+        varCtl <- self$options$ctrlvars
+        
+        if(is.null(varCtl)){
+          
+          partial <- psych::partial.r(data)
+                                      
+        } else{
+        
+        partial <- psych::partial.r(data,x=var, y=varCtl)
+        
+        }
         
         # Prepare Data For Plot -------
         image1 <- self$results$plot1
         image1$setState(partial)
       
+        # Matrix plot-----------
+        
+        image3 <- self$results$plot3
+        image3$setState(partial)
+        
+        
         # EBIC PLOT------------
         
         if(self$options$plot | self$options$plot2==TRUE){
+        
+          var <- self$options$vars
+          varCtl <- self$options$ctrlvars
+          
+          if(is.null(varCtl)){ 
+          
         # Compute correlations:
         CorMat <- qgraph::cor_auto(data)
+        
+          } else{
+            
+            
+            CorMat <- qgraph::cor_auto(data, select = var)
+            
+            
+          }
+        
         
         # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
@@ -276,8 +309,30 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         print(plot1)
         TRUE
-      }
-        )
+      },
+
+.plot3 = function(image3,...) {
+  
+  
+  if (is.null(image3$state))
+    return(FALSE)
+  
+  partial <- image3$state
+  
+  plot3 <- corrgram::corrgram(partial,order=TRUE, 
+                              upper.panel=corrgram::panel.conf) 
+  
+  print(plot3)
+  TRUE
+}
+
+
+
+
+
+
+
+)
 )
 
 

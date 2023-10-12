@@ -80,6 +80,10 @@ options:
       type: Bool
       default: FALSE   
 
+    - name: plot3
+      title: Matrix plot 
+      type: Bool
+      default: FALSE   
 ...
 
 

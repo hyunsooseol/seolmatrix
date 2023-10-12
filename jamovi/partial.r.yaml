@@ -82,5 +82,17 @@ items:
       clearWith:
           - vars
           - ctrlvars      
+
+    - name: plot3
+      title: 'Matrix plot'
+      type: Image
+      width:  500
+      height: 500
+      renderFun: .plot3
+      visible: (plot3)
+      refs: corrgram 
+      clearWith:
+          - vars
+          - ctrlvars      
 ...
 
