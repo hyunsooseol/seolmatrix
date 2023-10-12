@@ -38,9 +38,10 @@ partialClass <- if (requireNamespace('jmvcore'))
             <body>
             <div class='instructions'>
             <p>____________________________________________________________________________________</p>
-            <p>1. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
-            <p>2. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
-            <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            <p>1. When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</p>
+            <p>2. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
+            <p>3. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
+            <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -319,18 +320,12 @@ partialClass <- if (requireNamespace('jmvcore'))
   
   partial <- image3$state
   
-  plot3 <- corrgram::corrgram(partial,order=TRUE, 
-                              upper.panel=corrgram::panel.conf) 
+  plot3 <- corrgram::corrgram(partial, 
+                              upper.panel=corrgram::panel.cor) 
   
   print(plot3)
   TRUE
 }
-
-
-
-
-
-
 
 )
 )

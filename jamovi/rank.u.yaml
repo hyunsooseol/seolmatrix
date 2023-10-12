@@ -41,10 +41,12 @@ children:
                 optionName: type
                 optionPart: tetrachoric
           - type: Label
-            label: Table
+            label: 'Matrix'
             children:
               - type: CheckBox
                 name: cor
+              - type: CheckBox
+                name: plot3    
       - type: LayoutBox
         margin: large
         cell:

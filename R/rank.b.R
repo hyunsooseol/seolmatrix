@@ -11,6 +11,7 @@
 #' @importFrom psych tetrachoric
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph centralityPlot
+#' @importFrom corrgram corrgram
 #' @import qgraph
 #' @export
 
@@ -61,7 +62,6 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # get variables---------------------------------
             
             vars <- self$options$vars
-            #nVars <- length(vars)
             type <- self$options$type
             
             mydata <- self$data
@@ -72,8 +72,10 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
             
             
+            
             if(self$options$type=='spearman'){
-            #  compute spearman correlation with psych package--------
+            
+              #  compute spearman correlation with psych package--------
             
             spear <- psych::corr.test(mydata, method="spearman")
             spearman <- spear$r
@@ -108,13 +110,13 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               
             }
             
+            # partial plot---------
             res<- psych::partial.r(spearman)
             
-            # Prepare Data For Plot -------
             image1 <- self$results$plot1
             image1$setState(res)
            
-              ########## EBIC PLOT------------
+           # EBIC PLOT------------
               
               rank <- spear$r
               
@@ -129,6 +131,10 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               image2 <- self$results$plot2
               image2$setState(EBICgraph)  
            
+           # Matrix plot----------
+              
+              image3 <- self$results$plot3
+              image3$setState(spearman)
               
            
             }
@@ -173,7 +179,6 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               
               res<- psych::partial.r(poly)
               
-              # Prepare Data For Plot -------
               image1 <- self$results$plot1
               image1$setState(res)
               
@@ -184,7 +189,6 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Compute graph with tuning = 0.5 (EBIC)
                 EBICgraph <- qgraph::EBICglasso(poly,nrow(mydata), 0.5, threshold = TRUE)
                 
-                # Prepare Data For Plot -------
                 image <- self$results$plot
                 image$setState(EBICgraph)
                 
@@ -192,7 +196,12 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image2 <- self$results$plot2
                 image2$setState(EBICgraph)
                 
+                # Matrix plot----------
                 
+                image3 <- self$results$plot3
+                image3$setState(poly)
+                
+                 
               }
               
             
@@ -236,30 +245,29 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               ### partial correlation--------
               
               res<- psych::partial.r(tetrarho)
-              
-              # Prepare Data For Plot -------
+             
               image1 <- self$results$plot1
               image1$setState(res)
-              
-              
-                
-                # EBIC PLOT------------
+             
+              # EBIC PLOT------------
                 
                 tetrarho <- psych::tetrachoric(mydata)$rho
                 
                 # Compute graph with tuning = 0.5 (EBIC)
                 EBICgraph <- qgraph::EBICglasso(tetrarho,nrow(mydata), 0.5, threshold = TRUE)
                 
-                # Prepare Data For Plot -------
                 image <- self$results$plot
                 image$setState(EBICgraph)
                 
                 
-                # Centrality plot-------
+              # Centrality plot-------
                 image2 <- self$results$plot2
                 image2$setState(EBICgraph)
                 
-              
+              # Matrix plot----------
+                
+                image3 <- self$results$plot3
+                image3$setState(tetrarho)
               
            
           }
@@ -318,6 +326,24 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
           print(plot1)
           TRUE
+          
+        },
+        
+        .plot3 = function(image3,...) {
+          
+          
+          if (is.null(image3$state))
+            return(FALSE)
+          
+          gram <- image3$state  
+        
+       
+          plot3<- corrgram::corrgram(gram, 
+                                      upper.panel=corrgram::panel.cor) 
+        
+          
+           print(plot3)
+           TRUE
           
         }
         
