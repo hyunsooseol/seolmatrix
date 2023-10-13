@@ -34,4 +34,4 @@ Imports:
     magrittr,
     dplyr,
     tidyr,
-    corrgram
+    corrplot

@@ -11,7 +11,7 @@
 #' @importFrom psych tetrachoric
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph centralityPlot
-#' @importFrom corrgram corrgram
+#' @importFrom corrplot corrplot
 #' @import qgraph
 #' @export
 
@@ -134,7 +134,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
            # Matrix plot----------
               
               image3 <- self$results$plot3
-              image3$setState(spearman)
+              image3$setState(as.matrix(spearman))
               
            
             }
@@ -199,7 +199,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Matrix plot----------
                 
                 image3 <- self$results$plot3
-                image3$setState(poly)
+                image3$setState(as.matrix(poly))
                 
                  
               }
@@ -267,7 +267,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               # Matrix plot----------
                 
                 image3 <- self$results$plot3
-                image3$setState(tetrarho)
+                image3$setState(as.matrix(tetrarho))
               
            
           }
@@ -329,7 +329,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
         },
         
-        .plot3 = function(image3,...) {
+        .plot3 = function(image3, ggtheme, theme,...) {
           
           
           if (is.null(image3$state))
@@ -338,9 +338,10 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           gram <- image3$state  
         
        
-          plot3<- corrgram::corrgram(gram, 
-                                      upper.panel=corrgram::panel.cor) 
-        
+          plot3<- corrplot::corrplot(gram, 
+                                     type="lower",
+                                     col=c("black", "white"),
+                                     bg="lightblue")
           
            print(plot3)
            TRUE

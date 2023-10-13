@@ -8,11 +8,11 @@
 #' @import jmvcore
 #' @import qgraph
 #' @import psych
-#' @importFrom corrgram corrgram
 #' @importFrom psych partial.r
 #' @importFrom qgraph EBICglasso
 #' @importFrom qgraph centralityPlot
 #' @importFrom qgraph cor_auto
+#' @importFrom corrplot corrplot
 #' @export
 
 
@@ -206,14 +206,13 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         }
         
-        # Prepare Data For Plot -------
         image1 <- self$results$plot1
         image1$setState(partial)
       
         # Matrix plot-----------
         
         image3 <- self$results$plot3
-        image3$setState(partial)
+        image3$setState(as.matrix(partial))
         
         
         # EBIC PLOT------------
@@ -320,8 +319,12 @@ partialClass <- if (requireNamespace('jmvcore'))
   
   partial <- image3$state
   
-  plot3 <- corrgram::corrgram(partial, 
-                              upper.panel=corrgram::panel.cor) 
+  
+  plot3<- corrplot::corrplot(partial, 
+           type="lower",
+           col=c("black", "white"),
+           bg="lightblue")
+  
   
   print(plot3)
   TRUE
