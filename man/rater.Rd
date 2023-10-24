@@ -12,7 +12,7 @@ rater(
   model = "oneway",
   type = "agreement",
   unit = "single",
-  interrater = TRUE,
+  interrater = FALSE,
   icc = FALSE,
   bicc = FALSE,
   ic = FALSE,
@@ -21,11 +21,10 @@ rater(
   par = FALSE,
   fk = FALSE,
   cw = FALSE,
-  fk1 = FALSE,
-  cw1 = FALSE,
   ek = FALSE,
   krip = FALSE,
-  method = "nominal"
+  method = "nominal",
+  t = "col"
 )
 }
 \arguments{
@@ -61,15 +60,13 @@ rater(
 
 \item{cw}{.}
 
-\item{fk1}{.}
-
-\item{cw1}{.}
-
 \item{ek}{.}
 
 \item{krip}{.}
 
 \item{method}{.}
+
+\item{t}{.}
 }
 \value{
 A results object containing:
@@ -77,6 +74,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
+  \code{results$ek} \tab \tab \tab \tab \tab a table \cr
   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
@@ -85,9 +83,6 @@ A results object containing:
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
   \code{results$instructions1} \tab \tab \tab \tab \tab a html \cr
-  \code{results$fk1} \tab \tab \tab \tab \tab a table \cr
-  \code{results$ek} \tab \tab \tab \tab \tab a table \cr
-  \code{results$cw1} \tab \tab \tab \tab \tab a table \cr
   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 }
 

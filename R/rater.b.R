@@ -120,101 +120,7 @@ raterClass <- if (requireNamespace('jmvcore'))
           data <- self$data
           data <- jmvcore::naOmit(data)
           
-          
-          
-          ###Fleiss' kappa================
-          
-          kap<- irr::kappam.fleiss(ratings = data)
-          
-          # get subjects-------
-          
-          nk <- kap$subjects
-          
-          # get raters--------
-          
-          raterk <- kap$raters
-          
-          # get statistic------------
-          
-          statistick <- kap$value
-          
-          # z value----------------
-          
-          zk <- kap$statistic
-          
-          # p value-------------------
-          
-          pk <- kap$p.value
-          
-          #-----------------------------------
-          table <- self$results$fk1
-          
-          row <- list()
-          
-          row[['n']] <- nk
-          row[['rater']] <- raterk
-          row[['statistic']] <- statistick
-          row[['z']] <- zk
-          row[['p']] <- pk
-          
-          table$setRow(rowNo = 1, values = row)
-          
-          
-          if(isTRUE(self$options$ek)){
-            
-            ###Fleiss' Exact kappa================
-            
-            kae<- irr::kappam.fleiss(ratings = data, exact = TRUE)
-            
-            # get subjects-------
-            
-            nke <- kae$subjects
-            
-            # get raters--------
-            
-            raterke <- kae$raters
-            
-            # get statistic------------
-            
-            statisticke <- kae$value
-            
-            #-----------------------------------
-            table <- self$results$ek
-            
-            row <- list()
-            
-            row[['n']] <- nke
-            row[['rater']] <- raterke
-            row[['statistic']] <- statisticke
-            
-            table$setRow(rowNo = 1, values = row)
-            
-          }
-          
-          
-          if(isTRUE(self$options$cw1)){
-            
-            cw<- irr::kappam.fleiss(ratings=data, detail=TRUE)
-            
-            c<- cw[["detail"]]
-            
-            names<- dimnames(c)[[1]]
-            
-            table <- self$results$cw1  
-            
-            
-            for (name in names) {
-              
-              row <- list()
-              
-              row[['k']] <- c[name,1]
-              row[['z']] <- c[name,2]
-              row[['p']] <- c[name,3]
-              
-              table$addRow(rowKey=name, values=row)
-              
-            }
-          }        
+        
           
           if(isTRUE(self$options$krip)){
             
@@ -228,6 +134,19 @@ raterClass <- if (requireNamespace('jmvcore'))
             # dat2<- as.matrix(dat2)
             # 
             
+            if (self$options$t != "row"){
+              
+              # data <- read.csv("kripp.csv")
+              # sample<- t(data)
+              # sample1<- as.matrix(sample)
+              # krip<- irr::kripp.alpha(sample, method="nominal")
+              # krip
+              
+              data<- t(data)
+              dat2 <- as.matrix(data)
+              
+            }
+             
             dat2 <- as.matrix(data)
             
             krip<- irr::kripp.alpha(dat2, method=method)
@@ -258,7 +177,6 @@ raterClass <- if (requireNamespace('jmvcore'))
             
           }
         }
-        
         
         
         # get variables-------
@@ -292,18 +210,7 @@ raterClass <- if (requireNamespace('jmvcore'))
           
           private$.populateKapTable(results)
           
-          # populate Fleiss' category-wise table-----
-          
-         # private$.populateCwTable(results)
-          
-          # prepare plot-----
-          
-         # private$.prepareGgmPlot(data)
-          
-          # prepare partial plot-------
-          
-          #private$.prepareParPlot(data)
-          
+         
           # populate icc table-----
           
           private$.populateIccTable(results)
@@ -362,8 +269,8 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         p <- res$p.value
         
-    #################################################
-    ###Fleiss' kappa================
+     
+        # Fleiss' kappa================
         
         kap<- irr::kappam.fleiss(ratings = data)
         
@@ -390,9 +297,41 @@ raterClass <- if (requireNamespace('jmvcore'))
 
         pk <- kap$p.value
 
-######################################################
 
-if(isTRUE(self$options$cw)){
+        # Fleiss' Exact kappa================
+       
+        
+        if(isTRUE(self$options$ek)){
+         
+        kae<- irr::kappam.fleiss(ratings = data, exact = TRUE)
+        
+        # get subjects-------
+        
+        nke <- kae$subjects
+        
+        # get raters--------
+        
+        raterke <- kae$raters
+        
+        # get statistic------------
+        
+        statisticke <- kae$value
+        
+        #-----------------------------------
+        table <- self$results$ek
+        
+        row <- list()
+        
+        row[['n']] <- nke
+        row[['rater']] <- raterke
+        row[['statistic']] <- statisticke
+        
+        table$setRow(rowNo = 1, values = row)
+        
+        }
+     
+
+       if(isTRUE(self$options$cw)){
   
   cw<- irr::kappam.fleiss(ratings=data, detail=TRUE)
   
@@ -419,7 +358,7 @@ if(isTRUE(self$options$cw)){
      
         
         
-## compute icc table-------
+    ## compute icc table-------
         
         icc <- psy::icc(data = data)
         
@@ -566,6 +505,10 @@ if(isTRUE(self$options$cw)){
       # populate rater table-----
       
       .populateRaterTable = function(results) {
+        
+        if(!self$options$interrater) return()
+        
+        
         table <- self$results$interrater
         
         n <- results$n
@@ -591,6 +534,9 @@ if(isTRUE(self$options$cw)){
      # populate Fleiss' kappa table-----
      
      .populateKapTable = function(results) {
+       
+       if(!self$options$fk) return()
+       
        
        table <- self$results$fk
        
@@ -621,6 +567,8 @@ if(isTRUE(self$options$cw)){
   # populate icc table-----
       
       .populateIccTable = function(results) {
+        
+        
         table <- self$results$icc
         
         ns <- results$ns

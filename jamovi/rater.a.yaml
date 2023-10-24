@@ -26,19 +26,11 @@ options:
     - name: vars
       title: Variables
       type: Variables
-      suggested:
-        - continuous
-      permitted:
-        - numeric
-        
+
     - name: vars1
       title: Variables
       type: Variables
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
+ 
     - name: model
       title: Model
       type: List
@@ -66,7 +58,7 @@ options:
     - name: interrater
       title: Interrater reliability
       type: Bool
-      default: True
+      default: FALSE
 
     - name: icc
       title: Intraclass correlation coefficient(ICC)
@@ -108,16 +100,6 @@ options:
       type: Bool
       default: FALSE
 
-    - name: fk1
-      title: Fleiss' Kappa 
-      type: Bool
-      default: false
-
-    - name: cw1
-      title: Category-wise Kappas 
-      type: Bool
-      default: FALSE
-
     - name: ek
       title: Exact Kappa
       type: Bool
@@ -137,6 +119,17 @@ options:
         - interval
         - ratio
       default: nominal      
+
+    - name: t
+      title: 'Data format'
+      type: List
+      options:
+        - title: 'Raters are columns'
+          name: 'col'
+        - title: 'Raters are rows'
+          name: 'row'
+      default: 'col'
+
 
 ...
 
