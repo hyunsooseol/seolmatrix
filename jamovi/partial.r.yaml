@@ -50,20 +50,18 @@ items:
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot
       visible: (plot)
       refs: qgraph
       clearWith:
           - vars
           - ctrlvars
+          - width
+          - height
 
     - name: plot2
       title: 'Centrality plot '
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot2
       visible: (plot2)
       refs: qgraph
@@ -71,30 +69,32 @@ items:
           - vars
           - ctrlvars
           - scale
+          - width1
+          - height1
 
     - name: plot1
       title: 'Partial plot'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot1
       visible: (plot1)
       refs: qgraph 
       clearWith:
           - vars
-          - ctrlvars      
+          - ctrlvars
+          - width2
+          - height2
 
     - name: plot3
       title: 'Partial matrix plot'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot3
       visible: (plot3)
       refs: corrgram 
       clearWith:
           - vars
-          - ctrlvars      
+          - ctrlvars
+          - width3
+          - height3
 
     - name:  text
       title: EBIC matrix

@@ -46,7 +46,32 @@ partialClass <- if (requireNamespace('jmvcore'))
             </div>
             </body>
             </html>")
-        
+   
+   
+   if(isTRUE(self$options$plot)){
+     width <- self$options$width
+     height <- self$options$height
+     self$results$plot$setSize(width, height)
+   }
+   
+   if(isTRUE(self$options$plot1)){
+     width <- self$options$width2
+     height <- self$options$height2
+     self$results$plot1$setSize(width, height)
+   }  
+
+   if(isTRUE(self$options$plot2)){
+     width <- self$options$width1
+     height <- self$options$height1
+     self$results$plot2$setSize(width, height)
+   }  
+   
+   if(isTRUE(self$options$plot3)){
+     width <- self$options$width3
+     height <- self$options$height3
+     self$results$plot3$setSize(width, height)
+   }  
+   
 
    # get variables--------------------------------------
         
@@ -205,11 +230,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         partial <- psych::partial.r(data,x=var, y=varCtl)
         
         }
-        
-        if(isTRUE(self$options$pm)){
-        self$results$text1$setContent(partial)
-        }
-        
+       
         image1 <- self$results$plot1
         image1$setState(partial)
       
@@ -221,11 +242,6 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         # EBIC PLOT------------
         
-        if(self$options$plot | self$options$plot2==TRUE){
-        
-          var <- self$options$vars
-          varCtl <- self$options$ctrlvars
-          
           if(is.null(varCtl)){ 
           
         # Compute correlations:
@@ -233,18 +249,11 @@ partialClass <- if (requireNamespace('jmvcore'))
         
           } else{
             
-            
             CorMat <- qgraph::cor_auto(data, select = var)
-            
-            
+           
           }
         
-          if(isTRUE(self$options$ebic)){
-            
-          self$results$text$setContent(CorMat)
-          
-          }
-          
+  
         # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
         
@@ -255,8 +264,18 @@ partialClass <- if (requireNamespace('jmvcore'))
         # Centrality plot-------
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
+
+        
+        #---------------------------------------
+        if(isTRUE(self$options$pm)){
+          self$results$text1$setContent(partial)
         }
-       
+        #---------------------------------------
+        if(isTRUE(self$options$ebic)){
+          
+          self$results$text$setContent(CorMat)
+        }
+        
         },
       
  

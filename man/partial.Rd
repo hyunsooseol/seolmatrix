@@ -16,7 +16,16 @@ partial(
   plot1 = FALSE,
   plot2 = FALSE,
   plot3 = FALSE,
-  ebic = FALSE
+  ebic = FALSE,
+  pm = FALSE,
+  width = 500,
+  height = 500,
+  width1 = 500,
+  height1 = 500,
+  width2 = 500,
+  height2 = 500,
+  width3 = 500,
+  height3 = 500
 )
 }
 \arguments{
@@ -43,6 +52,24 @@ partial(
 \item{plot3}{.}
 
 \item{ebic}{.}
+
+\item{pm}{.}
+
+\item{width}{.}
+
+\item{height}{.}
+
+\item{width1}{.}
+
+\item{height1}{.}
+
+\item{width2}{.}
+
+\item{height2}{.}
+
+\item{width3}{.}
+
+\item{height3}{.}
 }
 \value{
 A results object containing:
@@ -54,6 +81,7 @@ A results object containing:
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
