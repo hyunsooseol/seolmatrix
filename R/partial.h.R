@@ -15,7 +15,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             plot = FALSE,
             plot1 = FALSE,
             plot2 = FALSE,
-            plot3 = FALSE, ...) {
+            plot3 = FALSE,
+            ebic = FALSE,
+            pm = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -80,6 +82,14 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot3",
                 plot3,
                 default=FALSE)
+            private$..ebic <- jmvcore::OptionBool$new(
+                "ebic",
+                ebic,
+                default=FALSE)
+            private$..pm <- jmvcore::OptionBool$new(
+                "pm",
+                pm,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
@@ -91,6 +101,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
             self$.addOption(private$..plot3)
+            self$.addOption(private$..ebic)
+            self$.addOption(private$..pm)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -102,7 +114,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot = function() private$..plot$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
-        plot3 = function() private$..plot3$value),
+        plot3 = function() private$..plot3$value,
+        ebic = function() private$..ebic$value,
+        pm = function() private$..pm$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
@@ -113,7 +127,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..plot = NA,
         ..plot1 = NA,
         ..plot2 = NA,
-        ..plot3 = NA)
+        ..plot3 = NA,
+        ..ebic = NA,
+        ..pm = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -125,7 +141,9 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot1 = function() private$.items[["plot1"]],
-        plot3 = function() private$.items[["plot3"]]),
+        plot3 = function() private$.items[["plot3"]],
+        text = function() private$.items[["text"]],
+        text1 = function() private$.items[["text1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -224,6 +242,20 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="corrgram",
                 clearWith=list(
                     "vars",
+                    "ctrlvars")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text",
+                title="EBIC matrix",
+                clearWith=list(
+                    "vars",
+                    "ctrlvars")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text1",
+                title="Partial matrix",
+                clearWith=list(
+                    "vars",
                     "ctrlvars")))}))
 
 partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -261,6 +293,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot1 .
 #' @param plot2 .
 #' @param plot3 .
+#' @param ebic .
+#' @param pm .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -269,6 +303,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -289,7 +325,9 @@ partial <- function(
     plot = FALSE,
     plot1 = FALSE,
     plot2 = FALSE,
-    plot3 = FALSE) {
+    plot3 = FALSE,
+    ebic = FALSE,
+    pm = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -313,7 +351,9 @@ partial <- function(
         plot = plot,
         plot1 = plot1,
         plot2 = plot2,
-        plot3 = plot3)
+        plot3 = plot3,
+        ebic = ebic,
+        pm = pm)
 
     analysis <- partialClass$new(
         options = options,

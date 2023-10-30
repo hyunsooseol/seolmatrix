@@ -84,6 +84,16 @@ options:
       title: Partial matrix plot 
       type: Bool
       default: FALSE   
+
+    - name: ebic
+      title: EBIC matrix
+      type: Bool
+      default: false
+
+    - name: pm
+      title: Partial matrix
+      type: Bool
+      default: false
 ...
 
 

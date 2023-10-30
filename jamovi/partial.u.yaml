@@ -75,3 +75,16 @@ children:
                 name: plot1
               - type: CheckBox
                 name: plot3
+  - type: CollapseBox
+    label: Additional outputs
+    margin: normal
+    collapsed: true
+    children:
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        children:
+          - type: CheckBox
+            name: ebic
+          - type: CheckBox
+            name: pm            

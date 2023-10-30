@@ -95,5 +95,19 @@ items:
       clearWith:
           - vars
           - ctrlvars      
+
+    - name:  text
+      title: EBIC matrix
+      type:  Preformatted
+      clearWith:
+        - vars
+        - ctrlvars
+
+    - name:  text1
+      title: Partial matrix
+      type:  Preformatted
+      clearWith:
+        - vars
+        - ctrlvars
 ...
 

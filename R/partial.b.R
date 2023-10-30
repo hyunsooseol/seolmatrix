@@ -206,6 +206,10 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         }
         
+        if(isTRUE(self$options$pm)){
+        self$results$text1$setContent(partial)
+        }
+        
         image1 <- self$results$plot1
         image1$setState(partial)
       
@@ -235,7 +239,12 @@ partialClass <- if (requireNamespace('jmvcore'))
             
           }
         
-        
+          if(isTRUE(self$options$ebic)){
+            
+          self$results$text$setContent(CorMat)
+          
+          }
+          
         # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
         
