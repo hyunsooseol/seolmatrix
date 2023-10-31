@@ -24,7 +24,8 @@ rater(
   ek = FALSE,
   krip = FALSE,
   method = "nominal",
-  t = "col"
+  t = "col",
+  t1 = "col"
 )
 }
 \arguments{
@@ -67,6 +68,8 @@ rater(
 \item{method}{.}
 
 \item{t}{.}
+
+\item{t1}{.}
 }
 \value{
 A results object containing:

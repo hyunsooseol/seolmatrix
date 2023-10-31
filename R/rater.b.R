@@ -19,6 +19,7 @@
 #' @import boot
 #' @importFrom irr kappam.fleiss
 #' @importFrom irr kripp.alpha
+#' @importFrom stringr str_interp
 #' @export
 
 
@@ -47,7 +48,8 @@ raterClass <- if (requireNamespace('jmvcore'))
              <div class='instructions'>
              <p>___________________________________________________________________________________
              <p>1. The R package <b>irr</b> is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
-             <p>2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p>2. If the <b>Raters are rows</b> option is selected, the plots are not drawn.</p>
+             <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
@@ -112,15 +114,24 @@ raterClass <- if (requireNamespace('jmvcore'))
        
         if(self$options$mode=='complex'){
           
-          if(is.null(self$options$vars1))
-            return()
+          if(is.null(self$options$vars1)) return()
+          
+          
+          if(!is.null(self$options$vars)){
+            
+            err_string <- stringr::str_interp(
+              " Variables should be removed from Rater Reliability box."
+            )
+            stop(err_string)
+            
+          } 
           
           
           vars1 <- self$options$vars1
           data <- self$data
           data <- jmvcore::naOmit(data)
           
-        
+          
           
           if(isTRUE(self$options$krip)){
             
@@ -146,7 +157,7 @@ raterClass <- if (requireNamespace('jmvcore'))
               dat2 <- as.matrix(data)
               
             }
-             
+            
             dat2 <- as.matrix(data)
             
             krip<- irr::kripp.alpha(dat2, method=method)
@@ -178,12 +189,11 @@ raterClass <- if (requireNamespace('jmvcore'))
           }
         }
         
-        
         # get variables-------
         
         data <- self$data
+        vars <- self$options$vars
         
-        vars <- self$options$get('vars')
         
         
         # Ready--------
@@ -230,21 +240,31 @@ raterClass <- if (requireNamespace('jmvcore'))
           
           
         }
-      },
+      
+       
+        
+        
+        
+        
+        },
       
       # compute results=====================================================
       
       .compute = function(data) {
         
         
+      
         data <- self$data
+        vars <- self$options$vars
         
-        vars <- self$options$get('vars')
+        #------------------------------------
+        if (self$options$t1 == "row"){
         
+          data<- t(data)
+          data <- as.matrix(data)
+          
+        }
         
-         # for(v in vars)
-         #   data[[v]] <- jmvcore::toNumeric(data[[v]])
-
         # compute Light's Kappa-----
         
         res <- irr::kappam.light(ratings = data)
@@ -435,8 +455,10 @@ raterClass <- if (requireNamespace('jmvcore'))
         lower <- out$lbound
         upper <- out$ubound
         
-        if(self$options$ggm==TRUE){
+        if(isTRUE(self$options$ggm)){
         
+          if(self$options$t1=='row') return()
+          
           # Compute correlations:
           CorMat <- qgraph::cor_auto(data)
           
@@ -449,7 +471,9 @@ raterClass <- if (requireNamespace('jmvcore'))
           
         }
           
-        if(self$options$par==TRUE){
+        if(isTRUE(self$options$par)){
+          
+          if(self$options$t1=='row') return()
         
           
           par <- psych::partial.r(data)

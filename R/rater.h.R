@@ -24,7 +24,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ek = FALSE,
             krip = FALSE,
             method = "nominal",
-            t = "col", ...) {
+            t = "col",
+            t1 = "col", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -126,6 +127,13 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "col",
                     "row"),
                 default="col")
+            private$..t1 <- jmvcore::OptionList$new(
+                "t1",
+                t1,
+                options=list(
+                    "col",
+                    "row"),
+                default="col")
 
             self$.addOption(private$..mode)
             self$.addOption(private$..vars)
@@ -146,6 +154,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..krip)
             self$.addOption(private$..method)
             self$.addOption(private$..t)
+            self$.addOption(private$..t1)
         }),
     active = list(
         mode = function() private$..mode$value,
@@ -166,7 +175,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ek = function() private$..ek$value,
         krip = function() private$..krip$value,
         method = function() private$..method$value,
-        t = function() private$..t$value),
+        t = function() private$..t$value,
+        t1 = function() private$..t1$value),
     private = list(
         ..mode = NA,
         ..vars = NA,
@@ -186,7 +196,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ek = NA,
         ..krip = NA,
         ..method = NA,
-        ..t = NA)
+        ..t = NA,
+        ..t1 = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -564,6 +575,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param krip .
 #' @param method .
 #' @param t .
+#' @param t1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -608,7 +620,8 @@ rater <- function(
     ek = FALSE,
     krip = FALSE,
     method = "nominal",
-    t = "col") {
+    t = "col",
+    t1 = "col") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -641,7 +654,8 @@ rater <- function(
         ek = ek,
         krip = krip,
         method = method,
-        t = t)
+        t = t,
+        t1 = t1)
 
     analysis <- raterClass$new(
         options = options,
