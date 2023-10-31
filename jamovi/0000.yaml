@@ -69,17 +69,16 @@ datasets:
     description: Rating Big5 variable
     tags:
       - Rater
-      - Krippendorff's alpha
   - name: kappa
     path: diagnoses.omv
-    description: Fleiss' Kappa
+    description: Character data
     tags:
-      - Krippendorff's alpha
-  - name: Krippendorff
-    path: krip.omv
-    description: Krippendorff's alpha
+      - Rater
+  - name: Transpose
+    path: transpose.omv
+    description: Transpose data
     tags:
-      - Krippendorff's alpha
+      - Rater
   - name: big5
     path: big5.omv
     description: partial data

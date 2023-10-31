@@ -25,7 +25,7 @@ children:
     collapsed: true
     children:
       - type: Label
-        label: 'Tables'
+        label: 'Kappa'
         children:
           - type: CheckBox
             name: interrater
@@ -35,6 +35,9 @@ children:
             name: ek
           - type: CheckBox
             name: cw
+      - type: Label
+        label: 'Agreement'
+        children:
           - type: CheckBox
             name: icc
           - type: CheckBox
@@ -77,7 +80,7 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: 'Tables'
+            label: 'ICC'
             children:
               - type: CheckBox
                 name: ic
