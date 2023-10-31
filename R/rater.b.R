@@ -45,9 +45,8 @@ raterClass <- if (requireNamespace('jmvcore'))
              <body>
              <div class='instructions'>
              <p>___________________________________________________________________________________
-             <p>1. The R package <b>irr</b> is described in the <a href='https://cran.r-project.org/web/packages/irr/irr.pdf' target = '_blank'>page</a>.</p>
-             <p>2. If the <b>Raters are rows</b> option is selected, the plots are not drawn.</p>
-             <p>3. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p>1. If the <b>Raters are rows</b> option is selected, the plots might not be drawn.</p>
+             <p>2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
