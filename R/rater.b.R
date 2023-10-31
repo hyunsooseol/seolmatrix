@@ -19,6 +19,7 @@
 #' @import boot
 #' @importFrom irr kappam.fleiss
 #' @importFrom irr kripp.alpha
+#' @importFrom  stringr str_interp
 #' @export
 
 
@@ -45,8 +46,7 @@ raterClass <- if (requireNamespace('jmvcore'))
              <body>
              <div class='instructions'>
              <p>___________________________________________________________________________________
-             <p>1. If the <b>Raters are rows</b> option is selected, the plots might not be drawn.</p>
-             <p>2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p> Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
@@ -80,86 +80,8 @@ raterClass <- if (requireNamespace('jmvcore'))
       #======================================++++++++++++++++++++++
       .run = function() {
         
-       
-        # if(self$options$mode=='complex'){
-        #   
-        #   if(is.null(self$options$vars1)) return()
-        #   
-        #   # 
-        #   # if(!is.null(self$options$vars)){
-        #   #   
-        #   #   err_string <- stringr::str_interp(
-        #   #     " Variables should be removed from Rater Reliability box."
-        #   #   )
-        #   #   stop(err_string)
-        #   #   
-        #   # } 
-        #   
-        #   
-        #   vars1 <- self$options$vars1
-        #   data <- self$data
-        #   data <- jmvcore::naOmit(data)
-        #   
-        #   
-        #   
-        #   if(isTRUE(self$options$krip)){
-        #     
-        #     method <- self$options$method
-        #     
-        #     # sample<- t(data)
-        #     # dat<- reshape::melt(sample)
-        #     # colnames(dat) <-c("n", "rater", "value")
-        #     # dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
-        #     # dat2 <- select(dat1, -rater)
-        #     # dat2<- as.matrix(dat2)
-        #     # 
-        #     
-        #     if (self$options$t != "row"){
-        #       
-        #       # data <- read.csv("kripp.csv")
-        #       # sample<- t(data)
-        #       # sample1<- as.matrix(sample)
-        #       # krip<- irr::kripp.alpha(sample, method="nominal")
-        #       # krip
-        #       
-        #       data<- t(data)
-        #       dat2 <- as.matrix(data)
-        #       
-        #     }
-        #     
-        #     dat2 <- as.matrix(data)
-        #     
-        #     krip<- irr::kripp.alpha(dat2, method=method)
-        #     
-        #     # get subjects-------
-        #     
-        #     nkrip <- krip$subjects
-        #     
-        #     # get raters--------
-        #     
-        #     raterkrip <- krip$raters
-        #     
-        #     # get statistic------------
-        #     
-        #     statistickrip <- krip$value
-        #     
-        #     #-----------------------------------
-        #     table <- self$results$krip
-        #     
-        #     row <- list()
-        #     
-        #     row[['Subjects']] <- nkrip
-        #     row[['Raters']] <- raterkrip
-        #     row[['alpha']] <- statistickrip
-        #     
-        #     table$setRow(rowNo = 1, values = row)
-        #     
-        #     
-        #   }
-        # }
-        # 
-        
-        if(is.null(self$options$vars)) return()
+        if (is.null(self$options$vars) |
+            length(self$options$vars) < 2) return()
         
         vars <- self$options$vars
         data <- self$data
@@ -173,8 +95,38 @@ raterClass <- if (requireNamespace('jmvcore'))
           data <- as.matrix(data)
           
         }
-        #---------------------------
+      
         
+        # plot-------------------------------
+        
+        if(isTRUE(self$options$ggm)){
+          
+          # Compute correlations:
+          CorMat <- qgraph::cor_auto(data)
+          
+          # Compute graph with tuning = 0.5 (EBIC)
+          EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+          
+          # EBIC Plot -------
+          image <- self$results$plot
+          image$setState(EBICgraph)
+          
+        }
+        
+        if(isTRUE(self$options$par)){
+          
+          par <- psych::partial.r(data)
+          
+          # partial Plot -------
+          
+          image1 <- self$results$plot1
+          image1$setState(par)
+          
+          
+        }
+        
+        #################################################################
+       
         # compute Light's Kappa-----
         
         res <- irr::kappam.light(ratings = data)
@@ -291,28 +243,45 @@ raterClass <- if (requireNamespace('jmvcore'))
         }        
         
        
+        #  Agreement Analysis------------
         
-        ## compute icc table-------
-        
-        icc <- psy::icc(data = data)
-        
-        #subjects
-        ns <- icc$nb.subjects
-        #raters
-        nr <- icc$nb.raters
-        #subject variance
-        sv <- icc$subject.variance
-        #rater variance
-        rv <- icc$rater.variance
-        # residual variance
-        ev <- icc$residual
-        # consistency
-        ic <- icc$icc.consistency
-        # agreement
-        ia <- icc$icc.agreement 
+        # ICC TABLE--------------------
         
         if(isTRUE(self$options$icc)){
        
+          ## compute icc table-------
+          
+          icc <- try(psy::icc(data = data))
+          #----------------------------
+          
+          if(jmvcore::isError(icc)){
+            
+            err_string <- stringr::str_interp(
+              "The analysis cannot be performed because the data is not suitable for the analysis model."
+            )
+            stop(err_string)
+            
+          } 
+          
+          if (! jmvcore::isError(icc) ){
+          
+          
+          #subjects
+          ns <- icc$nb.subjects
+          #raters
+          nr <- icc$nb.raters
+          #subject variance
+          sv <- icc$subject.variance
+          #rater variance
+          rv <- icc$rater.variance
+          # residual variance
+          ev <- icc$residual
+          # consistency
+          ic <- icc$icc.consistency
+          # agreement
+          ia <- icc$icc.agreement 
+          
+          
         # populate icc table-----
         
         table <- self$results$icc
@@ -331,22 +300,37 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         }
         
-        ### To obtain 95% confidence interval---------
-        
-        icc.boot <- function(data, x) {
-          icc(data[x, ])[[7]]
         }
-        
-        bres <- boot::boot(data, icc.boot, 1000)
-        
-        # two-sided bootstrapped confidence interval of icc (agreement)
-        
-        bicc <- quantile(bres$t, c(0.025, 0.975))
-        
+        # Bootstrap table---------
         
         if(isTRUE(self$options$bicc)){
         
-        table <- self$results$bicc
+          ### To obtain 95% confidence interval---------
+          
+          icc.boot <- function(data, x) {
+            icc(data[x, ])[[7]]
+          }
+          
+          bres <- try(boot::boot(data, icc.boot, 1000))
+          
+          if(jmvcore::isError(bres)){
+            
+            err_string <- stringr::str_interp(
+              "The analysis cannot be performed because the data is not suitable for the analysis model."
+            )
+            stop(err_string)
+            
+          } 
+          
+          if (! jmvcore::isError(bres) ){
+          
+          # two-sided bootstrapped confidence interval of icc (agreement)
+          
+        bicc <- quantile(bres$t, c(0.025, 0.975)) 
+         
+       
+          
+       table <- self$results$bicc
        
         row <- list()
         
@@ -358,7 +342,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         }
         
-        
+        }
         ########### icc using oneway and twoway----------
         
         model <- self$options$model
@@ -474,39 +458,7 @@ raterClass <- if (requireNamespace('jmvcore'))
           
         }
         
-         
-        # plot-------------------------------
         
-        if(isTRUE(self$options$ggm)){
-          
-        #  if(self$options$t=='row') return()
-          
-          # Compute correlations:
-          CorMat <- qgraph::cor_auto(data)
-          
-          # Compute graph with tuning = 0.5 (EBIC)
-          EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-          
-          # Prepare Data For Plot -------
-          image <- self$results$plot
-          image$setState(EBICgraph)
-          
-        }
-        
-        if(isTRUE(self$options$par)){
-          
-         # if(self$options$t=='row') return()
-          
-          
-          par <- psych::partial.r(data)
-          
-          # partial Plot -------
-          
-          image1 <- self$results$plot1
-          image1$setState(par)
-          
-        }
-      
       
      },
      
@@ -541,5 +493,82 @@ raterClass <- if (requireNamespace('jmvcore'))
       
      ))  
 
-      
+# if(self$options$mode=='complex'){
+#   
+#   if(is.null(self$options$vars1)) return()
+#   
+#   # 
+#   # if(!is.null(self$options$vars)){
+#   #   
+#   #   err_string <- stringr::str_interp(
+#   #     " Variables should be removed from Rater Reliability box."
+#   #   )
+#   #   stop(err_string)
+#   #   
+#   # } 
+#   
+#   
+#   vars1 <- self$options$vars1
+#   data <- self$data
+#   data <- jmvcore::naOmit(data)
+#   
+#   
+#   
+#   if(isTRUE(self$options$krip)){
+#     
+#     method <- self$options$method
+#     
+#     # sample<- t(data)
+#     # dat<- reshape::melt(sample)
+#     # colnames(dat) <-c("n", "rater", "value")
+#     # dat1 <- tidyr::pivot_wider(dat, id_cols = rater, names_from = n, values_from = value)
+#     # dat2 <- select(dat1, -rater)
+#     # dat2<- as.matrix(dat2)
+#     # 
+#     
+#     if (self$options$t != "row"){
+#       
+#       # data <- read.csv("kripp.csv")
+#       # sample<- t(data)
+#       # sample1<- as.matrix(sample)
+#       # krip<- irr::kripp.alpha(sample, method="nominal")
+#       # krip
+#       
+#       data<- t(data)
+#       dat2 <- as.matrix(data)
+#       
+#     }
+#     
+#     dat2 <- as.matrix(data)
+#     
+#     krip<- irr::kripp.alpha(dat2, method=method)
+#     
+#     # get subjects-------
+#     
+#     nkrip <- krip$subjects
+#     
+#     # get raters--------
+#     
+#     raterkrip <- krip$raters
+#     
+#     # get statistic------------
+#     
+#     statistickrip <- krip$value
+#     
+#     #-----------------------------------
+#     table <- self$results$krip
+#     
+#     row <- list()
+#     
+#     row[['Subjects']] <- nkrip
+#     row[['Raters']] <- raterkrip
+#     row[['alpha']] <- statistickrip
+#     
+#     table$setRow(rowNo = 1, values = row)
+#     
+#     
+#   }
+# }
+# 
+
  
