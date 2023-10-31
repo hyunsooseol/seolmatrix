@@ -6,9 +6,7 @@
 \usage{
 rater(
   data,
-  mode = "simple",
   vars,
-  vars1,
   model = "oneway",
   type = "agreement",
   unit = "single",
@@ -24,18 +22,13 @@ rater(
   ek = FALSE,
   krip = FALSE,
   method = "nominal",
-  t = "col",
-  t1 = "col"
+  t = "col"
 )
 }
 \arguments{
 \item{data}{The data as a data frame.}
 
-\item{mode}{.}
-
 \item{vars}{.}
-
-\item{vars1}{.}
 
 \item{model}{.}
 
@@ -68,8 +61,6 @@ rater(
 \item{method}{.}
 
 \item{t}{.}
-
-\item{t1}{.}
 }
 \value{
 A results object containing:
@@ -85,7 +76,6 @@ A results object containing:
   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$instructions1} \tab \tab \tab \tab \tab a html \cr
   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 }
 

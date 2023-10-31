@@ -13,24 +13,10 @@ options:
           R: >
             The data as a data frame.
 
-    - name: mode
-      title: ""
-      type: List
-      options:
-            - name: simple
-              title: 'Rater Reliability'
-            - name: complex
-              title: 'Krippendorff alpha'
-      default: simple
-
     - name: vars
       title: Variables
       type: Variables
 
-    - name: vars1
-      title: Variables
-      type: Variables
- 
     - name: model
       title: Model
       type: List
@@ -130,15 +116,6 @@ options:
           name: 'row'
       default: 'col'
 
-    - name: t1
-      title: 'Data format'
-      type: List
-      options:
-        - title: 'Raters are columns'
-          name: 'col'
-        - title: 'Raters are rows'
-          name: 'row'
-      default: 'col'
 
 
 ...

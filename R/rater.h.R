@@ -6,9 +6,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            mode = "simple",
             vars = NULL,
-            vars1 = NULL,
             model = "oneway",
             type = "agreement",
             unit = "single",
@@ -24,8 +22,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ek = FALSE,
             krip = FALSE,
             method = "nominal",
-            t = "col",
-            t1 = "col", ...) {
+            t = "col", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -33,19 +30,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..mode <- jmvcore::OptionList$new(
-                "mode",
-                mode,
-                options=list(
-                    "simple",
-                    "complex"),
-                default="simple")
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
                 vars)
-            private$..vars1 <- jmvcore::OptionVariables$new(
-                "vars1",
-                vars1)
             private$..model <- jmvcore::OptionList$new(
                 "model",
                 model,
@@ -127,17 +114,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "col",
                     "row"),
                 default="col")
-            private$..t1 <- jmvcore::OptionList$new(
-                "t1",
-                t1,
-                options=list(
-                    "col",
-                    "row"),
-                default="col")
 
-            self$.addOption(private$..mode)
             self$.addOption(private$..vars)
-            self$.addOption(private$..vars1)
             self$.addOption(private$..model)
             self$.addOption(private$..type)
             self$.addOption(private$..unit)
@@ -154,12 +132,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..krip)
             self$.addOption(private$..method)
             self$.addOption(private$..t)
-            self$.addOption(private$..t1)
         }),
     active = list(
-        mode = function() private$..mode$value,
         vars = function() private$..vars$value,
-        vars1 = function() private$..vars1$value,
         model = function() private$..model$value,
         type = function() private$..type$value,
         unit = function() private$..unit$value,
@@ -175,12 +150,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ek = function() private$..ek$value,
         krip = function() private$..krip$value,
         method = function() private$..method$value,
-        t = function() private$..t$value,
-        t1 = function() private$..t1$value),
+        t = function() private$..t$value),
     private = list(
-        ..mode = NA,
         ..vars = NA,
-        ..vars1 = NA,
         ..model = NA,
         ..type = NA,
         ..unit = NA,
@@ -196,8 +168,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ek = NA,
         ..krip = NA,
         ..method = NA,
-        ..t = NA,
-        ..t1 = NA)
+        ..t = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -215,7 +186,6 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ftest = function() private$.items[["ftest"]],
         plot = function() private$.items[["plot"]],
         plot1 = function() private$.items[["plot1"]],
-        instructions1 = function() private$.items[["instructions1"]],
         krip = function() private$.items[["krip"]]),
     private = list(),
     public=list(
@@ -236,7 +206,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Interrater reliability",
                 rows=1,
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "t"),
                 refs="irr",
                 columns=list(
                     list(
@@ -267,7 +238,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows=1,
                 visible="(fk)",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "t"),
                 refs="irr",
                 columns=list(
                     list(
@@ -298,7 +270,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows=1,
                 visible="(ek)",
                 clearWith=list(
-                    "vars1"),
+                    "vars",
+                    "t"),
                 refs="irr",
                 columns=list(
                     list(
@@ -322,7 +295,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(cw)",
                 refs="irr",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "t"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -349,7 +323,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(icc)",
                 rows=1,
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "t"),
                 refs="psy",
                 columns=list(
                     list(
@@ -385,7 +360,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(bicc)",
                 rows=1,
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "t"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -412,7 +388,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "model",
                     "type",
-                    "unit"),
+                    "unit",
+                    "t"),
                 refs="irr",
                 columns=list(
                     list(
@@ -449,7 +426,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "model",
                     "type",
-                    "unit"),
+                    "unit",
+                    "t"),
                 refs="irr",
                 columns=list(
                     list(
@@ -491,7 +469,10 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 height=500,
                 renderFun=".plot",
                 visible="(ggm)",
-                refs="qgraph"))
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "t")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -500,21 +481,21 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 height=500,
                 renderFun=".plot1",
                 visible="(par)",
-                refs="qgraph"))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="instructions1",
-                title="Krippendorff Alpha",
-                visible=TRUE))
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "t")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="krip",
                 title="`Krippendorff alpha - ${method}`",
                 rows=1,
                 visible="(krip)",
-                clearWith=list(
-                    "vars1"),
                 refs="irr",
+                clearWith=list(
+                    "vars",
+                    "method",
+                    "t"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -556,9 +537,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data The data as a data frame.
-#' @param mode .
 #' @param vars .
-#' @param vars1 .
 #' @param model .
 #' @param type .
 #' @param unit .
@@ -575,7 +554,6 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param krip .
 #' @param method .
 #' @param t .
-#' @param t1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -589,7 +567,6 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$instructions1} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
@@ -602,9 +579,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @export
 rater <- function(
     data,
-    mode = "simple",
     vars,
-    vars1,
     model = "oneway",
     type = "agreement",
     unit = "single",
@@ -620,25 +595,20 @@ rater <- function(
     ek = FALSE,
     krip = FALSE,
     method = "nominal",
-    t = "col",
-    t1 = "col") {
+    t = "col") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(vars)) vars <- jmvcore::resolveQuo(jmvcore::enquo(vars))
-    if ( ! missing(vars1)) vars1 <- jmvcore::resolveQuo(jmvcore::enquo(vars1))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(vars), vars, NULL),
-            `if`( ! missing(vars1), vars1, NULL))
+            `if`( ! missing(vars), vars, NULL))
 
 
     options <- raterOptions$new(
-        mode = mode,
         vars = vars,
-        vars1 = vars1,
         model = model,
         type = type,
         unit = unit,
@@ -654,8 +624,7 @@ rater <- function(
         ek = ek,
         krip = krip,
         method = method,
-        t = t,
-        t1 = t1)
+        t = t)
 
     analysis <- raterClass$new(
         options = options,

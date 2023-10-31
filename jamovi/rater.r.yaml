@@ -15,6 +15,7 @@ items:
       rows: 1
       clearWith:
         - vars
+        - t
       refs: irr    
 
       columns:
@@ -41,6 +42,7 @@ items:
       visible: (fk)
       clearWith:
         - vars
+        - t
       refs: irr    
 
       columns:
@@ -66,7 +68,8 @@ items:
       rows: 1
       visible: (ek)
       clearWith:
-        - vars1
+        - vars
+        - t
       refs: irr    
 
       columns:
@@ -88,6 +91,7 @@ items:
       refs: irr
       clearWith:
         - vars
+        - t
  
       columns:
         - name: name
@@ -113,6 +117,7 @@ items:
       rows: 1
       clearWith:
         - vars
+        - t
       refs: psy    
 
       columns:
@@ -142,6 +147,7 @@ items:
       rows: 1
       clearWith:
         - vars
+        - t
 
       columns:
         - name: name
@@ -167,6 +173,7 @@ items:
         - model
         - type
         - unit
+        - t
       refs: irr    
 
       columns:
@@ -199,6 +206,7 @@ items:
         - model
         - type
         - unit
+        - t
       refs: irr    
 
       columns:
@@ -235,6 +243,9 @@ items:
       renderFun: .plot
       visible: (ggm)
       refs: qgraph
+      clearWith:
+        - vars
+        - t
 
     - name: plot1
       title: 'Partial plot'
@@ -244,21 +255,21 @@ items:
       renderFun: .plot1
       visible: (par)
       refs: qgraph
-
-    - name: instructions1
-      title: Krippendorff Alpha 
-      type: Html
-      visible: True
+      clearWith:
+        - vars
+        - t
 
     - name: krip
       title:  '`Krippendorff alpha - ${method}`'
       type: Table
       rows: 1
       visible: (krip)
+      refs: irr   
       clearWith:
-        - vars1
-      refs: irr    
-
+        - vars
+        - method
+        - t
+      
       columns:
         - name: name
           title: ''
