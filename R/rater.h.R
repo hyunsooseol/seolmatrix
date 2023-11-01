@@ -15,8 +15,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             bicc = FALSE,
             ic = FALSE,
             ftest = FALSE,
-            ggm = FALSE,
-            par = FALSE,
             fk = FALSE,
             cw = FALSE,
             ek = FALSE,
@@ -74,14 +72,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ftest",
                 ftest,
                 default=FALSE)
-            private$..ggm <- jmvcore::OptionBool$new(
-                "ggm",
-                ggm,
-                default=FALSE)
-            private$..par <- jmvcore::OptionBool$new(
-                "par",
-                par,
-                default=FALSE)
             private$..fk <- jmvcore::OptionBool$new(
                 "fk",
                 fk,
@@ -124,8 +114,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..bicc)
             self$.addOption(private$..ic)
             self$.addOption(private$..ftest)
-            self$.addOption(private$..ggm)
-            self$.addOption(private$..par)
             self$.addOption(private$..fk)
             self$.addOption(private$..cw)
             self$.addOption(private$..ek)
@@ -143,8 +131,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         bicc = function() private$..bicc$value,
         ic = function() private$..ic$value,
         ftest = function() private$..ftest$value,
-        ggm = function() private$..ggm$value,
-        par = function() private$..par$value,
         fk = function() private$..fk$value,
         cw = function() private$..cw$value,
         ek = function() private$..ek$value,
@@ -161,8 +147,6 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..bicc = NA,
         ..ic = NA,
         ..ftest = NA,
-        ..ggm = NA,
-        ..par = NA,
         ..fk = NA,
         ..cw = NA,
         ..ek = NA,
@@ -184,8 +168,6 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         bicc = function() private$.items[["bicc"]],
         ic = function() private$.items[["ic"]],
         ftest = function() private$.items[["ftest"]],
-        plot = function() private$.items[["plot"]],
-        plot1 = function() private$.items[["plot1"]],
         krip = function() private$.items[["krip"]]),
     private = list(),
     public=list(
@@ -461,30 +443,6 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="Upper", 
                         `type`="number", 
                         `superTitle`="95% CI"))))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot",
-                title="Gaussian graphical model",
-                width=500,
-                height=500,
-                renderFun=".plot",
-                visible="(ggm)",
-                refs="qgraph",
-                clearWith=list(
-                    "vars",
-                    "t")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot1",
-                title="Partial plot",
-                width=500,
-                height=500,
-                renderFun=".plot1",
-                visible="(par)",
-                refs="qgraph",
-                clearWith=list(
-                    "vars",
-                    "t")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="krip",
@@ -546,8 +504,6 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param bicc .
 #' @param ic .
 #' @param ftest .
-#' @param ggm .
-#' @param par .
 #' @param fk .
 #' @param cw .
 #' @param ek .
@@ -565,8 +521,6 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
@@ -588,8 +542,6 @@ rater <- function(
     bicc = FALSE,
     ic = FALSE,
     ftest = FALSE,
-    ggm = FALSE,
-    par = FALSE,
     fk = FALSE,
     cw = FALSE,
     ek = FALSE,
@@ -617,8 +569,6 @@ rater <- function(
         bicc = bicc,
         ic = ic,
         ftest = ftest,
-        ggm = ggm,
-        par = par,
         fk = fk,
         cw = cw,
         ek = ek,

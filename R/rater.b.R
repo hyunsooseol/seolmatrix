@@ -97,33 +97,33 @@ raterClass <- if (requireNamespace('jmvcore'))
         }
       
         
-        # plot-------------------------------
-        
-        if(isTRUE(self$options$ggm)){
-          
-          # Compute correlations:
-          CorMat <- qgraph::cor_auto(data)
-          
-          # Compute graph with tuning = 0.5 (EBIC)
-          EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-          
-          # EBIC Plot -------
-          image <- self$results$plot
-          image$setState(EBICgraph)
-          
-        }
-        
-        if(isTRUE(self$options$par)){
-          
-          par <- psych::partial.r(data)
-          
-          # partial Plot -------
-          
-          image1 <- self$results$plot1
-          image1$setState(par)
-          
-          
-        }
+        # # plot-------------------------------
+        # 
+        # if(isTRUE(self$options$ggm)){
+        #   
+        #   # Compute correlations:
+        #   CorMat <- qgraph::cor_auto(data)
+        #   
+        #   # Compute graph with tuning = 0.5 (EBIC)
+        #   EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+        #   
+        #   # EBIC Plot -------
+        #   image <- self$results$plot
+        #   image$setState(EBICgraph)
+        #   
+        # }
+        # 
+        # if(isTRUE(self$options$par)){
+        #   
+        #   par <- psych::partial.r(data)
+        #   
+        #   # partial Plot -------
+        #   
+        #   image1 <- self$results$plot1
+        #   image1$setState(par)
+        #   
+        #   
+        # }
         
         #################################################################
        
@@ -460,38 +460,40 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         
       
-     },
-     
-     .plot = function(image, ...) {
-       
-       
-       if (is.null(image$state))
-         return(FALSE)
-       
-       EBICgraph <- image$state
-       
-       plot <- qgraph::qgraph(EBICgraph, layout = "spring", title = "EBIC", details = TRUE)
-       
-       print(plot)
-       TRUE
-     },
-     
-     .plot1 = function(image1, ...) {
-       
-       
-       if (is.null(image1$state))
-         return(FALSE)
-       
-       par <- image1$state
-       
-       plot1 <- qgraph::qgraph(par, layout = "spring", details = TRUE)
-       
-       print(plot1)
-       TRUE
      }
-    
-      
-     ))  
+     
+    ))
+     
+     # .plot = function(image, ...) {
+     #   
+     #   
+     #   if (is.null(image$state))
+     #     return(FALSE)
+     #   
+     #   EBICgraph <- image$state
+     #   
+     #   plot <- qgraph::qgraph(EBICgraph, layout = "spring", title = "EBIC", details = TRUE)
+     #   
+     #   print(plot)
+     #   TRUE
+     # },
+     # 
+     # .plot1 = function(image1, ...) {
+     #   
+     #   
+     #   if (is.null(image1$state))
+     #     return(FALSE)
+     #   
+     #   par <- image1$state
+     #   
+     #   plot1 <- qgraph::qgraph(par, layout = "spring", details = TRUE)
+     #   
+     #   print(plot1)
+     #   TRUE
+     # }
+     # 
+     #  
+     # ))  
 
 # if(self$options$mode=='complex'){
 #   

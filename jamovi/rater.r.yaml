@@ -235,30 +235,6 @@ items:
           type: number
           superTitle: '95% CI'
 
-    - name: plot
-      title: 'Gaussian graphical model'
-      type: Image
-      width:  500
-      height: 500
-      renderFun: .plot
-      visible: (ggm)
-      refs: qgraph
-      clearWith:
-        - vars
-        - t
-
-    - name: plot1
-      title: 'Partial plot'
-      type: Image
-      width:  500
-      height: 500
-      renderFun: .plot1
-      visible: (par)
-      refs: qgraph
-      clearWith:
-        - vars
-        - t
-
     - name: krip
       title:  '`Krippendorff alpha - ${method}`'
       type: Table

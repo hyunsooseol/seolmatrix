@@ -37,22 +37,15 @@ children:
             name: cw
       - type: Label
         label: 'Agreement'
-        children:
-          - type: CheckBox
-            name: icc
-          - type: CheckBox
-            name: bicc
-      - type: Label
-        label: 'Plots'
         fitToGrid: true
         cell:
           column: 1
           row: 0
         children:
           - type: CheckBox
-            name: ggm
+            name: icc
           - type: CheckBox
-            name: par
+            name: bicc    
   - type: CollapseBox
     label: ICC for oneway and twoway models
     margin: normal

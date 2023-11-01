@@ -15,8 +15,6 @@ rater(
   bicc = FALSE,
   ic = FALSE,
   ftest = FALSE,
-  ggm = FALSE,
-  par = FALSE,
   fk = FALSE,
   cw = FALSE,
   ek = FALSE,
@@ -46,10 +44,6 @@ rater(
 
 \item{ftest}{.}
 
-\item{ggm}{.}
-
-\item{par}{.}
-
 \item{fk}{.}
 
 \item{cw}{.}
@@ -74,8 +68,6 @@ A results object containing:
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
-  \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
 }
 
