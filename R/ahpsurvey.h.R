@@ -14,7 +14,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             method1 = "geometric",
             plot1 = FALSE,
             plot2 = FALSE,
-            angle = 0, ...) {
+            angle = 0,
+            width1 = 500,
+            height1 = 500,
+            width2 = 500,
+            height2 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -75,6 +79,22 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=0,
                 max=90,
                 default=0)
+            private$..width1 <- jmvcore::OptionInteger$new(
+                "width1",
+                width1,
+                default=500)
+            private$..height1 <- jmvcore::OptionInteger$new(
+                "height1",
+                height1,
+                default=500)
+            private$..width2 <- jmvcore::OptionInteger$new(
+                "width2",
+                width2,
+                default=500)
+            private$..height2 <- jmvcore::OptionInteger$new(
+                "height2",
+                height2,
+                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..atts)
@@ -86,6 +106,10 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
             self$.addOption(private$..angle)
+            self$.addOption(private$..width1)
+            self$.addOption(private$..height1)
+            self$.addOption(private$..width2)
+            self$.addOption(private$..height2)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -97,7 +121,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         cr = function() private$..cr$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
-        angle = function() private$..angle$value),
+        angle = function() private$..angle$value,
+        width1 = function() private$..width1$value,
+        height1 = function() private$..height1$value,
+        width2 = function() private$..width2$value,
+        height2 = function() private$..height2$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
@@ -108,7 +136,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..cr = NA,
         ..plot1 = NA,
         ..plot2 = NA,
-        ..angle = NA)
+        ..angle = NA,
+        ..width1 = NA,
+        ..height1 = NA,
+        ..width2 = NA,
+        ..height2 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -185,28 +217,28 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="plot1",
                 title="Individual preference weights",
                 visible="(plot1)",
-                width=600,
-                height=400,
                 renderFun=".plot1",
                 refs="ahpsurvey",
                 clearWith=list(
                     "vars",
                     "method",
-                    "method1")))
+                    "method1",
+                    "width1",
+                    "plot1")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
                 title="Individual priorities and consistency",
                 visible="(plot2)",
-                width=600,
-                height=400,
                 renderFun=".plot2",
                 refs="ahpsurvey",
                 clearWith=list(
                     "vars",
                     "method",
                     "method1",
-                    "angle")))}))
+                    "angle",
+                    "width2",
+                    "plot2")))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -243,6 +275,10 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot2 .
 #' @param angle a number from 0 to 90 defining the angle of the x-axis labels,
 #'   where 0 degrees represents completely horizontal labels.
+#' @param width1 .
+#' @param height1 .
+#' @param width2 .
+#' @param height2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -271,7 +307,11 @@ ahpsurvey <- function(
     method1 = "geometric",
     plot1 = FALSE,
     plot2 = FALSE,
-    angle = 0) {
+    angle = 0,
+    width1 = 500,
+    height1 = 500,
+    width2 = 500,
+    height2 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -292,7 +332,11 @@ ahpsurvey <- function(
         method1 = method1,
         plot1 = plot1,
         plot2 = plot2,
-        angle = angle)
+        angle = angle,
+        width1 = width1,
+        height1 = height1,
+        width2 = width2,
+        height2 = height2)
 
     analysis <- ahpsurveyClass$new(
         options = options,

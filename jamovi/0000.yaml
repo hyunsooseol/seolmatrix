@@ -124,6 +124,11 @@ datasets:
     description: 'from K.J. van Stralen et.al.,2012'
     tags:
       - Concordance
+  - name: hci
+    path: hci.omv
+    description: correlation structure with binary items.
+    tags:
+      - Correlation structure
   - name: ahp
     path: ahp.omv
     description: 4 items x 3 decision makers
@@ -134,11 +139,6 @@ datasets:
     description: Ahp for survey data
     tags:
       - AHP for survey data
-  - name: hci
-    path: hci.omv
-    description: correlation structure with binary items.
-    tags:
-      - Correlation structure
 usesNative: true
 minApp: 1.0.8
 

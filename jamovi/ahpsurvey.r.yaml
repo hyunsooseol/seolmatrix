@@ -58,21 +58,19 @@ items:
       title:  "Individual preference weights"
       type:  Image
       visible: (plot1)
-      width: 600
-      height: 400
       renderFun: .plot1
       refs: ahpsurvey
       clearWith:
         - vars
         - method
         - method1
+        - width1
+        - plot1
  
     - name:  plot2
       title: 'Individual priorities and consistency'
       type:  Image
       visible: (plot2)
-      width: 600
-      height: 400
       renderFun: .plot2
       refs: ahpsurvey
       clearWith:
@@ -80,4 +78,6 @@ items:
         - method
         - method1
         - angle
+        - width2
+        - plot2
 ...
