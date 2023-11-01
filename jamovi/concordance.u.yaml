@@ -50,5 +50,25 @@ children:
             children:
               - type: CheckBox
                 name: ccp
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (ccp)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (ccp)
               - type: CheckBox
                 name: bap
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width1
+                    format: number
+                    enable: (bap)
+                  - type: TextBox
+                    name: height1
+                    format: number
+                    enable: (bap)

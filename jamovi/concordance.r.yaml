@@ -33,24 +33,24 @@ items:
     - name: plot
       title: 'Concordance Plot'
       type: Image
-      width:  400
-      height: 400
       renderFun: .plot
       visible: (ccp)
       clearWith:
         - dep
         - covs
+        - width
+        - height
       refs: epiR   
   
     - name: plot1
       title: 'Bland-Altman Plot'
       type: Image
-      width:  400
-      height: 400
       renderFun: .plot1
       visible: (bap)
       clearWith:
         - dep
         - covs
+        - width1
+        - height1
       refs: epiR       
 ...

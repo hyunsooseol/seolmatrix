@@ -4,7 +4,18 @@
 \alias{concordance}
 \title{Concordance Correlation}
 \usage{
-concordance(data, dep, covs, cc = TRUE, ccp = FALSE, bap = FALSE)
+concordance(
+  data,
+  dep,
+  covs,
+  cc = TRUE,
+  ccp = FALSE,
+  bap = FALSE,
+  width = 500,
+  height = 500,
+  width1 = 500,
+  height1 = 500
+)
 }
 \arguments{
 \item{data}{.}
@@ -18,6 +29,14 @@ concordance(data, dep, covs, cc = TRUE, ccp = FALSE, bap = FALSE)
 \item{ccp}{.}
 
 \item{bap}{.}
+
+\item{width}{.}
+
+\item{height}{.}
+
+\item{width1}{.}
+
+\item{height1}{.}
 }
 \value{
 A results object containing:
