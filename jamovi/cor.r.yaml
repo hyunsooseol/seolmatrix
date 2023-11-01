@@ -13,8 +13,6 @@ items:
       title: Heatmap 
       type:  Image
       visible: (plot)
-      width: 600
-      height: 600
       refs: ShinyItemAnalysis
       renderFun: .plot
       clearWith:
@@ -24,13 +22,13 @@ items:
         - method
         - size
         - horiz
+        - width
+        - height
 
     - name:  plot1
       title: Dendrogram
       type:  Image
       visible: (plot1)
-      width: 600
-      height: 600
       renderFun: .plot1
       clearWith:
         - vars
@@ -39,13 +37,13 @@ items:
         - method
         - size
         - horiz
+        - width5
+        - height5
 
     - name:  plot2
       title: Polychoric Heatmap
       type:  Image
       visible: (plot2)
-      width: 600
-      height: 600
       renderFun: .plot2
       clearWith:
         - vars
@@ -55,13 +53,13 @@ items:
         - size
         - horiz
         - horiz1
+        - width4
+        - height4
 
     - name:  plot3
       title: Polychoric Dendrogram
       type:  Image
       visible: (plot3)
-      width: 600
-      height: 600
       renderFun: .plot3
       clearWith:
         - vars
@@ -69,5 +67,7 @@ items:
         - type
         - method
         - size
-        - horiz1        
+        - horiz1 
+        - width3
+        - height3
 ...

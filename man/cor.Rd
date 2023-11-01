@@ -17,7 +17,15 @@ cor(
   poly = FALSE,
   plot2 = FALSE,
   plot3 = FALSE,
-  horiz1 = FALSE
+  horiz1 = FALSE,
+  width = 500,
+  height = 500,
+  width3 = 500,
+  height3 = 500,
+  width4 = 500,
+  height4 = 500,
+  width5 = 500,
+  height5 = 500
 )
 }
 \arguments{
@@ -46,6 +54,22 @@ cor(
 \item{plot3}{.}
 
 \item{horiz1}{.}
+
+\item{width}{.}
+
+\item{height}{.}
+
+\item{width3}{.}
+
+\item{height3}{.}
+
+\item{width4}{.}
+
+\item{height4}{.}
+
+\item{width5}{.}
+
+\item{height5}{.}
 }
 \value{
 A results object containing:

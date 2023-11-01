@@ -56,7 +56,7 @@ options:
       default: 3
 
     - name: plot
-      title: Heatmap 
+      title: 'Heatmap' 
       type: Bool
       default: TRUE    
       
@@ -66,7 +66,7 @@ options:
       default: FALSE
 
     - name: plot1
-      title: Dendrogram
+      title: 'Dendrogram'
       type: Bool
       default: FALSE 
       
@@ -76,12 +76,12 @@ options:
       default: FALSE      
       
     - name: plot2
-      title: Heatmap
+      title: 'Heatmap'
       type: Bool
       default: FALSE     
 
     - name: plot3
-      title: Dendrogram 
+      title: 'Dendrogram' 
       type: Bool
       default: FALSE        
 
@@ -90,4 +90,43 @@ options:
       type: Bool
       default: FALSE
 
+    - name: width
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "X"
+      default: 500
+
+    - name: width3
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height3
+      type: Integer
+      title: "Height"
+      default: 500         
+
+    - name: width4
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height4
+      type: Integer
+      title: "Height"
+      default: 500       
+
+    - name: width5
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height5
+      type: Integer
+      title: "Height"
+      default: 500             
 ...

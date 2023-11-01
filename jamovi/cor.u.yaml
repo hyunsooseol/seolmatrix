@@ -47,6 +47,14 @@ children:
                   - type: CheckBox
                     name: plot2
                     enable: (poly)
+                  - type: TextBox
+                    name: width4
+                    format: number
+                    enable: (plot2)
+                  - type: TextBox
+                    name: height4
+                    format: number
+                    enable: (plot2)  
                   - type: CheckBox
                     name: plot3
                     enable: (poly)
@@ -54,6 +62,15 @@ children:
                       - type: CheckBox
                         name: horiz1
                         enable: (poly)
+                      - type: TextBox
+                        name: width3
+                        format: number
+                        enable: (plot3)
+                      - type: TextBox
+                        name: height3
+                        format: number
+                        enable: (plot3)  
+
       - type: LayoutBox
         stretchFactor: 1
         margin: large
@@ -67,12 +84,30 @@ children:
             children:
               - type: CheckBox
                 name: plot
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (plot)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (plot)
               - type: CheckBox
                 name: plot1
                 children:
                   - type: CheckBox
                     name: horiz
                     enable: (plot1)
+                  - type: TextBox
+                    name: width5
+                    format: number
+                    enable: (plot1)
+                  - type: TextBox
+                    name: height5
+                    format: number
+                    enable: (plot1)  
 
 
  

@@ -17,7 +17,15 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             poly = FALSE,
             plot2 = FALSE,
             plot3 = FALSE,
-            horiz1 = FALSE, ...) {
+            horiz1 = FALSE,
+            width = 500,
+            height = 500,
+            width3 = 500,
+            height3 = 500,
+            width4 = 500,
+            height4 = 500,
+            width5 = 500,
+            height5 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -90,6 +98,38 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "horiz1",
                 horiz1,
                 default=FALSE)
+            private$..width <- jmvcore::OptionInteger$new(
+                "width",
+                width,
+                default=500)
+            private$..height <- jmvcore::OptionInteger$new(
+                "height",
+                height,
+                default=500)
+            private$..width3 <- jmvcore::OptionInteger$new(
+                "width3",
+                width3,
+                default=500)
+            private$..height3 <- jmvcore::OptionInteger$new(
+                "height3",
+                height3,
+                default=500)
+            private$..width4 <- jmvcore::OptionInteger$new(
+                "width4",
+                width4,
+                default=500)
+            private$..height4 <- jmvcore::OptionInteger$new(
+                "height4",
+                height4,
+                default=500)
+            private$..width5 <- jmvcore::OptionInteger$new(
+                "width5",
+                width5,
+                default=500)
+            private$..height5 <- jmvcore::OptionInteger$new(
+                "height5",
+                height5,
+                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
@@ -103,6 +143,14 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..plot2)
             self$.addOption(private$..plot3)
             self$.addOption(private$..horiz1)
+            self$.addOption(private$..width)
+            self$.addOption(private$..height)
+            self$.addOption(private$..width3)
+            self$.addOption(private$..height3)
+            self$.addOption(private$..width4)
+            self$.addOption(private$..height4)
+            self$.addOption(private$..width5)
+            self$.addOption(private$..height5)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -116,7 +164,15 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         poly = function() private$..poly$value,
         plot2 = function() private$..plot2$value,
         plot3 = function() private$..plot3$value,
-        horiz1 = function() private$..horiz1$value),
+        horiz1 = function() private$..horiz1$value,
+        width = function() private$..width$value,
+        height = function() private$..height$value,
+        width3 = function() private$..width3$value,
+        height3 = function() private$..height3$value,
+        width4 = function() private$..width4$value,
+        height4 = function() private$..height4$value,
+        width5 = function() private$..width5$value,
+        height5 = function() private$..height5$value),
     private = list(
         ..vars = NA,
         ..type = NA,
@@ -129,7 +185,15 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..poly = NA,
         ..plot2 = NA,
         ..plot3 = NA,
-        ..horiz1 = NA)
+        ..horiz1 = NA,
+        ..width = NA,
+        ..height = NA,
+        ..width3 = NA,
+        ..height3 = NA,
+        ..width4 = NA,
+        ..height4 = NA,
+        ..width5 = NA,
+        ..height5 = NA)
 )
 
 corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -159,8 +223,6 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="plot",
                 title="Heatmap",
                 visible="(plot)",
-                width=600,
-                height=600,
                 refs="ShinyItemAnalysis",
                 renderFun=".plot",
                 clearWith=list(
@@ -169,14 +231,14 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz")))
+                    "horiz",
+                    "width",
+                    "height")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
                 title="Dendrogram",
                 visible="(plot1)",
-                width=600,
-                height=600,
                 renderFun=".plot1",
                 clearWith=list(
                     "vars",
@@ -184,14 +246,14 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz")))
+                    "horiz",
+                    "width5",
+                    "height5")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
                 title="Polychoric Heatmap",
                 visible="(plot2)",
-                width=600,
-                height=600,
                 renderFun=".plot2",
                 clearWith=list(
                     "vars",
@@ -200,14 +262,14 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "method",
                     "size",
                     "horiz",
-                    "horiz1")))
+                    "horiz1",
+                    "width4",
+                    "height4")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
                 title="Polychoric Dendrogram",
                 visible="(plot3)",
-                width=600,
-                height=600,
                 renderFun=".plot3",
                 clearWith=list(
                     "vars",
@@ -215,7 +277,9 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz1")))}))
+                    "horiz1",
+                    "width3",
+                    "height3")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",
@@ -254,6 +318,14 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot2 .
 #' @param plot3 .
 #' @param horiz1 .
+#' @param width .
+#' @param height .
+#' @param width3 .
+#' @param height3 .
+#' @param width4 .
+#' @param height4 .
+#' @param width5 .
+#' @param height5 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -277,7 +349,15 @@ cor <- function(
     poly = FALSE,
     plot2 = FALSE,
     plot3 = FALSE,
-    horiz1 = FALSE) {
+    horiz1 = FALSE,
+    width = 500,
+    height = 500,
+    width3 = 500,
+    height3 = 500,
+    width4 = 500,
+    height4 = 500,
+    width5 = 500,
+    height5 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("cor requires jmvcore to be installed (restart may be required)")
@@ -301,7 +381,15 @@ cor <- function(
         poly = poly,
         plot2 = plot2,
         plot3 = plot3,
-        horiz1 = horiz1)
+        horiz1 = horiz1,
+        width = width,
+        height = height,
+        width3 = width3,
+        height3 = height3,
+        width4 = width4,
+        height4 = height4,
+        width5 = width5,
+        height5 = height5)
 
     analysis <- corClass$new(
         options = options,
