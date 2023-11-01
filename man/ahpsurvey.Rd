@@ -14,7 +14,11 @@ ahpsurvey(
   method1 = "geometric",
   plot1 = FALSE,
   plot2 = FALSE,
-  angle = 0
+  angle = 0,
+  width1 = 500,
+  height1 = 500,
+  width2 = 500,
+  height2 = 500
 )
 }
 \arguments{
@@ -38,6 +42,14 @@ ahpsurvey(
 
 \item{angle}{a number from 0 to 90 defining the angle of the x-axis labels,
 where 0 degrees represents completely horizontal labels.}
+
+\item{width1}{.}
+
+\item{height1}{.}
+
+\item{width2}{.}
+
+\item{height2}{.}
 }
 \value{
 A results object containing:
