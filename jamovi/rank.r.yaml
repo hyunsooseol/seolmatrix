@@ -27,46 +27,50 @@ items:
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot
       visible: (plot)
       refs: qgraph
       clearWith:
         - vars
+        - type
+        - width
+        - height
 
     - name: plot2
       title: 'Centrality plot '
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot2
       visible: (plot2)
       refs: qgraph
       clearWith:
           - vars
+          - type
           - scale
+          - width2
+          - height2
 
     - name: plot1
       title: 'Partial plot'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot1
       visible: (plot1)
       refs: qgraph
       clearWith:
         - vars
+        - type
+        - width1
+        - height1
 
     - name: plot3
       title: 'Matrix plot'
       type: Image
-      width:  500
-      height: 500
       renderFun: .plot3
       visible: (plot3)
       refs: corrgram 
       clearWith:
           - vars
+          - type
+          - width3
+          - height3
               
 ...
