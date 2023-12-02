@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.8.2
+version: 3.8.3
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2023-10-30'
+date: '2023-12-02'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -70,7 +70,7 @@ datasets:
     tags:
       - Rater
   - name: kappa
-    path: diagnoses.omv
+    path: kappa.omv
     description: Character data
     tags:
       - Rater

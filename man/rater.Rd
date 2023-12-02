@@ -20,7 +20,8 @@ rater(
   ek = FALSE,
   krip = FALSE,
   method = "nominal",
-  t = "col"
+  t = "col",
+  pa = FALSE
 )
 }
 \arguments{
@@ -55,6 +56,8 @@ rater(
 \item{method}{.}
 
 \item{t}{.}
+
+\item{pa}{.}
 }
 \value{
 A results object containing:
@@ -64,6 +67,7 @@ A results object containing:
   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
+  \code{results$pa} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
   \code{results$ic} \tab \tab \tab \tab \tab a table \cr

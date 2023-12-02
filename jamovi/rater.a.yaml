@@ -106,7 +106,10 @@ options:
           name: 'row'
       default: 'col'
 
-
+    - name: pa
+      title: 'Percentage agreement'
+      type: Bool
+      default: FALSE 
 
 ...
 

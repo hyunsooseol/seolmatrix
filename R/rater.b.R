@@ -20,6 +20,7 @@
 #' @importFrom irr kappam.fleiss
 #' @importFrom irr kripp.alpha
 #' @importFrom  stringr str_interp
+#' @importFrom  irr agree
 #' @export
 
 
@@ -244,6 +245,35 @@ raterClass <- if (requireNamespace('jmvcore'))
         
        
         #  Agreement Analysis------------
+        
+        # Simple Percentage agreement-------------------
+        
+        if(isTRUE(self$options$pa)){
+          
+          #tol <- self$options$tol
+          
+          pa<- irr::agree(data)
+          
+          # get subjects-------
+          subjects <- pa$subjects
+          # get raters--------
+          raters <- pa$raters
+          
+          # get statistic(%)------------
+          percent <- pa$value
+          
+          table <- self$results$pa
+          
+          row <- list()
+          
+          row[['Subjects']] <- subjects
+          row[['Raters']] <- raters
+          row[['Agreement(%)']] <- percent
+          
+          table$setRow(rowNo = 1, values = row)
+          
+        }
+        
         
         # ICC TABLE--------------------
         

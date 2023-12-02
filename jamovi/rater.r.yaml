@@ -49,7 +49,7 @@ items:
         - name: name
           title: ''
           type: 'text'
-          content: Fleiss' Kappa
+          content: Value
         - name: n
           type: number
         - name: rater
@@ -76,7 +76,7 @@ items:
         - name: name
           title: ''
           type: 'text'
-          content: Exact Kappa
+          content: Value
         - name: n
           type: number
         - name: rater
@@ -109,6 +109,28 @@ items:
           title: 'p'
           type: number
           format: zto,pvalue
+
+    - name: pa
+      title: 'Simple percentage agreement'
+      type: Table
+      rows: 1
+      visible: (pa)
+      clearWith:
+        - vars
+        - t
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Value
+        - name: Subjects
+          type: number
+        - name: Raters
+          type: number
+        - name: Agreement(%)
+          type: number
 
     - name: icc
       title: 'Intraclass correlation coefficient'
@@ -153,7 +175,7 @@ items:
         - name: name
           title: ''
           type: 'text'
-          content: Agreement
+          content: Value
         - name: lower
           title: 'Lower'
           type: number
@@ -250,7 +272,7 @@ items:
         - name: name
           title: ''
           type: 'text'
-          content: Krippendorff alpha
+          content: Value
         - name: Subjects
           type: number
         - name: Raters

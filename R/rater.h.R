@@ -20,7 +20,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ek = FALSE,
             krip = FALSE,
             method = "nominal",
-            t = "col", ...) {
+            t = "col",
+            pa = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -104,6 +105,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "col",
                     "row"),
                 default="col")
+            private$..pa <- jmvcore::OptionBool$new(
+                "pa",
+                pa,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..model)
@@ -120,6 +125,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..krip)
             self$.addOption(private$..method)
             self$.addOption(private$..t)
+            self$.addOption(private$..pa)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -136,7 +142,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ek = function() private$..ek$value,
         krip = function() private$..krip$value,
         method = function() private$..method$value,
-        t = function() private$..t$value),
+        t = function() private$..t$value,
+        pa = function() private$..pa$value),
     private = list(
         ..vars = NA,
         ..model = NA,
@@ -152,7 +159,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ek = NA,
         ..krip = NA,
         ..method = NA,
-        ..t = NA)
+        ..t = NA,
+        ..pa = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -164,6 +172,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         fk = function() private$.items[["fk"]],
         ek = function() private$.items[["ek"]],
         cw = function() private$.items[["cw"]],
+        pa = function() private$.items[["pa"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
         ic = function() private$.items[["ic"]],
@@ -228,7 +237,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="Fleiss' Kappa"),
+                        `content`="Value"),
                     list(
                         `name`="n", 
                         `type`="number"),
@@ -260,7 +269,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="Exact Kappa"),
+                        `content`="Value"),
                     list(
                         `name`="n", 
                         `type`="number"),
@@ -298,6 +307,31 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="pa",
+                title="Simple percentage agreement",
+                rows=1,
+                visible="(pa)",
+                clearWith=list(
+                    "vars",
+                    "t"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Value"),
+                    list(
+                        `name`="Subjects", 
+                        `type`="number"),
+                    list(
+                        `name`="Raters", 
+                        `type`="number"),
+                    list(
+                        `name`="Agreement(%)", 
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="icc",
@@ -349,7 +383,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="Agreement"),
+                        `content`="Value"),
                     list(
                         `name`="lower", 
                         `title`="Lower", 
@@ -459,7 +493,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="name", 
                         `title`="", 
                         `type`="text", 
-                        `content`="Krippendorff alpha"),
+                        `content`="Value"),
                     list(
                         `name`="Subjects", 
                         `type`="number"),
@@ -510,6 +544,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param krip .
 #' @param method .
 #' @param t .
+#' @param pa .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -517,6 +552,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$pa} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
@@ -547,7 +583,8 @@ rater <- function(
     ek = FALSE,
     krip = FALSE,
     method = "nominal",
-    t = "col") {
+    t = "col",
+    pa = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -574,7 +611,8 @@ rater <- function(
         ek = ek,
         krip = krip,
         method = method,
-        t = t)
+        t = t,
+        pa = pa)
 
     analysis <- raterClass$new(
         options = options,

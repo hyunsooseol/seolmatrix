@@ -24,28 +24,38 @@ children:
     margin: normal
     collapsed: true
     children:
-      - type: Label
-        label: 'Kappa'
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         children:
-          - type: CheckBox
-            name: interrater
-          - type: CheckBox
-            name: fk
-          - type: CheckBox
-            name: ek
-          - type: CheckBox
-            name: cw
-      - type: Label
-        label: 'Agreement'
-        fitToGrid: true
+          - type: Label
+            label: 'Kappa'
+            children:
+              - type: CheckBox
+                name: interrater
+              - type: CheckBox
+                name: fk
+              - type: CheckBox
+                name: ek
+              - type: CheckBox
+                name: cw
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
         cell:
           column: 1
           row: 0
+        fitToGrid: true
         children:
-          - type: CheckBox
-            name: icc
-          - type: CheckBox
-            name: bicc    
+          - type: Label
+            label: 'Agreement'
+            children:
+              - type: CheckBox
+                name: pa    
+              - type: CheckBox
+                name: icc
+              - type: CheckBox
+                name: bicc    
   - type: CollapseBox
     label: ICC for oneway and twoway models
     margin: normal
