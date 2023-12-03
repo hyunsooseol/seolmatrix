@@ -62,6 +62,30 @@ items:
           type: number
           format: zto,pvalue
 
+    - name: bt
+      title: 'Bootstrap confidence intervals of Fleiss Kappa'
+      type: Table
+      visible: (bt)
+      rows: 1
+      clearWith:
+        - vars
+        - t
+        - boot1
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Value
+        - name: lower
+          title: 'Lower'
+          type: number
+          superTitle: '95% CI'
+        - name: upper
+          title: 'Upper'
+          type: number
+          superTitle: '95% CI'
+
     - name: ek
       title: 'Exact Kappa'
       type: Table

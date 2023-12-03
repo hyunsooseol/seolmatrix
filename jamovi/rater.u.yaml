@@ -36,6 +36,13 @@ children:
               - type: CheckBox
                 name: fk
               - type: CheckBox
+                name: bt
+                children:
+                  - name: boot1
+                    type: TextBox
+                    format: number
+                    enable: (bt)                
+              - type: CheckBox
                 name: ek
               - type: CheckBox
                 name: cw
@@ -59,7 +66,6 @@ children:
                 children:
                   - name: boot
                     type: TextBox
-                    label: Bootstrap N
                     format: number
                     enable: (bicc)
   - type: CollapseBox

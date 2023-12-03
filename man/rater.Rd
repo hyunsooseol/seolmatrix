@@ -22,7 +22,9 @@ rater(
   method = "nominal",
   t = "col",
   pa = FALSE,
-  boot = 1000
+  boot = 1000,
+  bt = FALSE,
+  boot1 = 1000
 )
 }
 \arguments{
@@ -61,6 +63,10 @@ rater(
 \item{pa}{.}
 
 \item{boot}{.}
+
+\item{bt}{.}
+
+\item{boot1}{.}
 }
 \value{
 A results object containing:
@@ -68,6 +74,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
+  \code{results$bt} \tab \tab \tab \tab \tab a table \cr
   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
   \code{results$pa} \tab \tab \tab \tab \tab a table \cr

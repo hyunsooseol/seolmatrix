@@ -21,6 +21,8 @@
 #' @importFrom irr kripp.alpha
 #' @importFrom  stringr str_interp
 #' @importFrom  irr agree
+#' @importFrom  boot boot
+#' @importFrom boot boot.ci
 #' @export
 
 
@@ -191,6 +193,31 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         }
         
+        # bootstrap of Fleiss' kappa------------
+        
+        if(isTRUE(self$options$bt)){
+        
+        bt <- boot::boot(data, function(x, idx) {kappam.fleiss(x[idx,])$value}, 
+                         R= self$options$boot1)
+        
+        bootci<- boot::boot.ci(bt)
+        
+        bootci<- bootci$normal
+        
+        table <- self$results$bt
+        
+        row <- list()
+        
+        row[['lower']] <- bootci[2]
+        row[['upper']] <- bootci[3]
+        
+        
+        table$setRow(rowNo = 1, values = row)
+        
+        
+        }
+        
+        
         # Fleiss' Exact kappa-------------------
         
         if(isTRUE(self$options$ek)){
@@ -287,7 +314,7 @@ raterClass <- if (requireNamespace('jmvcore'))
           if(jmvcore::isError(icc)){
             
             err_string <- stringr::str_interp(
-              "The analysis cannot be performed because the data is not suitable for the analysis model."
+              "You can't perform this analysis with sentence-type data."
             )
             stop(err_string)
             
@@ -331,53 +358,60 @@ raterClass <- if (requireNamespace('jmvcore'))
         }
         
         }
-        # Bootstrap table---------
+        
+        # Bootstrap of ICC agreement table---------
         
         if(isTRUE(self$options$bicc)){
         
-          ### To obtain 95% confidence interval---------
           
-          icc.boot <- function(data, x) {
-            icc(data[x, ])[[7]]
-          }
+          k <- try(boot::boot(data, function(x, idx) {icc(x[idx,])$icc.agreement}, R=self$options$boot))
+          
          
-          boot <- self$options$boot
+        #   
+        #   ### To obtain 95% confidence interval---------
+        #   
+        #   icc.boot <- function(data, x) {
+        #     icc(data[x, ])[[7]]
+        #   }
+        #  
+        #   boot <- self$options$boot
+        #    
+        #   bres <- try(boot::boot(data, icc.boot, boot))
+        #   
+           if(jmvcore::isError(k)){
+             
+             err_string <- stringr::str_interp(
+               "You can't perform this analysis with sentence-type data."
+             )
+             stop(err_string)
+             
+           } 
            
-          bres <- try(boot::boot(data, icc.boot, boot))
-          
-          if(jmvcore::isError(bres)){
-            
-            err_string <- stringr::str_interp(
-              "The analysis cannot be performed because the data is not suitable for the analysis model."
-            )
-            stop(err_string)
-            
-          } 
-          
-          if (! jmvcore::isError(bres) ){
-          
-          # two-sided bootstrapped confidence interval of icc (agreement)
-          
-        bicc <- quantile(bres$t, c(0.025, 0.975)) 
-         
+           if (! jmvcore::isError(k) ){
+        #   
+        #   # two-sided bootstrapped confidence interval of icc (agreement)
+        #   
+        # bicc <- quantile(bres$t, c(0.025, 0.975)) 
+        #  
        
+             bootci<- boot::boot.ci(k)
+             
+             bicc<- bootci$normal
+             
+             
        table <- self$results$bicc
        
         row <- list()
         
-        row[['lower']] <- bicc[1]
-        row[['upper']] <- bicc[2]
+        row[['lower']] <- bicc[2]
+        row[['upper']] <- bicc[3]
         
         
         table$setRow(rowNo = 1, values = row)
         
         }
-        
         }
-        
-        
-        
-        
+      
         ########### icc using oneway and twoway----------
         
         model <- self$options$model

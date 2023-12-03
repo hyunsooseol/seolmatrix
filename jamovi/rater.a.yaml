@@ -67,7 +67,7 @@ options:
       default: false
    
     - name: fk
-      title: Fleiss' Kappa 
+      title: Fleiss Kappa 
       type: Bool
       default: FALSE
 
@@ -112,10 +112,20 @@ options:
       default: FALSE 
 
     - name: boot
-      title: 'N'
+      title: 'Bootstrap N'
       type: Integer
       min: 100
       default: 1000
 
+    - name: bt
+      title: 'Confidence intervals of Fleiss Kappa'
+      type: Bool
+      default: FALSE
+
+    - name: boot1
+      title: 'Bootstrap N'
+      type: Integer
+      min: 100
+      default: 1000
 ...
 

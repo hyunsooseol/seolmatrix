@@ -22,7 +22,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             method = "nominal",
             t = "col",
             pa = FALSE,
-            boot = 1000, ...) {
+            boot = 1000,
+            bt = FALSE,
+            boot1 = 1000, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -115,6 +117,15 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 boot,
                 min=100,
                 default=1000)
+            private$..bt <- jmvcore::OptionBool$new(
+                "bt",
+                bt,
+                default=FALSE)
+            private$..boot1 <- jmvcore::OptionInteger$new(
+                "boot1",
+                boot1,
+                min=100,
+                default=1000)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..model)
@@ -133,6 +144,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..t)
             self$.addOption(private$..pa)
             self$.addOption(private$..boot)
+            self$.addOption(private$..bt)
+            self$.addOption(private$..boot1)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -151,7 +164,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         method = function() private$..method$value,
         t = function() private$..t$value,
         pa = function() private$..pa$value,
-        boot = function() private$..boot$value),
+        boot = function() private$..boot$value,
+        bt = function() private$..bt$value,
+        boot1 = function() private$..boot1$value),
     private = list(
         ..vars = NA,
         ..model = NA,
@@ -169,7 +184,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..method = NA,
         ..t = NA,
         ..pa = NA,
-        ..boot = NA)
+        ..boot = NA,
+        ..bt = NA,
+        ..boot1 = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -179,6 +196,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         interrater = function() private$.items[["interrater"]],
         fk = function() private$.items[["fk"]],
+        bt = function() private$.items[["bt"]],
         ek = function() private$.items[["ek"]],
         cw = function() private$.items[["cw"]],
         pa = function() private$.items[["pa"]],
@@ -263,6 +281,32 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="bt",
+                title="Bootstrap confidence intervals of Fleiss Kappa",
+                visible="(bt)",
+                rows=1,
+                clearWith=list(
+                    "vars",
+                    "t",
+                    "boot1"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Value"),
+                    list(
+                        `name`="lower", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="upper", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="ek",
@@ -556,11 +600,14 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param t .
 #' @param pa .
 #' @param boot .
+#' @param bt .
+#' @param boot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$bt} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ek} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cw} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pa} \tab \tab \tab \tab \tab a table \cr
@@ -596,7 +643,9 @@ rater <- function(
     method = "nominal",
     t = "col",
     pa = FALSE,
-    boot = 1000) {
+    boot = 1000,
+    bt = FALSE,
+    boot1 = 1000) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -625,7 +674,9 @@ rater <- function(
         method = method,
         t = t,
         pa = pa,
-        boot = boot)
+        boot = boot,
+        bt = bt,
+        boot1 = boot1)
 
     analysis <- raterClass$new(
         options = options,
