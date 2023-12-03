@@ -56,6 +56,12 @@ children:
                 name: icc
               - type: CheckBox
                 name: bicc    
+                children:
+                  - name: boot
+                    type: TextBox
+                    label: Bootstrap N
+                    format: number
+                    enable: (bicc)
   - type: CollapseBox
     label: ICC for oneway and twoway models
     margin: normal

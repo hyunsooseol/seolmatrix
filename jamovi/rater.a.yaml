@@ -52,7 +52,7 @@ options:
       default: FALSE
       
     - name: bicc
-      title: Bootstrap agreement(n=1000)
+      title: 'Confidence intervals of ICC agreement'
       type: Bool
       default: FALSE
 
@@ -110,6 +110,12 @@ options:
       title: 'Percentage agreement'
       type: Bool
       default: FALSE 
+
+    - name: boot
+      title: 'N'
+      type: Integer
+      min: 100
+      default: 1000
 
 ...
 

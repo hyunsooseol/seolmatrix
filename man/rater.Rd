@@ -21,7 +21,8 @@ rater(
   krip = FALSE,
   method = "nominal",
   t = "col",
-  pa = FALSE
+  pa = FALSE,
+  boot = 1000
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ rater(
 \item{t}{.}
 
 \item{pa}{.}
+
+\item{boot}{.}
 }
 \value{
 A results object containing:

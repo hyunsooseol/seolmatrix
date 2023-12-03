@@ -340,8 +340,10 @@ raterClass <- if (requireNamespace('jmvcore'))
           icc.boot <- function(data, x) {
             icc(data[x, ])[[7]]
           }
-          
-          bres <- try(boot::boot(data, icc.boot, 1000))
+         
+          boot <- self$options$boot
+           
+          bres <- try(boot::boot(data, icc.boot, boot))
           
           if(jmvcore::isError(bres)){
             
@@ -359,7 +361,6 @@ raterClass <- if (requireNamespace('jmvcore'))
         bicc <- quantile(bres$t, c(0.025, 0.975)) 
          
        
-          
        table <- self$results$bicc
        
         row <- list()
@@ -373,6 +374,10 @@ raterClass <- if (requireNamespace('jmvcore'))
         }
         
         }
+        
+        
+        
+        
         ########### icc using oneway and twoway----------
         
         model <- self$options$model

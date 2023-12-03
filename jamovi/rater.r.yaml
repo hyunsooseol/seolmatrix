@@ -163,13 +163,14 @@ items:
           type: number
           
     - name: bicc
-      title: 'Bootstrap agreement'
+      title: 'Bootstrap confidence intervals of ICC agreement'
       type: Table
       visible: (bicc)
       rows: 1
       clearWith:
         - vars
         - t
+        - boot
 
       columns:
         - name: name

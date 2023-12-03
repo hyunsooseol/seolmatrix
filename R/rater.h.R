@@ -21,7 +21,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             krip = FALSE,
             method = "nominal",
             t = "col",
-            pa = FALSE, ...) {
+            pa = FALSE,
+            boot = 1000, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -109,6 +110,11 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "pa",
                 pa,
                 default=FALSE)
+            private$..boot <- jmvcore::OptionInteger$new(
+                "boot",
+                boot,
+                min=100,
+                default=1000)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..model)
@@ -126,6 +132,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..method)
             self$.addOption(private$..t)
             self$.addOption(private$..pa)
+            self$.addOption(private$..boot)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -143,7 +150,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         krip = function() private$..krip$value,
         method = function() private$..method$value,
         t = function() private$..t$value,
-        pa = function() private$..pa$value),
+        pa = function() private$..pa$value,
+        boot = function() private$..boot$value),
     private = list(
         ..vars = NA,
         ..model = NA,
@@ -160,7 +168,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..krip = NA,
         ..method = NA,
         ..t = NA,
-        ..pa = NA)
+        ..pa = NA,
+        ..boot = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -372,12 +381,13 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="bicc",
-                title="Bootstrap agreement",
+                title="Bootstrap confidence intervals of ICC agreement",
                 visible="(bicc)",
                 rows=1,
                 clearWith=list(
                     "vars",
-                    "t"),
+                    "t",
+                    "boot"),
                 columns=list(
                     list(
                         `name`="name", 
@@ -545,6 +555,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param method .
 #' @param t .
 #' @param pa .
+#' @param boot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -584,7 +595,8 @@ rater <- function(
     krip = FALSE,
     method = "nominal",
     t = "col",
-    pa = FALSE) {
+    pa = FALSE,
+    boot = 1000) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -612,7 +624,8 @@ rater <- function(
         krip = krip,
         method = method,
         t = t,
-        pa = pa)
+        pa = pa,
+        boot = boot)
 
     analysis <- raterClass$new(
         options = options,
