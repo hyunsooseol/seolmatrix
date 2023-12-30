@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.8.3
+version: 3.8.4
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2023-12-02'
+date: '2024-01-01'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -74,6 +74,12 @@ datasets:
     description: Character data
     tags:
       - Rater
+  - name: anxiety
+    path: anxiety.omv
+    description: Kendall’s coefficient of concordance W
+    tags:
+      - Rater
+      - Kendall
   - name: big5
     path: big5.omv
     description: partial data

@@ -24,7 +24,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             pa = FALSE,
             boot = 1000,
             bt = FALSE,
-            boot1 = 1000, ...) {
+            boot1 = 1000,
+            kend = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -126,6 +127,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 boot1,
                 min=100,
                 default=1000)
+            private$..kend <- jmvcore::OptionBool$new(
+                "kend",
+                kend,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..model)
@@ -146,6 +151,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..boot)
             self$.addOption(private$..bt)
             self$.addOption(private$..boot1)
+            self$.addOption(private$..kend)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -166,7 +172,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         pa = function() private$..pa$value,
         boot = function() private$..boot$value,
         bt = function() private$..bt$value,
-        boot1 = function() private$..boot1$value),
+        boot1 = function() private$..boot1$value,
+        kend = function() private$..kend$value),
     private = list(
         ..vars = NA,
         ..model = NA,
@@ -186,7 +193,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..pa = NA,
         ..boot = NA,
         ..bt = NA,
-        ..boot1 = NA)
+        ..boot1 = NA,
+        ..kend = NA)
 )
 
 raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -202,6 +210,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         pa = function() private$.items[["pa"]],
         icc = function() private$.items[["icc"]],
         bicc = function() private$.items[["bicc"]],
+        kend = function() private$.items[["kend"]],
         ic = function() private$.items[["ic"]],
         ftest = function() private$.items[["ftest"]],
         krip = function() private$.items[["krip"]]),
@@ -450,6 +459,43 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `superTitle`="95% CI"))))
             self$add(jmvcore::Table$new(
                 options=options,
+                name="kend",
+                title="Kendall\u2019s coefficient of concordance W",
+                rows=1,
+                visible="(kend)",
+                clearWith=list(
+                    "vars",
+                    "t"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Value"),
+                    list(
+                        `name`="n", 
+                        `title`="Subjects", 
+                        `type`="number"),
+                    list(
+                        `name`="rater", 
+                        `title`="Raters", 
+                        `type`="number"),
+                    list(
+                        `name`="w", 
+                        `title`="W", 
+                        `type`="number"),
+                    list(
+                        `name`="chi", 
+                        `title`="Chi-square", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
                 name="ic",
                 title="Intraclass Correlation Coefficient(ICC)",
                 rows=1,
@@ -602,6 +648,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param boot .
 #' @param bt .
 #' @param boot1 .
+#' @param kend .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -613,6 +660,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$pa} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$kend} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$krip} \tab \tab \tab \tab \tab a table \cr
@@ -645,7 +693,8 @@ rater <- function(
     pa = FALSE,
     boot = 1000,
     bt = FALSE,
-    boot1 = 1000) {
+    boot1 = 1000,
+    kend = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rater requires jmvcore to be installed (restart may be required)")
@@ -676,7 +725,8 @@ rater <- function(
         pa = pa,
         boot = boot,
         bt = bt,
-        boot1 = boot1)
+        boot1 = boot1,
+        kend = kend)
 
     analysis <- raterClass$new(
         options = options,

@@ -127,5 +127,11 @@ options:
       type: Integer
       min: 100
       default: 1000
+
+    - name: kend
+      title: 'Coefficient of concordance W'
+      type: Bool
+      default: FALSE
+
 ...
 

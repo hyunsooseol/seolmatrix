@@ -68,6 +68,11 @@ children:
                     type: TextBox
                     format: number
                     enable: (bicc)
+          - type: Label
+            label: 'Kendall'
+            children:
+              - type: CheckBox
+                name: kend  
   - type: CollapseBox
     label: ICC for oneway and twoway models
     margin: normal

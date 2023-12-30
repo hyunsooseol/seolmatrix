@@ -24,7 +24,8 @@ rater(
   pa = FALSE,
   boot = 1000,
   bt = FALSE,
-  boot1 = 1000
+  boot1 = 1000,
+  kend = FALSE
 )
 }
 \arguments{
@@ -67,6 +68,8 @@ rater(
 \item{bt}{.}
 
 \item{boot1}{.}
+
+\item{kend}{.}
 }
 \value{
 A results object containing:
@@ -80,6 +83,7 @@ A results object containing:
   \code{results$pa} \tab \tab \tab \tab \tab a table \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$bicc} \tab \tab \tab \tab \tab a table \cr
+  \code{results$kend} \tab \tab \tab \tab \tab a table \cr
   \code{results$ic} \tab \tab \tab \tab \tab a table \cr
   \code{results$ftest} \tab \tab \tab \tab \tab a table \cr
   \code{results$krip} \tab \tab \tab \tab \tab a table \cr

@@ -23,6 +23,7 @@
 #' @importFrom  irr agree
 #' @importFrom  boot boot
 #' @importFrom boot boot.ci
+#' @importFrom irr kendall
 #' @export
 
 
@@ -412,6 +413,38 @@ raterClass <- if (requireNamespace('jmvcore'))
         }
         }
       
+        # Kendall's W--------------------------
+        
+        if(isTRUE(self$options$kend)){
+        
+          ked<- irr::kendall(data, correct=TRUE)
+        
+          # get subjects-------
+          n <- ked$subjects
+          # get raters--------
+          rater <- ked$raters
+          # W------------
+          w <- ked$value
+          # chi value----------------
+          chi <- ked$statistic
+          # p value-------------------
+          p <- ked$p.value
+          
+          table <- self$results$kend
+            
+            row <- list()
+            
+            row[['n']] <- n
+            row[['rater']] <- rater
+            row[['w']] <- w
+            row[['chi']] <- chi
+            row[['p']] <- p
+            
+            table$setRow(rowNo = 1, values = row)
+            
+          }
+          
+        
         ########### icc using oneway and twoway----------
         
         model <- self$options$model

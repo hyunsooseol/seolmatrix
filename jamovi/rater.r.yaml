@@ -210,6 +210,38 @@ items:
           type: number
           superTitle: '95% CI'
 
+    - name: kend
+      title: 'Kendall’s coefficient of concordance W'
+      type: Table
+      rows: 1
+      visible: (kend)
+      clearWith:
+        - vars
+        - t
+      refs: irr    
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: Value
+        - name: n
+          title: 'Subjects'
+          type: number
+        - name: rater
+          title: 'Raters'
+          type: number
+        - name: w
+          title: 'W'
+          type: number
+        - name: chi
+          title: 'Chi-square'
+          type: number
+        - name: p
+          title: 'p'
+          type: number
+          format: zto,pvalue
+
     - name: ic
       title: 'Intraclass Correlation Coefficient(ICC)'
       type: Table
