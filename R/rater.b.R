@@ -152,10 +152,10 @@ raterClass <- if (requireNamespace('jmvcore'))
         
           row <- list()
           
-          row[['n']] <- n
-          row[['rater']] <- rater
-          row[['statistic']] <- statistic
-          row[['z']] <- z
+          row[['N']] <- n
+          row[['Raters']] <- rater
+          row[['Kappa']] <- statistic
+          row[['Z']] <- z
           row[['p']] <- p
           
           table$setRow(rowNo = 1, values = row)
@@ -184,10 +184,10 @@ raterClass <- if (requireNamespace('jmvcore'))
        
         row <- list()
         
-        row[['n']] <- nk
-        row[['rater']] <- raterk
-        row[['statistic']] <- statistick
-        row[['z']] <- zk
+        row[['N']] <- nk
+        row[['Raters']] <- raterk
+        row[['Kappa']] <- statistick
+        row[['Z']] <- zk
         row[['p']] <- pk
         
         table$setRow(rowNo = 1, values = row)
@@ -236,9 +236,9 @@ raterClass <- if (requireNamespace('jmvcore'))
           
           row <- list()
           
-          row[['n']] <- nke
-          row[['rater']] <- raterke
-          row[['statistic']] <- statisticke
+          row[['N']] <- nke
+          row[['Raters']] <- raterke
+          row[['Kappa']] <- statisticke
           
           table$setRow(rowNo = 1, values = row)
           

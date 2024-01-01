@@ -243,16 +243,16 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="text", 
                         `content`="Light's Kappa"),
                     list(
-                        `name`="n", 
+                        `name`="N", 
                         `type`="number"),
                     list(
-                        `name`="rater", 
+                        `name`="Raters", 
                         `type`="number"),
                     list(
-                        `name`="statistic", 
+                        `name`="Kappa", 
                         `type`="number"),
                     list(
-                        `name`="z", 
+                        `name`="Z", 
                         `type`="number"),
                     list(
                         `name`="p", 
@@ -275,16 +275,16 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="text", 
                         `content`="Value"),
                     list(
-                        `name`="n", 
+                        `name`="N", 
                         `type`="number"),
                     list(
-                        `name`="rater", 
+                        `name`="Raters", 
                         `type`="number"),
                     list(
-                        `name`="statistic", 
+                        `name`="Kappa", 
                         `type`="number"),
                     list(
-                        `name`="z", 
+                        `name`="Z", 
                         `type`="number"),
                     list(
                         `name`="p", 
@@ -333,13 +333,13 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="text", 
                         `content`="Value"),
                     list(
-                        `name`="n", 
+                        `name`="N", 
                         `type`="number"),
                     list(
-                        `name`="rater", 
+                        `name`="Raters", 
                         `type`="number"),
                     list(
-                        `name`="statistic", 
+                        `name`="Kappa", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,

@@ -23,13 +23,13 @@ items:
           title: ''
           type: 'text'
           content: Light's Kappa
-        - name: n
+        - name: N
           type: number
-        - name: rater
+        - name: Raters
           type: number
-        - name: statistic
+        - name: Kappa
           type: number
-        - name: z
+        - name: Z
           type: number
         - name: p
           type: number
@@ -50,13 +50,13 @@ items:
           title: ''
           type: 'text'
           content: Value
-        - name: n
+        - name: N
           type: number
-        - name: rater
+        - name: Raters
           type: number
-        - name: statistic
+        - name: Kappa
           type: number
-        - name: z
+        - name: Z
           type: number
         - name: p
           type: number
@@ -101,11 +101,11 @@ items:
           title: ''
           type: 'text'
           content: Value
-        - name: n
+        - name: N
           type: number
-        - name: rater
+        - name: Raters
           type: number
-        - name: statistic
+        - name: Kappa
           type: number
 
     - name: cw
