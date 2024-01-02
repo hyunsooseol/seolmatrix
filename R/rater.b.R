@@ -60,7 +60,7 @@ raterClass <- if (requireNamespace('jmvcore'))
          if (self$options$ftest)
            self$results$ftest$setNote(
              "Note",
-             "H0: ICC = 0; H1: ICC > 0"
+             "H\u2090: ICC = 0; H\u2081: ICC > 0"
              
            )
          
@@ -78,6 +78,12 @@ raterClass <- if (requireNamespace('jmvcore'))
              
            )
 
+         if (self$options$kend)
+           self$results$kend$setNote(
+             "Note",
+             "H\u2090: W=0"
+             
+           )
       
       },
 
