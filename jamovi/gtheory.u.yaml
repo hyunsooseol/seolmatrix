@@ -68,8 +68,6 @@ children:
                 children:
                   - type: CheckBox
                     name: mea
-                  - type: CheckBox
-                    name: error
   - type: CollapseBox
     label: 'Multivariate analysis'
     margin: normal

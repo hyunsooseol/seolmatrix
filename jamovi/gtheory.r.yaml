@@ -10,11 +10,11 @@ items:
       visible: True
 
     - name:  text
-      title: Generalizability Theory
+      title: ''
       type:  Preformatted
 
     - name: g
-      title:  'Variance components: G study'
+      title:  'G Study: Variance components'
       type: Table
       visible: (g)
       clearWith:
@@ -42,7 +42,7 @@ items:
           type: integer     
 
     - name: d
-      title:  'Variance components: D study'
+      title: 'D Study: Variance components'
       type: Table
       visible: (d)
       clearWith:
@@ -70,7 +70,7 @@ items:
           type: integer     
 
     - name: mea
-      title: 'Coefficients'
+      title: 'Measures of D Study'
       type: Table
       visible: (mea)
       rows: 1
@@ -94,28 +94,11 @@ items:
         - name: universe
           title: 'Universe score variance'
           type: number
-
-    - name: error
-      title: 'Error variance'
-      type: Table
-      visible: (error)
-      rows: 1
-      clearWith:
-        - dep
-        - id
-        - facet
-      refs: gtheory
-
-      columns:
-        - name: name
-          title: ''
-          type: 'text'
-          content: D Study
         - name: relative
-          title: 'Relative'
+          title: 'Relative error variance'
           type: number
         - name: absolute
-          title: 'Absolute'
+          title: 'Absolute error variance'
           type: number
 
     - name: item
@@ -175,7 +158,7 @@ items:
           type: number
 
     - name: bm
-      title: 'Between measures: D study'
+      title: 'D Study: Between measures'
       type: Table
       visible: (bm)
       clearWith:

@@ -15,7 +15,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             d = FALSE,
             formula = "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)",
             mea = FALSE,
-            error = FALSE,
             item = FALSE,
             formula1 = "Score ~ (1 | Person) + (1 | Item)",
             t = "uni",
@@ -78,10 +77,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "mea",
                 mea,
                 default=FALSE)
-            private$..error <- jmvcore::OptionBool$new(
-                "error",
-                error,
-                default=FALSE)
             private$..item <- jmvcore::OptionBool$new(
                 "item",
                 item,
@@ -119,7 +114,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..d)
             self$.addOption(private$..formula)
             self$.addOption(private$..mea)
-            self$.addOption(private$..error)
             self$.addOption(private$..item)
             self$.addOption(private$..formula1)
             self$.addOption(private$..t)
@@ -137,7 +131,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         d = function() private$..d$value,
         formula = function() private$..formula$value,
         mea = function() private$..mea$value,
-        error = function() private$..error$value,
         item = function() private$..item$value,
         formula1 = function() private$..formula1$value,
         t = function() private$..t$value,
@@ -154,7 +147,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..d = NA,
         ..formula = NA,
         ..mea = NA,
-        ..error = NA,
         ..item = NA,
         ..formula1 = NA,
         ..t = NA,
@@ -172,7 +164,6 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         g = function() private$.items[["g"]],
         d = function() private$.items[["d"]],
         mea = function() private$.items[["mea"]],
-        error = function() private$.items[["error"]],
         item = function() private$.items[["item"]],
         comp = function() private$.items[["comp"]],
         bm = function() private$.items[["bm"]]),
@@ -192,11 +183,11 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Generalizability Theory"))
+                title=""))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="g",
-                title="Variance components: G study",
+                title="G Study: Variance components",
                 visible="(g)",
                 clearWith=list(
                     "dep",
@@ -224,7 +215,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="d",
-                title="Variance components: D study",
+                title="D Study: Variance components",
                 visible="(d)",
                 clearWith=list(
                     "dep",
@@ -252,7 +243,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="mea",
-                title="Coefficients",
+                title="Measures of D Study",
                 visible="(mea)",
                 rows=1,
                 clearWith=list(
@@ -277,31 +268,14 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="universe", 
                         `title`="Universe score variance", 
-                        `type`="number"))))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="error",
-                title="Error variance",
-                visible="(error)",
-                rows=1,
-                clearWith=list(
-                    "dep",
-                    "id",
-                    "facet"),
-                refs="gtheory",
-                columns=list(
-                    list(
-                        `name`="name", 
-                        `title`="", 
-                        `type`="text", 
-                        `content`="D Study"),
+                        `type`="number"),
                     list(
                         `name`="relative", 
-                        `title`="Relative", 
+                        `title`="Relative error variance", 
                         `type`="number"),
                     list(
                         `name`="absolute", 
-                        `title`="Absolute", 
+                        `title`="Absolute error variance", 
                         `type`="number"))))
             self$add(jmvcore::Array$new(
                 options=options,
@@ -366,7 +340,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="bm",
-                title="Between measures: D study",
+                title="D Study: Between measures",
                 visible="(bm)",
                 clearWith=list(
                     "dep",
@@ -432,7 +406,6 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param d .
 #' @param formula .
 #' @param mea .
-#' @param error .
 #' @param item .
 #' @param formula1 .
 #' @param t .
@@ -446,7 +419,6 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$g} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$d} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$error} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
 #'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
@@ -470,7 +442,6 @@ gtheory <- function(
     d = FALSE,
     formula = "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)",
     mea = FALSE,
-    error = FALSE,
     item = FALSE,
     formula1 = "Score ~ (1 | Person) + (1 | Item)",
     t = "uni",
@@ -507,7 +478,6 @@ gtheory <- function(
         d = d,
         formula = formula,
         mea = mea,
-        error = error,
         item = item,
         formula1 = formula1,
         t = t,

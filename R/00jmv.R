@@ -7,7 +7,8 @@
         `author`="Seol, H.", 
         `year`=2024, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="(Version 3.8.5) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix"), 
+        `publisher`="(Version 3.8.5) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix", 
+        `url`="https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
         `author`="Revelle,W", 
@@ -55,15 +56,13 @@
         `author`="Martinkova, P., & Drabinova, A.", 
         `year`=2018, 
         `title`="ShinyItemAnalysis: for teaching psychometrics and to enforce routine analysis of educational tests", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=ShinyItemAnalysis", 
-        `url`="https://CRAN.R-project.org/package=ShinyItemAnalysis"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=ShinyItemAnalysis"), 
     `multilevel`=list(
         `type`="software", 
         `author`="Bliese, P., Chen, G., Downes, P., Schepker, D., & Lang, J.", 
         `year`=2022, 
         `title`="multilevel: Multilevel Functions", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=multilevel", 
-        `url`="https://CRAN.R-project.org/package=multilevel"), 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=multilevel"), 
     `ahpsurvey`=list(
         `type`="software", 
         `author`="Cho, F.", 
@@ -75,5 +74,4 @@
         `author`="Christopher T.", 
         `year`=2016, 
         `title`="gtheory: Apply Generalizability Theory with R", 
-        `publisher`="(Version 0.1.2) [R package]. Retrieved from https://CRAN.R-project.org/package=gtheory", 
-        `url`="https://CRAN.R-project.org/package=gtheory"))
+        `publisher`="(Version 0.1.2) [R package]. Retrieved from https://CRAN.R-project.org/package=gtheory"))

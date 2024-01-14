@@ -197,23 +197,14 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             row[['generalizability']] <- gen
             row[['dependability']] <- depe
             row[['universe']] <- uni
-            
-            table$setRow(rowNo = 1, values = row)
-            
-          }
-          
-          if(isTRUE(self$options$error)){
-            
-            table<- self$results$error
-            
-            row <- list()
-            
             row[['relative']] <- rel
             row[['absolute']] <- abs
             
             table$setRow(rowNo = 1, values = row)
             
           }
+          
+         
 }
               
           if(self$options$t=='mul'){

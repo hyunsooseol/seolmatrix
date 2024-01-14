@@ -15,7 +15,6 @@ gtheory(
   d = FALSE,
   formula = "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)",
   mea = FALSE,
-  error = FALSE,
   item = FALSE,
   formula1 = "Score ~ (1 | Person) + (1 | Item)",
   t = "uni",
@@ -45,8 +44,6 @@ gtheory(
 
 \item{mea}{.}
 
-\item{error}{.}
-
 \item{item}{.}
 
 \item{formula1}{.}
@@ -67,7 +64,6 @@ A results object containing:
   \code{results$g} \tab \tab \tab \tab \tab a table \cr
   \code{results$d} \tab \tab \tab \tab \tab a table \cr
   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
-  \code{results$error} \tab \tab \tab \tab \tab a table \cr
   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
