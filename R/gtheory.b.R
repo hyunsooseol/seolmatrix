@@ -222,7 +222,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                  data = data,
                                  colname.scores = dep)
             #-----------------------------------------------------
-            self$results$text$setContent(ds1) 
+            self$results$text$setContent(g1[["within"]]) 
 
          if(isTRUE(self$options$item)){
             
