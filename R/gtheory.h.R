@@ -327,7 +327,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="comp",
-                title="Composite measures: D study",
+                title="Composite measures",
                 visible="(comp)",
                 rows=1,
                 clearWith=list(

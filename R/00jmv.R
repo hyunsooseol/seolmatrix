@@ -69,4 +69,11 @@
         `author`="Cho, F.", 
         `year`=2019, 
         `title`="ahpsurvey: Analytic Hierarchy Process for Survey Data", 
-        `publisher`="(Version 0.4.1)[R package]. Retrieved from https://CRAN.R-project.org/package=ahpsurvey"))
+        `publisher`="(Version 0.4.1)[R package]. Retrieved from https://CRAN.R-project.org/package=ahpsurvey"), 
+    `gtheory`=list(
+        `type`="software", 
+        `author`="Christopher T.", 
+        `year`=2016, 
+        `title`="gtheory: Apply Generalizability Theory with R", 
+        `publisher`="(Version 0.1.2) [R package]. Retrieved from https://CRAN.R-project.org/package=gtheory", 
+        `url`="https://CRAN.R-project.org/package=gtheory"))

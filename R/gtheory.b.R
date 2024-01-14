@@ -58,6 +58,19 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # 
         # data(Rajaratnam.2)
         
+        # Multivariate example----
+        # library(gtheory)
+        # data(Rajaratnam.2)
+        # formula.Rajaratnam.2 <- "Score ~ (1 | Person) + (1 | Item)"
+        # g<- gstudy(data = Rajaratnam.2, formula = formula.Rajaratnam.2, 
+        #            colname.strata = "Subtest", 
+        #            colname.objects = "Person")
+        # 
+        # ds<- dstudy(g, colname.objects = "Person", data = Rajaratnam.2, colname.scores = "Score", 
+        #             colname.strata = "Subtest")
+        
+        #-------------------------
+        
         if (is.null(self$options$dep) ||
             is.null(self$options$id) ||
             is.null(self$options$facet)) return()
@@ -119,7 +132,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                colname.scores = dep)
         
         # Univariate analysis----------
-          
         # G study table----------------
           
           table<- self$results$g
@@ -221,7 +233,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             #-----------------------------------------------------
             self$results$text$setContent(ds1) 
 
-            
          if(isTRUE(self$options$item)){
             
             ng <- self$options$ng
@@ -247,7 +258,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             }
             
             tab <- tab
-          # self$results$text$setContent(tab) 
+         
 #--------------------------------------------------------------         
              tables <- self$results$item
 
@@ -276,29 +287,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              }
 
 }
-           # Within variance components table------
-           
-           #  table <- self$results$within
-           #  
-           # for(i in seq_along(1:ng)){
-           # 
-           #    table <- self$results$within[[i]]
-           # 
-           #   
-           #    names <- dimnames(tab[[i]])[[1]]
-           #    dims <- dimnames(tab[[i]])[[2]]
-           #    
-           #    for (name in names) {
-           #      row <- list()
-           #      
-           #      for(j in seq_along(dims)){       
-           #        row[[dims[j]]] <- tab[[i]][name,j]
-           #      }
-           #      
-           #      table$addRow(rowKey=name, values=row)
-           #    }
-           # 
-           #    }
            
    # D study (Composite table)------------
          

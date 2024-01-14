@@ -141,7 +141,7 @@ items:
               content: ($key)
   
     - name: comp
-      title: 'Composite measures: D study'
+      title: 'Composite measures'
       type: Table
       visible: (comp)
       rows: 1
