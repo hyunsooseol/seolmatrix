@@ -232,7 +232,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             for (i in  seq_along(1:ng)){
               
-              res.df <- lapply(g$within[[as.character(i)]], as.data.frame)
+              res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
               
               res[[i]] <- res.df
               
