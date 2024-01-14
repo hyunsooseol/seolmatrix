@@ -1,0 +1,108 @@
+title: Generalizability Theory
+name: gtheory
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        children:
+          - type: VariablesListBox
+            name: dep
+            isTarget: true
+            maxItemCount: 1
+      - type: TargetLayoutBox
+        children:
+          - type: VariablesListBox
+            name: id
+            isTarget: true
+            maxItemCount: 1
+      - type: TargetLayoutBox
+        children:
+          - type: VariablesListBox
+            name: sub
+            isTarget: true
+            maxItemCount: 1
+      - type: TargetLayoutBox
+        label: Facets
+        children:
+          - type: VariablesListBox
+            name: facet
+            isTarget: true
+            maxItemCount: 2
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: ComboBox
+        name: t
+  - type: CollapseBox
+    label: 'Univariate analysis'
+    margin: normal
+    collapsed: true
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: TextBox
+                name: formula
+                format: string
+                stretchFactor: 3
+              - type: Label
+                label: Variance components
+                children:
+                  - type: CheckBox
+                    name: g
+                  - type: CheckBox
+                    name: d
+              - type: Label
+                label: Measures of D study
+                children:
+                  - type: CheckBox
+                    name: mea
+                  - type: CheckBox
+                    name: error
+  - type: CollapseBox
+    label: 'Multivariate analysis'
+    margin: normal
+    collapsed: true
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: TextBox
+                name: formula1
+                format: string
+                stretchFactor: 3
+              - name: ng
+                type: TextBox
+                format: number
+              - type: Label
+                label: G Study
+                children:
+                  - type: CheckBox
+                    name: item
+              - type: Label
+                label: D Study
+                children:
+                  - type: CheckBox
+                    name: itemd
+                  - type: CheckBox
+                    name: bm                    
+                  - type: CheckBox
+                    name: comp

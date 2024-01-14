@@ -7,7 +7,7 @@
         `author`="Seol, H.", 
         `year`=2024, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="(Version 3.8.4) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix"), 
+        `publisher`="(Version 3.8.5) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
         `author`="Revelle,W", 

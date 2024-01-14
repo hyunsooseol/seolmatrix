@@ -1,19 +1,20 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.8.4
+version: 3.8.5
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2024-01-01'
+date: '2024-01-12'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
-  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Bootstrap
-  agreement,  Rater Reliability, Fleiss Kappa, Multilevel correlation,
-  Concordance correlation, Analytic Hierarchy Process, Correlation structure,
-  and allows users to produce Gaussian Graphical Model and Partial plot.
+  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Multilevel
+  correlation, Concordance correlation, Correlation structure, Bootstrap
+  agreement, Fleiss Kappa, Rater Reliability, Generalizability Theory, Analytic
+  Hierarchy Process, and allows users to produce Gaussian Graphical Model and
+  Partial plot.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -51,6 +52,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Rater Reliability
     menuSubgroup: Rater
+  - title: Generalizability Theory
+    name: gtheory
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Generalizability Theory
+    menuSubgroup: Rater
   - title: Analytic Hierarchy Process
     name: ahp
     ns: seolmatrix
@@ -80,6 +87,16 @@ datasets:
     tags:
       - Rater
       - Kendall
+  - name: univariate
+    path: uni.omv
+    description: results on page 116 of Brennan (2001)
+    tags:
+      - Generalizability
+  - name: multivariate
+    path: multi.omv
+    description: results on page 270 of Brennan (2001)
+    tags:
+      - Generalizability
   - name: big5
     path: big5.omv
     description: partial data

@@ -1,0 +1,243 @@
+---
+name:  gtheory
+title: Generalizability Theory
+jrs:   '1.1'
+refs: seolmatrix
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+
+    - name:  text
+      title: Generalizability Theory
+      type:  Preformatted
+
+    - name: g
+      title:  'Variance components: G study'
+      type: Table
+      visible: (g)
+      clearWith:
+        - dep
+        - id
+        - facet
+      refs: gtheory
+        
+      columns:
+        - name: name
+          title: 'Source'
+          type: 'text'
+          content: ($key)
+
+        - name: var
+          title: 'variance'
+          type: number
+          
+        - name: percent
+          title: 'Percent'
+          type: number        
+
+        - name: n
+          title: 'n'
+          type: integer     
+
+    - name: d
+      title:  'Variance components: D study'
+      type: Table
+      visible: (d)
+      clearWith:
+        - dep
+        - id
+        - facet
+      refs: gtheory
+        
+      columns:
+        - name: name
+          title: 'Source'
+          type: 'text'
+          content: ($key)
+
+        - name: var
+          title: 'variance'
+          type: number
+          
+        - name: percent
+          title: 'Percent'
+          type: number        
+
+        - name: n
+          title: 'n'
+          type: integer     
+
+    - name: mea
+      title: 'Coefficients'
+      type: Table
+      visible: (mea)
+      rows: 1
+      clearWith:
+        - dep
+        - id
+        - facet
+      refs: gtheory
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: D Study
+        - name: generalizability
+          title: 'Generalizability'
+          type: number
+        - name: dependability
+          title: 'Dependability'
+          type: number
+        - name: universe
+          title: 'Universe score variance'
+          type: number
+
+    - name: error
+      title: 'Error variance'
+      type: Table
+      visible: (error)
+      rows: 1
+      clearWith:
+        - dep
+        - id
+        - facet
+      refs: gtheory
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: D Study
+        - name: relative
+          title: 'Relative'
+          type: number
+        - name: absolute
+          title: 'Absolute'
+          type: number
+
+    - name: item
+      title: 'Within Variance components'
+      type: Array
+      visible: (item)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      
+      template:
+          title: 'Variance components of $key'
+          type: Table
+          rows: 0
+
+          columns: 
+            - name: name
+              title: ''
+              type: 'text'
+              content: ($key)
+  
+    - name: comp
+      title: 'Composite measures: D study'
+      type: Table
+      visible: (comp)
+      rows: 1
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      refs: gtheory
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: D Study
+        - name: generalizability
+          title: 'Generalizability'
+          type: number
+        - name: dependability
+          title: 'Dependability'
+          type: number
+        - name: universe
+          title: 'Universe score variance'
+          type: number
+        - name: relative
+          title: 'Relative error variance'
+          type: number
+        - name: absolute
+          title: 'Absolute error variance'
+          type: number
+
+    - name: bm
+      title: 'Between measures: D study'
+      type: Table
+      visible: (bm)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      refs: gtheory
+ 
+      columns:
+        - name: name
+          title: 'Subtest'
+          type: 'text'
+          content: ($key)
+        - name: gen
+          title: 'Generalizabilty'
+          type: number
+        - name: depe
+          title: 'Dependability'
+          type: number
+        - name: rel
+          title: 'Relative error variance'
+          type: number
+        - name: abs
+          title: 'Absolute error variance'
+          type: number         
+
+
+
+    # - name: within
+    #   title: 'Variance components(within)'
+    #   type: Array
+    #   visible: (within)
+    # 
+    #   items: (within)
+    #   template:
+    #       title: 'Subgroup $key'
+    #       type: Table
+    #       rows: 0
+    #       clearWith:
+    #         - dep
+    #         - id
+    #         - facet
+    #         - ng
+    #       columns:
+    #         - name: name
+    #           title: ''
+    #           type: 'text'
+    #           content: ($key)
+    #         - name: sou
+    #           title: 'Source'
+    #           type: 'text'
+    #           content: ($key)
+    #         - name: var
+    #           title: 'Variance'
+    #           type: number
+    #         - name: per
+    #           title: 'Percent'
+    #           type: number
+    #         - name: n
+    #           title: 'n'
+    #           type: integer 
+    
+...

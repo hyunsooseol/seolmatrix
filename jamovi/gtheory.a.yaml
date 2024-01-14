@@ -1,0 +1,110 @@
+---
+name:  gtheory
+title: Generalizability Theory
+menuGroup: seolmatrix
+menuSubgroup: Rater
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: dep
+      title: 'Dependent variable'
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric    
+
+    - name: id
+      title: 'Person'
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: sub
+      title: 'Subtest (Multivariate only)'
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: ng
+      title: 'Num. of Subtest'
+      type: Integer
+      min: 1
+      default: 3
+
+    - name: facet
+      title: 'Facets'
+      type: Variables
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: g
+      title: 'G Study'
+      type: Bool
+      default: false
+
+    - name: d
+      title: 'D Study'
+      type: Bool
+      default: false
+
+    - name: formula
+      title: 'Formula'
+      type: String
+      default: "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)"
+
+    - name: mea
+      title: 'Coefficients'
+      type: Bool
+      default: false
+
+    - name: error
+      title: 'Error variance'
+      type: Bool
+      default: false
+
+    - name: item
+      title: 'Within variance components'
+      type: Bool
+      default: false
+
+    - name: formula1
+      title: 'Formula'
+      type: String
+      default: "Score ~ (1 | Person) + (1 | Item)"
+
+    - name: t
+      title: 'Analysis option'
+      type: List
+      options:
+        - title: 'Univariate'
+          name: 'uni'
+        - title: 'Multivariate'
+          name: 'mul'
+      default: 'uni'
+
+    - name: itemd
+      title: 'Within variance components'
+      type: Bool
+      default: false
+
+    - name: comp
+      title: 'Composite measures'
+      type: Bool
+      default: false
+
+    - name: bm
+      title: 'Between measures'
+      type: Bool
+      default: false
+...
