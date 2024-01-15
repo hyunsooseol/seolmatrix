@@ -14,7 +14,7 @@ items:
       type:  Preformatted
 
     - name: g
-      title:  'G Study: variance components'
+      title:  'Variance components of a single observation'
       type: Table
       visible: (g)
       clearWith:
@@ -41,8 +41,40 @@ items:
           title: 'n'
           type: integer     
 
+    - name: gmea
+      title: 'Measures of a single observation'
+      type: Table
+      visible: (gmea)
+      rows: 1
+      clearWith:
+        - dep
+        - id
+        - facet
+      refs: gtheory
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: D Study
+        - name: generalizability
+          title: 'Generalizability'
+          type: number
+        - name: dependability
+          title: 'Dependability'
+          type: number
+        - name: universe
+          title: 'Universe score variance'
+          type: number
+        - name: relative
+          title: 'Relative error variance'
+          type: number
+        - name: absolute
+          title: 'Absolute error variance'
+          type: number
+
     - name: d
-      title: 'D Study: variance components'
+      title: 'Overall variance components'
       type: Table
       visible: (d)
       clearWith:
@@ -70,7 +102,7 @@ items:
           type: integer     
 
     - name: mea
-      title: 'Measures of D Study'
+      title: 'Overall Measures'
       type: Table
       visible: (mea)
       rows: 1

@@ -49,12 +49,12 @@ options:
         - factor
 
     - name: g
-      title: 'G Study'
+      title: 'Variance components'
       type: Bool
       default: false
 
     - name: d
-      title: 'D Study'
+      title: 'Variance components'
       type: Bool
       default: false
 
@@ -64,6 +64,11 @@ options:
       default: "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)"
 
     - name: mea
+      title: 'Measures'
+      type: Bool
+      default: false
+
+    - name: gmea
       title: 'Measures'
       type: Bool
       default: false

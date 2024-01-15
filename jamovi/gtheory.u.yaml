@@ -57,15 +57,17 @@ children:
                 format: string
                 stretchFactor: 3
               - type: Label
-                label: Variance components
+                label: 'Single observation'
                 children:
                   - type: CheckBox
                     name: g
                   - type: CheckBox
-                    name: d
+                    name: gmea
               - type: Label
-                label: Measures of D study
+                label: 'Overall observations'
                 children:
+                  - type: CheckBox
+                    name: d
                   - type: CheckBox
                     name: mea
   - type: CollapseBox

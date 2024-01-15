@@ -155,6 +155,54 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             table$addRow(rowKey = items[i], values = row)
           }
           
+          #  Single observation study----------
+          # how many raters do I need?
+          # Example----------
+          #source: https://rpubs.com/YanweXu/672524
+          
+          # library(gtheory)
+          # Rating <- read.csv("univariate.csv")
+          # varComp <- gstudy(Rating, score ~ (1|ID) + (1|rater))
+          # 
+          # r1 <- dstudy(varComp, colname.objects = "ID")
+          # r1$components
+          # r1$generalizability
+          # 
+          # how many rater do I need ?
+          
+          # k <- 1
+          # r1 <- r1$var.universe/(r1$var.universe + (r1$var.error.rel/k))
+          # r1
+          # k<-12
+          # 0.62/(0.62 +2.787/12)
+          
+          if(isTRUE(self$options$gmea)){
+            
+            gmea<- gtheory::dstudy(gstudy.out, 
+                                 colname.objects = self$options$id)
+                    
+            
+            # Measures of D study---------------
+            gen <- gmea$generalizability
+            depe <- gmea$dependability
+            uni <- gmea$var.universe
+            rel <- gmea$var.error.rel
+            abs <- gmea$var.error.abs
+            
+            table<- self$results$gmea
+              
+              row <- list()
+              
+              row[['generalizability']] <- gen
+              row[['dependability']] <- depe
+              row[['universe']] <- uni
+              row[['relative']] <- rel
+              row[['absolute']] <- abs
+              
+              table$setRow(rowNo = 1, values = row)
+              
+                  }
+          
           # G study table(Variance components)----------------
           
           table<- self$results$d

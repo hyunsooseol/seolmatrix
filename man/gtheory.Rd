@@ -15,6 +15,7 @@ gtheory(
   d = FALSE,
   formula = "value ~ (1 | subject) + (1 | task) + (1 | rater:task) + (1 | subject:task)",
   mea = FALSE,
+  gmea = FALSE,
   item = FALSE,
   formula1 = "Score ~ (1 | Person) + (1 | Item)",
   t = "uni",
@@ -46,6 +47,8 @@ gtheory(
 
 \item{mea}{.}
 
+\item{gmea}{.}
+
 \item{item}{.}
 
 \item{formula1}{.}
@@ -68,6 +71,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$g} \tab \tab \tab \tab \tab a table \cr
+  \code{results$gmea} \tab \tab \tab \tab \tab a table \cr
   \code{results$d} \tab \tab \tab \tab \tab a table \cr
   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
