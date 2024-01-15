@@ -165,8 +165,9 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         d = function() private$.items[["d"]],
         mea = function() private$.items[["mea"]],
         item = function() private$.items[["item"]],
-        comp = function() private$.items[["comp"]],
-        bm = function() private$.items[["bm"]]),
+        itemd = function() private$.items[["itemd"]],
+        bm = function() private$.items[["bm"]],
+        comp = function() private$.items[["comp"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -280,7 +281,8 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Array$new(
                 options=options,
                 name="item",
-                title="Within Variance components",
+                title="G Study: Within variance components",
+                items="(ng)",
                 visible="(item)",
                 clearWith=list(
                     "dep",
@@ -290,18 +292,96 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ng"),
                 template=jmvcore::Table$new(
                     options=options,
-                    title="Variance components of $key",
-                    rows=0,
+                    title="Variance components of Subtest($key)",
+                    rows=3,
                     columns=list(
                         list(
-                            `name`="name", 
-                            `title`="", 
-                            `type`="text", 
-                            `content`="($key)")))))
+                            `name`="source", 
+                            `title`="Source", 
+                            `type`="text"),
+                        list(
+                            `name`="var", 
+                            `title`="Variance", 
+                            `type`="number"),
+                        list(
+                            `name`="percent", 
+                            `title`="Percent", 
+                            `type`="number"),
+                        list(
+                            `name`="n", 
+                            `title`="n", 
+                            `type`="integer")))))
+            self$add(jmvcore::Array$new(
+                options=options,
+                name="itemd",
+                title="D Study: Within variance components",
+                items="(ng)",
+                visible="(itemd)",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "sub",
+                    "facet",
+                    "ng"),
+                template=jmvcore::Table$new(
+                    options=options,
+                    title="Variance components of Subtest($key)",
+                    rows=3,
+                    columns=list(
+                        list(
+                            `name`="source", 
+                            `title`="Source", 
+                            `type`="text"),
+                        list(
+                            `name`="var", 
+                            `title`="Variance", 
+                            `type`="number"),
+                        list(
+                            `name`="percent", 
+                            `title`="Percent", 
+                            `type`="number"),
+                        list(
+                            `name`="n", 
+                            `title`="n", 
+                            `type`="integer")))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="bm",
+                title="D Study: Between measures",
+                visible="(bm)",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "sub",
+                    "facet",
+                    "ng"),
+                refs="gtheory",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="Subtest", 
+                        `type`="text", 
+                        `content`="($key)"),
+                    list(
+                        `name`="gen", 
+                        `title`="Generalizabilty", 
+                        `type`="number"),
+                    list(
+                        `name`="depe", 
+                        `title`="Dependability", 
+                        `type`="number"),
+                    list(
+                        `name`="rel", 
+                        `title`="Relative error variance", 
+                        `type`="number"),
+                    list(
+                        `name`="abs", 
+                        `title`="Absolute error variance", 
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="comp",
-                title="Composite measures",
+                title="D Study: Composite measures",
                 visible="(comp)",
                 rows=1,
                 clearWith=list(
@@ -335,40 +415,6 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="absolute", 
-                        `title`="Absolute error variance", 
-                        `type`="number"))))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="bm",
-                title="D Study: Between measures",
-                visible="(bm)",
-                clearWith=list(
-                    "dep",
-                    "id",
-                    "sub",
-                    "facet",
-                    "ng"),
-                refs="gtheory",
-                columns=list(
-                    list(
-                        `name`="name", 
-                        `title`="Subtest", 
-                        `type`="text", 
-                        `content`="($key)"),
-                    list(
-                        `name`="gen", 
-                        `title`="Generalizabilty", 
-                        `type`="number"),
-                    list(
-                        `name`="depe", 
-                        `title`="Dependability", 
-                        `type`="number"),
-                    list(
-                        `name`="rel", 
-                        `title`="Relative error variance", 
-                        `type`="number"),
-                    list(
-                        `name`="abs", 
                         `title`="Absolute error variance", 
                         `type`="number"))))}))
 
@@ -420,8 +466,9 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$d} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
-#'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$itemd} \tab \tab \tab \tab \tab an array of tables \cr
 #'   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

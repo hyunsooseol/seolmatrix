@@ -102,8 +102,9 @@ items:
           type: number
 
     - name: item
-      title: 'Within Variance components'
+      title: 'G Study: Within variance components'
       type: Array
+      items: (ng)
       visible: (item)
       clearWith:
         - dep
@@ -111,20 +112,85 @@ items:
         - sub
         - facet
         - ng
-      
       template:
-          title: 'Variance components of $key'
+          title: 'Variance components of Subtest($key)'
           type: Table
-          rows: 0
-
-          columns: 
-            - name: name
-              title: ''
+          rows: 3
+          columns:
+            - name: source
+              title: 'Source'
               type: 'text'
-              content: ($key)
-  
+            - name: var
+              title: 'Variance'
+              type: number
+            - name: percent
+              title: 'Percent'
+              type: number
+            - name: n
+              title: 'n'
+              type: integer
+
+    - name: itemd
+      title: 'D Study: Within variance components'
+      type: Array
+      items: (ng)
+      visible: (itemd)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      template:
+          title: 'Variance components of Subtest($key)'
+          type: Table
+          rows: 3
+          columns:
+            - name: source
+              title: 'Source'
+              type: 'text'
+            - name: var
+              title: 'Variance'
+              type: number
+            - name: percent
+              title: 'Percent'
+              type: number
+            - name: n
+              title: 'n'
+              type: integer
+
+    - name: bm
+      title: 'D Study: Between measures'
+      type: Table
+      visible: (bm)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      refs: gtheory
+ 
+      columns:
+        - name: name
+          title: 'Subtest'
+          type: 'text'
+          content: ($key)
+        - name: gen
+          title: 'Generalizabilty'
+          type: number
+        - name: depe
+          title: 'Dependability'
+          type: number
+        - name: rel
+          title: 'Relative error variance'
+          type: number
+        - name: abs
+          title: 'Absolute error variance'
+          type: number         
+
     - name: comp
-      title: 'Composite measures'
+      title: 'D Study: Composite measures'
       type: Table
       visible: (comp)
       rows: 1
@@ -157,70 +223,7 @@ items:
           title: 'Absolute error variance'
           type: number
 
-    - name: bm
-      title: 'D Study: Between measures'
-      type: Table
-      visible: (bm)
-      clearWith:
-        - dep
-        - id
-        - sub
-        - facet
-        - ng
-      refs: gtheory
  
-      columns:
-        - name: name
-          title: 'Subtest'
-          type: 'text'
-          content: ($key)
-        - name: gen
-          title: 'Generalizabilty'
-          type: number
-        - name: depe
-          title: 'Dependability'
-          type: number
-        - name: rel
-          title: 'Relative error variance'
-          type: number
-        - name: abs
-          title: 'Absolute error variance'
-          type: number         
 
 
-
-    # - name: within
-    #   title: 'Variance components(within)'
-    #   type: Array
-    #   visible: (within)
-    # 
-    #   items: (within)
-    #   template:
-    #       title: 'Subgroup $key'
-    #       type: Table
-    #       rows: 0
-    #       clearWith:
-    #         - dep
-    #         - id
-    #         - facet
-    #         - ng
-    #       columns:
-    #         - name: name
-    #           title: ''
-    #           type: 'text'
-    #           content: ($key)
-    #         - name: sou
-    #           title: 'Source'
-    #           type: 'text'
-    #           content: ($key)
-    #         - name: var
-    #           title: 'Variance'
-    #           type: number
-    #         - name: per
-    #           title: 'Percent'
-    #           type: number
-    #         - name: n
-    #           title: 'n'
-    #           type: integer 
-    
 ...

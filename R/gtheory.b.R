@@ -222,64 +222,83 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                  data = data,
                                  colname.scores = dep)
             #-----------------------------------------------------
-            self$results$text$setContent(g1[["within"]]) 
+            self$results$text$setContent(ds1) 
 
-         if(isTRUE(self$options$item)){
-            
-            ng <- self$options$ng
-          
-            res <- list() 
-            
-            for (i in  seq_along(1:ng)){
+            if(isTRUE(self$options$item)) {
               
-              res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
+              ng <- self$options$ng
+              res <- list() 
               
-              res[[i]] <- res.df
+              for (i in  seq_along(1:ng)) {
+                res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
+                res[[i]] <- res.df
+              }
               
+              tab <- NULL
+              
+              for(i in seq_along(1:ng)) {
+                re<- as.data.frame.matrix(res[[i]][['components']])
+                tab[[i]] <- re
+              }
+              
+              tab <- tab
+              
+              #--------------------------------------------------------------         
+              tables <- self$results$item
+              
+              for(i in seq_along(1:ng)){
+                table <- tables[[i]]
+                item <- tab[[i]]
+                
+                for(rNo in 1:3)
+                  table$setRow(rowNo=rNo,
+                               values=list('source'=item$source[[rNo]],
+                                           'var'=item$var[[rNo]],
+                                           'percent'=item$percent[[rNo]],
+                                           'n'=item$n[[rNo]]))
+              }
             }
-            
-            tab <- NULL
-            
-            for(i in seq_along(1:ng)){
-              
-              re<- as.data.frame.matrix(res[[i]][['components']])
-              
-              tab[[i]] <- re
-              
-            }
-            
-            tab <- tab
-         
-#--------------------------------------------------------------         
-             tables <- self$results$item
-
-             for(i in seq_along(1:ng)){
-
-               item <- tab[[i]]
-               table <- tables[[i]]
-              
-               names<- row.names(item)
-               dims <- colnames(item)
-
-               for (dim in dims) {
-                 table$addColumn(name = paste0(dim),
-                                 type = 'text',
-                                 combineBelow=TRUE)
-               }
-
-               for (name in names) {
-                 row <- list()
-                 for(j in seq_along(dims)){
-                   row[[dims[j]]] <- item[name,j]
-                 }
-                 table$addRow(rowKey=name, values=row)
-               }
-
-             }
-
-}
            
-   # D study (Composite table)------------
+  # D study: variance components--------
+            
+            if(isTRUE(self$options$itemd)) {
+              
+              ng <- self$options$ng
+              res <- list() 
+              
+              for (i in  seq_along(1:ng)) {
+                res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
+                res[[i]] <- res.df
+              }
+              
+              tab <- NULL
+              
+              for(i in seq_along(1:ng)) {
+                re<- as.data.frame.matrix(res[[i]][['components']])
+                tab[[i]] <- re
+              }
+              
+              tab <- tab
+              
+              #--------------------------------------------------------------         
+              tables <- self$results$itemd
+              
+              for(i in seq_along(1:ng)){
+                table <- tables[[i]]
+                item <- tab[[i]]
+                
+                for(rNo in 1:3)
+                  table$setRow(rowNo=rNo,
+                               values=list('source'=item$source[[rNo]],
+                                           'var'=item$var[[rNo]],
+                                           'percent'=item$percent[[rNo]],
+                                           'n'=item$n[[rNo]]))
+              }
+            }
+            
+            
+            
+          # D study (Composite table)------------
          
             if(isTRUE(self$options$comp)){
                

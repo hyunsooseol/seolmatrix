@@ -65,6 +65,7 @@ A results object containing:
   \code{results$d} \tab \tab \tab \tab \tab a table \cr
   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
+  \code{results$itemd} \tab \tab \tab \tab \tab an array of tables \cr
   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
 }
