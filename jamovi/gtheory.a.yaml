@@ -27,7 +27,7 @@ options:
         - factor
 
     - name: sub
-      title: 'Subtest (Multivariate only)'
+      title: 'Strata (Multivariate only)'
       type: Variable
       suggested:
         - nominal
@@ -35,7 +35,7 @@ options:
         - factor
 
     - name: ng
-      title: 'Num. of Subtest'
+      title: 'Num. of Strata'
       type: Integer
       min: 1
       default: 3
@@ -100,6 +100,16 @@ options:
 
     - name: bm
       title: 'Between measures'
+      type: Bool
+      default: false
+
+    - name: mat
+      title: 'Observed variance matrix'
+      type: Bool
+      default: false
+
+    - name: bmat
+      title: 'Between universe score matrix'
       type: Bool
       default: false
 ...

@@ -20,7 +20,9 @@ gtheory(
   t = "uni",
   itemd = FALSE,
   comp = FALSE,
-  bm = FALSE
+  bm = FALSE,
+  mat = FALSE,
+  bmat = FALSE
 )
 }
 \arguments{
@@ -55,6 +57,10 @@ gtheory(
 \item{comp}{.}
 
 \item{bm}{.}
+
+\item{mat}{.}
+
+\item{bmat}{.}
 }
 \value{
 A results object containing:
@@ -65,9 +71,11 @@ A results object containing:
   \code{results$d} \tab \tab \tab \tab \tab a table \cr
   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
+  \code{results$mat} \tab \tab \tab \tab \tab a table \cr
   \code{results$itemd} \tab \tab \tab \tab \tab an array of tables \cr
-  \code{results$comp} \tab \tab \tab \tab \tab a table \cr
+  \code{results$bmat} \tab \tab \tab \tab \tab a table \cr
   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
+  \code{results$comp} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

@@ -91,15 +91,19 @@ children:
                 type: TextBox
                 format: number
               - type: Label
-                label: G Study
+                label: 'G Study'
                 children:
                   - type: CheckBox
                     name: item
+                  - type: CheckBox
+                    name: mat
               - type: Label
-                label: D Study
+                label: 'D Study'
                 children:
                   - type: CheckBox
                     name: itemd
+                  - type: CheckBox
+                    name: bmat
                   - type: CheckBox
                     name: bm                    
                   - type: CheckBox

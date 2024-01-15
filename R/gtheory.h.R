@@ -20,7 +20,9 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             t = "uni",
             itemd = FALSE,
             comp = FALSE,
-            bm = FALSE, ...) {
+            bm = FALSE,
+            mat = FALSE,
+            bmat = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -104,6 +106,14 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "bm",
                 bm,
                 default=FALSE)
+            private$..mat <- jmvcore::OptionBool$new(
+                "mat",
+                mat,
+                default=FALSE)
+            private$..bmat <- jmvcore::OptionBool$new(
+                "bmat",
+                bmat,
+                default=FALSE)
 
             self$.addOption(private$..dep)
             self$.addOption(private$..id)
@@ -120,6 +130,8 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..itemd)
             self$.addOption(private$..comp)
             self$.addOption(private$..bm)
+            self$.addOption(private$..mat)
+            self$.addOption(private$..bmat)
         }),
     active = list(
         dep = function() private$..dep$value,
@@ -136,7 +148,9 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         t = function() private$..t$value,
         itemd = function() private$..itemd$value,
         comp = function() private$..comp$value,
-        bm = function() private$..bm$value),
+        bm = function() private$..bm$value,
+        mat = function() private$..mat$value,
+        bmat = function() private$..bmat$value),
     private = list(
         ..dep = NA,
         ..id = NA,
@@ -152,7 +166,9 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..t = NA,
         ..itemd = NA,
         ..comp = NA,
-        ..bm = NA)
+        ..bm = NA,
+        ..mat = NA,
+        ..bmat = NA)
 )
 
 gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -165,7 +181,9 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         d = function() private$.items[["d"]],
         mea = function() private$.items[["mea"]],
         item = function() private$.items[["item"]],
+        mat = function() private$.items[["mat"]],
         itemd = function() private$.items[["itemd"]],
+        bmat = function() private$.items[["bmat"]],
         bm = function() private$.items[["bm"]],
         comp = function() private$.items[["comp"]]),
     private = list(),
@@ -188,7 +206,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="g",
-                title="G Study: Variance components",
+                title="G Study: variance components",
                 visible="(g)",
                 clearWith=list(
                     "dep",
@@ -216,7 +234,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="d",
-                title="D Study: Variance components",
+                title="D Study: variance components",
                 visible="(d)",
                 clearWith=list(
                     "dep",
@@ -281,7 +299,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Array$new(
                 options=options,
                 name="item",
-                title="G Study: Within variance components",
+                title="G Study: within variance components",
                 items="(ng)",
                 visible="(item)",
                 clearWith=list(
@@ -292,40 +310,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ng"),
                 template=jmvcore::Table$new(
                     options=options,
-                    title="Variance components of Subtest($key)",
-                    rows=3,
-                    columns=list(
-                        list(
-                            `name`="source", 
-                            `title`="Source", 
-                            `type`="text"),
-                        list(
-                            `name`="var", 
-                            `title`="Variance", 
-                            `type`="number"),
-                        list(
-                            `name`="percent", 
-                            `title`="Percent", 
-                            `type`="number"),
-                        list(
-                            `name`="n", 
-                            `title`="n", 
-                            `type`="integer")))))
-            self$add(jmvcore::Array$new(
-                options=options,
-                name="itemd",
-                title="D Study: Within variance components",
-                items="(ng)",
-                visible="(itemd)",
-                clearWith=list(
-                    "dep",
-                    "id",
-                    "sub",
-                    "facet",
-                    "ng"),
-                template=jmvcore::Table$new(
-                    options=options,
-                    title="Variance components of Subtest($key)",
+                    title="Variance components of strata($key)",
                     rows=3,
                     columns=list(
                         list(
@@ -346,8 +331,77 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                             `type`="integer")))))
             self$add(jmvcore::Table$new(
                 options=options,
+                name="mat",
+                title="Observed score variance and covariance between strata",
+                visible="(mat)",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "sub",
+                    "facet",
+                    "ng"),
+                refs="gtheory",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))
+            self$add(jmvcore::Array$new(
+                options=options,
+                name="itemd",
+                title="D Study: within variance components",
+                items="(ng)",
+                visible="(itemd)",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "sub",
+                    "facet",
+                    "ng"),
+                template=jmvcore::Table$new(
+                    options=options,
+                    title="Variance components of strata($key)",
+                    rows=3,
+                    columns=list(
+                        list(
+                            `name`="source", 
+                            `title`="Source", 
+                            `type`="text"),
+                        list(
+                            `name`="var", 
+                            `title`="Variance", 
+                            `type`="number"),
+                        list(
+                            `name`="percent", 
+                            `title`="Percent", 
+                            `type`="number"),
+                        list(
+                            `name`="n", 
+                            `title`="n", 
+                            `type`="integer")))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="bmat",
+                title="Between universe score variance matrix",
+                visible="(bmat)",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "sub",
+                    "facet",
+                    "ng"),
+                refs="gtheory",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))
+            self$add(jmvcore::Table$new(
+                options=options,
                 name="bm",
-                title="D Study: Between measures",
+                title="D Study: between measures",
                 visible="(bm)",
                 clearWith=list(
                     "dep",
@@ -381,7 +435,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="comp",
-                title="D Study: Composite measures",
+                title="D Study: composite measures",
                 visible="(comp)",
                 rows=1,
                 clearWith=list(
@@ -458,6 +512,8 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param itemd .
 #' @param comp .
 #' @param bm .
+#' @param mat .
+#' @param bmat .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -466,7 +522,9 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$d} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$mea} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$item} \tab \tab \tab \tab \tab an array of tables \cr
+#'   \code{results$mat} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$itemd} \tab \tab \tab \tab \tab an array of tables \cr
+#'   \code{results$bmat} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
 #' }
@@ -494,7 +552,9 @@ gtheory <- function(
     t = "uni",
     itemd = FALSE,
     comp = FALSE,
-    bm = FALSE) {
+    bm = FALSE,
+    mat = FALSE,
+    bmat = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("gtheory requires jmvcore to be installed (restart may be required)")
@@ -530,7 +590,9 @@ gtheory <- function(
         t = t,
         itemd = itemd,
         comp = comp,
-        bm = bm)
+        bm = bm,
+        mat = mat,
+        bmat = bmat)
 
     analysis <- gtheoryClass$new(
         options = options,

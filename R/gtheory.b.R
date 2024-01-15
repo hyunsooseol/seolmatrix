@@ -222,7 +222,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                  data = data,
                                  colname.scores = dep)
             #-----------------------------------------------------
-            self$results$text$setContent(ds1) 
+           # self$results$text$setContent(ds1) 
 
             if(isTRUE(self$options$item)) {
               
@@ -259,7 +259,35 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
               }
             }
            
-  # D study: variance components--------
+  # G study: Observed variance and covariance matrix----------
+          
+            if(isTRUE(self$options$mat)) {
+              
+            mat <- g1$between$var.obs
+            mat <- as.data.frame(mat)
+            
+            names <- dimnames(mat)[[1]] 
+            dims <- dimnames(mat)[[2]]
+            
+            table <- self$results$mat
+            
+            # creating table----------------
+            
+            for (dim in dims) {
+                 table$addColumn(name = paste0(dim),
+                  type = 'number')
+            }
+            
+            for (name in names) {
+                  row <- list()
+                    for(j in seq_along(dims)){
+                             row[[dims[j]]] <- mat[name,j]
+                           }
+                          table$addRow(rowKey=name, values=row)
+                         }
+            }
+            
+            # D study: variance components--------
             
             if(isTRUE(self$options$itemd)) {
               
@@ -295,7 +323,34 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                            'n'=item$n[[rNo]]))
               }
             }
+          
+            # D study: Between universe score variance matrix----------
             
+            if(isTRUE(self$options$bmat)) {
+              
+              bmat <- ds1$between$var.universe
+              bmat <- as.data.frame(mat)
+              
+              names <- dimnames(bmat)[[1]] 
+              dims <- dimnames(bmat)[[2]]
+              
+              table <- self$results$bmat
+              
+              # creating table----------------
+              
+              for (dim in dims) {
+                table$addColumn(name = paste0(dim),
+                                type = 'number')
+              }
+              
+              for (name in names) {
+                row <- list()
+                for(j in seq_along(dims)){
+                  row[[dims[j]]] <- bmat[name,j]
+                }
+                table$addRow(rowKey=name, values=row)
+              }
+            }
             
             
           # D study (Composite table)------------

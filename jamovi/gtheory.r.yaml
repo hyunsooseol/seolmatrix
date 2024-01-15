@@ -14,7 +14,7 @@ items:
       type:  Preformatted
 
     - name: g
-      title:  'G Study: Variance components'
+      title:  'G Study: variance components'
       type: Table
       visible: (g)
       clearWith:
@@ -42,7 +42,7 @@ items:
           type: integer     
 
     - name: d
-      title: 'D Study: Variance components'
+      title: 'D Study: variance components'
       type: Table
       visible: (d)
       clearWith:
@@ -102,7 +102,7 @@ items:
           type: number
 
     - name: item
-      title: 'G Study: Within variance components'
+      title: 'G Study: within variance components'
       type: Array
       items: (ng)
       visible: (item)
@@ -113,7 +113,7 @@ items:
         - facet
         - ng
       template:
-          title: 'Variance components of Subtest($key)'
+          title: 'Variance components of strata($key)'
           type: Table
           rows: 3
           columns:
@@ -130,8 +130,26 @@ items:
               title: 'n'
               type: integer
 
+    - name: mat
+      title:  'Observed score variance and covariance between strata'
+      type: Table
+      visible: (mat)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      refs: gtheory   
+      
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
     - name: itemd
-      title: 'D Study: Within variance components'
+      title: 'D Study: within variance components'
       type: Array
       items: (ng)
       visible: (itemd)
@@ -142,7 +160,7 @@ items:
         - facet
         - ng
       template:
-          title: 'Variance components of Subtest($key)'
+          title: 'Variance components of strata($key)'
           type: Table
           rows: 3
           columns:
@@ -159,8 +177,26 @@ items:
               title: 'n'
               type: integer
 
+    - name: bmat
+      title:  'Between universe score variance matrix'
+      type: Table
+      visible: (bmat)
+      clearWith:
+        - dep
+        - id
+        - sub
+        - facet
+        - ng
+      refs: gtheory   
+      
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
     - name: bm
-      title: 'D Study: Between measures'
+      title: 'D Study: between measures'
       type: Table
       visible: (bm)
       clearWith:
@@ -190,7 +226,7 @@ items:
           type: number         
 
     - name: comp
-      title: 'D Study: Composite measures'
+      title: 'D Study: composite measures'
       type: Table
       visible: (comp)
       rows: 1
