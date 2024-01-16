@@ -266,7 +266,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             nvars <- length(1:self$options$nf)
             width <- 400 + nvars * 15
-            image$setSize(width, 500)
+            image$setSize(width, 400)
             
             image$setState(gmodel)
               
@@ -497,7 +497,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # dstudy_plot(one_facet_gstudy, unit = "Participants", 
           #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
           #             g_coef = FALSE)
-         facet <- self$options$facet 
+         facet<- self$options$facet 
          nf <- self$options$nf
          
           plot1 <- hemp::dstudy_plot(gmodel,

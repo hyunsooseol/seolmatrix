@@ -69,6 +69,7 @@ children:
                       - type: TextBox
                         name: nf
                         format: number
+                        enable: (plot1)
               - type: Label
                 label: 'Overall observations'
                 children:

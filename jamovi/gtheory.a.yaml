@@ -125,7 +125,7 @@ options:
       default: false
 
     - name: plot1
-      title: 'D study plot '
+      title: 'D study plot for one facet design'
       type: Bool
       default: false       
 ...

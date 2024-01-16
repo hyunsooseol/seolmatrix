@@ -292,7 +292,7 @@ items:
           type: number
 
     - name: plot1
-      title: 'D study plot'
+      title: 'D study plot for one facet design'
       type:  Image
       visible: (plot1)
       renderFun: .plot1
@@ -303,6 +303,7 @@ items:
         - facet
         - sub
         - nf
+ 
 
 
 

@@ -538,7 +538,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
-                title="D study plot",
+                title="D study plot for one facet design",
                 visible="(plot1)",
                 renderFun=".plot1",
                 refs="seolmatrix",
