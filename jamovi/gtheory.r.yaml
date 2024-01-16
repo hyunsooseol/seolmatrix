@@ -291,7 +291,19 @@ items:
           title: 'Absolute error variance'
           type: number
 
- 
+    - name: plot1
+      title: 'D study plot'
+      type:  Image
+      visible: (plot1)
+      renderFun: .plot1
+      refs: seolmatrix
+      clearWith:
+        - dep
+        - id
+        - facet
+        - sub
+        - nf
+
 
 
 ...

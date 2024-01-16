@@ -10,6 +10,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             id = NULL,
             sub = NULL,
             ng = 3,
+            nf = 2,
             facet = NULL,
             g = FALSE,
             d = FALSE,
@@ -23,7 +24,8 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             comp = FALSE,
             bm = FALSE,
             mat = FALSE,
-            bmat = FALSE, ...) {
+            bmat = FALSE,
+            plot1 = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -57,6 +59,11 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 ng,
                 min=1,
                 default=3)
+            private$..nf <- jmvcore::OptionInteger$new(
+                "nf",
+                nf,
+                min=2,
+                default=2)
             private$..facet <- jmvcore::OptionVariables$new(
                 "facet",
                 facet,
@@ -119,11 +126,16 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "bmat",
                 bmat,
                 default=FALSE)
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
+                default=FALSE)
 
             self$.addOption(private$..dep)
             self$.addOption(private$..id)
             self$.addOption(private$..sub)
             self$.addOption(private$..ng)
+            self$.addOption(private$..nf)
             self$.addOption(private$..facet)
             self$.addOption(private$..g)
             self$.addOption(private$..d)
@@ -138,12 +150,14 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..bm)
             self$.addOption(private$..mat)
             self$.addOption(private$..bmat)
+            self$.addOption(private$..plot1)
         }),
     active = list(
         dep = function() private$..dep$value,
         id = function() private$..id$value,
         sub = function() private$..sub$value,
         ng = function() private$..ng$value,
+        nf = function() private$..nf$value,
         facet = function() private$..facet$value,
         g = function() private$..g$value,
         d = function() private$..d$value,
@@ -157,12 +171,14 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         comp = function() private$..comp$value,
         bm = function() private$..bm$value,
         mat = function() private$..mat$value,
-        bmat = function() private$..bmat$value),
+        bmat = function() private$..bmat$value,
+        plot1 = function() private$..plot1$value),
     private = list(
         ..dep = NA,
         ..id = NA,
         ..sub = NA,
         ..ng = NA,
+        ..nf = NA,
         ..facet = NA,
         ..g = NA,
         ..d = NA,
@@ -176,7 +192,8 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..comp = NA,
         ..bm = NA,
         ..mat = NA,
-        ..bmat = NA)
+        ..bmat = NA,
+        ..plot1 = NA)
 )
 
 gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -194,7 +211,8 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         itemd = function() private$.items[["itemd"]],
         bmat = function() private$.items[["bmat"]],
         bm = function() private$.items[["bm"]],
-        comp = function() private$.items[["comp"]]),
+        comp = function() private$.items[["comp"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -516,7 +534,20 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="absolute", 
                         `title`="Absolute error variance", 
-                        `type`="number"))))}))
+                        `type`="number"))))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="D study plot",
+                visible="(plot1)",
+                renderFun=".plot1",
+                refs="seolmatrix",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "facet",
+                    "sub",
+                    "nf")))}))
 
 gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "gtheoryBase",
@@ -547,6 +578,7 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param id .
 #' @param sub .
 #' @param ng .
+#' @param nf .
 #' @param facet .
 #' @param g .
 #' @param d .
@@ -561,6 +593,7 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param bm .
 #' @param mat .
 #' @param bmat .
+#' @param plot1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -575,6 +608,7 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$bmat} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -590,6 +624,7 @@ gtheory <- function(
     id,
     sub,
     ng = 3,
+    nf = 2,
     facet,
     g = FALSE,
     d = FALSE,
@@ -603,7 +638,8 @@ gtheory <- function(
     comp = FALSE,
     bm = FALSE,
     mat = FALSE,
-    bmat = FALSE) {
+    bmat = FALSE,
+    plot1 = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("gtheory requires jmvcore to be installed (restart may be required)")
@@ -629,6 +665,7 @@ gtheory <- function(
         id = id,
         sub = sub,
         ng = ng,
+        nf = nf,
         facet = facet,
         g = g,
         d = d,
@@ -642,7 +679,8 @@ gtheory <- function(
         comp = comp,
         bm = bm,
         mat = mat,
-        bmat = bmat)
+        bmat = bmat,
+        plot1 = plot1)
 
     analysis <- gtheoryClass$new(
         options = options,

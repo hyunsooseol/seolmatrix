@@ -5,6 +5,9 @@
 #' @importFrom jmvcore toB64
 #' @importFrom gtheory gstudy
 #' @importFrom gtheory dstudy
+#' @importFrom lme4 lmer
+#' @importFrom hemp gstudy
+#' @importFrom hemp dstudy_plot
 #' @import ggplot2
 #' @export
 
@@ -252,8 +255,24 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
           }
           
-         
-}
+          # D study plot(n=1)----------------
+          
+          if(isTRUE(self$options$plot1)){
+            
+            m<- lme4::lmer(self$options$formula, data = data)
+            gmodel <- hemp::gstudy(m) 
+            #self$results$text$setContent(gmodel)                     
+            image <- self$results$plot1
+            
+            nvars <- length(1:self$options$nf)
+            width <- 400 + nvars * 15
+            image$setSize(width, 500)
+            
+            image$setState(gmodel)
+              
+          }
+          
+       }
               
           if(self$options$t=='mul'){
             
@@ -463,19 +482,33 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 table$addRow(rowKey=name, values=row)
                 
               }
-              
-              
-            }
-            
-            
-            
-            
-                      
- }  
              
+            }
+          }
+      },
+  ####################################################      
+        .plot1 = function(image, ...) {
+          
+          if (is.null(image$state))
+            return(FALSE)
+          
+          gmodel <- image$state    
 
+          # dstudy_plot(one_facet_gstudy, unit = "Participants", 
+          #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
+          #             g_coef = FALSE)
+         facet <- self$options$facet 
+         nf <- self$options$nf
+         
+          plot1 <- hemp::dstudy_plot(gmodel,
+                                     unit=self$options$id,
+                                     facet=list(facet=c(1:nf)),
+                                     g_coef=TRUE)
+           
+          print(plot1)
+          TRUE
+         
+        }  
           
-          
- 
-        })
+ )
 )

@@ -40,6 +40,12 @@ options:
       min: 1
       default: 3
 
+    - name: nf
+      title: 'Num. of Facet'
+      type: Integer
+      min: 2
+      default: 2
+
     - name: facet
       title: 'Facets'
       type: Variables
@@ -117,4 +123,9 @@ options:
       title: 'Between universe score matrix'
       type: Bool
       default: false
+
+    - name: plot1
+      title: 'D study plot '
+      type: Bool
+      default: false       
 ...

@@ -10,6 +10,7 @@ gtheory(
   id,
   sub,
   ng = 3,
+  nf = 2,
   facet,
   g = FALSE,
   d = FALSE,
@@ -23,7 +24,8 @@ gtheory(
   comp = FALSE,
   bm = FALSE,
   mat = FALSE,
-  bmat = FALSE
+  bmat = FALSE,
+  plot1 = FALSE
 )
 }
 \arguments{
@@ -36,6 +38,8 @@ gtheory(
 \item{sub}{.}
 
 \item{ng}{.}
+
+\item{nf}{.}
 
 \item{facet}{.}
 
@@ -64,6 +68,8 @@ gtheory(
 \item{mat}{.}
 
 \item{bmat}{.}
+
+\item{plot1}{.}
 }
 \value{
 A results object containing:
@@ -80,6 +86,7 @@ A results object containing:
   \code{results$bmat} \tab \tab \tab \tab \tab a table \cr
   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

@@ -35,4 +35,7 @@ Imports:
     dplyr,
     tidyr,
     corrplot,
-    gtheory
+    gtheory,
+    lme4,
+    equate,
+Remotes: cddesja/hemp    
