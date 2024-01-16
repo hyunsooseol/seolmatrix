@@ -75,7 +75,6 @@ gtheory(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$g} \tab \tab \tab \tab \tab a table \cr
   \code{results$gmea} \tab \tab \tab \tab \tab a table \cr
   \code{results$d} \tab \tab \tab \tab \tab a table \cr
@@ -87,6 +86,7 @@ A results object containing:
   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

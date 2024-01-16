@@ -9,10 +9,6 @@ items:
       type: Html
       visible: True
 
-    - name:  text
-      title: ''
-      type:  Preformatted
-
     - name: g
       title:  'Variance components of a single observation'
       type: Table
@@ -304,6 +300,9 @@ items:
         - sub
         - nf
  
+    - name:  text
+      title: 'Generalizability coefficient based on the number of facet'
+      type:  Preformatted
 
 
 

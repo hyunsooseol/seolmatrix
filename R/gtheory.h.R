@@ -201,7 +201,6 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        text = function() private$.items[["text"]],
         g = function() private$.items[["g"]],
         gmea = function() private$.items[["gmea"]],
         d = function() private$.items[["d"]],
@@ -212,7 +211,8 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         bmat = function() private$.items[["bmat"]],
         bm = function() private$.items[["bm"]],
         comp = function() private$.items[["comp"]],
-        plot1 = function() private$.items[["plot1"]]),
+        plot1 = function() private$.items[["plot1"]],
+        text = function() private$.items[["text"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -226,10 +226,6 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text",
-                title=""))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="g",
@@ -547,7 +543,11 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "id",
                     "facet",
                     "sub",
-                    "nf")))}))
+                    "nf")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text",
+                title="Generalizability coefficient based on the number of facet"))}))
 
 gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "gtheoryBase",
@@ -597,7 +597,6 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$g} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$gmea} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$d} \tab \tab \tab \tab \tab a table \cr
@@ -609,6 +608,7 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$bm} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$comp} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

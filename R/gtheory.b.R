@@ -31,7 +31,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              <body>
              <div class='instructions'>
              <p>___________________________________________________________________________________
-             <p> Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+             <p> 1. Perform Univariate or Multivariate Generalizability theory based on <b>gtheory</b> R package.</p>
+             <p> 2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
              <p>___________________________________________________________________________________
              </div>
              </body>
@@ -269,7 +270,19 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             image$setSize(width, 400)
             
             image$setState(gmodel)
-              
+           
+            nf <- self$options$nf
+            # gen <- gmea$generalizability
+            # uni <- gmea$var.universe
+            # rel <- gmea$var.error.rel
+            
+            gmea<- gtheory::dstudy(gstudy.out, 
+                                   colname.objects = self$options$id)
+            
+            tex <- gmea$var.universe/(gmea$var.universe + (gmea$var.error.rel/nf))
+            self$results$text$setContent(tex)   
+            
+            
           }
           
        }
