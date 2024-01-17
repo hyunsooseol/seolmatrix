@@ -301,9 +301,16 @@ items:
         - nf
  
     - name:  text
-      title: 'Generalizability coefficient based on the number of facet'
+      title: '`Generalizability coefficient based on the number of facet(${nf})`'
       type:  Preformatted
-
+      visible: (plot1)
+      refs: seolmatrix
+      clearWith:
+        - dep
+        - id
+        - facet
+        - sub
+        - nf
 
 
 ...

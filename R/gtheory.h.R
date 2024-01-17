@@ -9,7 +9,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             dep = NULL,
             id = NULL,
             sub = NULL,
-            ng = 3,
+            ng = 2,
             nf = 2,
             facet = NULL,
             g = FALSE,
@@ -57,8 +57,8 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ng <- jmvcore::OptionInteger$new(
                 "ng",
                 ng,
-                min=1,
-                default=3)
+                min=2,
+                default=2)
             private$..nf <- jmvcore::OptionInteger$new(
                 "nf",
                 nf,
@@ -547,7 +547,15 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Generalizability coefficient based on the number of facet"))}))
+                title="`Generalizability coefficient based on the number of facet(${nf})`",
+                visible="(plot1)",
+                refs="seolmatrix",
+                clearWith=list(
+                    "dep",
+                    "id",
+                    "facet",
+                    "sub",
+                    "nf")))}))
 
 gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "gtheoryBase",
@@ -623,7 +631,7 @@ gtheory <- function(
     dep,
     id,
     sub,
-    ng = 3,
+    ng = 2,
     nf = 2,
     facet,
     g = FALSE,

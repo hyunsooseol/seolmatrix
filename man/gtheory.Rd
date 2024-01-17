@@ -9,7 +9,7 @@ gtheory(
   dep,
   id,
   sub,
-  ng = 3,
+  ng = 2,
   nf = 2,
   facet,
   g = FALSE,

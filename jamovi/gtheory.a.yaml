@@ -37,9 +37,9 @@ options:
     - name: ng
       title: 'Num. of Strata'
       type: Integer
-      min: 1
-      default: 3
-
+      min: 2
+      default: 2
+     
     - name: nf
       title: 'Num. of Facet'
       type: Integer
