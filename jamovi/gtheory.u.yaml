@@ -38,7 +38,7 @@ children:
       - type: ComboBox
         name: t
   - type: CollapseBox
-    label: Univariate analysis
+    label: 'Univariate analysis'
     margin: normal
     collapsed: true
     children:
@@ -56,27 +56,31 @@ children:
                 name: formula
                 format: string
                 stretchFactor: 3
-              - type: Label
-                label: 'Single observation'
+      - type: LayoutBox
+        margin: large
+        style: inline
+        children:
+          - type: Label
+            label: 'Single observation'
+            children:
+              - type: CheckBox
+                name: g
+              - type: CheckBox
+                name: gmea
+              - type: CheckBox
+                name: plot1
                 children:
-                  - type: CheckBox
-                    name: g
-                  - type: CheckBox
-                    name: gmea
-                  - type: CheckBox
-                    name: plot1
-                    children:
-                      - type: TextBox
-                        name: nf
-                        format: number
-                        enable: (plot1)
-              - type: Label
-                label: 'Overall observations'
-                children:
-                  - type: CheckBox
-                    name: d
-                  - type: CheckBox
-                    name: mea
+                  - type: TextBox
+                    name: nf
+                    format: number
+                    enable: (plot1)
+          - type: Label
+            label: 'Overall observations'
+            children:
+              - type: CheckBox
+                name: d
+              - type: CheckBox
+                name: mea
   - type: CollapseBox
     label: 'Multivariate analysis'
     margin: normal
@@ -99,22 +103,26 @@ children:
               - name: ng
                 type: TextBox
                 format: number
-              - type: Label
-                label: G Study
-                children:
-                  - type: CheckBox
-                    name: item
-                  - type: CheckBox
-                    name: mat
-              - type: Label
-                label: D Study
-                children:
-                  - type: CheckBox
-                    name: itemd
-                  - type: CheckBox
-                    name: bmat
-                  - type: CheckBox
-                    name: bm
-                  - type: CheckBox
-                    name: comp
+      - type: LayoutBox
+        margin: large
+        style: inline
+        children:
+          - type: Label
+            label: 'G Study'
+            children:
+              - type: CheckBox
+                name: item
+              - type: CheckBox
+                name: mat
+          - type: Label
+            label: 'D Study'
+            children:
+              - type: CheckBox
+                name: itemd
+              - type: CheckBox
+                name: bmat
+              - type: CheckBox
+                name: bm
+              - type: CheckBox
+                name: comp
 
