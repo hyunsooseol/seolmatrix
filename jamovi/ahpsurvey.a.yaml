@@ -27,7 +27,7 @@ options:
       default: 'cult, fam, house, jobs, trans'
 
     - name: ap
-      title: 'Priorities' 
+      title: 'Preference weights' 
       type: Bool
       default: TRUE
       
@@ -46,7 +46,7 @@ options:
       default: 'geometric' 
           
     - name: aj
-      title: 'Pairwise matrix' 
+      title: 'Pairwise comparison matrix' 
       type: Bool
       default: false  
 
@@ -100,7 +100,7 @@ options:
       type: Output  
 
     - name: plot1
-      title: 'Compare different methods'
+      title: 'Compare different average methods'
       type: Bool
       default: false   
 

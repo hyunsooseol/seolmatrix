@@ -14,7 +14,7 @@ items:
       type:  Preformatted
 
     - name: ap
-      title: '`Aggregated priorities - ${method}`' 
+      title: '`Preference weights - ${method}`' 
       type: Table
       visible: (ap)
       refs: ahpsurvey
@@ -74,7 +74,7 @@ items:
         - vars
 
     - name:  plot1
-      title:  "Compare methods"
+      title:  "Compare different average methods"
       type:  Image
       visible: (plot1)
       renderFun: .plot1

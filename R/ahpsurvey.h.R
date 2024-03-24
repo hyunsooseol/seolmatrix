@@ -174,7 +174,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="ap",
-                title="`Aggregated priorities - ${method}`",
+                title="`Preference weights - ${method}`",
                 visible="(ap)",
                 refs="ahpsurvey",
                 clearWith=list(
@@ -237,7 +237,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
-                title="Compare methods",
+                title="Compare different average methods",
                 visible="(plot1)",
                 renderFun=".plot1",
                 refs="ahpsurvey",
