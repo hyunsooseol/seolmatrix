@@ -71,8 +71,13 @@ children:
             children:
               - type: CheckBox
                 name: plot1
-                style: list-inline
                 children:
+                  - type: ComboBox
+                    name: method2
+                    enable: (plot1)
+                  - type: ComboBox
+                    name: method3
+                    enable: (plot1)                    
                   - type: TextBox
                     name: width1
                     format: number

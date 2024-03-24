@@ -32,7 +32,7 @@ items:
           title: 'Value'
 
     - name: aj
-      title: '`Aggregated individual judgements - ${method1}`' 
+      title: '` Pairwise comparison matrix - ${method1}`' 
       type: Table
       refs: ahpsurvey
       visible: (aj)
@@ -55,28 +55,26 @@ items:
         - vars
 
     - name:  plot1
-      title:  "Individual preference weights"
+      title:  "Compare methods"
       type:  Image
       visible: (plot1)
       renderFun: .plot1
       refs: ahpsurvey
       clearWith:
         - vars
-        - method
-        - method1
+        - method2
+        - method3
         - width1
         - plot1
  
     - name:  plot2
-      title: 'Individual priorities and consistency'
+      title: 'Individual priorities and consistency(Method="eigen")'
       type:  Image
       visible: (plot2)
       renderFun: .plot2
       refs: ahpsurvey
       clearWith:
         - vars
-        - method
-        - method1
         - angle
         - width2
         - plot2

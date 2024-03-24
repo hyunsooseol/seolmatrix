@@ -9,9 +9,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             atts = "cult, fam, house, jobs, trans",
             ap = TRUE,
-            method = "eigen",
+            method = "geometric",
             aj = FALSE,
             method1 = "geometric",
+            method2 = "eigen",
+            method3 = "geometric",
             plot1 = FALSE,
             plot2 = FALSE,
             angle = 0,
@@ -50,7 +52,7 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "geometric",
                     "arithmetic",
                     "rootmean"),
-                default="eigen")
+                default="geometric")
             private$..aj <- jmvcore::OptionBool$new(
                 "aj",
                 aj,
@@ -59,6 +61,24 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "method1",
                 method1,
                 options=list(
+                    "geometric",
+                    "arithmetic",
+                    "rootmean"),
+                default="geometric")
+            private$..method2 <- jmvcore::OptionList$new(
+                "method2",
+                method2,
+                options=list(
+                    "eigen",
+                    "geometric",
+                    "arithmetic",
+                    "rootmean"),
+                default="eigen")
+            private$..method3 <- jmvcore::OptionList$new(
+                "method3",
+                method3,
+                options=list(
+                    "eigen",
                     "geometric",
                     "arithmetic",
                     "rootmean"),
@@ -102,6 +122,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..method)
             self$.addOption(private$..aj)
             self$.addOption(private$..method1)
+            self$.addOption(private$..method2)
+            self$.addOption(private$..method3)
             self$.addOption(private$..cr)
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
@@ -118,6 +140,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         method = function() private$..method$value,
         aj = function() private$..aj$value,
         method1 = function() private$..method1$value,
+        method2 = function() private$..method2$value,
+        method3 = function() private$..method3$value,
         cr = function() private$..cr$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
@@ -133,6 +157,8 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..method = NA,
         ..aj = NA,
         ..method1 = NA,
+        ..method2 = NA,
+        ..method3 = NA,
         ..cr = NA,
         ..plot1 = NA,
         ..plot2 = NA,
@@ -192,7 +218,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="aj",
-                title="`Aggregated individual judgements - ${method1}`",
+                title="` Pairwise comparison matrix - ${method1}`",
                 refs="ahpsurvey",
                 visible="(aj)",
                 clearWith=list(
@@ -215,27 +241,25 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
-                title="Individual preference weights",
+                title="Compare methods",
                 visible="(plot1)",
                 renderFun=".plot1",
                 refs="ahpsurvey",
                 clearWith=list(
                     "vars",
-                    "method",
-                    "method1",
+                    "method2",
+                    "method3",
                     "width1",
                     "plot1")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
-                title="Individual priorities and consistency",
+                title="Individual priorities and consistency(Method=\"eigen\")",
                 visible="(plot2)",
                 renderFun=".plot2",
                 refs="ahpsurvey",
                 clearWith=list(
                     "vars",
-                    "method",
-                    "method1",
                     "angle",
                     "width2",
                     "plot2")))}))
@@ -271,6 +295,8 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param method .
 #' @param aj .
 #' @param method1 .
+#' @param method2 .
+#' @param method3 .
 #' @param plot1 .
 #' @param plot2 .
 #' @param angle a number from 0 to 90 defining the angle of the x-axis labels,
@@ -302,9 +328,11 @@ ahpsurvey <- function(
     vars,
     atts = "cult, fam, house, jobs, trans",
     ap = TRUE,
-    method = "eigen",
+    method = "geometric",
     aj = FALSE,
     method1 = "geometric",
+    method2 = "eigen",
+    method3 = "geometric",
     plot1 = FALSE,
     plot2 = FALSE,
     angle = 0,
@@ -330,6 +358,8 @@ ahpsurvey <- function(
         method = method,
         aj = aj,
         method1 = method1,
+        method2 = method2,
+        method3 = method3,
         plot1 = plot1,
         plot2 = plot2,
         angle = angle,

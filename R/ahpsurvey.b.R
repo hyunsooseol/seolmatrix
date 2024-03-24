@@ -73,15 +73,16 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
     .run = function() {
 
+    
       # Ready--------
       
       ready <- TRUE
-      
+
       if (is.null(self$options$vars) ||
           length(self$options$vars) < 2)
-        
+
         ready <- FALSE
-      
+
       if (ready) {
         
         data <- private$.cleanData()
@@ -102,20 +103,20 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         
         
-      }
+       }
     },
     
     
     .compute = function(data) {
       
-       # get variables---------------------------------
-        
-        
+     
+      # get variables---------------------------------
+       
         vars <- self$options$vars
         method <- self$options$method
         method1 <- self$options$method1
-        
-          ############################################################   
+       
+       ############################################################   
           atts <- strsplit(self$options$atts, ',')[[1]]
           
         matahp<- ahpsurvey::ahp.mat(df=data,
@@ -148,9 +149,12 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # Individual preference plot1----------   
         if(self$options$plot1==TRUE){
         
-        eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
-        geom <- ahpsurvey::ahp.indpref(matahp, atts, method = "arithmetic")
-        error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(eigentrue - geom), 1, max))
+          me <- self$options$method2
+          me2 <- self$options$method3
+          
+        m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
+        m2 <- ahpsurvey::ahp.indpref(matahp, atts, method = me2)
+        error <- data.frame(id = 1:length(matahp), maxdiff = apply(abs(m - m2), 1, max))
         
         #self$results$text$setContent(error)   
         
@@ -160,32 +164,35 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         }
         
         if(self$options$plot2==TRUE){
+         
+          thres <- 0.1
           
-          eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
+         # eigentrue <- ahpsurvey::ahp.indpref(matahp, atts, method = "eigen")
         
           cr <- data %>%
             ahpsurvey::ahp.mat(atts, negconvert = T) %>%
             ahpsurvey::ahp.cr(atts)
-          
-          thres <- 0.1
-          
+         
           cr.df <- data %>%
             ahp.mat(atts, negconvert = TRUE) %>% 
             ahp.cr(atts) %>% 
             data.frame() %>%
             dplyr::mutate(rowid = 1:length(cr), cr.dum = as.factor(ifelse(cr <= thres, 1, 0))) %>%
             dplyr::select(cr.dum, rowid)
+        #self$results$text$setContent(cr.df) 
           
-          #self$results$text$setContent(cr.df) 
+          cityahp <- data %>% 
+            ahpsurvey::ahp.mat(atts, negconvert = T)
           
-          
+          eigentrue <- ahpsurvey::ahp.indpref(cityahp, atts, method = "eigen")
+         
           d<- data %>%
             ahpsurvey::ahp.mat(atts = atts, negconvert = TRUE) %>% 
             ahpsurvey::ahp.indpref(atts, method = "eigen") %>% 
             dplyr::mutate(rowid = 1:nrow(eigentrue)) %>%
             dplyr::left_join(cr.df, by = 'rowid') %>%
             tidyr::gather(atts, key = "var", value = "pref")  
-          
+            
           #self$results$text$setContent(d) 
           
          state<-list(d, cr)
@@ -200,6 +207,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             'df' = df,
             'item' = item,
             'cr'=cr
+            
           )
           
     },  
@@ -317,8 +325,9 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
       d <- image$state[[1]]
       cr <- image$state[[2]]
-    
-      plot2<- ggplot(d,aes(x = var, y = pref)) + 
+   
+      
+      plot2<- d %>% ggplot(aes(x = var, y = pref)) + 
         geom_violin(alpha = 0.6, width = 0.8, color = "transparent", fill = "gray") +
         geom_jitter(alpha = 0.6, height = 0, width = 0.1, aes(color = cr.dum)) +
         geom_boxplot(alpha = 0, width = 0.3, color = "#808080") +
