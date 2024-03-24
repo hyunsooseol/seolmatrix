@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.8.6
+version: 3.8.7
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2024-01-20'
+date: '2024-03-24'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -160,8 +160,8 @@ datasets:
     description: 4 items x 3 decision makers
     tags:
       - AHP
-  - name: ahp_survey
-    path: ahp_survey.omv
+  - name: city200
+    path: city200.omv
     description: Ahp for survey data
     tags:
       - AHP for survey data
