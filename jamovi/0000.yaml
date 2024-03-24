@@ -147,7 +147,7 @@ datasets:
       - Concordance
   - name: device
     path: device.omv
-    description: 'from K.J. van Stralen et.al.,2012'
+    description: from K.J. van Stralen et.al.,2012
     tags:
       - Concordance
   - name: hci

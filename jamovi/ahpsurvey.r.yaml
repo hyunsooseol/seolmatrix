@@ -46,6 +46,25 @@ items:
           type: 'text'
           content: ($key)
 
+    - name: sumcr
+      title: 'Summary of Consistency Ratio(CR<=0.1)'
+      type: Table
+      rows: 1
+      clearWith:
+        - vars
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: 'Frequency'
+        - name: NO
+          type: integer
+        - name: YES
+          type: integer
+        - name: Mean CR
+          type: number
+
     - name: cr
       title: CR
       type: Output
@@ -60,6 +79,7 @@ items:
       visible: (plot1)
       renderFun: .plot1
       refs: ahpsurvey
+      requiresData: true
       clearWith:
         - vars
         - method2
@@ -67,15 +87,5 @@ items:
         - width1
         - plot1
  
-    - name:  plot2
-      title: 'Individual priorities and consistency(Method="eigen")'
-      type:  Image
-      visible: (plot2)
-      renderFun: .plot2
-      refs: ahpsurvey
-      clearWith:
-        - vars
-        - angle
-        - width2
-        - plot2
+
 ...

@@ -9,16 +9,15 @@ ahpsurvey(
   vars,
   atts = "cult, fam, house, jobs, trans",
   ap = TRUE,
-  method = "eigen",
+  method = "geometric",
   aj = FALSE,
   method1 = "geometric",
+  method2 = "eigen",
+  method3 = "geometric",
+  sumcr = FALSE,
   plot1 = FALSE,
-  plot2 = FALSE,
-  angle = 0,
   width1 = 500,
-  height1 = 500,
-  width2 = 500,
-  height2 = 500
+  height1 = 500
 )
 }
 \arguments{
@@ -36,20 +35,17 @@ ahpsurvey(
 
 \item{method1}{.}
 
+\item{method2}{.}
+
+\item{method3}{.}
+
+\item{sumcr}{.}
+
 \item{plot1}{.}
-
-\item{plot2}{.}
-
-\item{angle}{a number from 0 to 90 defining the angle of the x-axis labels,
-where 0 degrees represents completely horizontal labels.}
 
 \item{width1}{.}
 
 \item{height1}{.}
-
-\item{width2}{.}
-
-\item{height2}{.}
 }
 \value{
 A results object containing:
@@ -58,9 +54,9 @@ A results object containing:
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
+  \code{results$sumcr} \tab \tab \tab \tab \tab a table \cr
   \code{results$cr} \tab \tab \tab \tab \tab an output \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

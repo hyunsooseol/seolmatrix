@@ -14,13 +14,10 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             method1 = "geometric",
             method2 = "eigen",
             method3 = "geometric",
+            sumcr = FALSE,
             plot1 = FALSE,
-            plot2 = FALSE,
-            angle = 0,
             width1 = 500,
-            height1 = 500,
-            width2 = 500,
-            height2 = 500, ...) {
+            height1 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -83,22 +80,16 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "arithmetic",
                     "rootmean"),
                 default="geometric")
+            private$..sumcr <- jmvcore::OptionBool$new(
+                "sumcr",
+                sumcr,
+                default=FALSE)
             private$..cr <- jmvcore::OptionOutput$new(
                 "cr")
             private$..plot1 <- jmvcore::OptionBool$new(
                 "plot1",
                 plot1,
                 default=FALSE)
-            private$..plot2 <- jmvcore::OptionBool$new(
-                "plot2",
-                plot2,
-                default=FALSE)
-            private$..angle <- jmvcore::OptionNumber$new(
-                "angle",
-                angle,
-                min=0,
-                max=90,
-                default=0)
             private$..width1 <- jmvcore::OptionInteger$new(
                 "width1",
                 width1,
@@ -106,14 +97,6 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..height1 <- jmvcore::OptionInteger$new(
                 "height1",
                 height1,
-                default=500)
-            private$..width2 <- jmvcore::OptionInteger$new(
-                "width2",
-                width2,
-                default=500)
-            private$..height2 <- jmvcore::OptionInteger$new(
-                "height2",
-                height2,
                 default=500)
 
             self$.addOption(private$..vars)
@@ -124,14 +107,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..method1)
             self$.addOption(private$..method2)
             self$.addOption(private$..method3)
+            self$.addOption(private$..sumcr)
             self$.addOption(private$..cr)
             self$.addOption(private$..plot1)
-            self$.addOption(private$..plot2)
-            self$.addOption(private$..angle)
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
-            self$.addOption(private$..width2)
-            self$.addOption(private$..height2)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -142,14 +122,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         method1 = function() private$..method1$value,
         method2 = function() private$..method2$value,
         method3 = function() private$..method3$value,
+        sumcr = function() private$..sumcr$value,
         cr = function() private$..cr$value,
         plot1 = function() private$..plot1$value,
-        plot2 = function() private$..plot2$value,
-        angle = function() private$..angle$value,
         width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value,
-        width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value),
+        height1 = function() private$..height1$value),
     private = list(
         ..vars = NA,
         ..atts = NA,
@@ -159,14 +136,11 @@ ahpsurveyOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..method1 = NA,
         ..method2 = NA,
         ..method3 = NA,
+        ..sumcr = NA,
         ..cr = NA,
         ..plot1 = NA,
-        ..plot2 = NA,
-        ..angle = NA,
         ..width1 = NA,
-        ..height1 = NA,
-        ..width2 = NA,
-        ..height2 = NA)
+        ..height1 = NA)
 )
 
 ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -177,9 +151,9 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         text = function() private$.items[["text"]],
         ap = function() private$.items[["ap"]],
         aj = function() private$.items[["aj"]],
+        sumcr = function() private$.items[["sumcr"]],
         cr = function() private$.items[["cr"]],
-        plot1 = function() private$.items[["plot1"]],
-        plot2 = function() private$.items[["plot2"]]),
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -230,6 +204,28 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="", 
                         `type`="text", 
                         `content`="($key)"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="sumcr",
+                title="Summary of Consistency Ratio(CR<=0.1)",
+                rows=1,
+                clearWith=list(
+                    "vars"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="Frequency"),
+                    list(
+                        `name`="NO", 
+                        `type`="integer"),
+                    list(
+                        `name`="YES", 
+                        `type`="integer"),
+                    list(
+                        `name`="Mean CR", 
+                        `type`="number"))))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="cr",
@@ -245,24 +241,13 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(plot1)",
                 renderFun=".plot1",
                 refs="ahpsurvey",
+                requiresData=TRUE,
                 clearWith=list(
                     "vars",
                     "method2",
                     "method3",
                     "width1",
-                    "plot1")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot2",
-                title="Individual priorities and consistency(Method=\"eigen\")",
-                visible="(plot2)",
-                renderFun=".plot2",
-                refs="ahpsurvey",
-                clearWith=list(
-                    "vars",
-                    "angle",
-                    "width2",
-                    "plot2")))}))
+                    "plot1")))}))
 
 ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "ahpsurveyBase",
@@ -297,23 +282,19 @@ ahpsurveyBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param method1 .
 #' @param method2 .
 #' @param method3 .
+#' @param sumcr .
 #' @param plot1 .
-#' @param plot2 .
-#' @param angle a number from 0 to 90 defining the angle of the x-axis labels,
-#'   where 0 degrees represents completely horizontal labels.
 #' @param width1 .
 #' @param height1 .
-#' @param width2 .
-#' @param height2 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$ap} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$aj} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$sumcr} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cr} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -333,13 +314,10 @@ ahpsurvey <- function(
     method1 = "geometric",
     method2 = "eigen",
     method3 = "geometric",
+    sumcr = FALSE,
     plot1 = FALSE,
-    plot2 = FALSE,
-    angle = 0,
     width1 = 500,
-    height1 = 500,
-    width2 = 500,
-    height2 = 500) {
+    height1 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("ahpsurvey requires jmvcore to be installed (restart may be required)")
@@ -360,13 +338,10 @@ ahpsurvey <- function(
         method1 = method1,
         method2 = method2,
         method3 = method3,
+        sumcr = sumcr,
         plot1 = plot1,
-        plot2 = plot2,
-        angle = angle,
         width1 = width1,
-        height1 = height1,
-        width2 = width2,
-        height2 = height2)
+        height1 = height1)
 
     analysis <- ahpsurveyClass$new(
         options = options,
