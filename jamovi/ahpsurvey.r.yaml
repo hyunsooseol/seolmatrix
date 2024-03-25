@@ -50,6 +50,7 @@ items:
       title: 'Summary of Consistency Ratio(CR<=0.1)'
       type: Table
       rows: 1
+      visible: (sumcr)
       clearWith:
         - vars
 

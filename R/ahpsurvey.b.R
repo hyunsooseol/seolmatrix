@@ -47,12 +47,12 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             </html>"
       )
       
-      # if (self$options$cir)
-      #   self$results$cir$setNote(
-      #     "Note",
-      #     "value<0.1 is acceptable for consistency ratio."
-      #   )
-      # 
+      if (self$options$sumcr)
+        self$results$sumcr$setNote(
+          "Note",
+          "Mean CR<0.1 is acceptable for consistency ratio."
+        )
+
       
       
       if(isTRUE(self$options$plot1)){
@@ -96,6 +96,9 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         private$.populateCrOutputs(results)
         
         
+        # populate sumcr table-----------
+        
+        private$.populateSumcrTable(results)
         
        }
     },
@@ -137,30 +140,13 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # Consistency ratio of each decision-maker-------
         
         cr <- ahpsurvey::ahp.cr(matahp, atts)
-        
-       if(isTRUE(self$options$sumcr)){
-         
-         cr1 <- data %>%
+      
+        cr1 <- data %>%
            ahpsurvey::ahp.mat(atts, negconvert = T) %>% 
            ahpsurvey::ahp.cr(atts)
-         
-         a<- as.vector(table(cr1 <= 0.1))
-         mcr<- round(mean(cr),3)
-         ve<- c(a,mcr)
-         
-         table <- self$results$sumcr
-         
-         row <- list()
-         
-         row[['NO']] <- ve[[1]]
-         row[['YES']] <- ve[[2]]
-         row[['Mean CR']] <- ve[[3]]
         
-         table$setRow(rowNo = 1, values = row)
-         
-         
-       }
-        
+       tab<- as.vector(table(cr1 <= 0.1))
+       
        
         # Individual preference plot1----------   
         if(self$options$plot1==TRUE){
@@ -218,7 +204,9 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           list(
             'df' = df,
             'item' = item,
-            'cr'=cr
+            'cr'=cr,
+            'cr1'=cr1,
+            'tab'=tab
             
           )
           
@@ -226,7 +214,32 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
         #Populate table----------------------------
         
-            .populateApTable = function(results) {
+    .populateSumcrTable = function(results) {
+      
+      table <- self$results$sumcr
+     
+      cr <- results$cr
+      cr1 <- results$cr1
+      tab <- results$tab
+      
+      mcr<- round(mean(cr),3)
+      ve<- c(tab,mcr)
+      
+     
+      row <- list()
+      
+      row[['NO']] <- ve[[1]]
+      row[['YES']] <- ve[[2]]
+      row[['Mean CR']] <- ve[[3]]
+      
+      table$setRow(rowNo = 1, values = row)
+      
+      
+      
+    },
+    
+    
+     .populateApTable = function(results) {
               
               table <- self$results$ap
               df <- results$df  

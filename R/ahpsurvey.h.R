@@ -209,6 +209,7 @@ ahpsurveyResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="sumcr",
                 title="Summary of Consistency Ratio(CR<=0.1)",
                 rows=1,
+                visible="(sumcr)",
                 clearWith=list(
                     "vars"),
                 columns=list(
