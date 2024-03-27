@@ -1,0 +1,47 @@
+---
+name:  rmc
+title: Repeated Measures Correlation
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: id
+      title: ID
+      type: Variable
+      suggested:
+         - nominal
+      permitted:
+        - factor
+
+    - name: dep
+      title: Measure 1
+      type: Variable
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+
+    - name: covs
+      title: Measure 2
+      type: Variable
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+        
+    - name: cc
+      type: Bool
+      title: Correlation coefficient
+      default: TRUE
+      
+    - name: ccp
+      title: Concordance 
+      type: Bool
+      default: FALSE
+      
+
+...

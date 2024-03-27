@@ -1,0 +1,46 @@
+---
+name:  rmc
+title: Repeated Measures Correlation
+jrs:   '1.1'
+refs: seolmatrix
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True
+
+    - name:  text
+      title: Repeated Measures Correlation
+      type:  Preformatted
+
+    - name:  cc
+      title: Correlation coefficient
+      type: Table
+      rows:  1
+      refs: rmcorr
+      clearWith:
+        - id
+        - dep
+        - covs
+      columns:
+        - name: r
+          title: Coefficient
+          type: number
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+        - name: lower
+          title: Lower
+          type: number
+          superTitle: '95% CI'
+        - name: upper
+          title: Upper
+          type: number
+          superTitle: '95% CI'
+
+
+...

@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.8.7
+version: 3.8.8
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2024-03-24'
+date: '2024-03-27'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -70,6 +70,11 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: AHP for survey data
     menuSubgroup: AHP
+  - title: Repeated Measures Correlation
+    name: rmc
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Repeated Measures Correlation
 datasets:
   - name: rater
     path: rater.omv
@@ -155,6 +160,11 @@ datasets:
     description: correlation structure with binary items.
     tags:
       - Correlation structure
+  - name: bland1995
+    path: bland1995.omv
+    description: Repeated measures correlation
+    tags:
+      - RM correlation
   - name: ahp
     path: ahp.omv
     description: 4 items x 3 decision makers
@@ -162,7 +172,7 @@ datasets:
       - AHP
   - name: city200
     path: city200.omv
-    description: Ahp for survey data
+    description: AHP for survey data
     tags:
       - AHP for survey data
 usesNative: true
