@@ -52,6 +52,30 @@ items:
         - width
         - Height
 
+    # - name:  text
+    #   title: 'Cross correlation values'
+    #   type:  Preformatted
+
+    - name: cc
+      title: 'Cross correlation values'
+      visible: (cc)
+      type: Table
+      clearWith:
+        - dep
+        - covs
+
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+        - name: lag
+          title: 'Lag'
+          type: number
+        - name: value
+          title: 'Value'
+          type: number
+
     - name: plot1
       title: 'Cross Correlation plot'
       type: Image
@@ -63,8 +87,4 @@ items:
         - covs
         - width1
         - height1
-
-    - name:  text
-      title: 'Cross correlation values'
-      type:  Preformatted
 ...

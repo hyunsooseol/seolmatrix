@@ -125,12 +125,31 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     
     Measure1 <- as.vector(data[[dep]])
     Measure2 <- as.vector(data[[covs]])
-    res1<- stats::ccf(Measure1, Measure2, plot = FALSE)
+    r<- stats::ccf(Measure1, Measure2, plot = FALSE)
     
-    self$results$text$setContent(res1)  
+    #self$results$text$setContent(res1)  
+    
+    table <- self$results$cc
+    
+    res1<- cbind(r[["lag"]], r[["acf"]])
+    res1<- as.data.frame(res1)
+    names(res1) <- c("Lag", "Values")
+    
+    names<- dimnames(res1)[[1]]
+    
+    for (name in names) {
+      
+      row <- list()
+      
+      row[["lag"]]   <-  res1[name, 1]
+      row[["value"]] <-  res1[name, 2]
+      
+      table$addRow(rowKey=name, values=row)
+      
+    }
     
     image1 <- self$results$plot1
-    image1$setState(res1) 
+    image1$setState(r) 
     
     }
     
@@ -163,9 +182,9 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
   if (is.null(image1$state))
     return(FALSE)
   
-  res1 <- image1$state
+  res11 <- image1$state
   
-  plot1<- plot(res1)
+  plot1<- plot(res11)
   
   print(plot1)
   TRUE

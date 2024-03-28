@@ -9,7 +9,7 @@ rmc(
   id,
   dep,
   covs,
-  rc = TRUE,
+  rc = FALSE,
   plot = FALSE,
   width = 500,
   height = 500,
@@ -51,7 +51,7 @@ A results object containing:
   \code{results$rc} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$cc} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

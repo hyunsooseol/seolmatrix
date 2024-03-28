@@ -123,8 +123,8 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         instructions = function() private$.items[["instructions"]],
         rc = function() private$.items[["rc"]],
         plot = function() private$.items[["plot"]],
-        plot1 = function() private$.items[["plot1"]],
-        text = function() private$.items[["text"]]),
+        cc = function() private$.items[["cc"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -186,6 +186,28 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs",
                     "width",
                     "Height")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="cc",
+                title="Cross correlation values",
+                visible="(cc)",
+                clearWith=list(
+                    "dep",
+                    "covs"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"),
+                    list(
+                        `name`="lag", 
+                        `title`="Lag", 
+                        `type`="number"),
+                    list(
+                        `name`="value", 
+                        `title`="Value", 
+                        `type`="number"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -197,11 +219,7 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "dep",
                     "covs",
                     "width1",
-                    "height1")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text",
-                title="Cross correlation values"))}))
+                    "height1")))}))
 
 rmcBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "rmcBase",
@@ -244,8 +262,8 @@ rmcBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$rc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$cc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
