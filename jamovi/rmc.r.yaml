@@ -1,6 +1,6 @@
 ---
 name:  rmc
-title: Repeated Measures Correlation
+title: Repeated & Cross Correlation
 jrs:   '1.1'
 refs: seolmatrix
 items:
@@ -9,12 +9,8 @@ items:
       type: Html
       visible: True
 
-    # - name:  text
-    #   title: Repeated Measures Correlation
-    #   type:  Preformatted
-
-    - name:  cc
-      title: Correlation coefficient
+    - name:  rc
+      title: 'Repeated correlation coefficient'
       type: Table
       rows:  1
       refs: rmcorr
@@ -43,7 +39,7 @@ items:
           superTitle: '95% CI'
 
     - name: plot
-      title: 'Scatterplot'
+      title: 'Scatterplot for Repeated Correlation'
       type: Image
       renderFun: .plot
       visible: (plot)
@@ -53,5 +49,22 @@ items:
         - id
         - dep
         - covs
+        - width
+        - Height
 
+    - name: plot1
+      title: 'Cross Correlation plot'
+      type: Image
+      renderFun: .plot1
+      visible: (plot1)
+      requiresData: true
+      clearWith:
+        - dep
+        - covs
+        - width1
+        - height1
+
+    - name:  text
+      title: 'Cross correlation values'
+      type:  Preformatted
 ...

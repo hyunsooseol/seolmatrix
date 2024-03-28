@@ -11,8 +11,8 @@ type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Multilevel
-  correlation, Concordance correlation, Correlation structure, Repeated measures
-  correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
+  correlation, Concordance correlation, Correlation structure, Repeated and
+  Cross correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
   Generalizability Theory, Analytic Hierarchy Process, and allows users to
   produce Gaussian Graphical Model and Partial plot.
 analyses:
@@ -46,6 +46,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Correlation Structure
     menuSubgroup: Correlation
+  - title: Repeated & Cross Correlation
+    name: rmc
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Repeated & Cross Correlation
+    menuSubgroup: Correlation
   - title: Rater Reliability
     name: rater
     ns: seolmatrix
@@ -70,11 +76,6 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: AHP for survey data
     menuSubgroup: AHP
-  - title: Repeated Measures Correlation
-    name: rmc
-    ns: seolmatrix
-    menuGroup: seolmatrix
-    menuTitle: Repeated Measures Correlation
 datasets:
   - name: rater
     path: rater.omv

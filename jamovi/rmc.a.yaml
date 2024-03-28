@@ -1,6 +1,6 @@
 ---
 name:  rmc
-title: Repeated Measures Correlation
+title: Repeated & Cross Correlation
 menuGroup: seolmatrix
 version: '1.0.0'
 jas: '1.2'
@@ -33,10 +33,10 @@ options:
       permitted:
         - numeric
         
-    - name: cc
+    - name: rc
       type: Bool
       title: Coefficient 
-      default: TRUE
+      default: false
       
     - name: plot
       title: Scatterplot
@@ -49,6 +49,26 @@ options:
       default: 500
       
     - name: height
+      type: Integer
+      title: "X"
+      default: 500
+
+    - name: cc
+      type: Bool
+      title: Coefficient 
+      default: FALSE
+
+    - name: plot1
+      title: 'Plot'
+      type: Bool
+      default: FALSE
+
+    - name: width1
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height1
       type: Integer
       title: "X"
       default: 500

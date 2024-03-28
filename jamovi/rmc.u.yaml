@@ -1,4 +1,4 @@
-title: Repeated Measures Correlation
+title: Repeated & Cross Correlation
 name: rmc
 jus: '3.0'
 stage: 0
@@ -9,7 +9,7 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: ID
+        label: ID(Only for Repeated)
         children:
           - type: VariablesListBox
             name: id
@@ -41,10 +41,10 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Correlation Coefficient
+            label: 'Repeated Correlation'
             children:
               - type: CheckBox
-                name: cc
+                name: rc
               - type: CheckBox
                 name: plot
                 style: list-inline
@@ -57,3 +57,27 @@ children:
                     name: height
                     format: number
                     enable: (plot) 
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: 'Cross Correlation'
+            children:
+              - type: CheckBox
+                name: cc
+              - type: CheckBox
+                name: plot1
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width1
+                    format: number
+                    enable: (plot1)
+                  - type: TextBox
+                    name: height1
+                    format: number
+                    enable: (plot1) 

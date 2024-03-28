@@ -9,10 +9,14 @@ rmcOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             id = NULL,
             dep = NULL,
             covs = NULL,
-            cc = TRUE,
+            rc = FALSE,
             plot = FALSE,
             width = 500,
-            height = 500, ...) {
+            height = 500,
+            cc = FALSE,
+            plot1 = FALSE,
+            width1 = 500,
+            height1 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -41,10 +45,10 @@ rmcOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
-            private$..cc <- jmvcore::OptionBool$new(
-                "cc",
-                cc,
-                default=TRUE)
+            private$..rc <- jmvcore::OptionBool$new(
+                "rc",
+                rc,
+                default=FALSE)
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -57,31 +61,59 @@ rmcOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height",
                 height,
                 default=500)
+            private$..cc <- jmvcore::OptionBool$new(
+                "cc",
+                cc,
+                default=FALSE)
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
+                default=FALSE)
+            private$..width1 <- jmvcore::OptionInteger$new(
+                "width1",
+                width1,
+                default=500)
+            private$..height1 <- jmvcore::OptionInteger$new(
+                "height1",
+                height1,
+                default=500)
 
             self$.addOption(private$..id)
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
-            self$.addOption(private$..cc)
+            self$.addOption(private$..rc)
             self$.addOption(private$..plot)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
+            self$.addOption(private$..cc)
+            self$.addOption(private$..plot1)
+            self$.addOption(private$..width1)
+            self$.addOption(private$..height1)
         }),
     active = list(
         id = function() private$..id$value,
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
-        cc = function() private$..cc$value,
+        rc = function() private$..rc$value,
         plot = function() private$..plot$value,
         width = function() private$..width$value,
-        height = function() private$..height$value),
+        height = function() private$..height$value,
+        cc = function() private$..cc$value,
+        plot1 = function() private$..plot1$value,
+        width1 = function() private$..width1$value,
+        height1 = function() private$..height1$value),
     private = list(
         ..id = NA,
         ..dep = NA,
         ..covs = NA,
-        ..cc = NA,
+        ..rc = NA,
         ..plot = NA,
         ..width = NA,
-        ..height = NA)
+        ..height = NA,
+        ..cc = NA,
+        ..plot1 = NA,
+        ..width1 = NA,
+        ..height1 = NA)
 )
 
 rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -89,15 +121,17 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        cc = function() private$.items[["cc"]],
-        plot = function() private$.items[["plot"]]),
+        rc = function() private$.items[["rc"]],
+        plot = function() private$.items[["plot"]],
+        plot1 = function() private$.items[["plot1"]],
+        text = function() private$.items[["text"]]),
     private = list(),
     public=list(
         initialize=function(options) {
             super$initialize(
                 options=options,
                 name="",
-                title="Repeated Measures Correlation",
+                title="Repeated & Cross Correlation",
                 refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
@@ -106,8 +140,8 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
-                name="cc",
-                title="Correlation coefficient",
+                name="rc",
+                title="Repeated correlation coefficient",
                 rows=1,
                 refs="rmcorr",
                 clearWith=list(
@@ -141,7 +175,7 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Scatterplot",
+                title="Scatterplot for Repeated Correlation",
                 renderFun=".plot",
                 visible="(plot)",
                 refs="rmcorr",
@@ -149,7 +183,25 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "id",
                     "dep",
-                    "covs")))}))
+                    "covs",
+                    "width",
+                    "Height")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Cross Correlation plot",
+                renderFun=".plot1",
+                visible="(plot1)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "dep",
+                    "covs",
+                    "width1",
+                    "height1")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text",
+                title="Cross correlation values"))}))
 
 rmcBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "rmcBase",
@@ -172,29 +224,35 @@ rmcBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Repeated Measures Correlation
+#' Repeated & Cross Correlation
 #'
 #' 
 #' @param data .
 #' @param id .
 #' @param dep .
 #' @param covs .
-#' @param cc .
+#' @param rc .
 #' @param plot .
 #' @param width .
 #' @param height .
+#' @param cc .
+#' @param plot1 .
+#' @param width1 .
+#' @param height1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$cc} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$rc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$cc$asDF}
+#' \code{results$rc$asDF}
 #'
-#' \code{as.data.frame(results$cc)}
+#' \code{as.data.frame(results$rc)}
 #'
 #' @export
 rmc <- function(
@@ -202,10 +260,14 @@ rmc <- function(
     id,
     dep,
     covs,
-    cc = TRUE,
+    rc = FALSE,
     plot = FALSE,
     width = 500,
-    height = 500) {
+    height = 500,
+    cc = FALSE,
+    plot1 = FALSE,
+    width1 = 500,
+    height1 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rmc requires jmvcore to be installed (restart may be required)")
@@ -226,10 +288,14 @@ rmc <- function(
         id = id,
         dep = dep,
         covs = covs,
-        cc = cc,
+        rc = rc,
         plot = plot,
         width = width,
-        height = height)
+        height = height,
+        cc = cc,
+        plot1 = plot1,
+        width1 = width1,
+        height1 = height1)
 
     analysis <- rmcClass$new(
         options = options,

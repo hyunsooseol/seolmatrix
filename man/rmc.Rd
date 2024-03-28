@@ -2,9 +2,22 @@
 % Please edit documentation in R/rmc.h.R
 \name{rmc}
 \alias{rmc}
-\title{Repeated Measures Correlation}
+\title{Repeated & Cross Correlation}
 \usage{
-rmc(data, id, dep, covs, cc = TRUE, plot = FALSE, width = 500, height = 500)
+rmc(
+  data,
+  id,
+  dep,
+  covs,
+  rc = TRUE,
+  plot = FALSE,
+  width = 500,
+  height = 500,
+  cc = FALSE,
+  plot1 = FALSE,
+  width1 = 500,
+  height1 = 500
+)
 }
 \arguments{
 \item{data}{.}
@@ -15,28 +28,38 @@ rmc(data, id, dep, covs, cc = TRUE, plot = FALSE, width = 500, height = 500)
 
 \item{covs}{.}
 
-\item{cc}{.}
+\item{rc}{.}
 
 \item{plot}{.}
 
 \item{width}{.}
 
 \item{height}{.}
+
+\item{cc}{.}
+
+\item{plot1}{.}
+
+\item{width1}{.}
+
+\item{height1}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-  \code{results$cc} \tab \tab \tab \tab \tab a table \cr
+  \code{results$rc} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$cc$asDF}
+\code{results$rc$asDF}
 
-\code{as.data.frame(results$cc)}
+\code{as.data.frame(results$rc)}
 }
 \description{
-Repeated Measures Correlation
+Repeated & Cross Correlation
 }

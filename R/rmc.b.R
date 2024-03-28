@@ -4,6 +4,7 @@
 #' @import jmvcore
 #' @import rmcorr
 #' @importFrom rmcorr rmcorr
+#' @importFrom stats ccf
 #' @import ggplot2
 #' @export
 
@@ -14,7 +15,7 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       .init = function() {
         
         if (is.null(self$data) |is.null(self$options$dep) | 
-            is.null(self$options$dep)  | is.null(self$options$covs)) {
+             is.null(self$options$covs)) {
           
           self$results$instructions$setVisible(visible = TRUE)
           
@@ -27,8 +28,9 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <body>
             <div class='instructions'>
             <p>____________________________________________________________________________________</p>
-            <p>1. The rationale of Repeated measures correlation is described in the <a href='https://r-bloggers.com/2020/01/concordance-correlation-coefficient/?fbclid=IwAR2Txi_QrFTuDB9jH8NiJW8dEde_lw2Td08XqxNzoWqut9m8E-bE5RHUDiI' target = '_blank'>page.</a></p>
-            <p>2. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p>1. The rationale of Repeated measures correlation is described in the <a href='https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00456/full' target = '_blank'>page.</a></p>
+            <p>2. The rationale of Cross correlation is described in the <a href='https://www.r-bloggers.com/2021/08/how-to-calculate-cross-correlation-in-r/' target = '_blank'>page.</a></p>
+            <p>3. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>
@@ -42,14 +44,20 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           self$results$plot$setSize(width, height)
         }
        
+        if(isTRUE(self$options$plot1)){
+          width <- self$options$width1
+          height <- self$options$height1
+          self$results$plot1$setSize(width, height)
+        }
+        
+        
       },
       
 #---------------------------------------------------------------      
   .run = function() {
 
     
-    if (is.null(self$options$id) | 
-        is.null(self$options$dep) | 
+    if (is.null(self$options$dep) | 
         is.null(self$options$covs)) return()
  
     # Example-----------
@@ -75,22 +83,24 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     
     
     data <- na.omit(data)
-    
-# Model: Correlation coefficient-----------------------------------------------------    
+   
+    if(isTRUE(self$options$rc) | isTRUE(self$options$plot)){
+     
+   # Repeated correlation-----------------------------------------------------    
   
-    cc<- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
-#-----------------------------------------          
-    #self$results$text$setContent(cc)    
-        
-    if(isTRUE(self$options$cc)){
+    res<- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
+
+    #-----------------------------------------          
+  
+    if(isTRUE(self$options$rc)){
       
-      table<- self$results$cc
+      table<- self$results$rc
       
-      r <-  cc$r
-      df <- cc$df
-      p <- cc$p
-      lower <-  cc$CI[[1]]
-      upper<-   cc$CI[[2]]
+      r <-  res$r
+      df <- res$df
+      p <- res$p
+      lower <-  res$CI[[1]]
+      upper<-   res$CI[[2]]
       
       row <- list()
       
@@ -105,8 +115,25 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     }
     
     image <- self$results$plot
-    image$setState(cc) 
-          
+    image$setState(res) 
+     
+    }
+    
+    # Cross correlation-----------------------
+    
+    if(isTRUE(self$options$cc) | isTRUE(self$options$plot1)){
+    
+    Measure1 <- as.vector(data[[dep]])
+    Measure2 <- as.vector(data[[covs]])
+    res1<- stats::ccf(Measure1, Measure2, plot = FALSE)
+    
+    self$results$text$setContent(res1)  
+    
+    image1 <- self$results$plot1
+    image1$setState(res1) 
+    
+    }
+    
   },
 
 .plot = function(image, ...) {
@@ -115,11 +142,11 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
   if (is.null(image$state))
     return(FALSE)
 
- cc <- image$state
+ rc <- image$state
 
   #plot <- plot(cc)
  
- plot<- plot(cc, overall = FALSE, lty = 1,lwd=3, 
+ plot<- plot(rc, overall = FALSE, lty = 1,lwd=3, 
              xlab = self$options$dep,
              ylab = self$options$covs)
  
@@ -128,7 +155,24 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
   TRUE
 
 
+},
+
+.plot1 = function(image1, ...) {
+  
+  
+  if (is.null(image1$state))
+    return(FALSE)
+  
+  res1 <- image1$state
+  
+  plot1<- plot(res1)
+  
+  print(plot1)
+  TRUE
+  
+  
 }
+
 
         )
 )
