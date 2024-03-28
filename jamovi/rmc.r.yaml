@@ -9,9 +9,9 @@ items:
       type: Html
       visible: True
 
-    - name:  text
-      title: Repeated Measures Correlation
-      type:  Preformatted
+    # - name:  text
+    #   title: Repeated Measures Correlation
+    #   type:  Preformatted
 
     - name:  cc
       title: Correlation coefficient
@@ -42,5 +42,16 @@ items:
           type: number
           superTitle: '95% CI'
 
+    - name: plot
+      title: 'Scatterplot'
+      type: Image
+      renderFun: .plot
+      visible: (plot)
+      refs: rmcorr
+      requiresData: true
+      clearWith:
+        - id
+        - dep
+        - covs
 
 ...

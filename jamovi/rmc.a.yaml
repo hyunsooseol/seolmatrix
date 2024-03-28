@@ -35,13 +35,21 @@ options:
         
     - name: cc
       type: Bool
-      title: Correlation coefficient
+      title: Coefficient 
       default: TRUE
       
-    - name: ccp
-      title: Concordance 
+    - name: plot
+      title: Scatterplot
       type: Bool
       default: FALSE
       
-
+    - name: width
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "X"
+      default: 500
 ...

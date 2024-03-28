@@ -4,7 +4,7 @@
 \alias{rmc}
 \title{Repeated Measures Correlation}
 \usage{
-rmc(data, id, dep, covs, cc = TRUE, ccp = FALSE)
+rmc(data, id, dep, covs, cc = TRUE, plot = FALSE, width = 500, height = 500)
 }
 \arguments{
 \item{data}{.}
@@ -17,14 +17,18 @@ rmc(data, id, dep, covs, cc = TRUE, ccp = FALSE)
 
 \item{cc}{.}
 
-\item{ccp}{.}
+\item{plot}{.}
+
+\item{width}{.}
+
+\item{height}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$cc} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

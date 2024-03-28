@@ -41,9 +41,19 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Tables"
+            label: Correlation Coefficient
             children:
               - type: CheckBox
                 name: cc
               - type: CheckBox
-                name: ccp 
+                name: plot
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (plot)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (plot) 

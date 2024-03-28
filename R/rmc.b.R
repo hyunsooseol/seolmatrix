@@ -36,18 +36,12 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         )
         
         
-        # if(isTRUE(self$options$ccp)){
-        #   width <- self$options$width
-        #   height <- self$options$height
-        #   self$results$plot$setSize(width, height)
-        # }
-        # 
-        # if(isTRUE(self$options$bap)){
-        #   width <- self$options$width1
-        #   height <- self$options$height1
-        #   self$results$plot1$setSize(width, height)
-        # }  
-        
+        if(isTRUE(self$options$plot)){
+          width <- self$options$width
+          height <- self$options$height
+          self$results$plot$setSize(width, height)
+        }
+       
       },
       
 #---------------------------------------------------------------      
@@ -110,7 +104,31 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
     }
     
-      
+    image <- self$results$plot
+    image$setState(cc) 
           
-        })
+  },
+
+.plot = function(image, ...) {
+
+
+  if (is.null(image$state))
+    return(FALSE)
+
+ cc <- image$state
+
+  #plot <- plot(cc)
+ 
+ plot<- plot(cc, overall = FALSE, lty = 1,lwd=3, 
+             xlab = self$options$dep,
+             ylab = self$options$covs)
+ 
+
+  print(plot)
+  TRUE
+
+
+}
+
+        )
 )
