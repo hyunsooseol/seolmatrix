@@ -71,7 +71,7 @@ items:
           content: ($key)
         - name: lag
           title: 'Lag'
-          type: number
+          type: integer
         - name: value
           title: 'Value'
           type: number

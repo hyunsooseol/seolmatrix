@@ -203,7 +203,7 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="lag", 
                         `title`="Lag", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="value", 
                         `title`="Value", 
