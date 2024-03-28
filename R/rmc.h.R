@@ -196,11 +196,6 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs"),
                 columns=list(
                     list(
-                        `name`="name", 
-                        `title`="", 
-                        `type`="text", 
-                        `content`="($key)"),
-                    list(
                         `name`="lag", 
                         `title`="Lag", 
                         `type`="integer"),

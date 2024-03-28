@@ -135,18 +135,31 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     res1<- as.data.frame(res1)
     names(res1) <- c("Lag", "Values")
     
-    names<- dimnames(res1)[[1]]
-    
-    for (name in names) {
+    for (i in 1:nrow(res1)) {
       
       row <- list()
       
-      row[["lag"]]   <-  res1[name, 1]
-      row[["value"]] <-  res1[name, 2]
+      row[['lag']] <- res1[i,1]
+      row[['value']] <- res1[i,2]
       
-      table$addRow(rowKey=name, values=row)
+      table$addRow(rowKey = i, values = row)
       
     }
+    
+    
+    # names<- dimnames(res1)[[1]]
+    # 
+    # for (name in names) {
+    #   
+    #   row <- list()
+    #   
+    #   row[["lag"]]   <-  res1[name, 1]
+    #   row[["value"]] <-  res1[name, 2]
+    #   
+    #   table$addRow(rowKey=name, values=row)
+    #   
+    # }
+
     
     image1 <- self$results$plot1
     image1$setState(r) 

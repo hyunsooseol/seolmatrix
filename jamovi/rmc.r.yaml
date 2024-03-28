@@ -65,10 +65,6 @@ items:
         - covs
 
       columns:
-        - name: name
-          title: ''
-          type: 'text'
-          content: ($key)
         - name: lag
           title: 'Lag'
           type: integer
