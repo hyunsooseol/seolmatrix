@@ -28,9 +28,7 @@ rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <body>
             <div class='instructions'>
             <p>____________________________________________________________________________________</p>
-            <p>1. The rationale of Repeated measures correlation is described in the <a href='https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00456/full' target = '_blank'>page.</a></p>
-            <p>2. The rationale of Cross correlation is described in the <a href='https://www.r-bloggers.com/2021/08/how-to-calculate-cross-correlation-in-r/' target = '_blank'>page.</a></p>
-            <p>3. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
+            <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
             <p>____________________________________________________________________________________</p>
             </div>
             </body>

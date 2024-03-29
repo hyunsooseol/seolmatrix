@@ -14,6 +14,7 @@ items:
       type: Table
       rows:  1
       refs: rmcorr
+      visible: (rc)
       clearWith:
         - id
         - dep

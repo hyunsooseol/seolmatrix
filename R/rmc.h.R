@@ -144,6 +144,7 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Repeated correlation coefficient",
                 rows=1,
                 refs="rmcorr",
+                visible="(rc)",
                 clearWith=list(
                     "id",
                     "dep",

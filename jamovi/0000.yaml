@@ -163,9 +163,14 @@ datasets:
       - Correlation structure
   - name: bland1995
     path: bland1995.omv
-    description: Repeated & Cross correlation
+    description: Repeated correlation
     tags:
-      - Repeated & Cross
+      - Repeated Correlation
+  - name: cross
+    path: cross.omv
+    description: Cross correlation
+    tags:
+      - Cross Correlation
   - name: ahp
     path: ahp.omv
     description: 4 items x 3 decision makers
