@@ -186,7 +186,7 @@ rmcResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "dep",
                     "covs",
                     "width",
-                    "Height")))
+                    "height")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cc",

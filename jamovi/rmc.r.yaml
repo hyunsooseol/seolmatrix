@@ -51,7 +51,7 @@ items:
         - dep
         - covs
         - width
-        - Height
+        - height
 
     # - name:  text
     #   title: 'Cross correlation values'
