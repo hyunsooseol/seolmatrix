@@ -239,22 +239,20 @@ partialClass <- if (requireNamespace('jmvcore'))
         image3 <- self$results$plot3
         image3$setState(as.matrix(partial))
         
-        
+
         # EBIC PLOT------------
-        
-          if(is.null(varCtl)){ 
+
+if(isTRUE(self$options$plot || self$options$plot2)){                
+
+            if(is.null(varCtl)){ 
           
         # Compute correlations:
         CorMat <- qgraph::cor_auto(data)
-        
           } else{
-            
             CorMat <- qgraph::cor_auto(data, select = var)
-           
           }
         
-  
-        # Compute graph with tuning = 0.5 (EBIC)
+         # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
         
         # Prepare Data For Plot -------
@@ -265,7 +263,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
 
-        
+  }    
         #---------------------------------------
         if(isTRUE(self$options$pm)){
           self$results$text1$setContent(partial)
