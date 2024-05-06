@@ -31,7 +31,12 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
-                vars)
+                vars,
+                suggested=list(
+                    "nominal",
+                    "ordinal"),
+                permitted=list(
+                    "factor"))
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
@@ -328,6 +333,7 @@ rank <- function(
             parent.frame(),
             `if`( ! missing(vars), vars, NULL))
 
+    for (v in vars) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- rankOptions$new(
         vars = vars,

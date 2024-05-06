@@ -16,7 +16,12 @@ options:
     - name: vars
       title: Variables
       type: Variables
- 
+      suggested:
+         - nominal
+         - ordinal
+      permitted:
+        - factor
+
     - name: type
       title: Type of correlation
       type: List
