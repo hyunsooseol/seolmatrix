@@ -104,7 +104,7 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             image$setState(mat1)
             }
  
-            if(self$options$poly==TRUE){
+            if(isTRUE(self$options$poly)){
                 
             #Polychoric correlation------
                 
@@ -186,7 +186,7 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
            data<- image$state
            
            plot2 <- ShinyItemAnalysis::plot_corr(data, 
-                                                cor='poly',
+                                                cor='polychoric',
                                                 clust_method = self$options$method,
                                                 n_clust=self$options$k, 
                                                 labels_size = self$options$size,

@@ -43,6 +43,7 @@ items:
     - name:  plot2
       title: Polychoric Heatmap
       type:  Image
+      requiresData: true
       visible: (plot2)
       renderFun: .plot2
       clearWith:
@@ -59,6 +60,7 @@ items:
     - name:  plot3
       title: Polychoric Dendrogram
       type:  Image
+      requiresData: true
       visible: (plot3)
       renderFun: .plot3
       clearWith:
