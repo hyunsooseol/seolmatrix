@@ -20,9 +20,9 @@ options:
          - continuous
       permitted:
         - numeric  
-
+        
     - name: type
-      title: Correlation
+      title: 'Correlation type'
       type: List
       options:
         - pearson
@@ -30,7 +30,7 @@ options:
       default: pearson
 
     - name: method
-      title: Clustering
+      title: 'Clustering method'
       type: List
       options:
         - none
@@ -42,13 +42,13 @@ options:
         - mcquitty
         - median
         - centroid
-      default: none
+      default: ward.D
 
     - name: k
       title: Number of clusters
-      default: 0
       type: Integer
-      min: 0
+      min: 1
+      default: 2
 
     - name: size
       title: Values display size
@@ -58,7 +58,7 @@ options:
     - name: plot
       title: 'Heatmap' 
       type: Bool
-      default: TRUE    
+      default: FALSE    
       
     - name: horiz
       title: horizontal

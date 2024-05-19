@@ -8,10 +8,10 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             type = "pearson",
-            method = "none",
-            k = 0,
+            method = "ward.D",
+            k = 2,
             size = 3,
-            plot = TRUE,
+            plot = FALSE,
             horiz = FALSE,
             plot1 = FALSE,
             poly = FALSE,
@@ -60,12 +60,12 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "mcquitty",
                     "median",
                     "centroid"),
-                default="none")
+                default="ward.D")
             private$..k <- jmvcore::OptionInteger$new(
                 "k",
                 k,
-                default=0,
-                min=0)
+                min=1,
+                default=2)
             private$..size <- jmvcore::OptionInteger$new(
                 "size",
                 size,
@@ -73,7 +73,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
-                default=TRUE)
+                default=FALSE)
             private$..horiz <- jmvcore::OptionBool$new(
                 "horiz",
                 horiz,
@@ -342,10 +342,10 @@ cor <- function(
     data,
     vars,
     type = "pearson",
-    method = "none",
-    k = 0,
+    method = "ward.D",
+    k = 2,
     size = 3,
-    plot = TRUE,
+    plot = FALSE,
     horiz = FALSE,
     plot1 = FALSE,
     poly = FALSE,
