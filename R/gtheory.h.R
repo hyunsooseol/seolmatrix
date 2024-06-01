@@ -10,7 +10,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             id = NULL,
             sub = NULL,
             ng = 2,
-            nf = 2,
+            nf = 1,
             facet = NULL,
             g = FALSE,
             d = FALSE,
@@ -63,7 +63,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "nf",
                 nf,
                 min=1,
-                default=2)
+                default=1)
             private$..facet <- jmvcore::OptionVariables$new(
                 "facet",
                 facet,
@@ -632,7 +632,7 @@ gtheory <- function(
     id,
     sub,
     ng = 2,
-    nf = 2,
+    nf = 1,
     facet,
     g = FALSE,
     d = FALSE,

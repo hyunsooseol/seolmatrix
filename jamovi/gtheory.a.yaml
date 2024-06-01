@@ -44,7 +44,7 @@ options:
       title: 'Num. of Facet'
       type: Integer
       min: 1
-      default: 2
+      default: 1
 
     - name: facet
       title: 'Facets'
@@ -125,7 +125,7 @@ options:
       default: false
 
     - name: plot1
-      title: 'D study plot for one facet design'
+      title: 'D study plot(One facet only)'
       type: Bool
       default: false       
 ...

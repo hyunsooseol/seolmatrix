@@ -93,14 +93,14 @@ datasets:
     tags:
       - Rater
       - Kendall
-  - name: univariate
-    path: uni.omv
-    description: results on page 116 of Brennan (2001)
-    tags:
-      - Generalizability
   - name: onefacet
     path: onefacet.omv
     description: One facet design
+    tags:
+      - Generalizability
+  - name: univariate
+    path: uni.omv
+    description: results on page 116 of Brennan (2001)
     tags:
       - Generalizability
   - name: multivariate

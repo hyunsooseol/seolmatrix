@@ -10,7 +10,7 @@ gtheory(
   id,
   sub,
   ng = 2,
-  nf = 2,
+  nf = 1,
   facet,
   g = FALSE,
   d = FALSE,
