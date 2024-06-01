@@ -62,7 +62,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..nf <- jmvcore::OptionInteger$new(
                 "nf",
                 nf,
-                min=2,
+                min=1,
                 default=2)
             private$..facet <- jmvcore::OptionVariables$new(
                 "facet",

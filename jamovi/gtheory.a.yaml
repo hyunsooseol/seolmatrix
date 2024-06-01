@@ -43,7 +43,7 @@ options:
     - name: nf
       title: 'Num. of Facet'
       type: Integer
-      min: 2
+      min: 1
       default: 2
 
     - name: facet
