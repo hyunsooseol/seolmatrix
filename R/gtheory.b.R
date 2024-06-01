@@ -258,8 +258,12 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           
           # D study plot(n=1)----------------
           
-          if(isTRUE(self$options$plot1)){
+         # if(isTRUE(self$options$plot1)){
+          
+          if(length(self$options$facet)==1){
             
+            if(length(self$options$facet)>1) return()
+          
             m<- lme4::lmer(self$options$formula, data = data)
             gmodel <- hemp::gstudy(m) 
             #self$results$text$setContent(gmodel)                     
