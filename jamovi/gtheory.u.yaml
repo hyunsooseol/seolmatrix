@@ -67,38 +67,38 @@ children:
                 name: g
               - type: CheckBox
                 name: gmea
-          - type: Label
-            label: 'Plot'
+          - type: LayoutBox
+            margin: large
+            style: inline
             children:
-              - type: CheckBox
-                name: plot1
+              - type: Label
+                label: 'Overall observations'
                 children:
-                  - type: TextBox
-                    name: nf
-                    format: number
-                    enable: (plot1)
-                  - type: ComboBox
-                    name: gco
-                    enable: (plot1)
-                  - type: TextBox
-                    name: width
-                    format: number
-                    enable: (plot1)
-                  - type: TextBox
-                    name: height
-                    format: number
-                    enable: (plot1)  
-      - type: LayoutBox
-        margin: large
-        style: inline
+                  - type: CheckBox
+                    name: d
+                  - type: CheckBox
+                    name: mea
+      - type: Label
+        label: 'Plot'
         children:
-          - type: Label
-            label: 'Overall observations'
+          - type: CheckBox
+            name: plot1
             children:
-              - type: CheckBox
-                name: d
-              - type: CheckBox
-                name: mea
+              - type: TextBox
+                name: nf
+                format: number
+                enable: (plot1)
+              - type: ComboBox
+                name: gco
+                enable: (plot1)
+              - type: TextBox
+                name: width
+                format: number
+                enable: (plot1)
+              - type: TextBox
+                name: height
+                format: number
+                enable: (plot1)  
   - type: CollapseBox
     label: 'Multivariate analysis'
     margin: normal
