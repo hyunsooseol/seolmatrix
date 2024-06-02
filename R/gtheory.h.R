@@ -25,7 +25,10 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             bm = FALSE,
             mat = FALSE,
             bmat = FALSE,
-            plot1 = FALSE, ...) {
+            plot1 = FALSE,
+            width = 500,
+            height = 500,
+            gco = "TRUE", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -130,6 +133,21 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot1",
                 plot1,
                 default=FALSE)
+            private$..width <- jmvcore::OptionInteger$new(
+                "width",
+                width,
+                default=500)
+            private$..height <- jmvcore::OptionInteger$new(
+                "height",
+                height,
+                default=500)
+            private$..gco <- jmvcore::OptionList$new(
+                "gco",
+                gco,
+                options=list(
+                    "TRUE",
+                    "FALSE"),
+                default="TRUE")
 
             self$.addOption(private$..dep)
             self$.addOption(private$..id)
@@ -151,6 +169,9 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..mat)
             self$.addOption(private$..bmat)
             self$.addOption(private$..plot1)
+            self$.addOption(private$..width)
+            self$.addOption(private$..height)
+            self$.addOption(private$..gco)
         }),
     active = list(
         dep = function() private$..dep$value,
@@ -172,7 +193,10 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         bm = function() private$..bm$value,
         mat = function() private$..mat$value,
         bmat = function() private$..bmat$value,
-        plot1 = function() private$..plot1$value),
+        plot1 = function() private$..plot1$value,
+        width = function() private$..width$value,
+        height = function() private$..height$value,
+        gco = function() private$..gco$value),
     private = list(
         ..dep = NA,
         ..id = NA,
@@ -193,7 +217,10 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..bm = NA,
         ..mat = NA,
         ..bmat = NA,
-        ..plot1 = NA)
+        ..plot1 = NA,
+        ..width = NA,
+        ..height = NA,
+        ..gco = NA)
 )
 
 gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -534,7 +561,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
-                title="D study plot for one facet design",
+                title="D study for one facet design",
                 visible="(plot1)",
                 renderFun=".plot1",
                 refs="seolmatrix",
@@ -543,11 +570,14 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "id",
                     "facet",
                     "sub",
-                    "nf")))
+                    "nf",
+                    "gco",
+                    "width",
+                    "height")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="`Generalizability coefficient based on the number of facet(${nf})`",
+                title="`Coefficient based on the number of facet(${nf})`",
                 visible="(plot1)",
                 refs="seolmatrix",
                 clearWith=list(
@@ -555,7 +585,8 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "id",
                     "facet",
                     "sub",
-                    "nf")))}))
+                    "nf",
+                    "gco")))}))
 
 gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "gtheoryBase",
@@ -602,6 +633,9 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param mat .
 #' @param bmat .
 #' @param plot1 .
+#' @param width .
+#' @param height .
+#' @param gco .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -647,7 +681,10 @@ gtheory <- function(
     bm = FALSE,
     mat = FALSE,
     bmat = FALSE,
-    plot1 = FALSE) {
+    plot1 = FALSE,
+    width = 500,
+    height = 500,
+    gco = "TRUE") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("gtheory requires jmvcore to be installed (restart may be required)")
@@ -688,7 +725,10 @@ gtheory <- function(
         bm = bm,
         mat = mat,
         bmat = bmat,
-        plot1 = plot1)
+        plot1 = plot1,
+        width = width,
+        height = height,
+        gco = gco)
 
     analysis <- gtheoryClass$new(
         options = options,

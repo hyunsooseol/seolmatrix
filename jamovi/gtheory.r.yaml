@@ -288,7 +288,7 @@ items:
           type: number
 
     - name: plot1
-      title: 'D study plot for one facet design'
+      title: 'D study for one facet design'
       type:  Image
       visible: (plot1)
       renderFun: .plot1
@@ -299,9 +299,12 @@ items:
         - facet
         - sub
         - nf
+        - gco
+        - width
+        - height
  
     - name:  text
-      title: '`Generalizability coefficient based on the number of facet(${nf})`'
+      title: '`Coefficient based on the number of facet(${nf})`'
       type:  Preformatted
       visible: (plot1)
       refs: seolmatrix
@@ -311,6 +314,6 @@ items:
         - facet
         - sub
         - nf
-
+        - gco
 
 ...

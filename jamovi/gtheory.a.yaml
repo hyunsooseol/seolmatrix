@@ -125,7 +125,27 @@ options:
       default: false
 
     - name: plot1
-      title: 'D study plot(One facet only)'
+      title: 'D study(One facet only)'
       type: Bool
       default: false       
+
+    - name: width
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "Height"
+      default: 500   
+
+    - name: gco
+      title: 'Generalizability coefficient'
+      type: List
+      options:
+        - title: 'TRUE'
+          name:  'TRUE'
+        - title: 'FALSE'
+          name: 'FALSE'
+      default: 'TRUE'
 ...

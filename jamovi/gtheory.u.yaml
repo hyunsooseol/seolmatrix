@@ -67,6 +67,9 @@ children:
                 name: g
               - type: CheckBox
                 name: gmea
+          - type: Label
+            label: 'Plot'
+            children:
               - type: CheckBox
                 name: plot1
                 children:
@@ -74,6 +77,21 @@ children:
                     name: nf
                     format: number
                     enable: (plot1)
+                  - type: ComboBox
+                    name: gco
+                    enable: (plot1)
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (plot1)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (plot1)  
+      - type: LayoutBox
+        margin: large
+        style: inline
+        children:
           - type: Label
             label: 'Overall observations'
             children:
@@ -125,4 +143,3 @@ children:
                 name: bm
               - type: CheckBox
                 name: comp
-

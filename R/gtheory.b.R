@@ -39,6 +39,11 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
              </html>"
         )
         
+        if(isTRUE(self$options$plot1)){
+          width <- self$options$width
+          height <- self$options$height
+          self$results$plot1$setSize(width, height)
+        }  
         
       },
       
@@ -276,6 +281,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             image$setState(gmodel)
            
             nf <- self$options$nf
+            gco <- self$options$gco
             # gen <- gmea$generalizability
             # uni <- gmea$var.universe
             # rel <- gmea$var.error.rel
@@ -286,6 +292,10 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             tex <- gmea$var.universe/(gmea$var.universe + (gmea$var.error.rel/nf))
             self$results$text$setContent(tex)   
             
+            if(!gco==FALSE){
+            tex <- gmea$var.universe/(gmea$var.universe + (gmea$var.error.abs/nf))
+              self$results$text$setContent(tex)  
+            }
             
           }
           
@@ -516,11 +526,12 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           #             g_coef = FALSE)
          facet<- self$options$facet 
          nf <- self$options$nf
+         gco <- self$options$gco
          
           plot1 <- hemp::dstudy_plot(gmodel,
                                      unit=self$options$id,
                                      facet=list(facet=c(1:nf)),
-                                     g_coef=TRUE)
+                                     g_coef=gco)
            
           print(plot1)
           TRUE

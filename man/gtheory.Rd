@@ -25,7 +25,10 @@ gtheory(
   bm = FALSE,
   mat = FALSE,
   bmat = FALSE,
-  plot1 = FALSE
+  plot1 = FALSE,
+  width = 500,
+  height = 500,
+  gco = "TRUE"
 )
 }
 \arguments{
@@ -70,6 +73,12 @@ gtheory(
 \item{bmat}{.}
 
 \item{plot1}{.}
+
+\item{width}{.}
+
+\item{height}{.}
+
+\item{gco}{.}
 }
 \value{
 A results object containing:
