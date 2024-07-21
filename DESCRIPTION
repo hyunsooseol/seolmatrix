@@ -37,5 +37,6 @@ Imports:
     gtheory,
     lme4,
     equate,
-    rmcorr
+    rmcorr,
+Remotes: cddesja/hemp    
 
