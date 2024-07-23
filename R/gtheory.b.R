@@ -526,6 +526,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
           #             g_coef = FALSE)
           
+          if(length(self$options$facet)>1) return()
+          
           # hemp package---------
           
           dep <- self$options$dep
