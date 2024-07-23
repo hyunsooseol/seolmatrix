@@ -564,6 +564,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="D study for one facet design",
                 visible="(plot1)",
                 renderFun=".plot1",
+                requiresData=TRUE,
                 refs="seolmatrix",
                 clearWith=list(
                     "dep",

@@ -292,6 +292,7 @@ items:
       type:  Image
       visible: (plot1)
       renderFun: .plot1
+      requiresData: TRUE
       refs: seolmatrix
       clearWith:
         - dep

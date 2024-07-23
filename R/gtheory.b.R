@@ -6,9 +6,8 @@
 #' @importFrom gtheory gstudy
 #' @importFrom gtheory dstudy
 #' @importFrom lme4 lmer
-#' @importFrom hemp gstudy
-#' @importFrom hemp dstudy_plot
 #' @import ggplot2
+#' @import lattice
 #' @export
 
 
@@ -269,19 +268,21 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             
             if(length(self$options$facet)>1) return()
           
-            m<- lme4::lmer(self$options$formula, data = data)
-            gmodel <- hemp::gstudy(m) 
-            #self$results$text$setContent(gmodel)                     
-            image <- self$results$plot1
+            # m<- lme4::lmer(self$options$formula, data = data)
+            # gmodel <- hemp::gstudy(m) 
+            # #self$results$text$setContent(gmodel)                     
+            # image <- self$results$plot1
+            # 
+            # nvars <- length(1:self$options$nf)
+            # width <- 400 + nvars * 15
+            # image$setSize(width, 400)
+            # 
+            # image$setState(gmodel)
+            # 
             
-            nvars <- length(1:self$options$nf)
-            width <- 400 + nvars * 15
-            image$setSize(width, 400)
             
-            image$setState(gmodel)
-           
-            nf <- self$options$nf
-            gco <- self$options$gco
+             nf <- self$options$nf
+             gco <- self$options$gco
             # gen <- gmea$generalizability
             # uni <- gmea$var.universe
             # rel <- gmea$var.error.rel
@@ -516,22 +517,185 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
   ####################################################      
         .plot1 = function(image, ...) {
           
-          if (is.null(image$state))
-            return(FALSE)
-          
-          gmodel <- image$state    
+          # if (is.null(image$state))
+          #   return(FALSE)
+          # 
+          # gmodel <- image$state    
 
           # dstudy_plot(one_facet_gstudy, unit = "Participants", 
           #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
           #             g_coef = FALSE)
+          
+          # hemp package---------
+          
+          dep <- self$options$dep
+          id <- self$options$id
+          sub <- self$options$sub
+          facets <- self$options$facet
+          
+          data <- self$data
+          data <- na.omit(data)
+          data <- as.data.frame(data)
+          
+          one_facet<- lme4::lmer(self$options$formula, data = data)          
+          
+          # gstudy function---
+          gstudy <- function(x, fixed = NULL) {
+            tmp <- as.data.frame(lme4::VarCorr(x))
+            tmp <- tmp[c(1,4)]
+            no.match <- function(x) {x[-match(fixed, x)]}
+            if(!is.null(fixed)){
+              n_adj <- length(unique(x@frame[,grep(fixed, names(x@frame))]))
+              fixed_vars <- tmp[grep(fixed, tmp$grp),]
+              fixed_vars <- fixed_vars[-match(fixed, fixed_vars$grp),]
+              fixed_vars$adj_vcov <- fixed_vars$vcov/n_adj;fixed_vars$vcov <- NULL
+              add_back <- strsplit(fixed_vars$grp, ":")
+              fixed_vars$grp <- sapply(add_back, no.match)
+              two.way <- data.frame(grp = paste(fixed_vars$grp, collapse = ":"), adj_vcov = tmp[nrow(tmp),2]/n_adj)
+              fixed_vars <- rbind(fixed_vars, two.way)
+              tmp <- merge(tmp, fixed_vars)
+              tmp[,2] <- tmp[,2] + tmp[,3]; tmp[,3] <- NULL
+              tmp$grp[length(tmp$grp)] <- "Residual"
+            }
+            colnames(tmp) <- c("Source", "Est.Variance")
+            tmp$Percent.Variance <- tmp$Est.Variance/sum(tmp$Est.Variance)
+            tmp[,2] <- round(tmp[,2], 4)
+            tmp[,3] <- paste0(round(tmp[,3] * 100,1), "%")
+            N <- length(x@resp$y)
+            output <- list(gstudy.out = tmp, nobs = N)
+            class(output) <- "gStudy"
+            return(output)
+          }
+          
+          gmodel <- gstudy(one_facet)
+          
+          
+          #d study function---
+          
+          dstudy <- function(x, n, unit) {
+            tmp <- x$gstudy.out
+            tmp <- tmp[c(1,2)]
+            us.var <- tmp[tmp$Source %in% unit,2]
+            n.matrix <- matrix(nrow = nrow(tmp), ncol = length(n))
+            for(i in 1:length(n)) n.matrix[grep(names(n)[i], tmp$Source),i] <- n[i]
+            n.matrix[nrow(n.matrix),] <- n
+            tmp$n <- apply(n.matrix, 1, prod, na.rm = T)
+            tmp[match(unit, tmp$Source), "n"] <- x$nobs
+            tmp$vcov.n <- tmp$Est.Variance/tmp$n
+            tmp[match(unit, tmp$Source), "vcov.n"] <- tmp[match(unit, tmp$Source), "Est.Variance"]
+            
+            # relative variance ----
+            rel.var <- tmp$vcov.n[nrow(tmp)]
+            if(length(n)>1){
+              for(i in 1:length(n)) {
+                tmp.names <- c(paste0(unit, ":", names(n)[i]), paste0(names(n)[i], ":", unit))
+                tmp.var <- tmp[tmp$Source %in% tmp.names,"vcov.n"]
+                rel.var <- sum(rel.var, tmp.var)
+              }
+            }
+            
+            # absolute variance ----
+            tmp.abs <- tmp[-nrow(tmp),]
+            abs.var <- sum(tmp.abs[-grep(unit, tmp.abs$Source),"vcov.n"], rel.var)
+            
+            # generalizability coefficient
+            g.coef <- us.var/(us.var + rel.var)
+            
+            # dependability coefficient
+            d.coef <- us.var/(us.var + abs.var)
+            
+            output <- list(ds.df = tmp, relvar = rel.var, absvar = abs.var, gcoef = g.coef, dcoef = d.coef)
+            class(output) <- "dStudy"
+            return(output)
+          }
+          
+          library(lattice)
+          
+          # d_study plot---
+          
+          dstudy_plot <- function(x, unit, facets, g_coef = T, bw = F){
+            if(length(facets)==1){
+              conds <- facets[[1]]
+              coefs <- matrix(NA, nrow = length(conds), ncol = 2)
+              for(i in 1:length(conds)){
+                n <- conds[i]
+                names(n) <- names(facets)
+                tmp <- dstudy(x, n = n, unit = unit)
+                coefs[i,] <- c(tmp$gcoef, tmp$dcoef)
+              }
+              data.df <- data.frame(conds, coefs)
+              names(data.df)[1] <- names(facets)
+              names(data.df)[2:3] <- c("Generalizability", "Dependability")
+              if(g_coef){
+                if(bw){
+                  xyplot(data.df[,2] ~ data.df[,1], type = c("p", "l"),
+                         xlab = paste(names(data.df[1])), ylab = paste(names(data.df[2])),
+                         scales = list(x = list(at = unique(data.df[,1]))),
+                         col = "black")
+                } else {
+                  xyplot(data.df[,2] ~ data.df[,1], type = c("p", "l"),
+                         xlab = paste(names(data.df[1])), ylab = paste(names(data.df[2])),
+                         scales = list(x = list(at = unique(data.df[,1]))))
+                }
+              } else {
+                if(bw){
+                  xyplot(data.df[,3] ~ data.df[,1], type = c("p", "l"),
+                         xlab = paste(names(data.df[1])), ylab = paste(names(data.df[3])),
+                         scales = list(x = list(at = unique(data.df[,1]))),
+                         col = "black")
+                } else {
+                  xyplot(data.df[,3] ~ data.df[,1], type = c("p", "l"),
+                         xlab = paste(names(data.df[1])), ylab = paste(names(data.df[3])),
+                         scales = list(x = list(at = unique(data.df[,1]))))
+                }
+              }
+            } else {
+              conds <- expand.grid(facets[[1]], facets[[2]])
+              coefs <- matrix(NA, nrow = nrow(conds), ncol = 2)
+              names(conds) <- names(facets)
+              for(i in 1:nrow(conds)){
+                n <- c(conds[i,1], conds[i,2])
+                names(n) <- names(conds)
+                tmp <- dstudy(x, n = n, unit = unit)
+                coefs[i,] <- c(tmp$gcoef, tmp$dcoef)
+              }
+              data.df <- data.frame(conds, coefs)
+              names(data.df)[1:2] <- names(conds)
+              names(data.df)[3:4] <- c("Generalizability", "Dependability")
+              if(bw){
+                par.settings <- simpleTheme(lty = seq(1, length(unique(data.df[,2]))), pch = seq(1, length(unique(data.df[,2]))), col = "black")
+              } else {
+                par.settings <- simpleTheme(lty = seq(1, length(unique(data.df[,2]))), pch = 1)
+              }
+              if(g_coef){
+                xyplot(data.df[,3] ~ data.df[,1], group = data.df[,2], type = "b", xlab = paste(names(data.df[1])), ylab = paste(names(data.df[3])), par.settings = par.settings,
+                       auto.key = list(title = paste(names(data.df[2])),
+                                       space = "right", cex.title = 1, lines = T,
+                                       points = F,
+                                       type = "b"),
+                       scales = list(x = list(at = unique(data.df[,1]))))
+              } else {
+                xyplot(data.df[,4] ~ data.df[,1], group = data.df[,2], type = "b", xlab = paste(names(data.df[1])), ylab = paste(names(data.df[4])), par.settings = par.settings,
+                       auto.key = list(title = paste(names(data.df[2])),
+                                       space = "right", cex.title = 1, lines = T,
+                                       points = F,
+                                       type = "b"),
+                       scales = list(x = list(at = unique(data.df[,1]))))
+              }
+            }
+          }
+          
+          
+#############################################          
+
          facet<- self$options$facet 
          nf <- self$options$nf
          gco <- self$options$gco
          
-          plot1 <- hemp::dstudy_plot(gmodel,
-                                     unit=self$options$id,
-                                     facet=list(facet=c(1:nf)),
-                                     g_coef=gco)
+          plot1 <- dstudy_plot(gmodel,
+                               unit=self$options$id,
+                               facet=list(facet=c(1:nf)),
+                               g_coef=gco)
            
           print(plot1)
           TRUE
