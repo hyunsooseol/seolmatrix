@@ -32,10 +32,11 @@ raterClass <- if (requireNamespace('jmvcore'))
     "raterClass",
     inherit = raterBase,
     private = list(
-     # ==========================================================
+      .htmlwidget = NULL,  # Add instance for HTMLWidget
+      # ==========================================================
       .init = function() {
        
-
+        private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
        
           if (is.null(self$data) | is.null(self$options$vars)) {
             self$results$instructions$setVisible(visible = TRUE)
@@ -43,20 +44,36 @@ raterClass <- if (requireNamespace('jmvcore'))
           }
           
           
-         self$results$instructions$setContent(
-           "<html>
-             <head>
-             </head>
-             <body>
-             <div class='instructions'>
-             <p>___________________________________________________________________________________
-             <p> Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-             <p>___________________________________________________________________________________
-             </div>
-             </body>
-             </html>"
-         )
+         # self$results$instructions$setContent(
+         #   "<html>
+         #     <head>
+         #     </head>
+         #     <body>
+         #     <div class='instructions'>
+         #     <p>___________________________________________________________________________________
+         #     <p> Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+         #     <p>___________________________________________________________________________________
+         #     </div>
+         #     </body>
+         #     </html>"
+         # )
 
+        self$results$instructions$setContent(
+          private$.htmlwidget$generate_accordion(
+            title="Instructions",
+            content = paste(
+              '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+              '<div style="text-align:justify;">',
+              '<ul>',
+              '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+              '</ul></div></div>'
+              
+            )
+            
+          )
+        )         
+        
+        
          if (self$options$ftest)
            self$results$ftest$setNote(
              "Note",

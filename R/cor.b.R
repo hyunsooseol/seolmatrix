@@ -16,32 +16,54 @@ corClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     inherit = corBase,
     private = list(
 
-        #------------------------------------
-        
+      .htmlwidget = NULL,  # Add instance for HTMLWidget
+
         .init = function() {
+          
+          private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
             if (is.null(self$data) | is.null(self$options$vars)) {
                 self$results$instructions$setVisible(visible = TRUE)
                 
             }
             
-            self$results$instructions$setContent(
-                "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>____________________________________________________________________________________</p>
-            <p> 1. Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</p>
-            <p> 2. The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</p>
-            <p> 3. When clustering method is <b>none</b>, dendrogram will not be drawn.</p>
-            <p> 4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-            <p>____________________________________________________________________________________</p>
-            
-            </div>
-            </body>
-            </html>"
-            )
+            # self$results$instructions$setContent(
+            #     "<html>
+            # <head>
+            # </head>
+            # <body>
+            # <div class='instructions'>
+            # <p>____________________________________________________________________________________</p>
+            # <p> 1. Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</p>
+            # <p> 2. The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</p>
+            # <p> 3. When clustering method is <b>none</b>, dendrogram will not be drawn.</p>
+            # <p> 4. Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            # <p>____________________________________________________________________________________</p>
+            # 
+            # </div>
+            # </body>
+            # </html>"
+            # )
            
+          self$results$instructions$setContent(
+            private$.htmlwidget$generate_accordion(
+              title="Instructions",
+              content = paste(
+                '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+                '<div style="text-align:justify;">',
+                '<ul>',
+                '<li>Computes and visualizes an item correlation matrix, offering several correlation types and clustering methods.</li>',
+                '<li>The heatmap is estimated by using <b>ShinyItemAnalysis::plot_corr</b> function.</li>',
+                '<li>When clustering method is <b>none</b>, dendrogram will not be drawn.</li>',
+                '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+                '</ul></div></div>'
+                
+              )
+              
+            )
+          )         
+          
+          
+          
             if(isTRUE(self$options$plot)){
               width <- self$options$width
               height <- self$options$height

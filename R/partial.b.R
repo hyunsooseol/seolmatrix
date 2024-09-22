@@ -22,31 +22,53 @@ partialClass <- if (requireNamespace('jmvcore'))
     inherit = partialBase,
     private = list(
 
+      .htmlwidget = NULL,  # Add instance for HTMLWidget
 #==================================================================================
  .init = function(){
-        
+   
+   private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
+   
    
    if(is.null(self$dat) | is.null(self$options$vars)){
      self$results$instructions$setVisible(visible = TRUE)
      
    }
    
-   self$results$instructions$setContent(
-          "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>____________________________________________________________________________________</p>
-            <p>1. When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</p>
-            <p>2. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
-            <p>3. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
-            <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-            <p>____________________________________________________________________________________</p>
-            </div>
-            </body>
-            </html>")
+   # self$results$instructions$setContent(
+   #        "<html>
+   #          <head>
+   #          </head>
+   #          <body>
+   #          <div class='instructions'>
+   #          <p>____________________________________________________________________________________</p>
+   #          <p>1. When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</p>
+   #          <p>2. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
+   #          <p>3. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
+   #          <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+   #          <p>____________________________________________________________________________________</p>
+   #          </div>
+   #          </body>
+   #          </html>")
    
+   
+   self$results$instructions$setContent(
+     private$.htmlwidget$generate_accordion(
+       title="Instructions",
+       content = paste(
+         '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+         '<div style="text-align:justify;">',
+         '<ul>',
+         '<li>When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</li>',
+         '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
+         '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
+         '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+         '</ul></div></div>'
+         
+       )
+       
+     )
+   )         
+  
    
    if(isTRUE(self$options$plot)){
      width <- self$options$width

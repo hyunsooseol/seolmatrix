@@ -21,30 +21,46 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "rankClass",
     inherit = rankBase,
     private = list(
-        
-        #==========================================================
+      .htmlwidget = NULL,  # Add instance for HTMLWidget
+      
+#==========================================================
         .init = function() {
            
+          private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
           
           
           if(is.null(self$data) | is.null(self$options$vars)){
             self$results$instructions$setVisible(visible = TRUE)
             
-            self$results$instructions$setContent(
-              "<html>
-            <head>
-            </head>
-            <body>
-            <div class='instructions'>
-            <p>____________________________________________________________________________________</p>
-            <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-            <p>____________________________________________________________________________________</p>
-            </div>
-            </body>
-            </html>"
-            )
+            # self$results$instructions$setContent(
+            #   "<html>
+            # <head>
+            # </head>
+            # <body>
+            # <div class='instructions'>
+            # <p>____________________________________________________________________________________</p>
+            # <p>Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+            # <p>____________________________________________________________________________________</p>
+            # </div>
+            # </body>
+            # </html>"
+            # )
             
-          
+            self$results$instructions$setContent(
+              private$.htmlwidget$generate_accordion(
+                title="Instructions",
+                content = paste(
+                  '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+                  '<div style="text-align:justify;">',
+                  '<ul>',
+                  '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+                  '</ul></div></div>'
+                  
+                )
+                
+              )
+            )         
+            
             
           }
         },

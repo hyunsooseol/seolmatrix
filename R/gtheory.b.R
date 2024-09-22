@@ -15,28 +15,46 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     "gtheoryClass",
     inherit = gtheoryBase,
     private = list(
-  
+      .htmlwidget = NULL,
       .init = function() {
- 
+        private$.htmlwidget <- HTMLWidget$new()
+        
         if (is.null(self$data) | is.null(self$options$facet)) {
           self$results$instructions$setVisible(visible = TRUE)
           
         }
         
+        # self$results$instructions$setContent(
+        #   "<html>
+        #      <head>
+        #      </head>
+        #      <body>
+        #      <div class='instructions'>
+        #      <p>___________________________________________________________________________________
+        #      <p> 1. Perform Univariate or Multivariate Generalizability theory based on <b>gtheory</b> R package.</p>
+        #      <p> 2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
+        #      <p>___________________________________________________________________________________
+        #      </div>
+        #      </body>
+        #      </html>"
+        # )
+        
         self$results$instructions$setContent(
-          "<html>
-             <head>
-             </head>
-             <body>
-             <div class='instructions'>
-             <p>___________________________________________________________________________________
-             <p> 1. Perform Univariate or Multivariate Generalizability theory based on <b>gtheory</b> R package.</p>
-             <p> 2. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-             <p>___________________________________________________________________________________
-             </div>
-             </body>
-             </html>"
-        )
+          private$.htmlwidget$generate_accordion(
+            title="Instructions",
+            content = paste(
+              '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+              '<div style="text-align:justify;">',
+              '<ul>',
+              '<li>Perform Univariate or Multivariate Generalizability theory based on <b>gtheory</b> R package.</li>',
+              '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+              '</ul></div></div>'
+              
+            )
+            
+          )
+        )         
+        
         
         if(isTRUE(self$options$plot1)){
           width <- self$options$width
