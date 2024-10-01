@@ -12,20 +12,17 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             scale = "raw",
             shwSig = FALSE,
             flgSig = FALSE,
-            plot = FALSE,
-            plot1 = FALSE,
+            plot = TRUE,
+            model = "glasso",
+            layout = "spring",
+            shape = "circle",
             plot2 = FALSE,
-            plot3 = FALSE,
             ebic = FALSE,
             pm = FALSE,
             width = 500,
             height = 500,
             width1 = 500,
-            height1 = 500,
-            width2 = 500,
-            height2 = 500,
-            width3 = 500,
-            height3 = 500, ...) {
+            height1 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -77,18 +74,38 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
-                default=FALSE)
-            private$..plot1 <- jmvcore::OptionBool$new(
-                "plot1",
-                plot1,
-                default=FALSE)
+                default=TRUE)
+            private$..model <- jmvcore::OptionList$new(
+                "model",
+                model,
+                options=list(
+                    "glasso",
+                    "pcor",
+                    "cor"),
+                default="glasso")
+            private$..layout <- jmvcore::OptionList$new(
+                "layout",
+                layout,
+                options=list(
+                    "spring",
+                    "circle",
+                    "groups",
+                    "circular"),
+                default="spring")
+            private$..shape <- jmvcore::OptionList$new(
+                "shape",
+                shape,
+                options=list(
+                    "circle",
+                    "square",
+                    "triangle",
+                    "diamond",
+                    "ellipse",
+                    "heart"),
+                default="circle")
             private$..plot2 <- jmvcore::OptionBool$new(
                 "plot2",
                 plot2,
-                default=FALSE)
-            private$..plot3 <- jmvcore::OptionBool$new(
-                "plot3",
-                plot3,
                 default=FALSE)
             private$..ebic <- jmvcore::OptionBool$new(
                 "ebic",
@@ -114,22 +131,6 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height1",
                 height1,
                 default=500)
-            private$..width2 <- jmvcore::OptionInteger$new(
-                "width2",
-                width2,
-                default=500)
-            private$..height2 <- jmvcore::OptionInteger$new(
-                "height2",
-                height2,
-                default=500)
-            private$..width3 <- jmvcore::OptionInteger$new(
-                "width3",
-                width3,
-                default=500)
-            private$..height3 <- jmvcore::OptionInteger$new(
-                "height3",
-                height3,
-                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
@@ -138,19 +139,16 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..shwSig)
             self$.addOption(private$..flgSig)
             self$.addOption(private$..plot)
-            self$.addOption(private$..plot1)
+            self$.addOption(private$..model)
+            self$.addOption(private$..layout)
+            self$.addOption(private$..shape)
             self$.addOption(private$..plot2)
-            self$.addOption(private$..plot3)
             self$.addOption(private$..ebic)
             self$.addOption(private$..pm)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
-            self$.addOption(private$..width2)
-            self$.addOption(private$..height2)
-            self$.addOption(private$..width3)
-            self$.addOption(private$..height3)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -160,19 +158,16 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         shwSig = function() private$..shwSig$value,
         flgSig = function() private$..flgSig$value,
         plot = function() private$..plot$value,
-        plot1 = function() private$..plot1$value,
+        model = function() private$..model$value,
+        layout = function() private$..layout$value,
+        shape = function() private$..shape$value,
         plot2 = function() private$..plot2$value,
-        plot3 = function() private$..plot3$value,
         ebic = function() private$..ebic$value,
         pm = function() private$..pm$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value,
-        width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value,
-        width3 = function() private$..width3$value,
-        height3 = function() private$..height3$value),
+        height1 = function() private$..height1$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
@@ -181,19 +176,16 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..shwSig = NA,
         ..flgSig = NA,
         ..plot = NA,
-        ..plot1 = NA,
+        ..model = NA,
+        ..layout = NA,
+        ..shape = NA,
         ..plot2 = NA,
-        ..plot3 = NA,
         ..ebic = NA,
         ..pm = NA,
         ..width = NA,
         ..height = NA,
         ..width1 = NA,
-        ..height1 = NA,
-        ..width2 = NA,
-        ..height2 = NA,
-        ..width3 = NA,
-        ..height3 = NA)
+        ..height1 = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -204,8 +196,6 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
-        plot1 = function() private$.items[["plot1"]],
-        plot3 = function() private$.items[["plot3"]],
         text = function() private$.items[["text"]],
         text1 = function() private$.items[["text1"]]),
     private = list(),
@@ -261,7 +251,7 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Gaussian Graphical Model",
+                title="Network plot",
                 renderFun=".plot",
                 visible="(plot)",
                 refs="qgraph",
@@ -269,7 +259,10 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "ctrlvars",
                     "width",
-                    "height")))
+                    "height",
+                    "model",
+                    "layout",
+                    "shape")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -283,30 +276,6 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale",
                     "width1",
                     "height1")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot1",
-                title="Partial plot",
-                renderFun=".plot1",
-                visible="(plot1)",
-                refs="qgraph",
-                clearWith=list(
-                    "vars",
-                    "ctrlvars",
-                    "width2",
-                    "height2")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot3",
-                title="Partial matrix plot",
-                renderFun=".plot3",
-                visible="(plot3)",
-                refs="corrgram",
-                clearWith=list(
-                    "vars",
-                    "ctrlvars",
-                    "width3",
-                    "height3")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -354,27 +323,22 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param shwSig .
 #' @param flgSig .
 #' @param plot .
-#' @param plot1 .
+#' @param model .
+#' @param layout .
+#' @param shape .
 #' @param plot2 .
-#' @param plot3 .
 #' @param ebic .
 #' @param pm .
 #' @param width .
 #' @param height .
 #' @param width1 .
 #' @param height1 .
-#' @param width2 .
-#' @param height2 .
-#' @param width3 .
-#' @param height3 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
@@ -394,20 +358,17 @@ partial <- function(
     scale = "raw",
     shwSig = FALSE,
     flgSig = FALSE,
-    plot = FALSE,
-    plot1 = FALSE,
+    plot = TRUE,
+    model = "glasso",
+    layout = "spring",
+    shape = "circle",
     plot2 = FALSE,
-    plot3 = FALSE,
     ebic = FALSE,
     pm = FALSE,
     width = 500,
     height = 500,
     width1 = 500,
-    height1 = 500,
-    width2 = 500,
-    height2 = 500,
-    width3 = 500,
-    height3 = 500) {
+    height1 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -429,19 +390,16 @@ partial <- function(
         shwSig = shwSig,
         flgSig = flgSig,
         plot = plot,
-        plot1 = plot1,
+        model = model,
+        layout = layout,
+        shape = shape,
         plot2 = plot2,
-        plot3 = plot3,
         ebic = ebic,
         pm = pm,
         width = width,
         height = height,
         width1 = width1,
-        height1 = height1,
-        width2 = width2,
-        height2 = height2,
-        width3 = width3,
-        height3 = height3)
+        height1 = height1)
 
     analysis <- partialClass$new(
         options = options,

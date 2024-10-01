@@ -48,7 +48,7 @@ items:
             visible: (shwSig)
 
     - name: plot
-      title: 'Gaussian Graphical Model'
+      title: 'Network plot'
       type: Image
       renderFun: .plot
       visible: (plot)
@@ -58,6 +58,9 @@ items:
           - ctrlvars
           - width
           - height
+          - model
+          - layout
+          - shape
 
     - name: plot2
       title: 'Centrality plot '
@@ -71,31 +74,7 @@ items:
           - scale
           - width1
           - height1
-
-    - name: plot1
-      title: 'Partial plot'
-      type: Image
-      renderFun: .plot1
-      visible: (plot1)
-      refs: qgraph 
-      clearWith:
-          - vars
-          - ctrlvars
-          - width2
-          - height2
-
-    - name: plot3
-      title: 'Partial matrix plot'
-      type: Image
-      renderFun: .plot3
-      visible: (plot3)
-      refs: corrgram 
-      clearWith:
-          - vars
-          - ctrlvars
-          - width3
-          - height3
-
+ 
     - name:  text
       title: EBIC matrix
       type:  Preformatted

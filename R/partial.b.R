@@ -61,6 +61,7 @@ partialClass <- if (requireNamespace('jmvcore'))
          '<li>When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</li>',
          '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
          '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
+         '<li>The network plots were implemented using the <b>qgraph</b> R package.</li>',
          '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
          '</ul></div></div>'
          
@@ -76,25 +77,13 @@ partialClass <- if (requireNamespace('jmvcore'))
      self$results$plot$setSize(width, height)
    }
    
-   if(isTRUE(self$options$plot1)){
-     width <- self$options$width2
-     height <- self$options$height2
-     self$results$plot1$setSize(width, height)
-   }  
-
    if(isTRUE(self$options$plot2)){
      width <- self$options$width1
      height <- self$options$height1
      self$results$plot2$setSize(width, height)
    }  
    
-   if(isTRUE(self$options$plot3)){
-     width <- self$options$width3
-     height <- self$options$height3
-     self$results$plot3$setSize(width, height)
-   }  
-   
-
+ 
    # get variables--------------------------------------
         
         matrix <- self$results$get('matrix')
@@ -239,63 +228,71 @@ partialClass <- if (requireNamespace('jmvcore'))
         }
         
  # Patial plot----------------
-        
+
         var <- self$options$vars
         varCtl <- self$options$ctrlvars
-        
+
         if(is.null(varCtl)){
-          
+
           partial <- psych::partial.r(data)
-                                      
+
         } else{
-        
+
         partial <- psych::partial.r(data,x=var, y=varCtl)
-        
+
         }
-       
-        image1 <- self$results$plot1
-        image1$setState(partial)
-      
-        # Matrix plot-----------
+
+        if(isTRUE(self$options$pm)){
+          self$results$text1$setContent(partial)
+        }
+ 
+ #        image1 <- self$results$plot1
+ #        image1$setState(partial)
+ #      
+ #        # Matrix plot-----------
+ #        
+ #        image3 <- self$results$plot3
+ #        image3$setState(as.matrix(partial))
+ #        
+
+        # Network PLOT------------
         
-        image3 <- self$results$plot3
-        image3$setState(as.matrix(partial))
+        if(isTRUE(self$options$plot)){          
         
-
-        # EBIC PLOT------------
-
-if(isTRUE(self$options$plot || self$options$plot2)){                
-
-            if(is.null(varCtl)){ 
+          df <- qgraph::cor_auto(data)
+          n = nrow(data)
           
-        # Compute correlations:
-        CorMat <- qgraph::cor_auto(data)
-          } else{
-            CorMat <- qgraph::cor_auto(data, select = var)
-          }
+          # Prepare Data For Plot -------
+          image <- self$results$plot
+         
+          state <- list(df,n)
+          image$setState(state)
+        }
         
+
+if(isTRUE(self$options$plot2)){                
+
+        #     if(is.null(varCtl)){ 
+        #   
+        # # Compute correlations:
+         CorMat <- qgraph::cor_auto(data)
+        #   } else{
+        #     CorMat <- qgraph::cor_auto(data, select = var)
+        #   }
+
          # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-        
-        # Prepare Data For Plot -------
-        image <- self$results$plot
-        image$setState(EBICgraph)
-       
+
         # Centrality plot-------
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
 
-  }    
-        #---------------------------------------
-        if(isTRUE(self$options$pm)){
-          self$results$text1$setContent(partial)
-        }
-        #---------------------------------------
+         #---------------------------------------
         if(isTRUE(self$options$ebic)){
           
           self$results$text$setContent(CorMat)
         }
-        
+}     
         },
       
  
@@ -307,12 +304,21 @@ if(isTRUE(self$options$plot || self$options$plot2)){
   if (is.null(image$state))
     return(FALSE)
   
-  EBICgraph <- image$state
+  df <- image$state[[1]]
+  n <- image$state[[2]] # for glasso
   
-  plot <- qgraph( EBICgraph, layout = "spring", details = TRUE)
   
- # plot <- plot+ggtheme
+  model <- self$options$model
+  layout <- self$options$layout
+  shape <- self$options$shape
   
+  plot <- qgraph(df,
+                 graph=model,
+                 layout=layout,
+                 shape=shape,
+                 sampleSize = n) 
+               
+
   print(plot)
   TRUE
 
@@ -337,46 +343,46 @@ if(isTRUE(self$options$plot || self$options$plot2)){
   print(plot2)
   TRUE
   
-},
-  
-  
-# partial plot-----------
-
-
-.plot1 = function(image1,ggtheme, theme, ...) {
-      
-        
-  if (is.null(image1$state))
-    return(FALSE)
-        
-        partial <- image1$state
-        
-        plot1 <- qgraph(partial, layout = "spring", details = TRUE)
-        
-      #  plot1 <- plot1+ggtheme
-        
-        print(plot1)
-        TRUE
-      },
-
-.plot3 = function(image3,...) {
-  
-  
-  if (is.null(image3$state))
-    return(FALSE)
-  
-  partial <- image3$state
-  
-  
-  plot3<- corrplot::corrplot(partial, 
-           type="lower",
-           col=c("black", "white"),
-           bg="lightblue")
-  
-  
-  print(plot3)
-  TRUE
 }
+  
+  
+# # partial plot-----------
+# 
+# 
+# .plot1 = function(image1,ggtheme, theme, ...) {
+#       
+#         
+#   if (is.null(image1$state))
+#     return(FALSE)
+#         
+#         partial <- image1$state
+#         
+#         plot1 <- qgraph(partial, layout = "spring", details = TRUE)
+#         
+#       #  plot1 <- plot1+ggtheme
+#         
+#         print(plot1)
+#         TRUE
+#       },
+# 
+# .plot3 = function(image3,...) {
+#   
+#   
+#   if (is.null(image3$state))
+#     return(FALSE)
+#   
+#   partial <- image3$state
+#   
+#   
+#   plot3<- corrplot::corrplot(partial, 
+#            type="lower",
+#            col=c("black", "white"),
+#            bg="lightblue")
+#   
+#   
+#   print(plot3)
+#   TRUE
+# }
 
 )
 )

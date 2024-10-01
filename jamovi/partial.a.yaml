@@ -66,24 +66,68 @@ options:
       default: false
 
     - name: plot
-      title: Gaussian graphical model
+      title: 'Network plot'
       type: Bool
-      default: false
+      default: TRUE
 
-    - name: plot1
-      title: Partial plot
-      type: Bool
-      default: FALSE    
+    # - name: plot1
+    #   title: Partial plot
+    #   type: Bool
+    #   default: FALSE    
+
+    - name: model
+      title: Model
+      type: List
+      options:
+        - title: glasso
+          name:  glasso
+        - title: pcor
+          name:  pcor
+        - title: cor
+          name:  cor      
+      default: glasso
+
+    - name: layout
+      title: Layout
+      type: List
+      options:
+        - title: spring
+          name:  spring
+        - title: circle
+          name:  circle
+        - title: groups
+          name:  groups
+        - title: circular
+          name:  circular        
+      default: spring
+
+    - name: shape
+      title: Shape
+      type: List
+      options:
+        - title: circle
+          name:  circle
+        - title: square
+          name:  square
+        - title: triangle
+          name:  triangle
+        - title: diamond
+          name:  diamond
+        - title: ellipse
+          name:  ellipse
+        - title: heart
+          name:  heart          
+      default: circle      
 
     - name: plot2
-      title: Centrality 
+      title: 'Centrality plot' 
       type: Bool
       default: FALSE   
 
-    - name: plot3
-      title: Partial matrix plot 
-      type: Bool
-      default: FALSE   
+    # - name: plot3
+    #   title: Partial matrix plot 
+    #   type: Bool
+    #   default: FALSE   
 
     - name: ebic
       title: EBIC matrix
@@ -114,28 +158,6 @@ options:
       type: Integer
       title: "Height"
       default: 500
-
-    - name: width2
-      type: Integer
-      title: "Size: "
-      default: 500
-      
-    - name: height2
-      type: Integer
-      title: "X"
-      default: 500
-    
-    - name: width3
-      type: Integer
-      title: "Size: "
-      default: 500
-      
-    - name: height3
-      type: Integer
-      title: "X"
-      default: 500      
-
 ...
-
 
 

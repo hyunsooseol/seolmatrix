@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.9.5
+version: 3.9.6
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2024-09-22'
+date: '2024-10-01'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -108,6 +108,12 @@ datasets:
     description: results on page 270 of Brennan (2001)
     tags:
       - Generalizability
+  - name: network
+    path: network.omv
+    description: Big5 data
+    tags:
+      - Partial
+      - Network
   - name: big5
     path: big5.omv
     description: partial data

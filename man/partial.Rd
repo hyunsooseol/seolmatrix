@@ -12,20 +12,17 @@ partial(
   scale = "raw",
   shwSig = FALSE,
   flgSig = FALSE,
-  plot = FALSE,
-  plot1 = FALSE,
+  plot = TRUE,
+  model = "glasso",
+  layout = "spring",
+  shape = "circle",
   plot2 = FALSE,
-  plot3 = FALSE,
   ebic = FALSE,
   pm = FALSE,
   width = 500,
   height = 500,
   width1 = 500,
-  height1 = 500,
-  width2 = 500,
-  height2 = 500,
-  width3 = 500,
-  height3 = 500
+  height1 = 500
 )
 }
 \arguments{
@@ -45,11 +42,13 @@ partial(
 
 \item{plot}{.}
 
-\item{plot1}{.}
+\item{model}{.}
+
+\item{layout}{.}
+
+\item{shape}{.}
 
 \item{plot2}{.}
-
-\item{plot3}{.}
 
 \item{ebic}{.}
 
@@ -62,14 +61,6 @@ partial(
 \item{width1}{.}
 
 \item{height1}{.}
-
-\item{width2}{.}
-
-\item{height2}{.}
-
-\item{width3}{.}
-
-\item{height3}{.}
 }
 \value{
 A results object containing:
@@ -78,8 +69,6 @@ A results object containing:
   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 }
