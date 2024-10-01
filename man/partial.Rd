@@ -9,7 +9,8 @@ partial(
   vars,
   ctrlvars,
   sidSig = "twotailed",
-  scale = "raw",
+  scale = "raw0",
+  scale1 = "raw0",
   shwSig = FALSE,
   flgSig = FALSE,
   plot = TRUE,
@@ -17,12 +18,15 @@ partial(
   layout = "spring",
   shape = "circle",
   plot2 = FALSE,
+  plot3 = FALSE,
   ebic = FALSE,
   pm = FALSE,
   width = 500,
   height = 500,
   width1 = 500,
-  height1 = 500
+  height1 = 500,
+  width2 = 500,
+  height2 = 500
 )
 }
 \arguments{
@@ -35,6 +39,8 @@ partial(
 \item{sidSig}{.}
 
 \item{scale}{.}
+
+\item{scale1}{.}
 
 \item{shwSig}{.}
 
@@ -50,6 +56,8 @@ partial(
 
 \item{plot2}{.}
 
+\item{plot3}{.}
+
 \item{ebic}{.}
 
 \item{pm}{.}
@@ -61,6 +69,10 @@ partial(
 \item{width1}{.}
 
 \item{height1}{.}
+
+\item{width2}{.}
+
+\item{height2}{.}
 }
 \value{
 A results object containing:
@@ -69,6 +81,7 @@ A results object containing:
   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 }
