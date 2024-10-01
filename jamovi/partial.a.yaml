@@ -47,13 +47,29 @@ options:
       title: Scale
       type: List
       options:
+        - title: raw0
+          name:  raw0
         - title: raw
           name:  raw
         - title: z-scores
           name:  z-scores
         - title: relative
           name:  relative      
-      default: raw
+      default: raw0
+
+    - name: scale1
+      title: Scale
+      type: List
+      options:
+        - title: raw0
+          name:  raw0
+        - title: raw
+          name:  raw
+        - title: z-scores
+          name:  z-scores
+        - title: relative
+          name:  relative      
+      default: raw0
 
     - name: shwSig
       title: Display significance levels
@@ -124,10 +140,10 @@ options:
       type: Bool
       default: FALSE   
 
-    # - name: plot3
-    #   title: Partial matrix plot 
-    #   type: Bool
-    #   default: FALSE   
+    - name: plot3
+      title: 'Clustering plot' 
+      type: Bool
+      default: FALSE   
 
     - name: ebic
       title: EBIC matrix
@@ -158,6 +174,16 @@ options:
       type: Integer
       title: "Height"
       default: 500
+
+    - name: width2
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height2
+      type: Integer
+      title: "Height"
+      default: 500      
 ...
 
 

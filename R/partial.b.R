@@ -83,6 +83,12 @@ partialClass <- if (requireNamespace('jmvcore'))
      self$results$plot2$setSize(width, height)
    }  
    
+   if(isTRUE(self$options$plot3)){
+     width <- self$options$width2
+     height <- self$options$height2
+     self$results$plot3$setSize(width, height)
+   }  
+   
  
    # get variables--------------------------------------
         
@@ -287,6 +293,10 @@ if(isTRUE(self$options$plot2)){
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
 
+        # Clustering plot-------
+        image3 <- self$results$plot3
+        image3$setState(EBICgraph)
+        
          #---------------------------------------
         if(isTRUE(self$options$ebic)){
           
@@ -336,6 +346,7 @@ if(isTRUE(self$options$plot2)){
   EBICgraph <- image2$state
 
   plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
+                                 include='all',
                                  scale=scale)
 
   plot2 <- plot2+ggtheme
@@ -343,7 +354,30 @@ if(isTRUE(self$options$plot2)){
   print(plot2)
   TRUE
   
+},
+
+
+# Clustering plot for EBIC------------
+
+.plot3 = function(image3, ggtheme, theme,...) {
+  
+  if (is.null(image3$state))
+    return(FALSE)
+  
+  scale1 <- self$options$scale1
+  
+  EBICgraph <- image3$state
+  
+  plot3<- qgraph::clusteringPlot(EBIC = EBICgraph,
+                                 scale=scale1)
+  
+  plot3 <- plot3+ggtheme
+  
+  print(plot3)
+  TRUE
+  
 }
+
   
   
 # # partial plot-----------

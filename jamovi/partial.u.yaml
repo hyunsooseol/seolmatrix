@@ -98,6 +98,20 @@ children:
                     name: height1
                     format: number
                     enable: (plot2)
+              - type: CheckBox
+                name: plot3
+                children:
+                  - type: ComboBox
+                    name: scale1
+                    enable: (plot3)
+                  - type: TextBox
+                    name: width2
+                    format: number
+                    enable: (plot3)
+                  - type: TextBox
+                    name: height2
+                    format: number
+                    enable: (plot3)
   - type: CollapseBox
     label: Additional outputs
     margin: normal

@@ -75,6 +75,19 @@ items:
           - width1
           - height1
  
+    - name: plot3
+      title: 'Clustering plot '
+      type: Image
+      renderFun: .plot3
+      visible: (plot3)
+      refs: qgraph
+      clearWith:
+          - vars
+          - ctrlvars
+          - scale1
+          - width2
+          - height2
+          
     - name:  text
       title: EBIC matrix
       type:  Preformatted
