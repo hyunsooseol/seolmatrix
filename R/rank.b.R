@@ -344,6 +344,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           EBICgraph <- image2$state
           
           plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
+                                         include='all',
                                          scale=scale)
           
           plot2 <- plot2+ggtheme

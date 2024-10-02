@@ -16,22 +16,10 @@ options:
     - name: vars
       title: Variables
       type: Variables
-      suggested:
-         - nominal
-         - continuous
-      permitted:
-        - factor
-        - numeric
 
     - name: ctrlvars
       title: Controlling for
       type: Variables
-      suggested:
-         - nominal
-         - continuous
-      permitted:
-        - factor
-        - numeric
 
     - name: sidSig
       title: Test of significance
@@ -85,11 +73,6 @@ options:
       title: 'Network plot'
       type: Bool
       default: TRUE
-
-    # - name: plot1
-    #   title: Partial plot
-    #   type: Bool
-    #   default: FALSE    
 
     - name: model
       title: Model

@@ -38,13 +38,15 @@ options:
       title: Scale
       type: List
       options:
+        - title: raw0
+          name:  raw0
         - title: raw
           name:  raw
         - title: z-scores
           name:  z-scores
         - title: relative
           name:  relative      
-      default: raw
+      default:  raw0
 
     - name: cor
       title: Correlation matrix

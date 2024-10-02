@@ -43,12 +43,36 @@ children:
                 optionName: sidSig
                 optionPart: twotailed
           - type: Label
-            label: Options
+            label: 'Options'
             children:
               - type: CheckBox
                 name: shwSig
               - type: CheckBox
                 name: flgSig
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        fitToGrid: true
+        children:
+          - type: Label
+            label: 'Additional outputs'
+            children:
+              - type: CheckBox
+                name: ebic
+              - type: CheckBox
+                name: pm
+  - type: CollapseBox
+    label: 'Network plots'
+    margin: normal
+    collapsed: true
+    children:
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        children:
           - type: Label
             label: 'Network plot options'
             children:
@@ -70,8 +94,8 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: Plots
-            children:
+            label: 'Plots'
+            children:        
               - type: CheckBox
                 name: plot
                 style: list-inline
@@ -112,16 +136,3 @@ children:
                     name: height2
                     format: number
                     enable: (plot3)
-  - type: CollapseBox
-    label: Additional outputs
-    margin: normal
-    collapsed: true
-    children:
-      - type: LayoutBox
-        stretchFactor: 1
-        margin: large
-        children:
-          - type: CheckBox
-            name: ebic
-          - type: CheckBox
-            name: pm

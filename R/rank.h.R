@@ -8,7 +8,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             type = "spearman",
-            scale = "raw",
+            scale = "raw0",
             cor = TRUE,
             plot = FALSE,
             plot1 = FALSE,
@@ -49,10 +49,11 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "scale",
                 scale,
                 options=list(
+                    "raw0",
                     "raw",
                     "z-scores",
                     "relative"),
-                default="raw")
+                default="raw0")
             private$..cor <- jmvcore::OptionBool$new(
                 "cor",
                 cor,
@@ -309,7 +310,7 @@ rank <- function(
     data,
     vars,
     type = "spearman",
-    scale = "raw",
+    scale = "raw0",
     cor = TRUE,
     plot = FALSE,
     plot1 = FALSE,
