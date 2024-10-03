@@ -16,10 +16,19 @@ options:
     - name: vars
       title: Variables
       type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric
+
 
     - name: ctrlvars
       title: Controlling for
       type: Variables
+      suggested:
+         - continuous
+      permitted:
+        - numeric
 
     - name: sidSig
       title: Test of significance

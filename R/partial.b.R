@@ -62,7 +62,6 @@ partialClass <- if (requireNamespace('jmvcore'))
          '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
          '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
          '<li>The network plots were implemented using the <b>qgraph</b> R package.</li>',
-         '<li>To compute the correlation matrix used in the network plot, we used the <b>qgraph::cor_auto( )</b> function.</li>',
          '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
          '</ul></div></div>'
          
