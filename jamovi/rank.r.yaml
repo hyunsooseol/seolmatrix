@@ -48,6 +48,7 @@ items:
           - scale
           - width2
           - height2
+          - angle
 
     - name: plot1
       title: 'Partial plot'

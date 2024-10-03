@@ -26,7 +26,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             width1 = 500,
             height1 = 500,
             width2 = 500,
-            height2 = 500, ...) {
+            height2 = 500,
+            angle = 0,
+            angle1 = 0, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -153,6 +155,18 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height2",
                 height2,
                 default=500)
+            private$..angle <- jmvcore::OptionNumber$new(
+                "angle",
+                angle,
+                min=0,
+                max=90,
+                default=0)
+            private$..angle1 <- jmvcore::OptionNumber$new(
+                "angle1",
+                angle1,
+                min=0,
+                max=90,
+                default=0)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
@@ -175,6 +189,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height1)
             self$.addOption(private$..width2)
             self$.addOption(private$..height2)
+            self$.addOption(private$..angle)
+            self$.addOption(private$..angle1)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -197,7 +213,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         width1 = function() private$..width1$value,
         height1 = function() private$..height1$value,
         width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value),
+        height2 = function() private$..height2$value,
+        angle = function() private$..angle$value,
+        angle1 = function() private$..angle1$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
@@ -219,7 +237,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..width1 = NA,
         ..height1 = NA,
         ..width2 = NA,
-        ..height2 = NA)
+        ..height2 = NA,
+        ..angle = NA,
+        ..angle1 = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -310,7 +330,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ctrlvars",
                     "scale",
                     "width1",
-                    "height1")))
+                    "height1",
+                    "angle")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -323,7 +344,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ctrlvars",
                     "scale1",
                     "width2",
-                    "height2")))
+                    "height2",
+                    "angle1")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -385,6 +407,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height1 .
 #' @param width2 .
 #' @param height2 .
+#' @param angle .
+#' @param angle1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -425,7 +449,9 @@ partial <- function(
     width1 = 500,
     height1 = 500,
     width2 = 500,
-    height2 = 500) {
+    height2 = 500,
+    angle = 0,
+    angle1 = 0) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -460,7 +486,9 @@ partial <- function(
         width1 = width1,
         height1 = height1,
         width2 = width2,
-        height2 = height2)
+        height2 = height2,
+        angle = angle,
+        angle1 = angle1)
 
     analysis <- partialClass$new(
         options = options,

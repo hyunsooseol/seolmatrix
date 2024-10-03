@@ -21,7 +21,8 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             width3 = 500,
             height3 = 500,
             width2 = 500,
-            height2 = 500, ...) {
+            height2 = 500,
+            angle = 0, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -106,6 +107,12 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height2",
                 height2,
                 default=500)
+            private$..angle <- jmvcore::OptionNumber$new(
+                "angle",
+                angle,
+                min=0,
+                max=90,
+                default=0)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
@@ -123,6 +130,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height3)
             self$.addOption(private$..width2)
             self$.addOption(private$..height2)
+            self$.addOption(private$..angle)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -140,7 +148,8 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         width3 = function() private$..width3$value,
         height3 = function() private$..height3$value,
         width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value),
+        height2 = function() private$..height2$value,
+        angle = function() private$..angle$value),
     private = list(
         ..vars = NA,
         ..type = NA,
@@ -157,7 +166,8 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..width3 = NA,
         ..height3 = NA,
         ..width2 = NA,
-        ..height2 = NA)
+        ..height2 = NA,
+        ..angle = NA)
 )
 
 rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -222,7 +232,8 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "scale",
                     "width2",
-                    "height2")))
+                    "height2",
+                    "angle")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -289,6 +300,7 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height3 .
 #' @param width2 .
 #' @param height2 .
+#' @param angle .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -323,7 +335,8 @@ rank <- function(
     width3 = 500,
     height3 = 500,
     width2 = 500,
-    height2 = 500) {
+    height2 = 500,
+    angle = 0) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rank requires jmvcore to be installed (restart may be required)")
@@ -352,7 +365,8 @@ rank <- function(
         width3 = width3,
         height3 = height3,
         width2 = width2,
-        height2 = height2)
+        height2 = height2,
+        angle = angle)
 
     analysis <- rankClass$new(
         options = options,

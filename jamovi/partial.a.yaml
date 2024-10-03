@@ -176,6 +176,20 @@ options:
       type: Integer
       title: "Height"
       default: 500      
+
+    - name: angle
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 0
+
+    - name: angle1
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 0      
 ...
 
 

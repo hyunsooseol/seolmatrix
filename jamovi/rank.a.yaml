@@ -54,17 +54,17 @@ options:
       default: TRUE
 
     - name: plot
-      title: Gaussian graphical model
+      title: 'EBICglasso plot'
       type: Bool
       default: false
       
     - name: plot1
-      title: Partial plot
+      title: 'Partial plot'
       type: Bool
       default: FALSE    
 
     - name: plot2
-      title: Centrality 
+      title: 'Centrality plot'
       type: Bool
       default: FALSE   
 
@@ -112,4 +112,11 @@ options:
       type: Integer
       title: "Height"
       default: 500      
+
+    - name: angle
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 0
 ...

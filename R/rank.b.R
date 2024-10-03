@@ -323,7 +323,7 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
           EBICgraph <- image$state
 
-          plot <- qgraph(EBICgraph, layout = "spring", details = TRUE)
+          plot <- qgraph(EBICgraph, layout = "spring")
 
           print(plot)
           TRUE
@@ -348,6 +348,14 @@ rankClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                          scale=scale)
           
           plot2 <- plot2+ggtheme
+          
+          if (self$options$angle > 0) {
+            plot2 <- plot2 + ggplot2::theme(
+              axis.text.x = ggplot2::element_text(
+                angle = self$options$angle, hjust = 1
+              )
+            )
+          }
           
           print(plot2)
           TRUE

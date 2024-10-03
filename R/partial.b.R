@@ -351,6 +351,13 @@ if(isTRUE(self$options$plot2)){
 
   plot2 <- plot2+ggtheme
   
+  if (self$options$angle > 0) {
+    plot2 <- plot2 + ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        angle = self$options$angle, hjust = 1
+      )
+    )
+  }
   print(plot2)
   TRUE
   
@@ -372,7 +379,13 @@ if(isTRUE(self$options$plot2)){
                                  scale=scale1)
   
   plot3 <- plot3+ggtheme
-  
+  if (self$options$angle1 > 0) {
+    plot3 <- plot3 + ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        angle = self$options$angle1, hjust = 1
+      )
+    )
+  }
   print(plot3)
   TRUE
   

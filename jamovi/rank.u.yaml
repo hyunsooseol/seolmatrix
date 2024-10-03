@@ -65,7 +65,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: EBIC plots
+            label: 'Network plots'
             children:
               - type: CheckBox
                 name: plot
@@ -93,8 +93,15 @@ children:
                     name: height2
                     format: number
                     enable: (plot2)  
+                  - type: TextBox
+                    name: angle
+                    format: number
+                    suggestedValues:
+                      - value: 0
+                      - value: 45
+                      - value: 90
           - type: Label
-            label: Partial plot
+            label: 'Partial plot'
             children:
               - type: CheckBox
                 name: plot1
