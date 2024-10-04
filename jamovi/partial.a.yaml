@@ -76,7 +76,7 @@ options:
     - name: flgSig
       title: Flag significant correlations
       type: Bool
-      default: false
+      default: TRUE
 
     - name: plot
       title: 'Network plot'
@@ -138,7 +138,7 @@ options:
       default: FALSE   
 
     - name: ebic
-      title: EBIC matrix
+      title: 'EBICglasso matrix'
       type: Bool
       default: false
 

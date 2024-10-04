@@ -12,7 +12,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             scale = "raw0",
             scale1 = "raw0",
             shwSig = FALSE,
-            flgSig = FALSE,
+            flgSig = TRUE,
             plot = TRUE,
             model = "glasso",
             layout = "spring",
@@ -82,7 +82,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..flgSig <- jmvcore::OptionBool$new(
                 "flgSig",
                 flgSig,
-                default=FALSE)
+                default=TRUE)
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -349,7 +349,7 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="EBIC matrix",
+                title="EBICglasso matrix",
                 clearWith=list(
                     "vars",
                     "ctrlvars")))
@@ -435,7 +435,7 @@ partial <- function(
     scale = "raw0",
     scale1 = "raw0",
     shwSig = FALSE,
-    flgSig = FALSE,
+    flgSig = TRUE,
     plot = TRUE,
     model = "glasso",
     layout = "spring",

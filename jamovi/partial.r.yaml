@@ -91,7 +91,7 @@ items:
           - angle1
           
     - name:  text
-      title: EBIC matrix
+      title: EBICglasso matrix
       type:  Preformatted
       clearWith:
         - vars
