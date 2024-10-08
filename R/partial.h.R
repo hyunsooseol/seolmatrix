@@ -288,7 +288,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows="(vars)",
                 clearWith=list(
                     "vars",
-                    "ctrlvars"),
+                    "ctrlvars",
+                    "scale"),
                 refs="qgraph",
                 columns=list(
                     list(

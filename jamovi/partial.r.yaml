@@ -116,6 +116,7 @@ items:
       clearWith:
         - vars
         - ctrlvars
+        - scale
       refs: qgraph
       columns:
         - name: name
