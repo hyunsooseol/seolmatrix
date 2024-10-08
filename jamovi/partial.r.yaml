@@ -9,6 +9,10 @@ items:
       type: Html
       visible: True
 
+    - name:  text2
+      title: '' 
+      type:  Preformatted
+      
     - name: matrix
       title: Correlation Matrix
       type: Table
@@ -76,32 +80,52 @@ items:
           - height1
           - angle
  
-    - name: plot3
-      title: 'Clustering plot '
-      type: Image
-      renderFun: .plot3
-      visible: (plot3)
-      refs: qgraph
-      clearWith:
-          - vars
-          - ctrlvars
-          - scale1
-          - width2
-          - height2
-          - angle1
+    # - name: plot3
+    #   title: 'Clustering plot '
+    #   type: Image
+    #   renderFun: .plot3
+    #   visible: (plot3)
+    #   refs: qgraph
+    #   clearWith:
+    #       - vars
+    #       - ctrlvars
+    #       - scale1
+    #       - width2
+    #       - height2
+    #       - angle1
           
-    - name:  text
-      title: EBICglasso matrix
-      type:  Preformatted
-      clearWith:
-        - vars
-        - ctrlvars
+    # - name:  text
+    #   title: EBICglasso matrix
+    #   type:  Preformatted
+    #   clearWith:
+    #     - vars
+    #     - ctrlvars
+    # 
+    # - name:  text1
+    #   title: Partial matrix
+    #   type:  Preformatted
+    #   clearWith:
+    #     - vars
+    #     - ctrlvars
 
-    - name:  text1
-      title: Partial matrix
-      type:  Preformatted
+    - name:  cen
+      title: 'Centrality' 
+      type:  Table
+      visible: (cen)
+      rows: (vars)
       clearWith:
         - vars
         - ctrlvars
+      refs: qgraph
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+        - name: clo
+          title: Closeness
+        - name: bet
+          title: Betweeness
+ 
 ...
 

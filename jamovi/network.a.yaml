@@ -1,0 +1,48 @@
+---
+name:  network
+title: Directed Graph Centrality
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: labels
+      title: 'Labels(Required)'
+      type: Variable
+      suggested:
+         - nominal
+      permitted:
+        - id
+        - factor
+  
+    - name: vars
+      title: Variables
+      type: Variables
+
+    - name: cen
+      title: 'Centrality'
+      type: Bool 
+      default: TRUE
+
+    - name: plot
+      title: 'Directed Graph Centrality'
+      type: Bool
+      default: false
+
+    - name: width
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "Height"
+      default: 500    
+
+...

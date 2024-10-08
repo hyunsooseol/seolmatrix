@@ -42,13 +42,6 @@ children:
                 name: sidSig_twotailed
                 optionName: sidSig
                 optionPart: twotailed
-          - type: Label
-            label: 'Options'
-            children:
-              - type: CheckBox
-                name: shwSig
-              - type: CheckBox
-                name: flgSig
       - type: LayoutBox
         stretchFactor: 1
         margin: large
@@ -58,12 +51,12 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: 'Additional outputs'
+            label: 'Options'
             children:
               - type: CheckBox
-                name: ebic
+                name: shwSig
               - type: CheckBox
-                name: pm
+                name: flgSig
   - type: CollapseBox
     label: 'Network plots'
     margin: normal
@@ -74,7 +67,7 @@ children:
         margin: large
         children:
           - type: Label
-            label: 'Network plot options'
+            label: Network plot options
             children:
               - type: ComboBox
                 name: model
@@ -94,8 +87,8 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: 'Plots'
-            children:        
+            label: Plots
+            children:
               - type: CheckBox
                 name: plot
                 style: list-inline
@@ -129,24 +122,8 @@ children:
                       - value: 0
                       - value: 45
                       - value: 90
+          - type: Label
+            label: Table
+            children:
               - type: CheckBox
-                name: plot3
-                children:
-                  - type: ComboBox
-                    name: scale1
-                    enable: (plot3)
-                  - type: TextBox
-                    name: width2
-                    format: number
-                    enable: (plot3)
-                  - type: TextBox
-                    name: height2
-                    format: number
-                    enable: (plot3)
-                  - type: TextBox
-                    name: angle1
-                    format: number
-                    suggestedValues:
-                      - value: 0
-                      - value: 45
-                      - value: 90                    
+                name: cen

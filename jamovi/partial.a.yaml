@@ -54,19 +54,19 @@ options:
           name:  relative      
       default: raw0
 
-    - name: scale1
-      title: Scale
-      type: List
-      options:
-        - title: raw0
-          name:  raw0
-        - title: raw
-          name:  raw
-        - title: z-scores
-          name:  z-scores
-        - title: relative
-          name:  relative      
-      default: raw0
+    # - name: scale1
+    #   title: Scale
+    #   type: List
+    #   options:
+    #     - title: raw0
+    #       name:  raw0
+    #     - title: raw
+    #       name:  raw
+    #     - title: z-scores
+    #       name:  z-scores
+    #     - title: relative
+    #       name:  relative      
+    #   default: raw0
 
     - name: shwSig
       title: Display significance levels
@@ -78,6 +78,11 @@ options:
       type: Bool
       default: TRUE
 
+    - name: cen
+      title: 'Centrality'
+      type: Bool 
+      default: false
+ 
     - name: plot
       title: 'Network plot'
       type: Bool
@@ -132,20 +137,20 @@ options:
       type: Bool
       default: FALSE   
 
-    - name: plot3
-      title: 'Clustering plot' 
-      type: Bool
-      default: FALSE   
+    # - name: plot3
+    #   title: 'Clustering plot' 
+    #   type: Bool
+    #   default: FALSE   
 
-    - name: ebic
-      title: 'EBICglasso matrix'
-      type: Bool
-      default: false
-
-    - name: pm
-      title: Partial matrix
-      type: Bool
-      default: false
+    # - name: ebic
+    #   title: 'EBICglasso matrix'
+    #   type: Bool
+    #   default: false
+    # 
+    # - name: pm
+    #   title: Partial matrix
+    #   type: Bool
+    #   default: false
 
     - name: width
       type: Integer
@@ -167,15 +172,15 @@ options:
       title: "Height"
       default: 500
 
-    - name: width2
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height2
-      type: Integer
-      title: "Height"
-      default: 500      
+    # - name: width2
+    #   type: Integer
+    #   title: "Width "
+    #   default: 500
+    #   
+    # - name: height2
+    #   type: Integer
+    #   title: "Height"
+    #   default: 500      
 
     - name: angle
       title: Angle of x-axis labels
@@ -184,12 +189,12 @@ options:
       max: 90
       default: 0
 
-    - name: angle1
-      title: Angle of x-axis labels
-      type: Number
-      min: 0
-      max: 90
-      default: 0      
+    # - name: angle1
+    #   title: Angle of x-axis labels
+    #   type: Number
+    #   min: 0
+    #   max: 90
+    #   default: 0      
 ...
 
 

@@ -1,13 +1,13 @@
 Package: seolmatrix
 Type: Package
 Title: Correlations suite for jamovi
-Version: 3.9.6
-Date: 2024-10-01
+Version: 3.9.7
+Date: 2024-10-08
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
 Description: This module is a tool for calculating correlations such as Person, Partial,
-  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Rater Reliability, Generalizability Theory, Fleiss Kappa, Bootstrap agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy Process, Correlation structure, Repeated and Cross correlation, and allows users to produce 
-  Gaussian Graphical Model and Partial plot.
+  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Rater Reliability, Generalizability Theory, Fleiss Kappa, Bootstrap agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy Process, Correlation structure, Repeated and Cross correlation, Directed Graph Centrality and allows users to
+  produce Network plots.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

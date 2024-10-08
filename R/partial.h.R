@@ -10,25 +10,19 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ctrlvars = NULL,
             sidSig = "twotailed",
             scale = "raw0",
-            scale1 = "raw0",
             shwSig = FALSE,
             flgSig = TRUE,
+            cen = FALSE,
             plot = TRUE,
             model = "glasso",
             layout = "spring",
             shape = "circle",
             plot2 = FALSE,
-            plot3 = FALSE,
-            ebic = FALSE,
-            pm = FALSE,
             width = 500,
             height = 500,
             width1 = 500,
             height1 = 500,
-            width2 = 500,
-            height2 = 500,
-            angle = 0,
-            angle1 = 0, ...) {
+            angle = 0, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -66,15 +60,6 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "z-scores",
                     "relative"),
                 default="raw0")
-            private$..scale1 <- jmvcore::OptionList$new(
-                "scale1",
-                scale1,
-                options=list(
-                    "raw0",
-                    "raw",
-                    "z-scores",
-                    "relative"),
-                default="raw0")
             private$..shwSig <- jmvcore::OptionBool$new(
                 "shwSig",
                 shwSig,
@@ -83,6 +68,10 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "flgSig",
                 flgSig,
                 default=TRUE)
+            private$..cen <- jmvcore::OptionBool$new(
+                "cen",
+                cen,
+                default=FALSE)
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -119,18 +108,6 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot2",
                 plot2,
                 default=FALSE)
-            private$..plot3 <- jmvcore::OptionBool$new(
-                "plot3",
-                plot3,
-                default=FALSE)
-            private$..ebic <- jmvcore::OptionBool$new(
-                "ebic",
-                ebic,
-                default=FALSE)
-            private$..pm <- jmvcore::OptionBool$new(
-                "pm",
-                pm,
-                default=FALSE)
             private$..width <- jmvcore::OptionInteger$new(
                 "width",
                 width,
@@ -147,23 +124,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height1",
                 height1,
                 default=500)
-            private$..width2 <- jmvcore::OptionInteger$new(
-                "width2",
-                width2,
-                default=500)
-            private$..height2 <- jmvcore::OptionInteger$new(
-                "height2",
-                height2,
-                default=500)
             private$..angle <- jmvcore::OptionNumber$new(
                 "angle",
                 angle,
-                min=0,
-                max=90,
-                default=0)
-            private$..angle1 <- jmvcore::OptionNumber$new(
-                "angle1",
-                angle1,
                 min=0,
                 max=90,
                 default=0)
@@ -172,74 +135,56 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ctrlvars)
             self$.addOption(private$..sidSig)
             self$.addOption(private$..scale)
-            self$.addOption(private$..scale1)
             self$.addOption(private$..shwSig)
             self$.addOption(private$..flgSig)
+            self$.addOption(private$..cen)
             self$.addOption(private$..plot)
             self$.addOption(private$..model)
             self$.addOption(private$..layout)
             self$.addOption(private$..shape)
             self$.addOption(private$..plot2)
-            self$.addOption(private$..plot3)
-            self$.addOption(private$..ebic)
-            self$.addOption(private$..pm)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
-            self$.addOption(private$..width2)
-            self$.addOption(private$..height2)
             self$.addOption(private$..angle)
-            self$.addOption(private$..angle1)
         }),
     active = list(
         vars = function() private$..vars$value,
         ctrlvars = function() private$..ctrlvars$value,
         sidSig = function() private$..sidSig$value,
         scale = function() private$..scale$value,
-        scale1 = function() private$..scale1$value,
         shwSig = function() private$..shwSig$value,
         flgSig = function() private$..flgSig$value,
+        cen = function() private$..cen$value,
         plot = function() private$..plot$value,
         model = function() private$..model$value,
         layout = function() private$..layout$value,
         shape = function() private$..shape$value,
         plot2 = function() private$..plot2$value,
-        plot3 = function() private$..plot3$value,
-        ebic = function() private$..ebic$value,
-        pm = function() private$..pm$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
         height1 = function() private$..height1$value,
-        width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value,
-        angle = function() private$..angle$value,
-        angle1 = function() private$..angle1$value),
+        angle = function() private$..angle$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
         ..sidSig = NA,
         ..scale = NA,
-        ..scale1 = NA,
         ..shwSig = NA,
         ..flgSig = NA,
+        ..cen = NA,
         ..plot = NA,
         ..model = NA,
         ..layout = NA,
         ..shape = NA,
         ..plot2 = NA,
-        ..plot3 = NA,
-        ..ebic = NA,
-        ..pm = NA,
         ..width = NA,
         ..height = NA,
         ..width1 = NA,
         ..height1 = NA,
-        ..width2 = NA,
-        ..height2 = NA,
-        ..angle = NA,
-        ..angle1 = NA)
+        ..angle = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -247,12 +192,11 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
+        text2 = function() private$.items[["text2"]],
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
-        plot3 = function() private$.items[["plot3"]],
-        text = function() private$.items[["text"]],
-        text1 = function() private$.items[["text1"]]),
+        cen = function() private$.items[["cen"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -266,6 +210,10 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text2",
+                title=""))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="matrix",
@@ -332,34 +280,28 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "width1",
                     "height1",
                     "angle")))
-            self$add(jmvcore::Image$new(
+            self$add(jmvcore::Table$new(
                 options=options,
-                name="plot3",
-                title="Clustering plot ",
-                renderFun=".plot3",
-                visible="(plot3)",
+                name="cen",
+                title="Centrality",
+                visible="(cen)",
+                rows="(vars)",
+                clearWith=list(
+                    "vars",
+                    "ctrlvars"),
                 refs="qgraph",
-                clearWith=list(
-                    "vars",
-                    "ctrlvars",
-                    "scale1",
-                    "width2",
-                    "height2",
-                    "angle1")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text",
-                title="EBICglasso matrix",
-                clearWith=list(
-                    "vars",
-                    "ctrlvars")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text1",
-                title="Partial matrix",
-                clearWith=list(
-                    "vars",
-                    "ctrlvars")))}))
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"),
+                    list(
+                        `name`="clo", 
+                        `title`="Closeness"),
+                    list(
+                        `name`="bet", 
+                        `title`="Betweeness"))))}))
 
 partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "partialBase",
@@ -390,34 +332,27 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ctrlvars .
 #' @param sidSig .
 #' @param scale .
-#' @param scale1 .
 #' @param shwSig .
 #' @param flgSig .
+#' @param cen .
 #' @param plot .
 #' @param model .
 #' @param layout .
 #' @param shape .
 #' @param plot2 .
-#' @param plot3 .
-#' @param ebic .
-#' @param pm .
 #' @param width .
 #' @param height .
 #' @param width1 .
 #' @param height1 .
-#' @param width2 .
-#' @param height2 .
 #' @param angle .
-#' @param angle1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -433,25 +368,19 @@ partial <- function(
     ctrlvars,
     sidSig = "twotailed",
     scale = "raw0",
-    scale1 = "raw0",
     shwSig = FALSE,
     flgSig = TRUE,
+    cen = FALSE,
     plot = TRUE,
     model = "glasso",
     layout = "spring",
     shape = "circle",
     plot2 = FALSE,
-    plot3 = FALSE,
-    ebic = FALSE,
-    pm = FALSE,
     width = 500,
     height = 500,
     width1 = 500,
     height1 = 500,
-    width2 = 500,
-    height2 = 500,
-    angle = 0,
-    angle1 = 0) {
+    angle = 0) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -470,25 +399,19 @@ partial <- function(
         ctrlvars = ctrlvars,
         sidSig = sidSig,
         scale = scale,
-        scale1 = scale1,
         shwSig = shwSig,
         flgSig = flgSig,
+        cen = cen,
         plot = plot,
         model = model,
         layout = layout,
         shape = shape,
         plot2 = plot2,
-        plot3 = plot3,
-        ebic = ebic,
-        pm = pm,
         width = width,
         height = height,
         width1 = width1,
         height1 = height1,
-        width2 = width2,
-        height2 = height2,
-        angle = angle,
-        angle1 = angle1)
+        angle = angle)
 
     analysis <- partialClass$new(
         options = options,

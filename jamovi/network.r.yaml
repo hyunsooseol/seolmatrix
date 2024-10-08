@@ -1,0 +1,57 @@
+---
+name:  network
+title: Directed Graph Centrality
+jrs:   '1.1'
+refs: seolmatrix
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: True 
+
+    - name:  text
+      title: '' 
+      type:  Preformatted
+
+    - name:  cen
+      title: 'Centrality' 
+      type:  Table
+      visible: (cen)
+      rows: (vars)
+      clearWith:
+        - vars
+        - labels
+      refs: qgraph
+      columns:
+        - name: name
+          title: ''
+          type: 'text'
+          content: ($key)
+        - name: bet
+          title: Betweenness
+        - name: clo
+          title: Closeness
+        - name: ind
+          title: InDegree
+        - name: out
+          title: OutDegree
+        - name: outex
+          title: OutExpectedInfluence
+        - name: inex
+          title: InExpectedInfluence         
+
+    - name:  plot
+      title: 'Directed Graph Centrality'
+      type:  Image
+      requiresData: true
+      visible: (plot)
+      renderFun: .plot
+      refs: qgraph
+      clearWith:
+        - vars
+        - labels
+        - width
+        - height
+
+...

@@ -13,6 +13,7 @@
 #' @importFrom qgraph centralityPlot
 #' @importFrom qgraph cor_auto
 #' @importFrom corrplot corrplot
+#' @importFrom qgraph centrality_auto
 #' @export
 
 
@@ -83,11 +84,11 @@ partialClass <- if (requireNamespace('jmvcore'))
      self$results$plot2$setSize(width, height)
    }  
    
-   if(isTRUE(self$options$plot3)){
-     width <- self$options$width2
-     height <- self$options$height2
-     self$results$plot3$setSize(width, height)
-   }  
+   # if(isTRUE(self$options$plot3)){
+   #   width <- self$options$width2
+   #   height <- self$options$height2
+   #   self$results$plot3$setSize(width, height)
+   # }  
    
  
    # get variables--------------------------------------
@@ -235,22 +236,22 @@ partialClass <- if (requireNamespace('jmvcore'))
         
  # Patial plot----------------
 
-        var <- self$options$vars
-        varCtl <- self$options$ctrlvars
+        # var <- self$options$vars
+        # varCtl <- self$options$ctrlvars
+        # 
+        # if(is.null(varCtl)){
+        # 
+        #   partial <- psych::partial.r(data)
+        # 
+        # } else{
+        # 
+        # partial <- psych::partial.r(data,x=var, y=varCtl)
+        # 
+        # }
 
-        if(is.null(varCtl)){
-
-          partial <- psych::partial.r(data)
-
-        } else{
-
-        partial <- psych::partial.r(data,x=var, y=varCtl)
-
-        }
-
-        if(isTRUE(self$options$pm)){
-          self$results$text1$setContent(partial)
-        }
+        # if(isTRUE(self$options$pm)){
+        #   self$results$text1$setContent(partial)
+        # }
  
  #        image1 <- self$results$plot1
  #        image1$setState(partial)
@@ -276,7 +277,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         }
         
 
-if(isTRUE(self$options$plot2)){                
+#if(isTRUE(self$options$plot2)){                
 
         #     if(is.null(varCtl)){ 
         #   
@@ -289,20 +290,46 @@ if(isTRUE(self$options$plot2)){
          # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
 
+        if(isTRUE(self$options$cen)){
+          
+          vars<- self$options$vars
+          
+          table <- self$results$cen
+          
+          # Calculate centrality measures
+          res <- qgraph::centrality_auto(CorMat)
+          cen<- res[["node.centrality"]]
+          #self$results$text2$setContent(cen)
+
+          for (i in seq_along(vars)) {
+
+            row <- list()
+
+            row[["clo"]] <- cen[i, 2]
+            row[["bet"]] <- cen[i, 3]
+
+            table$setRow(rowKey = vars[i], values = row)
+          }
+          
+          
+        }
+        
+        if(isTRUE(self$options$plot2)){
         # Centrality plot-------
         image2 <- self$results$plot2
         image2$setState(EBICgraph)
-
-        # Clustering plot-------
-        image3 <- self$results$plot3
-        image3$setState(EBICgraph)
+        }
+        
+        # # Clustering plot-------
+        # image3 <- self$results$plot3
+        # image3$setState(EBICgraph)
         
          #---------------------------------------
-        if(isTRUE(self$options$ebic)){
-          
-          self$results$text$setContent(CorMat)
-        }
-}     
+        # if(isTRUE(self$options$ebic)){
+        #   
+        #   self$results$text$setContent(CorMat)
+        # }
+     
         },
       
  
@@ -361,35 +388,35 @@ if(isTRUE(self$options$plot2)){
   print(plot2)
   TRUE
   
-},
-
-
-# Clustering plot for EBIC------------
-
-.plot3 = function(image3, ggtheme, theme,...) {
-  
-  if (is.null(image3$state))
-    return(FALSE)
-  
-  scale1 <- self$options$scale1
-  
-  EBICgraph <- image3$state
-  
-  plot3<- qgraph::clusteringPlot(EBIC = EBICgraph,
-                                 scale=scale1)
-  
-  plot3 <- plot3+ggtheme
-  if (self$options$angle1 > 0) {
-    plot3 <- plot3 + ggplot2::theme(
-      axis.text.x = ggplot2::element_text(
-        angle = self$options$angle1, hjust = 1
-      )
-    )
-  }
-  print(plot3)
-  TRUE
-  
 }
+
+
+# # Clustering plot for EBIC------------
+# 
+# .plot3 = function(image3, ggtheme, theme,...) {
+#   
+#   if (is.null(image3$state))
+#     return(FALSE)
+#   
+#   scale1 <- self$options$scale1
+#   
+#   EBICgraph <- image3$state
+#   
+#   plot3<- qgraph::clusteringPlot(EBIC = EBICgraph,
+#                                  scale=scale1)
+#   
+#   plot3 <- plot3+ggtheme
+#   if (self$options$angle1 > 0) {
+#     plot3 <- plot3 + ggplot2::theme(
+#       axis.text.x = ggplot2::element_text(
+#         angle = self$options$angle1, hjust = 1
+#       )
+#     )
+#   }
+#   print(plot3)
+#   TRUE
+#   
+# }
 
   
   

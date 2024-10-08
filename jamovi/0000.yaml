@@ -1,20 +1,20 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 3.9.6
+version: 3.9.7
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2024-10-01'
+date: '2024-10-08'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Multilevel
   correlation, Concordance correlation, Correlation structure, Repeated and
   Cross correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
-  Generalizability Theory, Analytic Hierarchy Process, and allows users to
-  produce Gaussian Graphical Model and Partial plot.
+  Generalizability Theory, Analytic Hierarchy Process, Directed Graph Centrality
+  and allows users to produce Network plots.
 analyses:
   - title: Partial Correlation
     name: partial
@@ -76,6 +76,12 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: AHP for survey data
     menuSubgroup: AHP
+  - title: Directed Graph Centrality
+    name: network
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Directed Graph Centrality
+    menuSubgroup: Network
 datasets:
   - name: rater
     path: rater.omv
@@ -184,6 +190,11 @@ datasets:
     description: AHP for survey data
     tags:
       - AHP for survey data
+  - name: Directed_graph
+    path: Directed.omv
+    description: Directed graph centrality
+    tags:
+      - Network
 usesNative: true
 minApp: 1.0.8
 
