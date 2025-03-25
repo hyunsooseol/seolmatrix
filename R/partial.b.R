@@ -1,110 +1,61 @@
 
-# This file is a generated template, your changes will not be overwritten
-
-
-#' Correlation Analysis
-#'
-#' @importFrom R6 R6Class
-#' @import jmvcore
-#' @import qgraph
-#' @import psych
-#' @importFrom psych partial.r
-#' @importFrom qgraph EBICglasso
-#' @importFrom qgraph centralityPlot
-#' @importFrom qgraph cor_auto
-#' @importFrom corrplot corrplot
-#' @importFrom qgraph centrality_auto
-#' @export
-
-
 partialClass <- if (requireNamespace('jmvcore'))
   R6::R6Class(
     "partialClass",
     inherit = partialBase,
     private = list(
-
-      .htmlwidget = NULL,  # Add instance for HTMLWidget
-#==================================================================================
- .init = function(){
-   
-   private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
-   
-   
-   if(is.null(self$dat) | is.null(self$options$vars)){
-     self$results$instructions$setVisible(visible = TRUE)
-     
-   }
-   
-   # self$results$instructions$setContent(
-   #        "<html>
-   #          <head>
-   #          </head>
-   #          <body>
-   #          <div class='instructions'>
-   #          <p>____________________________________________________________________________________</p>
-   #          <p>1. When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</p>
-   #          <p>2. If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</p>
-   #          <p>3. When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</P>
-   #          <p>4. Feature requests and bug reports can be made on my <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub</a>.</p>
-   #          <p>____________________________________________________________________________________</p>
-   #          </div>
-   #          </body>
-   #          </html>")
-   
-   
-   self$results$instructions$setContent(
-     private$.htmlwidget$generate_accordion(
-       title="Instructions",
-       content = paste(
-         '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
-         '<div style="text-align:justify;">',
-         '<ul>',
-         '<li>When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</li>',
-         '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
-         '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
-         '<li>The network plots were implemented using the <b>qgraph</b> R package.</li>',
-         '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
-         '</ul></div></div>'
-         
-       )
-       
-     )
-   )         
-  
-   
-   if(isTRUE(self$options$plot)){
-     width <- self$options$width
-     height <- self$options$height
-     self$results$plot$setSize(width, height)
-   }
-   
-   if(isTRUE(self$options$plot2)){
-     width <- self$options$width1
-     height <- self$options$height1
-     self$results$plot2$setSize(width, height)
-   }  
-   
-   # if(isTRUE(self$options$plot3)){
-   #   width <- self$options$width2
-   #   height <- self$options$height2
-   #   self$results$plot3$setSize(width, height)
-   # }  
-   
- 
-   # get variables--------------------------------------
+      .htmlwidget = NULL,
+      
+      .init = function() {
+        private$.htmlwidget <- HTMLWidget$new()
+        
+        
+        if (is.null(self$dat) | is.null(self$options$vars)) {
+          self$results$instructions$setVisible(visible = TRUE)
+          
+        }
+        self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
+          title = "Instructions",
+          content = paste(
+            '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+            '<div style="text-align:justify;">',
+            '<ul>',
+            '<li>When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</li>',
+            '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
+            '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
+            '<li>The network plots were implemented using the <b>qgraph</b> R package.</li>',
+            '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+            '</ul></div></div>'
+            
+          )
+        ))
+        if (isTRUE(self$options$plot)) {
+          width <- self$options$width
+          height <- self$options$height
+          self$results$plot$setSize(width, height)
+        }
+        
+        if (isTRUE(self$options$plot2)) {
+          width <- self$options$width1
+          height <- self$options$height1
+          self$results$plot2$setSize(width, height)
+        }
+        # get variables--------------------------------------
         
         matrix <- self$results$get('matrix')
         var <- self$options$get('vars')
         varCtl <- self$options$get('ctrlvars')
         
         
- # whether the procedure is controlling for variables or not-----------
+        # whether the procedure is controlling for variables or not-----------
         
         matrix$setTitle(ifelse(
-          length(varCtl) > 0,'Partial Correlation Matrix','Correlation Matrix'
+          length(varCtl) > 0,
+          'Partial Correlation Matrix',
+          'Correlation Matrix'
         ))
         
-# Add Columns----------------------------------
+        # Add Columns----------------------------------
         
         for (i in seq_along(var)) {
           matrix$addColumn(
@@ -122,7 +73,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           )
         }
         
- # Empty cells above and put "-" in the main diagonal-------------------
+        # Empty cells above and put "-" in the main diagonal-------------------
         
         for (i in seq_along(var)) {
           values <- list()
@@ -136,10 +87,16 @@ partialClass <- if (requireNamespace('jmvcore'))
           matrix$setRow(rowKey = var[[i]], values)
         }
         
- # initialize setNote-------------------------------------------------
+        # initialize setNote-------------------------------------------------
         
-        matrix$setNote('ctlNte', ifelse(length(varCtl) > 0, paste0('Controlling for ', paste(varCtl, collapse=", ")), 
-                                        'Not controlling for any variables, the result table shows Pearson correlation matrix'))
+        matrix$setNote(
+          'ctlNte',
+          ifelse(
+            length(varCtl) > 0,
+            paste0('Controlling for ', paste(varCtl, collapse = ", ")),
+            'Not controlling for any variables, the result table shows Pearson correlation matrix'
+          )
+        )
         
         
         matrix$setNote('sigNte', paste0(
@@ -156,41 +113,27 @@ partialClass <- if (requireNamespace('jmvcore'))
         ))
         if (length(self$options$vars) <= 1)
           self$setStatus('complete')
-        },
-    
+      },
       
-#====================================================================
-      
-.run = function() {
- 
-         # get variables--------------------------------------------------
-        
-            matrix <- self$results$get('matrix')
-  
-            var <- self$options$get('vars')
-            nVar <- length(var)
-  
-            varCtl <- self$options$get('ctrlvars')
-             nCtl   <- length(varCtl)
-  
-        
+      .run = function() {
+        matrix <- self$results$get('matrix')
+        var <- self$options$get('vars')
+        nVar <- length(var)
+        varCtl <- self$options$get('ctrlvars')
+        nCtl   <- length(varCtl)
         
         data <- self$data
-         
-        for(v in var)
-         data[[v]] <- jmvcore::toNumeric(data[[v]])
         
-        for(v in varCtl)
-         data[[v]] <-jmvcore::toNumeric(data[[v]])
-         
+        for (v in var)
+          data[[v]] <- jmvcore::toNumeric(data[[v]])
         
-# Computing correlations----------
+        for (v in varCtl)
+          data[[v]] <- jmvcore::toNumeric(data[[v]])
+        # Computing correlations----------
         
         if (nVar > 1) {
           m  <-
-            as.matrix(stats::cor(data[, c(var, varCtl)], 
-                                 use="pairwise.complete.obs",
-                                 method = 'pearson'))
+            as.matrix(stats::cor(data[, c(var, varCtl)], use = "pairwise.complete.obs", method = 'pearson'))
           X  <- m[var, var]
           
           if (nCtl > 0) {
@@ -210,7 +153,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           }
           Pp <- -nt *  expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
           
-# populate results------------------------------------------------
+          # populate results------------------------------------------------
           
           for (i in 2:nVar) {
             for (j in seq_len(i - 1)) {
@@ -234,231 +177,127 @@ partialClass <- if (requireNamespace('jmvcore'))
           
         }
         
- # Patial plot----------------
-
+        # Patial plot----------------
+        
         # var <- self$options$vars
         # varCtl <- self$options$ctrlvars
-        # 
+        #
         # if(is.null(varCtl)){
-        # 
+        #
         #   partial <- psych::partial.r(data)
-        # 
+        #
         # } else{
-        # 
+        #
         # partial <- psych::partial.r(data,x=var, y=varCtl)
-        # 
+        #
         # }
-
+        
         # if(isTRUE(self$options$pm)){
         #   self$results$text1$setContent(partial)
         # }
- 
- #        image1 <- self$results$plot1
- #        image1$setState(partial)
- #      
- #        # Matrix plot-----------
- #        
- #        image3 <- self$results$plot3
- #        image3$setState(as.matrix(partial))
- #        
-
+        
+        #        image1 <- self$results$plot1
+        #        image1$setState(partial)
+        #
+        #        # Matrix plot-----------
+        #
+        #        image3 <- self$results$plot3
+        #        image3$setState(as.matrix(partial))
+        #
+        
         # Network PLOT------------
         
-        if(isTRUE(self$options$plot)){          
-        
+        if (isTRUE(self$options$plot)) {
           df <- qgraph::cor_auto(data)
           n = nrow(data)
-          
           # Prepare Data For Plot -------
           image <- self$results$plot
-         
-          state <- list(df,n)
+          state <- list(df, n)
           image$setState(state)
         }
+        #if(isTRUE(self$options$plot2)){
         
-
-#if(isTRUE(self$options$plot2)){                
-
-        #     if(is.null(varCtl)){ 
-        #   
+        #     if(is.null(varCtl)){
+        #
         # # Compute correlations:
-         CorMat <- qgraph::cor_auto(data)
+        CorMat <- qgraph::cor_auto(data)
         #   } else{
         #     CorMat <- qgraph::cor_auto(data, select = var)
         #   }
-
-         # Compute graph with tuning = 0.5 (EBIC)
+        
+        # Compute graph with tuning = 0.5 (EBIC)
         EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-
-        if(isTRUE(self$options$cen)){
-          
-          vars<- self$options$vars
-          
+        
+        if (isTRUE(self$options$cen)) {
+          vars <- self$options$vars
           table <- self$results$cen
-          
           # Calculate centrality measures
           res <- qgraph::centrality_auto(CorMat)
-          cen<- res[["node.centrality"]]
+          cen <- res[["node.centrality"]]
           #self$results$text2$setContent(cen)
-
           for (i in seq_along(vars)) {
-
             row <- list()
-
             row[["clo"]] <- cen[i, 2]
             row[["bet"]] <- cen[i, 3]
-
             table$setRow(rowKey = vars[i], values = row)
           }
-          
-          
         }
         
-        if(isTRUE(self$options$plot2)){
-        # Centrality plot-------
-        image2 <- self$results$plot2
-        image2$setState(EBICgraph)
+        if (isTRUE(self$options$plot2)) {
+          # Centrality plot-------
+          image2 <- self$results$plot2
+          image2$setState(EBICgraph)
         }
         
         # # Clustering plot-------
         # image3 <- self$results$plot3
         # image3$setState(EBICgraph)
         
-         #---------------------------------------
+        #---------------------------------------
         # if(isTRUE(self$options$ebic)){
-        #   
+        #
         #   self$results$text$setContent(CorMat)
         # }
-     
-        },
+        
+      },
       
- 
-#================================================================
-
-.plot = function(image, ggtheme, theme,...) {
-  
-  
-  if (is.null(image$state))
-    return(FALSE)
-  
-  df <- image$state[[1]]
-  n <- image$state[[2]] # for glasso
-  
-  
-  model <- self$options$model
-  layout <- self$options$layout
-  shape <- self$options$shape
-  
-  plot <- qgraph(df,
-                 graph=model,
-                 layout=layout,
-                 shape=shape,
-                 sampleSize = n) 
-               
-
-  print(plot)
-  TRUE
-
-  },     
-
-# Centrality plot for EBIC------------
-
-.plot2 = function(image2, ggtheme, theme,...) {
-  
-  if (is.null(image2$state))
-    return(FALSE)
-  
-  scale <- self$options$scale
-  
-  EBICgraph <- image2$state
-
-  plot2<- qgraph::centralityPlot(EBIC = EBICgraph,
-                                 include='all',
-                                 scale=scale)
-
-  plot2 <- plot2+ggtheme
-  
-  if (self$options$angle > 0) {
-    plot2 <- plot2 + ggplot2::theme(
-      axis.text.x = ggplot2::element_text(
-        angle = self$options$angle, hjust = 1
-      )
+      .plot = function(image, ggtheme, theme, ...) {
+        if (is.null(image$state))
+          return(FALSE)
+        
+        df <- image$state[[1]]
+        n <- image$state[[2]] # for glasso
+        model <- self$options$model
+        layout <- self$options$layout
+        shape <- self$options$shape
+        plot <- qgraph(
+          df,
+          graph = model,
+          layout = layout,
+          shape = shape,
+          sampleSize = n
+        )
+        print(plot)
+        TRUE
+      },
+      
+      # Centrality plot for EBIC------------
+      
+      .plot2 = function(image2, ggtheme, theme, ...) {
+        if (is.null(image2$state))
+          return(FALSE)
+        
+        scale <- self$options$scale
+        EBICgraph <- image2$state
+        plot2 <- qgraph::centralityPlot(EBIC = EBICgraph,
+                                        include = 'all',
+                                        scale = scale)
+        plot2 <- plot2 + ggtheme
+        if (self$options$angle > 0) {
+          plot2 <- plot2 + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = self$options$angle, hjust = 1))
+        }
+        print(plot2)
+        TRUE
+      }
     )
-  }
-  print(plot2)
-  TRUE
-  
-}
-
-
-# # Clustering plot for EBIC------------
-# 
-# .plot3 = function(image3, ggtheme, theme,...) {
-#   
-#   if (is.null(image3$state))
-#     return(FALSE)
-#   
-#   scale1 <- self$options$scale1
-#   
-#   EBICgraph <- image3$state
-#   
-#   plot3<- qgraph::clusteringPlot(EBIC = EBICgraph,
-#                                  scale=scale1)
-#   
-#   plot3 <- plot3+ggtheme
-#   if (self$options$angle1 > 0) {
-#     plot3 <- plot3 + ggplot2::theme(
-#       axis.text.x = ggplot2::element_text(
-#         angle = self$options$angle1, hjust = 1
-#       )
-#     )
-#   }
-#   print(plot3)
-#   TRUE
-#   
-# }
-
-  
-  
-# # partial plot-----------
-# 
-# 
-# .plot1 = function(image1,ggtheme, theme, ...) {
-#       
-#         
-#   if (is.null(image1$state))
-#     return(FALSE)
-#         
-#         partial <- image1$state
-#         
-#         plot1 <- qgraph(partial, layout = "spring", details = TRUE)
-#         
-#       #  plot1 <- plot1+ggtheme
-#         
-#         print(plot1)
-#         TRUE
-#       },
-# 
-# .plot3 = function(image3,...) {
-#   
-#   
-#   if (is.null(image3$state))
-#     return(FALSE)
-#   
-#   partial <- image3$state
-#   
-#   
-#   plot3<- corrplot::corrplot(partial, 
-#            type="lower",
-#            col=c("black", "white"),
-#            bg="lightblue")
-#   
-#   
-#   print(plot3)
-#   TRUE
-# }
-
-)
-)
-
-
+  )

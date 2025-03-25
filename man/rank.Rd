@@ -8,7 +8,7 @@ rank(
   data,
   vars,
   type = "spearman",
-  scale = "raw",
+  scale = "raw0",
   cor = TRUE,
   plot = FALSE,
   plot1 = FALSE,
@@ -21,7 +21,8 @@ rank(
   width3 = 500,
   height3 = 500,
   width2 = 500,
-  height2 = 500
+  height2 = 500,
+  angle = 0
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ rank(
 \item{width2}{.}
 
 \item{height2}{.}
+
+\item{angle}{.}
 }
 \value{
 A results object containing:

@@ -10,23 +10,19 @@ partial(
   ctrlvars,
   sidSig = "twotailed",
   scale = "raw0",
-  scale1 = "raw0",
   shwSig = FALSE,
-  flgSig = FALSE,
+  flgSig = TRUE,
+  cen = FALSE,
   plot = TRUE,
   model = "glasso",
   layout = "spring",
   shape = "circle",
   plot2 = FALSE,
-  plot3 = FALSE,
-  ebic = FALSE,
-  pm = FALSE,
   width = 500,
   height = 500,
   width1 = 500,
   height1 = 500,
-  width2 = 500,
-  height2 = 500
+  angle = 0
 )
 }
 \arguments{
@@ -40,11 +36,11 @@ partial(
 
 \item{scale}{.}
 
-\item{scale1}{.}
-
 \item{shwSig}{.}
 
 \item{flgSig}{.}
+
+\item{cen}{.}
 
 \item{plot}{.}
 
@@ -56,12 +52,6 @@ partial(
 
 \item{plot2}{.}
 
-\item{plot3}{.}
-
-\item{ebic}{.}
-
-\item{pm}{.}
-
 \item{width}{.}
 
 \item{height}{.}
@@ -70,20 +60,17 @@ partial(
 
 \item{height1}{.}
 
-\item{width2}{.}
-
-\item{height2}{.}
+\item{angle}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
-  \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$cen} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

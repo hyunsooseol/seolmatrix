@@ -1,225 +1,142 @@
 
-# This file is a generated template, your changes will not be overwritten
-#' @importFrom R6 R6Class
-#' @import jmvcore
-#' @import rmcorr
-#' @importFrom rmcorr rmcorr
-#' @importFrom stats ccf
-#' @import ggplot2
-#' @export
 
-rmcClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
+rmcClass <- if (requireNamespace('jmvcore', quietly = TRUE))
+  R6::R6Class(
     "rmcClass",
     inherit = rmcBase,
     private = list(
-      .htmlwidget = NULL,  # Add instance for HTMLWidget
+      .htmlwidget = NULL,
+      # Add instance for HTMLWidget
       
       .init = function() {
-        private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance 
+        private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance
         
-        if (is.null(self$data) |is.null(self$options$dep) | 
-             is.null(self$options$covs)) {
-          
+        if (is.null(self$data) | is.null(self$options$dep) |
+            is.null(self$options$covs)) {
           self$results$instructions$setVisible(visible = TRUE)
           
         }
-        
-        # self$results$instructions$setContent(
-        #   "<html>
-        #     <head>
-        #     </head>
-        #     <body>
-        #     <div class='instructions'>
-        #     <p>____________________________________________________________________________________</p>
-        #     <p> Feature requests and bug reports can be made on the <a href='https://github.com/hyunsooseol/seolmatrix/issues'  target = '_blank'>GitHub.</a></p>
-        #     <p>____________________________________________________________________________________</p>
-        #     </div>
-        #     </body>
-        #     </html>"
-        # )
-        self$results$instructions$setContent(
-          private$.htmlwidget$generate_accordion(
-            title="Instructions",
-            content = paste(
-              '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
-              '<div style="text-align:justify;">',
-              '<ul>',
-              '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
-              '</ul></div></div>'
-              
-            )
+        self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
+          title = "Instructions",
+          content = paste(
+            '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
+            '<div style="text-align:justify;">',
+            '<ul>',
+            '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
+            '</ul></div></div>'
             
           )
-        )         
-        
-        
-        if(isTRUE(self$options$plot)){
+        ))
+        if (isTRUE(self$options$plot)) {
           width <- self$options$width
           height <- self$options$height
           self$results$plot$setSize(width, height)
         }
-       
-        if(isTRUE(self$options$plot1)){
+        
+        if (isTRUE(self$options$plot1)) {
           width <- self$options$width1
           height <- self$options$height1
           self$results$plot1$setSize(width, height)
         }
-        
-        
       },
       
-#---------------------------------------------------------------      
-  .run = function() {
-
-    
-    if (is.null(self$options$dep) | 
-        is.null(self$options$covs)) return()
- 
-    # Example-----------
-    # library(rmcorr)
-    # bland1995 <- bland1995
-    # ## Bland Altman 1995 data
-    # rc<- rmcorr(Subject, PaCO2, pH, bland1995)
-    
-    
-    #get the data--------
-  
-    data <- self$data
-    
-    id <- self$options$id
-    dep <- self$options$dep
-    covs <- self$options$covs
-
- 
-    # convert to appropriate data types
-    
-    data[[dep]] <- jmvcore::toNumeric(data[[dep]])
-    data[[covs]] <- jmvcore::toNumeric(data[[covs]])
-    
-    
-    data <- na.omit(data)
-   
-    if(isTRUE(self$options$rc) | isTRUE(self$options$plot)){
-     
-   # Repeated correlation-----------------------------------------------------    
-  
-    res<- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
-
-    #-----------------------------------------          
-  
-    if(isTRUE(self$options$rc)){
+      #---------------------------------------------------------------
+      .run = function() {
+        if (is.null(self$options$dep) |
+            is.null(self$options$covs))
+          return()
+        
+        # Example-----------
+        # library(rmcorr)
+        # bland1995 <- bland1995
+        # ## Bland Altman 1995 data
+        # rc<- rmcorr(Subject, PaCO2, pH, bland1995)
+        #get the data--------
+        data <- self$data
+        id <- self$options$id
+        dep <- self$options$dep
+        covs <- self$options$covs
+        # convert to appropriate data types
+        data[[dep]] <- jmvcore::toNumeric(data[[dep]])
+        data[[covs]] <- jmvcore::toNumeric(data[[covs]])
+        data <- na.omit(data)
+        
+        if (isTRUE(self$options$rc) | isTRUE(self$options$plot)) {
+          # Repeated correlation-----------------------------------------------------
+          
+          res <- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
+          
+          #-----------------------------------------
+          
+          if (isTRUE(self$options$rc)) {
+            table <- self$results$rc
+            r <-  res$r
+            df <- res$df
+            p <- res$p
+            lower <-  res$CI[[1]]
+            upper <-   res$CI[[2]]
+            
+            row <- list()
+            row[['r']] <- r
+            row[['df']] <- df
+            row[['p']] <- p
+            row[['lower']] <- lower
+            row[['upper']] <- upper
+            table$setRow(rowNo = 1, values = row)
+          }
+          image <- self$results$plot
+          image$setState(res)
+        }
+        
+        # Cross correlation-----------------------
+        
+        if (isTRUE(self$options$cc) | isTRUE(self$options$plot1)) {
+          Measure1 <- as.vector(data[[dep]])
+          Measure2 <- as.vector(data[[covs]])
+          r <- stats::ccf(Measure1, Measure2, plot = FALSE)
+          
+          #self$results$text$setContent(res1)
+          
+          table <- self$results$cc
+          
+          res1 <- cbind(r[["lag"]], r[["acf"]])
+          res1 <- as.data.frame(res1)
+          names(res1) <- c("Lag", "Values")
+          
+          for (i in 1:nrow(res1)) {
+            row <- list()
+            row[['lag']] <- res1[i, 1]
+            row[['value']] <- res1[i, 2]
+            table$addRow(rowKey = i, values = row)
+          }
+          image1 <- self$results$plot1
+          image1$setState(r)
+        }
+      },
       
-      table<- self$results$rc
-      
-      r <-  res$r
-      df <- res$df
-      p <- res$p
-      lower <-  res$CI[[1]]
-      upper<-   res$CI[[2]]
-      
-      row <- list()
-      
-      row[['r']] <- r
-      row[['df']] <- df
-      row[['p']] <- p
-      row[['lower']] <- lower
-      row[['upper']] <- upper
-      
-      table$setRow(rowNo = 1, values = row)
-      
-    }
-    
-    image <- self$results$plot
-    image$setState(res) 
-     
-    }
-    
-    # Cross correlation-----------------------
-    
-    if(isTRUE(self$options$cc) | isTRUE(self$options$plot1)){
-    
-    Measure1 <- as.vector(data[[dep]])
-    Measure2 <- as.vector(data[[covs]])
-    r<- stats::ccf(Measure1, Measure2, plot = FALSE)
-    
-    #self$results$text$setContent(res1)  
-    
-    table <- self$results$cc
-    
-    res1<- cbind(r[["lag"]], r[["acf"]])
-    res1<- as.data.frame(res1)
-    names(res1) <- c("Lag", "Values")
-    
-    for (i in 1:nrow(res1)) {
-      
-      row <- list()
-      
-      row[['lag']] <- res1[i,1]
-      row[['value']] <- res1[i,2]
-      
-      table$addRow(rowKey = i, values = row)
-      
-    }
-    
-    
-    # names<- dimnames(res1)[[1]]
-    # 
-    # for (name in names) {
-    #   
-    #   row <- list()
-    #   
-    #   row[["lag"]]   <-  res1[name, 1]
-    #   row[["value"]] <-  res1[name, 2]
-    #   
-    #   table$addRow(rowKey=name, values=row)
-    #   
-    # }
-
-    
-    image1 <- self$results$plot1
-    image1$setState(r) 
-    
-    }
-    
-  },
-
-.plot = function(image, ...) {
-
-
-  if (is.null(image$state))
-    return(FALSE)
-
- rc <- image$state
-
-  #plot <- plot(cc)
- 
- plot<- plot(rc, overall = FALSE, lty = 1,lwd=3, 
-             xlab = self$options$dep,
-             ylab = self$options$covs)
- 
-
-  print(plot)
-  TRUE
-
-
-},
-
-.plot1 = function(image1, ...) {
-  
-  
-  if (is.null(image1$state))
-    return(FALSE)
-  
-  res11 <- image1$state
-  
-  plot1<- plot(res11)
-  
-  print(plot1)
-  TRUE
-  
-  
-}
-
-
+      .plot = function(image, ...) {
+        if (is.null(image$state))
+          return(FALSE)
+        rc <- image$state
+        plot <- plot(
+          rc,
+          overall = FALSE,
+          lty = 1,
+          lwd = 3,
+          xlab = self$options$dep,
+          ylab = self$options$covs
         )
-)
+        print(plot)
+        TRUE
+      },
+      
+      .plot1 = function(image1, ...) {
+        if (is.null(image1$state))
+          return(FALSE)
+        res11 <- image1$state
+        plot1 <- plot(res11)
+        print(plot1)
+        TRUE
+      }
+    )
+  )
