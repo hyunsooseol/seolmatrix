@@ -1,14 +1,12 @@
-
-
 raterClass <- if (requireNamespace('jmvcore'))
   R6::R6Class(
     "raterClass",
     inherit = raterBase,
     private = list(
       .htmlwidget = NULL,
-      # Add instance for HTMLWidget
+      
       .init = function() {
-        private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance
+        private$.htmlwidget <- HTMLWidget$new() 
         
         if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
@@ -41,8 +39,7 @@ raterClass <- if (requireNamespace('jmvcore'))
       
       .run = function() {
         if (is.null(self$options$vars) |
-            length(self$options$vars) < 2)
-          return()
+            length(self$options$vars) < 2) return()
         
         vars <- self$options$vars
         data <- self$data
@@ -78,6 +75,20 @@ raterClass <- if (requireNamespace('jmvcore'))
           row[['p']] <- p
           table$setRow(rowNo = 1, values = row)
         }
+        
+        # if (self$options$interrater) {
+        #   self$results$interrater$setRow(
+        #     rowNo = 1, 
+        #     values = list(
+        #       'N' = res$subjects,
+        #       'Raters' = res$raters,
+        #       'Kappa' = res$value,
+        #       'Z' = res$statistic,
+        #       'p' = res$p.value
+        #     )
+        #   )
+        # }
+
         # Fleiss' kappa================
         
         kap <- irr::kappam.fleiss(ratings = data)
@@ -107,6 +118,9 @@ raterClass <- if (requireNamespace('jmvcore'))
         # bootstrap of Fleiss' kappa------------
         
         if (isTRUE(self$options$bt)) {
+          
+          library(irr)
+          
           bt <- boot::boot(data, function(x, idx) {
             kappam.fleiss(x[idx, ])$value
           }, R = self$options$boot1)
@@ -122,6 +136,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         # Fleiss' Exact kappa-------------------
         
         if (isTRUE(self$options$ek)) {
+          
           kae <- irr::kappam.fleiss(ratings = data, exact = TRUE)
           
           # get subjects-------
@@ -140,6 +155,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         }
         # Category-wise Kappas -----------------
         if (isTRUE(self$options$cw)) {
+          
           cw <- irr::kappam.fleiss(ratings = data, detail = TRUE)
           c <- cw[["detail"]]
           names <- dimnames(c)[[1]]
@@ -178,6 +194,7 @@ raterClass <- if (requireNamespace('jmvcore'))
         # ICC TABLE--------------------
         
         if (isTRUE(self$options$icc)) {
+          
           ## compute icc table-------
           
           icc <- try(psy::icc(data = data))
@@ -221,6 +238,9 @@ raterClass <- if (requireNamespace('jmvcore'))
         # Bootstrap of ICC agreement table---------
         
         if (isTRUE(self$options$bicc)) {
+          
+          library(psy)
+          
           k <- try(boot::boot(data, function(x, idx) {
             icc(x[idx, ])$icc.agreement
           }, R = self$options$boot))
