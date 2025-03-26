@@ -215,6 +215,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         #######################################################
         tmp.ccc <- epi.ccc(data[[dep]], data[[covs]])
         ######################################################
+        if(self$options$cc){
         table <- self$results$table
         r <-  tmp.ccc$rho.c[[1]]
         lower <-  tmp.ccc$rho.c[[2]]
@@ -224,7 +225,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         row[['lower']] <- lower
         row[['upper']] <- upper
         table$setRow(rowNo = 1, values = row)
-        
+        }
         ## plot---------------------------------
         
         #tmp <- data.frame(data[[dep]], data[[covs]])
@@ -242,10 +243,11 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         dep <- data[[dep]]
         covs <- data[[covs]]
         
+        if(self$options$ccp){
         image <- self$results$plot
         state <- list(z, alpha, beta, tmp.lm, dep, covs)
         image$setState(state)
-        
+        }
         ## plot1-------------------------
         #tmp1 <- data.frame(mean = tmp.ccc$blalt[, 1], delta = tmp.ccc$blalt[, 2])
         
@@ -259,10 +261,11 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         dat <- tmp.ccc$sblalt
         
         #########
-        
+        if(self$options$bap){
         image1 <- self$results$plot1
         state <- list( est=est, lower=lower, upper=upper, mean=mean, delta=delta, dat=dat)
         image1$setState(state)
+        }
       },
       
       .plot1 = function(image1, ggtheme, theme, ...) {
