@@ -1,6 +1,4 @@
 
-
-
 concordanceClass <- if (requireNamespace('jmvcore'))
   R6::R6Class(
     "concordanceClass",
@@ -229,7 +227,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         
         ## plot---------------------------------
         
-        tmp <- data.frame(data[[dep]], data[[covs]])
+        #tmp <- data.frame(data[[dep]], data[[covs]])
         
         # tmp.lab <- data.frame(lab = paste("CCC: ",
         #                                   round(tmp.ccc$rho.c[,1], digits = 2), " (95% CI ",
@@ -243,13 +241,14 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         
         dep <- data[[dep]]
         covs <- data[[covs]]
-        image <- self$results$plot
         
-        state <- list(z, alpha, beta, tmp.lm, tmp, dep, covs)
+        image <- self$results$plot
+        state <- list(z, alpha, beta, tmp.lm, dep, covs)
         image$setState(state)
         
         ## plot1-------------------------
-        tmp1 <- data.frame(mean = tmp.ccc$blalt[, 1], delta = tmp.ccc$blalt[, 2])
+        #tmp1 <- data.frame(mean = tmp.ccc$blalt[, 1], delta = tmp.ccc$blalt[, 2])
+        
         est <- tmp.ccc$sblalt$est
         lower <- tmp.ccc$sblalt$lower
         upper <- tmp.ccc$sblalt$upper
@@ -262,7 +261,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         #########
         
         image1 <- self$results$plot1
-        state <- list(tmp1, est, lower, upper, mean, delta, dat)
+        state <- list( est=est, lower=lower, upper=upper, mean=mean, delta=delta, dat=dat)
         image1$setState(state)
       },
       
@@ -270,14 +269,23 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         if (is.null(image1$state))
           return(FALSE)
         
-        tmp1 <- image1$state[[1]]
-        est     <- image1$state[[2]]
-        lower  <- image1$state[[3]]
-        upper  <- image1$state[[4]]
-        mean <- image1$state[[5]]
-        delta <- image1$state[[6]]
-        dat <- image1$state[[7]]
+        est <- image1$state$est
+        lower <- image1$state$lower
+        upper <- image1$state$upper
+        mean <- image1$state$mean
+        delta <- image1$state$delta
+        dat <- image1$state$dat
         
+        tmp1 <- data.frame(mean = mean, delta = delta)
+        #tmp1 <- image1$state[[1]]
+        # est     <- image1$state[[2]]
+        # lower  <- image1$state[[3]]
+        # upper  <- image1$state[[4]]
+        # mean <- image1$state[[5]]
+        # delta <- image1$state[[6]]
+        # dat <- image1$state[[7]]
+        # 
+        library(ggplot2)
         plot1 <- ggplot2::ggplot(tmp1, aes(x = mean, y = delta)) +
           geom_point() +
           geom_hline(data = dat,
@@ -305,10 +313,12 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         alpha  <- image$state[[2]]
         beta  <- image$state[[3]]
         tmp.lm <- image$state[[4]]
-        tmp <- image$state[[5]]
-        dep <- image$state[[6]]
-        covs <- image$state[[7]]
+        dep <- image$state[[5]]
+        covs <- image$state[[6]]
         
+        tmp <- data.frame(dep, covs)
+        
+        library(ggplot2)
         plot <- ggplot2::ggplot(tmp, aes(x = dep, y = covs)) +
           geom_point() +
           geom_abline(intercept = 0, slope = 1) +
