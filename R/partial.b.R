@@ -270,7 +270,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         model <- self$options$model
         layout <- self$options$layout
         shape <- self$options$shape
-        plot <- qgraph(
+        plot <- qgraph::qgraph(
           df,
           graph = model,
           layout = layout,
