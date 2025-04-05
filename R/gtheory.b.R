@@ -25,17 +25,13 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           )
           
         ))
-        
-        
         if (isTRUE(self$options$plot1)) {
           width <- self$options$width
           height <- self$options$height
           self$results$plot1$setSize(width, height)
         }
-        
       },
-      
-      
+
       .run = function() {
         # g theory with R-----------
         
@@ -128,29 +124,38 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             colname.scores = dep
           )
           
-          # Univariate analysis----------
-          # G study table----------------
+          # Univariate analysis(G study)----------
+        if(isTRUE(self$options$g)){         
           
           table <- self$results$g
-          
           gstudy <- as.data.frame(gstudy.out)
           
-          var <- as.vector(gstudy[[2]])
-          percent <- as.vector(gstudy[[3]])
-          n <- as.vector(gstudy[[4]])
-          
-          items <- as.vector(gstudy[[1]])
-          
-          for (i in seq_along(items)) {
-            row <- list()
-            
-            row[["var"]] <- var[i]
-            row[["percent"]] <- percent[i]
-            row[["n"]] <- n[i]
-            
-            table$addRow(rowKey = items[i], values = row)
+          for (i in seq_len(nrow(gstudy))) {
+            table$addRow(
+              rowKey = gstudy[i, 1],
+              values = list(
+                var = gstudy[[2]][i],
+                percent = gstudy[[3]][i],
+                n = gstudy[[4]][i]
+              )
+            )
           }
-          
+          # var <- as.vector(gstudy[[2]])
+          # percent <- as.vector(gstudy[[3]])
+          # n <- as.vector(gstudy[[4]])
+          # 
+          # items <- as.vector(gstudy[[1]])
+          # 
+          # for (i in seq_along(items)) {
+          #   row <- list()
+          #   
+          #   row[["var"]] <- var[i]
+          #   row[["percent"]] <- percent[i]
+          #   row[["n"]] <- n[i]
+          #   
+          #   table$addRow(rowKey = items[i], values = row)
+          # }
+        }  
           #  Single observation study----------
           # how many raters do I need?
           # Example----------
@@ -174,74 +179,47 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           
           if (isTRUE(self$options$gmea)) {
             gmea <- gtheory::dstudy(gstudy.out, colname.objects = self$options$id)
-            
-            
-            # Measures of D study---------------
-            gen <- gmea$generalizability
-            depe <- gmea$dependability
-            uni <- gmea$var.universe
-            rel <- gmea$var.error.rel
-            abs <- gmea$var.error.abs
-            
+
             table <- self$results$gmea
-            
-            row <- list()
-            
-            row[['generalizability']] <- gen
-            row[['dependability']] <- depe
-            row[['universe']] <- uni
-            row[['relative']] <- rel
-            row[['absolute']] <- abs
-            
-            table$setRow(rowNo = 1, values = row)
-            
+            table$setRow(
+              rowNo = 1,
+              values = with(gmea, list(
+                generalizability = generalizability,
+                dependability = dependability,
+                universe = var.universe,
+                relative = var.error.rel,
+                absolute = var.error.abs
+              )))
           }
-          
-          # G study table(Variance components)----------------
-          
+            
+          # D study table(Variance components)----------------
+        if (isTRUE(self$options$d)){
           table <- self$results$d
-          
           dstudy <- as.data.frame(ds$components)
           
-          var <- as.vector(dstudy[[2]])
-          percent <- as.vector(dstudy[[3]])
-          n <- as.vector(dstudy[[4]])
-          
-          items <- as.vector(dstudy[[1]])
-          
-          for (i in seq_along(items)) {
-            row <- list()
-            
-            row[["var"]] <- var[i]
-            row[["percent"]] <- percent[i]
-            row[["n"]] <- n[i]
-            
-            table$addRow(rowKey = items[i], values = row)
-          }
-          
-          # self$results$text2$setContent(dstudy.out$generalizability)
-          
-          # Measures of D study---------------
-          gen <- ds$generalizability
-          depe <- ds$dependability
-          uni <- ds$var.universe
-          rel <- ds$var.error.rel
-          abs <- ds$var.error.abs
-          
-          
-          if (isTRUE(self$options$mea)) {
+          for (i in seq_len(nrow(dstudy))) {
+            table$addRow(
+              rowKey = dstudy[i, 1],
+              values = list(
+                var = dstudy[[2]][i],
+                percent = dstudy[[3]][i],
+                n = dstudy[[4]][i]
+              )
+            )
+            }}
+
+        if (isTRUE(self$options$mea)) {
             table <- self$results$mea
             
-            row <- list()
-            
-            row[['generalizability']] <- gen
-            row[['dependability']] <- depe
-            row[['universe']] <- uni
-            row[['relative']] <- rel
-            row[['absolute']] <- abs
-            
-            table$setRow(rowNo = 1, values = row)
-            
+            table$setRow(
+              rowNo = 1,
+              values = with(ds, list(
+                generalizability = generalizability,
+                dependability = dependability,
+                universe = var.universe,
+                relative = var.error.rel,
+                absolute = var.error.abs
+              )))
           }
           
           # D study plot(n=1)----------------
@@ -249,8 +227,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           # if(isTRUE(self$options$plot1)){
           
           if (length(self$options$facet) == 1) {
-            if (length(self$options$facet) > 1)
-              return()
+            if (length(self$options$facet) > 1) return()
             
             # m<- lme4::lmer(self$options$formula, data = data)
             # gmodel <- hemp::gstudy(m)
@@ -263,27 +240,17 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             #
             # image$setState(gmodel)
             #
-            
-            
             nf <- self$options$nf
             gco <- self$options$gco
-            # gen <- gmea$generalizability
-            # uni <- gmea$var.universe
-            # rel <- gmea$var.error.rel
-            
             gmea <- gtheory::dstudy(gstudy.out, colname.objects = self$options$id)
-            
-            tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel /
-                                                               nf))
+            tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel / nf))
             self$results$text$setContent(tex)
             
             if (!gco == FALSE) {
               tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.abs / nf))
               self$results$text$setContent(tex)
             }
-            
           }
-          
         }
         
         if (self$options$t == 'mul') {
@@ -315,19 +282,13 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
-            
             tab <- NULL
-            
             for (i in seq_along(1:ng)) {
               re <- as.data.frame.matrix(res[[i]][['components']])
               tab[[i]] <- re
             }
-            
             tab <- tab
-            
-            #--------------------------------------------------------------
             tables <- self$results$item
-            
             for (i in seq_along(1:ng)) {
               table <- tables[[i]]
               item <- tab[[i]]
@@ -343,21 +304,18 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                   )
                 )
             }
+       
           }
-          
           # G study: Observed variance and covariance matrix----------
           
           if (isTRUE(self$options$mat)) {
             mat <- g1$between$var.obs
             mat <- as.data.frame(mat)
-            
             names <- dimnames(mat)[[1]]
             dims <- dimnames(mat)[[2]]
             
             table <- self$results$mat
-            
-            # creating table----------------
-            
+
             for (dim in dims) {
               table$addColumn(name = paste0(dim), type = 'number')
             }
@@ -381,17 +339,12 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
-            
             tab <- NULL
-            
             for (i in seq_along(1:ng)) {
               re <- as.data.frame.matrix(res[[i]][['components']])
               tab[[i]] <- re
             }
-            
             tab <- tab
-            
-            #--------------------------------------------------------------
             tables <- self$results$itemd
             
             for (i in seq_along(1:ng)) {
@@ -419,11 +372,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             
             names <- dimnames(bmat)[[1]]
             dims <- dimnames(bmat)[[2]]
-            
             table <- self$results$bmat
-            
-            # creating table----------------
-            
+
             for (dim in dims) {
               table$addColumn(name = paste0(dim), type = 'number')
             }
@@ -436,69 +386,44 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               table$addRow(rowKey = name, values = row)
             }
           }
-          
-          
+
           # D study (Composite table)------------
           
           if (isTRUE(self$options$comp)) {
-            table <- self$results$comp
-            
-            # Measures of D study---------------
             gen <- as.vector(ds1$composite$generalizability)
             depe <- as.vector(ds1$composite$dependability)
             uni <- as.vector(ds1$composite$var.universe)
             rel <- as.vector(ds1$composite$var.error.rel)
             abs <- as.vector(ds1$composite$var.error.abs)
             
-            row <- list()
-            
-            row[['generalizability']] <- gen
-            row[['dependability']] <- depe
-            row[['universe']] <- uni
-            row[['relative']] <- rel
-            row[['absolute']] <- abs
-            
-            table$setRow(rowNo = 1, values = row)
-            
+            table <- self$results$comp
+            table$setRow(
+              rowNo = 1,
+              values = list(
+                generalizability = gen,
+                dependability = depe,
+                universe = uni,
+                relative = rel,
+                absolute = abs
+              ))
           }
-          
+
           if (isTRUE(self$options$bm)) {
-            table <- self$results$bm
-            
-            # measure---
-            gen <- ds1$between$generalizability
-            Generalizability <- diag(gen)
-            gen <- as.data.frame(Generalizability)
-            
-            dep <- ds1$between$dependability
-            Dependability <- diag(dep)
-            depe <- as.data.frame(Dependability)
-            
-            rel <- ds1$between$var.error.rel
-            Relative <- diag(rel)
-            rel <- as.data.frame(Relative)
-            
-            abs <- ds1$between$var.error.abs
-            Absolute <- diag(abs)
-            abs <- as.data.frame(Absolute)
-            
-            all <- data.frame(gen, depe, rel, abs)
-            #-----------
-            names <- dimnames(all)[[1]]
-            
-            for (name in names) {
-              row <- list()
+              table <- self$results$bm
+              all <- data.frame(
+                gen = diag(ds1$between$generalizability),
+                depe = diag(ds1$between$dependability),
+                rel = diag(ds1$between$var.error.rel),
+                abs = diag(ds1$between$var.error.abs)
+              )
               
-              row[['gen']] <- all[name, 1]
-              row[['depe']] <- all[name, 2]
-              row[['rel']] <- all[name, 3]
-              row[['abs']] <- all[name, 4]
-              
-              table$addRow(rowKey = name, values = row)
-              
+              for (i in seq_len(nrow(all))) {
+                table$addRow(
+                  rowKey = rownames(all)[i],
+                  values = as.list(all[i, ])
+                )
+              }
             }
-            
-          }
         }
       },
       ####################################################
@@ -512,8 +437,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
         #             g_coef = FALSE)
         
-        if (length(self$options$facet) > 1)
-          return()
+        if (length(self$options$facet) > 1) return()
         
         # hemp package---------
         
