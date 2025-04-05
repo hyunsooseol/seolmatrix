@@ -153,7 +153,8 @@ items:
           type: number
         - name: Raters
           type: number
-        - name: Agreement(%)
+        - name: Agreement
+          title: Agreement(%)
           type: number
 
     - name: icc
@@ -175,11 +176,14 @@ items:
           type: number
         - name: Raters
           type: number
-        - name: Subject variance
+        - name: sv
+          title: Subject variance
           type: number
-        - name: Rater variance
+        - name: rv
+          title: Rater variance
           type: number
-        - name: Residual variance
+        - name: rev
+          title: Residual variance
           type: number  
         - name: Consistency
           type: number

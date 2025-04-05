@@ -392,7 +392,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="Raters", 
                         `type`="number"),
                     list(
-                        `name`="Agreement(%)", 
+                        `name`="Agreement", 
+                        `title`="Agreement(%)", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -417,13 +418,16 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="Raters", 
                         `type`="number"),
                     list(
-                        `name`="Subject variance", 
+                        `name`="sv", 
+                        `title`="Subject variance", 
                         `type`="number"),
                     list(
-                        `name`="Rater variance", 
+                        `name`="rv", 
+                        `title`="Rater variance", 
                         `type`="number"),
                     list(
-                        `name`="Residual variance", 
+                        `name`="rev", 
+                        `title`="Residual variance", 
                         `type`="number"),
                     list(
                         `name`="Consistency", 

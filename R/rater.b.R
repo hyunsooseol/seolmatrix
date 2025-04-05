@@ -52,69 +52,64 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         # compute Light's Kappa-----
         
+        # res <- irr::kappam.light(ratings = data)
+        # 
+        # # get subjects-------
+        # n <- res$subjects
+        # # get raters--------
+        # rater <- res$raters
+        # # get statistic------------
+        # statistic <- res$value
+        # # z value----------------
+        # z <- res$statistic
+        # # p value-------------------
+        # p <- res$p.value
+        # 
+        # if (isTRUE(self$options$interrater)) {
+        #   table <- self$results$interrater
+        #   row <- list()
+        #   row[['N']] <- n
+        #   row[['Raters']] <- rater
+        #   row[['Kappa']] <- statistic
+        #   row[['Z']] <- z
+        #   row[['p']] <- p
+        #   table$setRow(rowNo = 1, values = row)
+        # }
+        # 
         res <- irr::kappam.light(ratings = data)
-        
-        # get subjects-------
-        n <- res$subjects
-        # get raters--------
-        rater <- res$raters
-        # get statistic------------
-        statistic <- res$value
-        # z value----------------
-        z <- res$statistic
-        # p value-------------------
-        p <- res$p.value
         
         if (isTRUE(self$options$interrater)) {
           table <- self$results$interrater
-          row <- list()
-          row[['N']] <- n
-          row[['Raters']] <- rater
-          row[['Kappa']] <- statistic
-          row[['Z']] <- z
-          row[['p']] <- p
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = with(res, list(
+              N = subjects,
+              Raters = raters,
+              Kappa = value,
+              Z = statistic,
+              p = p.value
+            ))
+          )
         }
         
-        # if (self$options$interrater) {
-        #   self$results$interrater$setRow(
-        #     rowNo = 1, 
-        #     values = list(
-        #       'N' = res$subjects,
-        #       'Raters' = res$raters,
-        #       'Kappa' = res$value,
-        #       'Z' = res$statistic,
-        #       'p' = res$p.value
-        #     )
-        #   )
-        # }
-
         # Fleiss' kappa================
         
         kap <- irr::kappam.fleiss(ratings = data)
         
-        # get subjects-------
-        nk <- kap$subjects
-        # get raters--------
-        raterk <- kap$raters
-        # get statistic------------
-        statistick <- kap$value
-        # z value----------------
-        zk <- kap$statistic
-        # p value-------------------
-        pk <- kap$p.value
-        
         if (isTRUE(self$options$fk)) {
           table <- self$results$fk
-          row <- list()
-          row[['N']] <- nk
-          row[['Raters']] <- raterk
-          row[['Kappa']] <- statistick
-          row[['Z']] <- zk
-          row[['p']] <- pk
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = with(kap, list(
+              N = subjects,
+              Raters = raters,
+              Kappa = value,
+              Z = statistic,
+              p = p.value
+            ))
+          )
         }
-        
+
         # bootstrap of Fleiss' kappa------------
         
         if (isTRUE(self$options$bt)) {
@@ -133,26 +128,24 @@ raterClass <- if (requireNamespace('jmvcore'))
           row[['upper']] <- bootci[3]
           table$setRow(rowNo = 1, values = row)
         }
-        # Fleiss' Exact kappa-------------------
+        
+        #  Exact kappa-------------------
         
         if (isTRUE(self$options$ek)) {
           
           kae <- irr::kappam.fleiss(ratings = data, exact = TRUE)
+            table <- self$results$ek
+            table$setRow(
+              rowNo = 1,
+              values = list(
+                N = kae$subjects,
+                Raters = kae$raters,
+                Kappa = kae$value  
+              )
+            )
+              }
           
-          # get subjects-------
-          nke <- kae$subjects
-          # get raters--------
-          raterke <- kae$raters
-          # get statistic------------
-          statisticke <- kae$value
-          
-          table <- self$results$ek
-          row <- list()
-          row[['N']] <- nke
-          row[['Raters']] <- raterke
-          row[['Kappa']] <- statisticke
-          table$setRow(rowNo = 1, values = row)
-        }
+                 
         # Category-wise Kappas -----------------
         if (isTRUE(self$options$cw)) {
           
@@ -168,71 +161,49 @@ raterClass <- if (requireNamespace('jmvcore'))
             table$addRow(rowKey = name, values = row)
           }
         }
-        #  Agreement Analysis------------
+
         # Simple Percentage agreement-------------------
         
         if (isTRUE(self$options$pa)) {
-          #tol <- self$options$tol
-          
           pa <- irr::agree(data)
-          
-          # get subjects-------
-          subjects <- pa$subjects
-          # get raters--------
-          raters <- pa$raters
-          # get statistic(%)------------
-          percent <- pa$value
-          
+
           table <- self$results$pa
-          row <- list()
-          row[['Subjects']] <- subjects
-          row[['Raters']] <- raters
-          row[['Agreement(%)']] <- percent
-          table$setRow(rowNo = 1, values = row)
-        }
+          table$setRow(
+            rowNo = 1,
+            values = with(pa, list(
+              Subjects = subjects,
+              Raters = raters,
+              Agreement = value
+             ))
+          )
+          }
         
         # ICC TABLE--------------------
         
         if (isTRUE(self$options$icc)) {
           
-          ## compute icc table-------
-          
+          # compute icc table-------
           icc <- try(psy::icc(data = data))
-          #----------------------------
-          
+         
           if (jmvcore::isError(icc)) {
             err_string <- stringr::str_interp("You can't perform this analysis with sentence-type data.")
             stop(err_string)
           }
           if (!jmvcore::isError(icc)) {
-            #subjects
-            ns <- icc$nb.subjects
-            #raters
-            nr <- icc$nb.raters
-            #subject variance
-            sv <- icc$subject.variance
-            #rater variance
-            rv <- icc$rater.variance
-            # residual variance
-            ev <- icc$residual
-            # consistency
-            ic <- icc$icc.consistency
-            # agreement
-            ia <- icc$icc.agreement
-            
-            # populate icc table-----
-            
             table <- self$results$icc
-            row <- list()
-            row[['Subjects']] <- ns
-            row[['Raters']] <- nr
-            row[['Subject variance']] <- sv
-            row[['Rater variance']] <- rv
-            row[['Residual variance']] <- ev
-            row[['Consistency']] <- ic
-            row[['Agreement']] <- ia
-            table$setRow(rowNo = 1, values = row)
-          }
+            table$setRow(
+              rowNo = 1,
+              values = with(icc, list(
+                Subjects = nb.subjects,
+                Raters = nb.raters,
+                sv = subject.variance,
+                rv = rater.variance,
+                rev= residual,
+                Consistency= icc.consistency,
+                Agreement= icc.agreement
+              )))
+    
+              }
         }
         
         # Bootstrap of ICC agreement table---------
@@ -244,64 +215,47 @@ raterClass <- if (requireNamespace('jmvcore'))
           k <- try(boot::boot(data, function(x, idx) {
             icc(x[idx, ])$icc.agreement
           }, R = self$options$boot))
-          #
-          #   ### To obtain 95% confidence interval---------
-          #
-          #   icc.boot <- function(data, x) {
-          #     icc(data[x, ])[[7]]
-          #   }
-          #
-          #   boot <- self$options$boot
-          #
-          #   bres <- try(boot::boot(data, icc.boot, boot))
-          #
+
           if (jmvcore::isError(k)) {
             err_string <- stringr::str_interp("You can't perform this analysis with sentence-type data.")
             stop(err_string)
           }
           
           if (!jmvcore::isError(k)) {
-            #
-            #   # two-sided bootstrapped confidence interval of icc (agreement)
-            #
-            # bicc <- quantile(bres$t, c(0.025, 0.975))
-            #
             bootci <- boot::boot.ci(k)
             bicc <- bootci$normal
             
             table <- self$results$bicc
-            row <- list()
-            row[['lower']] <- bicc[2]
-            row[['upper']] <- bicc[3]
-            table$setRow(rowNo = 1, values = row)
+            # row <- list()
+            # row[['lower']] <- bicc[2]
+            # row[['upper']] <- bicc[3]
+            # table$setRow(rowNo = 1, values = row)
+            table$setRow(
+              rowNo = 1,
+              values = list(
+                lower = bicc[2],
+                upper = bicc[3]
+              )
+            )
           }
         }
         
         # Kendall's W--------------------------
-        
         if (isTRUE(self$options$kend)) {
           ked <- irr::kendall(data, correct = TRUE)
-          
-          # get subjects-------
-          n <- ked$subjects
-          # get raters--------
-          rater <- ked$raters
-          # W------------
-          w <- ked$value
-          # chi value----------------
-          chi <- ked$statistic
-          # p value-------------------
-          p <- ked$p.value
-          
+
           table <- self$results$kend
-          row <- list()
-          row[['n']] <- n
-          row[['rater']] <- rater
-          row[['w']] <- w
-          row[['chi']] <- chi
-          row[['p']] <- p
-          table$setRow(rowNo = 1, values = row)
-        }
+          table$setRow(
+            rowNo = 1,
+            values = with(ked, list(
+              n = subjects,
+              rater = raters,
+              w = value,
+              chi = statistic,
+              p = p.value
+            )))
+          }
+        
         ########### icc using oneway and twoway----------
         
         model <- self$options$model
@@ -313,52 +267,41 @@ raterClass <- if (requireNamespace('jmvcore'))
                         model = model,
                         type = type,
                         unit = unit)
-        
-        #################################################
-        model <- out$model
-        type <- out$type
-        unit <- out$unit
-        sub <- out$subjects
-        raters <- out$raters
-        icc <- out$value
-        
-        ##############
-        # icc <- out$value
-        f <- out$Fvalue
-        df1 <- out$df1
-        df2 <- out$df2
-        p1 <- out$p.value
-        lower <- out$lbound
-        upper <- out$ubound
+
+        # icc for oneway and twoway table--------------
         
         if (isTRUE(self$options$ic)) {
-          # icc for oneway and twoway table--------------
           
           table <- self$results$ic
-          
-          row <- list()
-          row[['model']] <- model
-          row[['type']] <- type
-          row[['unit']] <- unit
-          row[['sub']] <- sub
-          row[['raters']] <- raters
-          row[['icc']] <- icc
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = with(out, list(
+              model = model,
+              type = type,
+              unit = unit,
+              sub = subjects,
+              raters = raters,
+              icc=value
+            )))
         }
+
+      # F test--------------------------
+        
         if (isTRUE(self$options$ftest)) {
-          # F test--------------------------
+          
           table <- self$results$ftest
           
-          row <- list()
-          row[['icc']] <- icc
-          row[['f']] <- f
-          row[['df1']] <- df1
-          row[['df2']] <- df2
-          row[['p1']] <- p1
-          row[['lower']] <- lower
-          row[['upper']] <- upper
-          
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = with(out, list(
+              icc = value,
+              f = Fvalue,
+              df1 = df1,
+              df2 = df2,
+              p1 = p.value,
+              lower = lbound,
+              upper=ubound
+            )))
         }
         
         
@@ -374,24 +317,16 @@ raterClass <- if (requireNamespace('jmvcore'))
           }
           #----------------------------------------------
           krip <- irr::kripp.alpha(data, method = method)
-          
-          # get subjects-------
-          nkrip <- krip$subjects
-          
-          # get raters--------
-          raterkrip <- krip$raters
-          
-          # get statistic------------
-          statistickrip <- krip$value
-          
-          #-----------------------------------
+
           table <- self$results$krip
           
-          row <- list()
-          row[['Subjects']] <- nkrip
-          row[['Raters']] <- raterkrip
-          row[['alpha']] <- statistickrip
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = with(krip, list(
+              Subjects = subjects,
+              Raters = raters,
+              alpha=value
+            )))
         }
       }
     )
