@@ -1,9 +1,5 @@
 
-
 #' @importFrom magrittr %>%
-
-
-
 ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
   R6::R6Class(
     "ahpsurveyClass",
@@ -114,42 +110,6 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           image <- self$results$plot1
           image$setState(error)
         }
-        
-        # if(self$options$plot2==TRUE){
-        #
-        #   thres <- 0.1
-        #   atts <- strsplit(self$options$atts, ',')[[1]]
-        #
-        #   cr <- data %>%
-        #     ahp.mat(atts, negconvert = T) %>%
-        #     ahp.cr(atts)
-        #
-        #
-        #   cr.df <- data %>%
-        #     ahp.mat(atts, negconvert = TRUE) %>%
-        #     ahp.cr(atts) %>%
-        #     data.frame() %>%
-        #     mutate(rowid = 1:length(cr), cr.dum = as.factor(ifelse(cr <= thres, 1, 0))) %>%
-        #     select(cr.dum, rowid)
-        #
-        #
-        #   cityahp <- data %>%
-        #     ahp.mat(atts, negconvert = T)
-        #
-        #   eigentrue <- ahp.indpref(cityahp, atts, method = "eigen")
-        #
-        #   d <- data %>%
-        #     ahpsurvey::ahp.mat(atts = atts, negconvert = TRUE) %>%
-        #     ahpsurvey::ahp.indpref(atts, method = "eigen") %>%
-        #     dplyr::mutate(rowid = 1:nrow(eigentrue)) %>%
-        #     dplyr::left_join(cr.df, by = 'rowid') %>%
-        #     tidyr::gather(atts, key = "var", value = "pref")
-        #
-        #   state<-list(d, cr)
-        #   image <- self$results$plot2
-        #   image$setState(state)
-        # }
-        #
         results <-
           list(
             'df' = df,
@@ -239,56 +199,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         print(plot1)
         TRUE
       },
-      
-      
-      # .plot2 = function(image,ggtheme, theme,...) {
-      #
-      #   if (is.null(image$state))
-      #     return(FALSE)
-      #
-      #   atts <- strsplit(self$options$atts, ',')[[1]]
-      #   thres <- 0.1
-      #
-      #   d <- image$state[[1]]
-      #   cr <- image$state[[2]]
-      #
-      #  plot2 <- d |> ggplot(aes(x = var, y = pref)) +
-      #     geom_violin(alpha = 0.6, width = 0.8, color = "transparent", fill = "gray") +
-      #     geom_jitter(alpha = 0.6, height = 0, width = 0.1, aes(color = cr.dum)) +
-      #     geom_boxplot(alpha = 0, width = 0.3, color = "#808080") +
-      #     scale_x_discrete("Attribute", label = atts) +
-      #     scale_y_continuous("Weight (dominant eigenvalue)",
-      #                        labels = scales::percent,
-      #                        breaks = c(seq(0,0.7,0.1))) +
-      #     guides(color=guide_legend(title=NULL))+
-      #     scale_color_discrete(breaks = c(0,1),
-      #                          labels = c(paste("CR >", thres),
-      #                                     paste("CR <", thres))) +
-      #     labs(NULL, caption = paste("n =", nrow(data), ",", "Mean CR =",
-      #                                round(mean(cr),3)))+
-      #     #theme_minimal()
-      #
-      #     theme(
-      #       axis.text.x = element_text(size = 12, color = "black")  # adjust size and darkness of x-axis text
-      #       #axis.text.x.bottom = element_text(angle = 90, hjust = 1)  # rotate x-axis text by 90 degrees
-      #     )
-      #
-      #   plot2+ggtheme
-      #
-      #     if (self$options$angle > 0) {
-      #     plot2 <- plot2 + ggplot2::theme(
-      #       axis.text.x = ggplot2::element_text(
-      #         angle = self$options$angle, hjust = 1
-      #       )
-      #     )
-      #   }
-      #
-      #
-      #   print(plot2)
-      #   TRUE
-      #
-      # },
-      
+
       ### Helper functions =================================
       
       .cleanData = function() {
@@ -309,3 +220,90 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       }
     )
   )
+
+# if(self$options$plot2==TRUE){
+#
+#   thres <- 0.1
+#   atts <- strsplit(self$options$atts, ',')[[1]]
+#
+#   cr <- data %>%
+#     ahp.mat(atts, negconvert = T) %>%
+#     ahp.cr(atts)
+#
+#
+#   cr.df <- data %>%
+#     ahp.mat(atts, negconvert = TRUE) %>%
+#     ahp.cr(atts) %>%
+#     data.frame() %>%
+#     mutate(rowid = 1:length(cr), cr.dum = as.factor(ifelse(cr <= thres, 1, 0))) %>%
+#     select(cr.dum, rowid)
+#
+#
+#   cityahp <- data %>%
+#     ahp.mat(atts, negconvert = T)
+#
+#   eigentrue <- ahp.indpref(cityahp, atts, method = "eigen")
+#
+#   d <- data %>%
+#     ahpsurvey::ahp.mat(atts = atts, negconvert = TRUE) %>%
+#     ahpsurvey::ahp.indpref(atts, method = "eigen") %>%
+#     dplyr::mutate(rowid = 1:nrow(eigentrue)) %>%
+#     dplyr::left_join(cr.df, by = 'rowid') %>%
+#     tidyr::gather(atts, key = "var", value = "pref")
+#
+#   state<-list(d, cr)
+#   image <- self$results$plot2
+#   image$setState(state)
+# }
+#
+
+
+
+# .plot2 = function(image,ggtheme, theme,...) {
+#
+#   if (is.null(image$state))
+#     return(FALSE)
+#
+#   atts <- strsplit(self$options$atts, ',')[[1]]
+#   thres <- 0.1
+#
+#   d <- image$state[[1]]
+#   cr <- image$state[[2]]
+#
+#  plot2 <- d |> ggplot(aes(x = var, y = pref)) +
+#     geom_violin(alpha = 0.6, width = 0.8, color = "transparent", fill = "gray") +
+#     geom_jitter(alpha = 0.6, height = 0, width = 0.1, aes(color = cr.dum)) +
+#     geom_boxplot(alpha = 0, width = 0.3, color = "#808080") +
+#     scale_x_discrete("Attribute", label = atts) +
+#     scale_y_continuous("Weight (dominant eigenvalue)",
+#                        labels = scales::percent,
+#                        breaks = c(seq(0,0.7,0.1))) +
+#     guides(color=guide_legend(title=NULL))+
+#     scale_color_discrete(breaks = c(0,1),
+#                          labels = c(paste("CR >", thres),
+#                                     paste("CR <", thres))) +
+#     labs(NULL, caption = paste("n =", nrow(data), ",", "Mean CR =",
+#                                round(mean(cr),3)))+
+#     #theme_minimal()
+#
+#     theme(
+#       axis.text.x = element_text(size = 12, color = "black")  # adjust size and darkness of x-axis text
+#       #axis.text.x.bottom = element_text(angle = 90, hjust = 1)  # rotate x-axis text by 90 degrees
+#     )
+#
+#   plot2+ggtheme
+#
+#     if (self$options$angle > 0) {
+#     plot2 <- plot2 + ggplot2::theme(
+#       axis.text.x = ggplot2::element_text(
+#         angle = self$options$angle, hjust = 1
+#       )
+#     )
+#   }
+#
+#
+#   print(plot2)
+#   TRUE
+#
+# },
+

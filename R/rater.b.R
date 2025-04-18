@@ -4,14 +4,19 @@ raterClass <- if (requireNamespace('jmvcore'))
     inherit = raterBase,
     private = list(
       .htmlwidget = NULL,
+      .cachedResults = NULL,
+      .transformedData = NULL,
       
       .init = function() {
+        # Initialize cache
+        private$.cachedResults <- list()
+        
         private$.htmlwidget <- HTMLWidget$new() 
         
         if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
-          
         }
+        
         self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
           title = "Instructions",
           content = paste(
@@ -20,9 +25,10 @@ raterClass <- if (requireNamespace('jmvcore'))
             '<ul>',
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
-            
           )
         ))
+        
+        # Set notes once at initialization
         if (self$options$ftest)
           self$results$ftest$setNote("Note", "H\u2090: ICC = 0; H\u2081: ICC > 0")
         
@@ -34,51 +40,58 @@ raterClass <- if (requireNamespace('jmvcore'))
         
         if (self$options$kend)
           self$results$kend$setNote("Note", "H\u2090: W=0")
+      },
+      
+      # Helper function to get and prepare data only once
+      .getData = function() {
+        if (!is.null(private$.transformedData))
+          return(private$.transformedData)
         
+        if (is.null(self$options$vars) || length(self$options$vars) < 2)
+          return(NULL)
+        
+        data <- jmvcore::naOmit(self$data)
+        
+        # Transform data if needed
+        if (self$options$t == "row") {
+          data <- t(data)
+        }
+        
+        # Convert to matrix once
+        private$.transformedData <- as.matrix(data)
+        return(private$.transformedData)
+      },
+      
+      # Cache-aware computation function
+      .compute = function(key, computeFn) {
+        if (!is.null(private$.cachedResults[[key]])) {
+          return(private$.cachedResults[[key]])
+        }
+        
+        result <- computeFn()
+        private$.cachedResults[[key]] <- result
+        return(result)
       },
       
       .run = function() {
-        if (is.null(self$options$vars) |
-            length(self$options$vars) < 2) return()
+        data <- private$.getData()
+        if (is.null(data)) return()
         
-        vars <- self$options$vars
-        data <- self$data
-        data <- jmvcore::naOmit(data)
-        #------------------------------------
-        if (self$options$t == "row") {
-          data <- t(data)
-          data <- as.matrix(data)
+        # Load required libraries at the beginning
+        if (any(c(self$options$bt, self$options$bicc))) {
+          requireNamespace("boot", quietly = TRUE)
         }
         
-        # compute Light's Kappa-----
+        if (self$options$icc) {
+          requireNamespace("psy", quietly = TRUE)
+        }
         
-        # res <- irr::kappam.light(ratings = data)
-        # 
-        # # get subjects-------
-        # n <- res$subjects
-        # # get raters--------
-        # rater <- res$raters
-        # # get statistic------------
-        # statistic <- res$value
-        # # z value----------------
-        # z <- res$statistic
-        # # p value-------------------
-        # p <- res$p.value
-        # 
-        # if (isTRUE(self$options$interrater)) {
-        #   table <- self$results$interrater
-        #   row <- list()
-        #   row[['N']] <- n
-        #   row[['Raters']] <- rater
-        #   row[['Kappa']] <- statistic
-        #   row[['Z']] <- z
-        #   row[['p']] <- p
-        #   table$setRow(rowNo = 1, values = row)
-        # }
-        # 
-        res <- irr::kappam.light(ratings = data)
-        
+        # Compute Light's Kappa
         if (isTRUE(self$options$interrater)) {
+          res <- private$.compute("light_kappa", function() {
+            irr::kappam.light(ratings = data)
+          })
+          
           table <- self$results$interrater
           table$setRow(
             rowNo = 1,
@@ -92,11 +105,12 @@ raterClass <- if (requireNamespace('jmvcore'))
           )
         }
         
-        # Fleiss' kappa================
-        
-        kap <- irr::kappam.fleiss(ratings = data)
-        
+        # Fleiss' kappa
         if (isTRUE(self$options$fk)) {
+          kap <- private$.compute("fleiss_kappa", function() {
+            irr::kappam.fleiss(ratings = data)
+          })
+          
           table <- self$results$fk
           table$setRow(
             rowNo = 1,
@@ -109,50 +123,55 @@ raterClass <- if (requireNamespace('jmvcore'))
             ))
           )
         }
-
-        # bootstrap of Fleiss' kappa------------
         
+        # Bootstrap of Fleiss' kappa
         if (isTRUE(self$options$bt)) {
+          bt_results <- private$.compute(paste0("fleiss_bootstrap_", self$options$boot1), function() {
+            bt <- boot::boot(data, function(x, idx) {
+              irr::kappam.fleiss(x[idx, ])$value
+            }, R = self$options$boot1)
+            
+            bootci <- boot::boot.ci(bt)
+            return(bootci$normal)
+          })
           
-          library(irr)
-          
-          bt <- boot::boot(data, function(x, idx) {
-            kappam.fleiss(x[idx, ])$value
-          }, R = self$options$boot1)
-          
-          bootci <- boot::boot.ci(bt)
-          bootci <- bootci$normal
           table <- self$results$bt
-          row <- list()
-          row[['lower']] <- bootci[2]
-          row[['upper']] <- bootci[3]
-          table$setRow(rowNo = 1, values = row)
+          table$setRow(
+            rowNo = 1,
+            values = list(
+              lower = bt_results[2],
+              upper = bt_results[3]
+            )
+          )
         }
         
-        #  Exact kappa-------------------
-        
+        # Exact kappa
         if (isTRUE(self$options$ek)) {
+          kae <- private$.compute("exact_kappa", function() {
+            irr::kappam.fleiss(ratings = data, exact = TRUE)
+          })
           
-          kae <- irr::kappam.fleiss(ratings = data, exact = TRUE)
-            table <- self$results$ek
-            table$setRow(
-              rowNo = 1,
-              values = list(
-                N = kae$subjects,
-                Raters = kae$raters,
-                Kappa = kae$value  
-              )
+          table <- self$results$ek
+          table$setRow(
+            rowNo = 1,
+            values = list(
+              N = kae$subjects,
+              Raters = kae$raters,
+              Kappa = kae$value  
             )
-              }
-          
-                 
-        # Category-wise Kappas -----------------
+          )
+        }
+        
+        # Category-wise Kappas
         if (isTRUE(self$options$cw)) {
+          cw_results <- private$.compute("category_kappa", function() {
+            irr::kappam.fleiss(ratings = data, detail = TRUE)
+          })
           
-          cw <- irr::kappam.fleiss(ratings = data, detail = TRUE)
-          c <- cw[["detail"]]
+          c <- cw_results[["detail"]]
           names <- dimnames(c)[[1]]
           table <- self$results$cw
+          
           for (name in names) {
             row <- list()
             row[['k']] <- c[name, 1]
@@ -161,12 +180,13 @@ raterClass <- if (requireNamespace('jmvcore'))
             table$addRow(rowKey = name, values = row)
           }
         }
-
-        # Simple Percentage agreement-------------------
         
+        # Simple Percentage agreement
         if (isTRUE(self$options$pa)) {
-          pa <- irr::agree(data)
-
+          pa <- private$.compute("percent_agreement", function() {
+            irr::agree(data)
+          })
+          
           table <- self$results$pa
           table$setRow(
             rowNo = 1,
@@ -174,76 +194,79 @@ raterClass <- if (requireNamespace('jmvcore'))
               Subjects = subjects,
               Raters = raters,
               Agreement = value
-             ))
+            ))
           )
-          }
-        
-        # ICC TABLE--------------------
-        
-        if (isTRUE(self$options$icc)) {
-          
-          # compute icc table-------
-          icc <- try(psy::icc(data = data))
-         
-          if (jmvcore::isError(icc)) {
-            err_string <- stringr::str_interp("You can't perform this analysis with sentence-type data.")
-            stop(err_string)
-          }
-          if (!jmvcore::isError(icc)) {
-            table <- self$results$icc
-            table$setRow(
-              rowNo = 1,
-              values = with(icc, list(
-                Subjects = nb.subjects,
-                Raters = nb.raters,
-                sv = subject.variance,
-                rv = rater.variance,
-                rev= residual,
-                Consistency= icc.consistency,
-                Agreement= icc.agreement
-              )))
-    
-              }
         }
         
-        # Bootstrap of ICC agreement table---------
+        # ICC TABLE
+        if (isTRUE(self$options$icc)) {
+          # Only try to compute if not already cached
+          icc_key <- "psy_icc"
+          if (is.null(private$.cachedResults[[icc_key]])) {
+            icc <- try(psy::icc(data = data))
+            
+            if (jmvcore::isError(icc)) {
+              err_string <- "You can't perform this analysis with sentence-type data."
+              stop(err_string)
+            }
+            
+            private$.cachedResults[[icc_key]] <- icc
+          } 
+          
+          icc <- private$.cachedResults[[icc_key]]
+          
+          table <- self$results$icc
+          table$setRow(
+            rowNo = 1,
+            values = with(icc, list(
+              Subjects = nb.subjects,
+              Raters = nb.raters,
+              sv = subject.variance,
+              rv = rater.variance,
+              rev = residual,
+              Consistency = icc.consistency,
+              Agreement = icc.agreement
+            ))
+          )
+        }
         
+        # Bootstrap of ICC agreement table
         if (isTRUE(self$options$bicc)) {
+          bicc_key <- paste0("icc_bootstrap_", self$options$boot)
           
-          library(psy)
-          
-          k <- try(boot::boot(data, function(x, idx) {
-            icc(x[idx, ])$icc.agreement
-          }, R = self$options$boot))
-
-          if (jmvcore::isError(k)) {
-            err_string <- stringr::str_interp("You can't perform this analysis with sentence-type data.")
-            stop(err_string)
-          }
-          
-          if (!jmvcore::isError(k)) {
+          if (is.null(private$.cachedResults[[bicc_key]])) {
+            k <- try(boot::boot(data, function(x, idx) {
+              psy::icc(x[idx, ])$icc.agreement
+            }, R = self$options$boot))
+            
+            if (jmvcore::isError(k)) {
+              err_string <- "You can't perform this analysis with sentence-type data."
+              stop(err_string)
+            }
+            
             bootci <- boot::boot.ci(k)
             bicc <- bootci$normal
-            
-            table <- self$results$bicc
-            # row <- list()
-            # row[['lower']] <- bicc[2]
-            # row[['upper']] <- bicc[3]
-            # table$setRow(rowNo = 1, values = row)
-            table$setRow(
-              rowNo = 1,
-              values = list(
-                lower = bicc[2],
-                upper = bicc[3]
-              )
-            )
+            private$.cachedResults[[bicc_key]] <- bicc
           }
+          
+          bicc <- private$.cachedResults[[bicc_key]]
+          
+          table <- self$results$bicc
+          table$setRow(
+            rowNo = 1,
+            values = list(
+              lower = bicc[2],
+              upper = bicc[3]
+            )
+          )
         }
         
-        # Kendall's W--------------------------
+        # Kendall's W
         if (isTRUE(self$options$kend)) {
-          ked <- irr::kendall(data, correct = TRUE)
-
+          ked <- private$.compute("kendall", function() {
+            irr::kendall(data, correct = TRUE)
+          })
+          
           table <- self$results$kend
           table$setRow(
             rowNo = 1,
@@ -253,81 +276,88 @@ raterClass <- if (requireNamespace('jmvcore'))
               w = value,
               chi = statistic,
               p = p.value
-            )))
+            ))
+          )
+        }
+        
+        # ICC using oneway and twoway
+        if (isTRUE(self$options$ic) || isTRUE(self$options$ftest)) {
+          model <- self$options$model
+          type <- self$options$type
+          unit <- self$options$unit
+          
+          icc_key <- paste("irr_icc", model, type, unit, sep = "_")
+          out <- private$.compute(icc_key, function() {
+            irr::icc(data, model = model, type = type, unit = unit)
+          })
+          
+          # ICC for oneway and twoway table
+          if (isTRUE(self$options$ic)) {
+            table <- self$results$ic
+            table$setRow(
+              rowNo = 1,
+              values = with(out, list(
+                model = model,
+                type = type,
+                unit = unit,
+                sub = subjects,
+                raters = raters,
+                icc = value
+              ))
+            )
           }
-        
-        ########### icc using oneway and twoway----------
-        
-        model <- self$options$model
-        type <- self$options$type
-        unit <- self$options$unit
-        
-        ###################################################
-        out <- irr::icc(data,
-                        model = model,
-                        type = type,
-                        unit = unit)
-
-        # icc for oneway and twoway table--------------
-        
-        if (isTRUE(self$options$ic)) {
           
-          table <- self$results$ic
-          table$setRow(
-            rowNo = 1,
-            values = with(out, list(
-              model = model,
-              type = type,
-              unit = unit,
-              sub = subjects,
-              raters = raters,
-              icc=value
-            )))
-        }
-
-      # F test--------------------------
-        
-        if (isTRUE(self$options$ftest)) {
-          
-          table <- self$results$ftest
-          
-          table$setRow(
-            rowNo = 1,
-            values = with(out, list(
-              icc = value,
-              f = Fvalue,
-              df1 = df1,
-              df2 = df2,
-              p1 = p.value,
-              lower = lbound,
-              upper=ubound
-            )))
+          # F test
+          if (isTRUE(self$options$ftest)) {
+            table <- self$results$ftest
+            table$setRow(
+              rowNo = 1,
+              values = with(out, list(
+                icc = value,
+                f = Fvalue,
+                df1 = df1,
+                df2 = df2,
+                p1 = p.value,
+                lower = lbound,
+                upper = ubound
+              ))
+            )
+          }
         }
         
-        
+        # Krippendorff's alpha
         if (isTRUE(self$options$krip)) {
           method <- self$options$method
           
+          # Prepare data for Krippendorff's alpha
+          krip_data <- data
           if (self$options$t != "row") {
-            data <- t(data)
-            data <- as.matrix(data)
+            krip_data <- t(krip_data)
           } else if (self$options$t == "row") {
-            data <- t(data)
-            data <- as.matrix(data)
+            krip_data <- t(krip_data)
           }
-          #----------------------------------------------
-          krip <- irr::kripp.alpha(data, method = method)
-
-          table <- self$results$krip
           
+          krip_key <- paste("krippendorff", method, sep = "_")
+          krip <- private$.compute(krip_key, function() {
+            irr::kripp.alpha(as.matrix(krip_data), method = method)
+          })
+          
+          table <- self$results$krip
           table$setRow(
             rowNo = 1,
             values = with(krip, list(
               Subjects = subjects,
               Raters = raters,
-              alpha=value
-            )))
+              alpha = value
+            ))
+          )
         }
+      },
+      
+      # Add a cleanup method to clear caches when needed
+      .clearCache = function() {
+        private$.cachedResults <- list()
+        private$.transformedData <- NULL
       }
     )
   )

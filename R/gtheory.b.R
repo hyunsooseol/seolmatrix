@@ -5,13 +5,22 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     inherit = gtheoryBase,
     private = list(
       .htmlwidget = NULL,
+      
+      .cachedData = NULL,
+      .cachedResults = NULL,
+      .dataKey = NULL,
+      
       .init = function() {
+        private$.cachedResults <- list()
+        private$.cachedData <- NULL
+        private$.dataKey <- NULL
+        
         private$.htmlwidget <- HTMLWidget$new()
         
         if (is.null(self$data) | is.null(self$options$facet)) {
           self$results$instructions$setVisible(visible = TRUE)
-          
         }
+        
         self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
           title = "Instructions",
           content = paste(
@@ -21,165 +30,110 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             '<li>Perform Univariate or Multivariate Generalizability theory based on <b>gtheory</b> R package.</li>',
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
-            
           )
-          
         ))
+        
         if (isTRUE(self$options$plot1)) {
           width <- self$options$width
           height <- self$options$height
           self$results$plot1$setSize(width, height)
         }
       },
-
+      
+      .getData = function() {
+        currentDataKey <- paste(
+          paste(self$options$dep, collapse = "_"),
+          paste(self$options$id, collapse = "_"),
+          paste(self$options$facet, collapse = "_"),
+          sep = "||"
+        )
+        
+        if (!is.null(private$.cachedData) && private$.dataKey == currentDataKey) {
+          return(private$.cachedData)
+        }
+        
+        if (is.null(self$options$dep) || is.null(self$options$id) || is.null(self$options$facet)) {
+          return(NULL)
+        }
+        
+        data <- self$data
+        data <- na.omit(data)
+        data <- as.data.frame(data)
+        
+        private$.cachedData <- data
+        private$.dataKey <- currentDataKey
+        
+        return(data)
+      },
+      
+      .computeWithCache = function(key, computeFn) {
+        if (!is.null(private$.cachedResults[[key]])) {
+          return(private$.cachedResults[[key]])
+        }
+        
+        result <- computeFn()
+        private$.cachedResults[[key]] <- result
+        return(result)
+      },
+      
       .run = function() {
-        # g theory with R-----------
-        
-        # library(gtheory)
-        # data(Brennan.3.2)
-        # data <- Brennan.3.2
-        #
-        # formula <- "Score ~ (1 | Person) + (1 | Task) +
-        # (1 | Rater:Task) +
-        # (1 | Person:Task)"
-        # gstudy.out <- gtheory::gstudy(data = data,
-        #                               colname.objects = "Person",
-        #                               formula = formula)
-        # coef<- dstudy(gstudy.out, colname.objects = "Person",
-        #               data = data, colname.scores = "Score")
-        #
-        # data(Rajaratnam.2)
-        
-        # Multivariate example----
-        # library(gtheory)
-        # data(Rajaratnam.2)
-        # formula.Rajaratnam.2 <- "Score ~ (1 | Person) + (1 | Item)"
-        # g<- gstudy(data = Rajaratnam.2, formula = formula.Rajaratnam.2,
-        #            colname.strata = "Subtest",
-        #            colname.objects = "Person")
-        #
-        # ds<- dstudy(g, colname.objects = "Person", data = Rajaratnam.2, colname.scores = "Score",
-        #             colname.strata = "Subtest")
-        
-        #-------------------------
-        
-        if (is.null(self$options$dep) ||
-            is.null(self$options$id) ||
-            is.null(self$options$facet))
-          return()
-        
+        data <- private$.getData()
+        if (is.null(data)) return()
         
         dep <- self$options$dep
         id <- self$options$id
         sub <- self$options$sub
         facets <- self$options$facet
         
-        data <- self$data
-        data <- na.omit(data)
-        data <- as.data.frame(data)
-        
         ###### Generalizability theory--------------------
-        
-        # facet <- self$options$facet
-        
-        # Formula Example----------------------
-        # formula <- "value ~ (1 | subject) +(1 | rater) + (1 | task) +
-        # (1 | subject:rater) +
-        # (1 | rater:task) +
-        # (1 | subject:task)"
-        
-        # Example----------
-        # vars <- c('A', 'B', 'C')  # you'll populate this from self$options$...
-        # response <- 'bruce'
-        # fmla <- as.formula(paste0(jmvcore::composeTerm(response), '~', paste(jmvcore::composeTerms(vars), collapse='*')))
-        # trms <- attr(terms(fmla), 'term.labels')
-        # trms[1:6] #example---
-        # funnyTerms <- paste0('(1|', trms, ')')
-        # finalFmla <- paste0(jmvcore::composeTerm(response), '~', paste(funnyTerms, collapse='+'))
-        # finalFmla
-        #
-        #
-        # vars <- c(self$options$id, self$options$facet)
-        # response <- self$options$dep
-        # fmla <- as.formula(paste0(jmvcore::composeTerm(response), '~', paste(jmvcore::composeTerms(vars), collapse='*')))
-        # trms <- attr(terms(fmla), 'term.labels')
-        # funnyTerms <- paste0('(1|', trms, ')')
-        # formula <- paste0(jmvcore::composeTerm(response), '~', paste(funnyTerms, collapse='+'))
-        #
-        #
-        # self$results$text1$setContent(formula)
-        #
-        
-        #------------------------------------------------
         
         if (self$options$t == 'uni') {
           formula <- self$options$formula
           
-          gstudy.out <- gtheory::gstudy(data = data, formula = formula)
+          gstudy.out <- private$.computeWithCache(
+            paste("gstudy", formula, sep = "_"),
+            function() {
+              gtheory::gstudy(data = data, formula = formula)
+            }
+          )
           
-          ds <- gtheory::dstudy(
-            gstudy.out,
-            colname.objects = id,
-            data = data,
-            colname.scores = dep
+          ds <- private$.computeWithCache(
+            paste("dstudy", formula, id, dep, sep = "_"),
+            function() {
+              gtheory::dstudy(
+                gstudy.out,
+                colname.objects = id,
+                data = data,
+                colname.scores = dep
+              )
+            }
           )
           
           # Univariate analysis(G study)----------
-        if(isTRUE(self$options$g)){         
-          
-          table <- self$results$g
-          gstudy <- as.data.frame(gstudy.out)
-          
-          for (i in seq_len(nrow(gstudy))) {
-            table$addRow(
-              rowKey = gstudy[i, 1],
-              values = list(
-                var = gstudy[[2]][i],
-                percent = gstudy[[3]][i],
-                n = gstudy[[4]][i]
+          if(isTRUE(self$options$g)) {
+            table <- self$results$g
+            gstudy <- as.data.frame(gstudy.out)
+            
+            for (i in seq_len(nrow(gstudy))) {
+              table$addRow(
+                rowKey = gstudy[i, 1],
+                values = list(
+                  var = gstudy[[2]][i],
+                  percent = gstudy[[3]][i],
+                  n = gstudy[[4]][i]
+                )
               )
-            )
+            }
           }
-          # var <- as.vector(gstudy[[2]])
-          # percent <- as.vector(gstudy[[3]])
-          # n <- as.vector(gstudy[[4]])
-          # 
-          # items <- as.vector(gstudy[[1]])
-          # 
-          # for (i in seq_along(items)) {
-          #   row <- list()
-          #   
-          #   row[["var"]] <- var[i]
-          #   row[["percent"]] <- percent[i]
-          #   row[["n"]] <- n[i]
-          #   
-          #   table$addRow(rowKey = items[i], values = row)
-          # }
-        }  
-          #  Single observation study----------
-          # how many raters do I need?
-          # Example----------
-          #source: https://rpubs.com/YanweXu/672524
-          
-          # library(gtheory)
-          # Rating <- read.csv("univariate.csv")
-          # varComp <- gstudy(Rating, score ~ (1|ID) + (1|rater))
-          #
-          # r1 <- dstudy(varComp, colname.objects = "ID")
-          # r1$components
-          # r1$generalizability
-          #
-          # how many rater do I need ?
-          
-          # k <- 1
-          # r1 <- r1$var.universe/(r1$var.universe + (r1$var.error.rel/k))
-          # r1
-          # k<-12
-          # 0.62/(0.62 +2.787/12)
           
           if (isTRUE(self$options$gmea)) {
-            gmea <- gtheory::dstudy(gstudy.out, colname.objects = self$options$id)
-
+            gmea <- private$.computeWithCache(
+              paste("gmea", formula, id, sep = "_"),
+              function() {
+                gtheory::dstudy(gstudy.out, colname.objects = id)
+              }
+            )
+            
             table <- self$results$gmea
             table$setRow(
               rowNo = 1,
@@ -189,26 +143,28 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 universe = var.universe,
                 relative = var.error.rel,
                 absolute = var.error.abs
-              )))
-          }
-            
-          # D study table(Variance components)----------------
-        if (isTRUE(self$options$d)){
-          table <- self$results$d
-          dstudy <- as.data.frame(ds$components)
-          
-          for (i in seq_len(nrow(dstudy))) {
-            table$addRow(
-              rowKey = dstudy[i, 1],
-              values = list(
-                var = dstudy[[2]][i],
-                percent = dstudy[[3]][i],
-                n = dstudy[[4]][i]
-              )
+              ))
             )
-            }}
-
-        if (isTRUE(self$options$mea)) {
+          }
+          
+          # D study table(Variance components)----------------
+          if (isTRUE(self$options$d)) {
+            table <- self$results$d
+            dstudy <- as.data.frame(ds$components)
+            
+            for (i in seq_len(nrow(dstudy))) {
+              table$addRow(
+                rowKey = dstudy[i, 1],
+                values = list(
+                  var = dstudy[[2]][i],
+                  percent = dstudy[[3]][i],
+                  n = dstudy[[4]][i]
+                )
+              )
+            }
+          }
+          
+          if (isTRUE(self$options$mea)) {
             table <- self$results$mea
             
             table$setRow(
@@ -219,30 +175,24 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 universe = var.universe,
                 relative = var.error.rel,
                 absolute = var.error.abs
-              )))
+              ))
+            )
           }
           
           # D study plot(n=1)----------------
-          
-          # if(isTRUE(self$options$plot1)){
-          
           if (length(self$options$facet) == 1) {
             if (length(self$options$facet) > 1) return()
             
-            # m<- lme4::lmer(self$options$formula, data = data)
-            # gmodel <- hemp::gstudy(m)
-            # #self$results$text$setContent(gmodel)
-            # image <- self$results$plot1
-            #
-            # nvars <- length(1:self$options$nf)
-            # width <- 400 + nvars * 15
-            # image$setSize(width, 400)
-            #
-            # image$setState(gmodel)
-            #
             nf <- self$options$nf
             gco <- self$options$gco
-            gmea <- gtheory::dstudy(gstudy.out, colname.objects = self$options$id)
+            
+            gmea <- private$.computeWithCache(
+              paste("gmea", formula, id, sep = "_"),
+              function() {
+                gtheory::dstudy(gstudy.out, colname.objects = id)
+              }
+            )
+            
             tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel / nf))
             self$results$text$setContent(tex)
             
@@ -254,31 +204,38 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
         
         if (self$options$t == 'mul') {
-          #-------------------------------------------------------------
           formula1 <- self$options$formula1
           
-          g1 <- gtheory::gstudy(
-            data = data,
-            formula = formula1,
-            colname.strata = self$options$sub,
-            colname.objects = self$options$id
+          g1 <- private$.computeWithCache(
+            paste("mul_gstudy", formula1, id, sub, sep = "_"), 
+            function() {
+              gtheory::gstudy(
+                data = data,
+                formula = formula1,
+                colname.strata = sub,
+                colname.objects = id
+              )
+            }
           )
           
-          ds1 <- gtheory::dstudy(
-            g1,
-            colname.objects = id,
-            colname.strata = sub,
-            data = data,
-            colname.scores = dep
+          ds1 <- private$.computeWithCache(
+            paste("mul_dstudy", formula1, id, sub, dep, sep = "_"),
+            function() {
+              gtheory::dstudy(
+                g1,
+                colname.objects = id,
+                colname.strata = sub,
+                data = data,
+                colname.scores = dep
+              )
+            }
           )
-          #-----------------------------------------------------
-          # self$results$text$setContent(ds1)
           
           if (isTRUE(self$options$item)) {
             ng <- self$options$ng
             res <- list()
             
-            for (i in  seq_along(1:ng)) {
+            for (i in seq_along(1:ng)) {
               res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
@@ -304,10 +261,9 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                   )
                 )
             }
-       
           }
-          # G study: Observed variance and covariance matrix----------
           
+          # G study: Observed variance and covariance matrix----------
           if (isTRUE(self$options$mat)) {
             mat <- g1$between$var.obs
             mat <- as.data.frame(mat)
@@ -315,7 +271,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             dims <- dimnames(mat)[[2]]
             
             table <- self$results$mat
-
+            
             for (dim in dims) {
               table$addColumn(name = paste0(dim), type = 'number')
             }
@@ -330,12 +286,11 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           }
           
           # D study: variance components--------
-          
           if (isTRUE(self$options$itemd)) {
             ng <- self$options$ng
             res <- list()
             
-            for (i in  seq_along(1:ng)) {
+            for (i in seq_along(1:ng)) {
               res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
@@ -365,7 +320,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           }
           
           # D study: Between universe score variance matrix----------
-          
           if (isTRUE(self$options$bmat)) {
             bmat <- ds1$between$var.universe
             bmat <- as.data.frame(mat)
@@ -373,7 +327,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             names <- dimnames(bmat)[[1]]
             dims <- dimnames(bmat)[[2]]
             table <- self$results$bmat
-
+            
             for (dim in dims) {
               table$addColumn(name = paste0(dim), type = 'number')
             }
@@ -386,9 +340,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               table$addRow(rowKey = name, values = row)
             }
           }
-
-          # D study (Composite table)------------
           
+          # D study (Composite table)------------
           if (isTRUE(self$options$comp)) {
             gen <- as.vector(ds1$composite$generalizability)
             depe <- as.vector(ds1$composite$dependability)
@@ -407,52 +360,48 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 absolute = abs
               ))
           }
-
+          
           if (isTRUE(self$options$bm)) {
-              table <- self$results$bm
-              all <- data.frame(
-                gen = diag(ds1$between$generalizability),
-                depe = diag(ds1$between$dependability),
-                rel = diag(ds1$between$var.error.rel),
-                abs = diag(ds1$between$var.error.abs)
+            table <- self$results$bm
+            all <- data.frame(
+              gen = diag(ds1$between$generalizability),
+              depe = diag(ds1$between$dependability),
+              rel = diag(ds1$between$var.error.rel),
+              abs = diag(ds1$between$var.error.abs)
+            )
+            
+            for (i in seq_len(nrow(all))) {
+              table$addRow(
+                rowKey = rownames(all)[i],
+                values = as.list(all[i, ])
               )
-              
-              for (i in seq_len(nrow(all))) {
-                table$addRow(
-                  rowKey = rownames(all)[i],
-                  values = as.list(all[i, ])
-                )
-              }
             }
+          }
         }
       },
-      ####################################################
+      
+      .clearCache = function() {
+        private$.cachedResults <- list()
+        private$.cachedData <- NULL
+        private$.dataKey <- NULL
+      },
+      
       .plot1 = function(image, ...) {
-        # if (is.null(image$state))
-        #   return(FALSE)
-        #
-        # gmodel <- image$state
-        
-        # dstudy_plot(one_facet_gstudy, unit = "Participants",
-        #             facets = list(Items = c(10, 20, 30, 40, 50, 60)),
-        #             g_coef = FALSE)
-        
         if (length(self$options$facet) > 1) return()
         
-        # hemp package---------
+        data <- private$.getData()
+        if (is.null(data)) return(FALSE)
         
         dep <- self$options$dep
         id <- self$options$id
         sub <- self$options$sub
         facets <- self$options$facet
         
-        data <- self$data
-        data <- na.omit(data)
-        data <- as.data.frame(data)
+        lmer_key <- paste("lmer", self$options$formula, sep = "_")
+        one_facet <- private$.computeWithCache(lmer_key, function() {
+          lme4::lmer(self$options$formula, data = data)
+        })
         
-        one_facet <- lme4::lmer(self$options$formula, data = data)
-        
-        # gstudy function---
         gstudy <- function(x, fixed = NULL) {
           tmp <- as.data.frame(lme4::VarCorr(x))
           tmp <- tmp[c(1, 4)]
@@ -485,10 +434,10 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return(output)
         }
         
-        gmodel <- gstudy(one_facet)
-        
-        
-        #d study function---
+        gmodel_key <- paste("gmodel", lmer_key, sep = "_")
+        gmodel <- private$.computeWithCache(gmodel_key, function() {
+          gstudy(one_facet)
+        })
         
         dstudy <- function(x, n, unit) {
           tmp <- x$gstudy.out
@@ -537,23 +486,23 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         library(lattice)
         
         # d_study plot---
-        
         dstudy_plot <- function(x,
                                 unit,
-                                facets,
+                                facet,
                                 g_coef = T,
                                 bw = F) {
-          if (length(facets) == 1) {
-            conds <- facets[[1]]
+          # 원본 코드 유지
+          if (length(facet) == 1) {
+            conds <- facet[[1]]
             coefs <- matrix(NA, nrow = length(conds), ncol = 2)
             for (i in 1:length(conds)) {
               n <- conds[i]
-              names(n) <- names(facets)
+              names(n) <- names(facet)
               tmp <- dstudy(x, n = n, unit = unit)
               coefs[i, ] <- c(tmp$gcoef, tmp$dcoef)
             }
             data.df <- data.frame(conds, coefs)
-            names(data.df)[1] <- names(facets)
+            names(data.df)[1] <- names(facet)
             names(data.df)[2:3] <- c("Generalizability", "Dependability")
             if (g_coef) {
               if (bw) {
@@ -595,9 +544,9 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               }
             }
           } else {
-            conds <- expand.grid(facets[[1]], facets[[2]])
+            conds <- expand.grid(facet[[1]], facet[[2]])
             coefs <- matrix(NA, nrow = nrow(conds), ncol = 2)
-            names(conds) <- names(facets)
+            names(conds) <- names(facet)
             for (i in 1:nrow(conds)) {
               n <- c(conds[i, 1], conds[i, 2])
               names(n) <- names(conds)
@@ -656,24 +605,101 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           }
         }
         
-        
         #############################################
         
         facet <- self$options$facet
         nf <- self$options$nf
         gco <- self$options$gco
         
-        plot1 <- dstudy_plot(
-          gmodel,
-          unit = self$options$id,
-          facet = list(facet = c(1:nf)),
-          g_coef = gco
-        )
+        # 플롯 생성 및 캐싱
+        plot_key <- paste("plot", id, paste(facet, collapse="_"), nf, gco, sep = "_")
+        plot1 <- private$.computeWithCache(plot_key, function() {
+          dstudy_plot(
+            gmodel,
+            unit = id,
+            facet = list(facet = c(1:nf)),
+            g_coef = gco
+          )
+        })
         
         print(plot1)
         TRUE
-        
       }
-      
     )
   )
+
+# g theory with R-----------
+
+# library(gtheory)
+# data(Brennan.3.2)
+# data <- Brennan.3.2
+#
+# formula <- "Score ~ (1 | Person) + (1 | Task) +
+# (1 | Rater:Task) +
+# (1 | Person:Task)"
+# gstudy.out <- gtheory::gstudy(data = data,
+#                               colname.objects = "Person",
+#                               formula = formula)
+# coef<- dstudy(gstudy.out, colname.objects = "Person",
+#               data = data, colname.scores = "Score")
+#
+# data(Rajaratnam.2)
+
+# Multivariate example----
+# library(gtheory)
+# data(Rajaratnam.2)
+# formula.Rajaratnam.2 <- "Score ~ (1 | Person) + (1 | Item)"
+# g<- gstudy(data = Rajaratnam.2, formula = formula.Rajaratnam.2,
+#            colname.strata = "Subtest",
+#            colname.objects = "Person")
+#
+# ds<- dstudy(g, colname.objects = "Person", data = Rajaratnam.2, colname.scores = "Score",
+#             colname.strata = "Subtest")
+
+
+# facet <- self$options$facet
+
+# Formula Example----------------------
+# formula <- "value ~ (1 | subject) +(1 | rater) + (1 | task) +
+# (1 | subject:rater) +
+# (1 | rater:task) +
+# (1 | subject:task)"
+
+# Example----------
+# vars <- c('A', 'B', 'C')  # you'll populate this from self$options$...
+# response <- 'bruce'
+# fmla <- as.formula(paste0(jmvcore::composeTerm(response), '~', paste(jmvcore::composeTerms(vars), collapse='*')))
+# trms <- attr(terms(fmla), 'term.labels')
+# trms[1:6] #example---
+# funnyTerms <- paste0('(1|', trms, ')')
+# finalFmla <- paste0(jmvcore::composeTerm(response), '~', paste(funnyTerms, collapse='+'))
+# finalFmla
+#
+#
+# vars <- c(self$options$id, self$options$facet)
+# response <- self$options$dep
+# fmla <- as.formula(paste0(jmvcore::composeTerm(response), '~', paste(jmvcore::composeTerms(vars), collapse='*')))
+# trms <- attr(terms(fmla), 'term.labels')
+# funnyTerms <- paste0('(1|', trms, ')')
+# formula <- paste0(jmvcore::composeTerm(response), '~', paste(funnyTerms, collapse='+'))
+#
+#
+# self$results$text1$setContent(formula)
+#
+
+
+# var <- as.vector(gstudy[[2]])
+# percent <- as.vector(gstudy[[3]])
+# n <- as.vector(gstudy[[4]])
+# 
+# items <- as.vector(gstudy[[1]])
+# 
+# for (i in seq_along(items)) {
+#   row <- list()
+#   
+#   row[["var"]] <- var[i]
+#   row[["percent"]] <- percent[i]
+#   row[["n"]] <- n[i]
+#   
+#   table$addRow(rowKey = items[i], values = row)
+# }

@@ -9,8 +9,8 @@ concordance(
   dep,
   covs,
   cc = TRUE,
-  ccp = FALSE,
-  bap = FALSE,
+  plot = FALSE,
+  plot1 = FALSE,
   width = 500,
   height = 500,
   width1 = 500,
@@ -26,9 +26,9 @@ concordance(
 
 \item{cc}{.}
 
-\item{ccp}{.}
+\item{plot}{.}
 
-\item{bap}{.}
+\item{plot1}{.}
 
 \item{width}{.}
 
@@ -42,6 +42,7 @@ concordance(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$table} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr

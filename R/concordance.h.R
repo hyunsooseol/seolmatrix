@@ -9,8 +9,8 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             dep = NULL,
             covs = NULL,
             cc = TRUE,
-            plot = FALSE,
-            plot1 = FALSE,
+            ccp = FALSE,
+            bap = FALSE,
             width = 500,
             height = 500,
             width1 = 500,
@@ -40,13 +40,13 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "cc",
                 cc,
                 default=TRUE)
-            private$..plot <- jmvcore::OptionBool$new(
-                "plot",
-                plot,
+            private$..ccp <- jmvcore::OptionBool$new(
+                "ccp",
+                ccp,
                 default=FALSE)
-            private$..plot1 <- jmvcore::OptionBool$new(
-                "plot1",
-                plot1,
+            private$..bap <- jmvcore::OptionBool$new(
+                "bap",
+                bap,
                 default=FALSE)
             private$..width <- jmvcore::OptionInteger$new(
                 "width",
@@ -68,8 +68,8 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
             self$.addOption(private$..cc)
-            self$.addOption(private$..plot)
-            self$.addOption(private$..plot1)
+            self$.addOption(private$..ccp)
+            self$.addOption(private$..bap)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..width1)
@@ -79,8 +79,8 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
         cc = function() private$..cc$value,
-        plot = function() private$..plot$value,
-        plot1 = function() private$..plot1$value,
+        ccp = function() private$..ccp$value,
+        bap = function() private$..bap$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
@@ -89,8 +89,8 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         ..dep = NA,
         ..covs = NA,
         ..cc = NA,
-        ..plot = NA,
-        ..plot1 = NA,
+        ..ccp = NA,
+        ..bap = NA,
         ..width = NA,
         ..height = NA,
         ..width1 = NA,
@@ -102,7 +102,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        text = function() private$.items[["text"]],
         table = function() private$.items[["table"]],
         plot = function() private$.items[["plot"]],
         plot1 = function() private$.items[["plot1"]]),
@@ -119,10 +118,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text",
-                title=""))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="table",
@@ -152,8 +147,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 name="plot",
                 title="Concordance Plot",
                 renderFun=".plot",
-                visible="(plot)",
-                requiresData=TRUE,
+                visible="(ccp)",
                 clearWith=list(
                     "dep",
                     "covs",
@@ -165,8 +159,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 name="plot1",
                 title="Bland-Altman Plot",
                 renderFun=".plot1",
-                visible="(plot1)",
-                requiresData=TRUE,
+                visible="(bap)",
                 clearWith=list(
                     "dep",
                     "covs",
@@ -202,8 +195,8 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param dep .
 #' @param covs .
 #' @param cc .
-#' @param plot .
-#' @param plot1 .
+#' @param ccp .
+#' @param bap .
 #' @param width .
 #' @param height .
 #' @param width1 .
@@ -211,7 +204,6 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$table} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
@@ -229,8 +221,8 @@ concordance <- function(
     dep,
     covs,
     cc = TRUE,
-    plot = FALSE,
-    plot1 = FALSE,
+    ccp = FALSE,
+    bap = FALSE,
     width = 500,
     height = 500,
     width1 = 500,
@@ -252,8 +244,8 @@ concordance <- function(
         dep = dep,
         covs = covs,
         cc = cc,
-        plot = plot,
-        plot1 = plot1,
+        ccp = ccp,
+        bap = bap,
         width = width,
         height = height,
         width1 = width1,
