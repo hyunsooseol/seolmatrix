@@ -5,13 +5,13 @@ concordanceClass <- if (requireNamespace('jmvcore'))
     inherit = concordanceBase,
     private = list(
       .htmlwidget = NULL,
+      # Add instance for HTMLWidget
       
       .init = function() {
         private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance
         
         if (is.null(self$data) |
-            is.null(self$options$dep)  |
-            is.null(self$options$covs)) {
+            is.null(self$options$dep)  | is.null(self$options$covs)) {
           self$results$instructions$setVisible(visible = TRUE)
           
         }
@@ -29,13 +29,13 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           )
         ))
         
-        if (isTRUE(self$options$plot)) {
+        if (isTRUE(self$options$ccp)) {
           width <- self$options$width
           height <- self$options$height
           self$results$plot$setSize(width, height)
         }
         
-        if (isTRUE(self$options$plot1)) {
+        if (isTRUE(self$options$bap)) {
           width <- self$options$width1
           height <- self$options$height1
           self$results$plot1$setSize(width, height)
@@ -43,94 +43,10 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         
       },
       .run = function() {
-        res <- private$.computeRES()
-        tmp.ccc <- res$tmp.ccc
-        
-        if (self$options$cc) {
-          table <- self$results$table
-          
-          r <- tmp.ccc$rho.c[[1]]
-          lower <- tmp.ccc$rho.c[[2]]
-          upper <- tmp.ccc$rho.c[[3]]
-          
-          row <- list()
-          row[['r']] <- r
-          row[['lower']] <- lower
-          row[['upper']] <- upper
-          table$setRow(rowNo = 1, values = row)
-        }
-      },
-      
-      .plot = function(image,ggtheme, theme,...) {
-        if (!self$options$plot)
-          return(FALSE)
-        
-        res <- private$.computeRES()
-        
-        tmp <- res$tmp
-        alpha <- res$alpha
-        beta <- res$beta
-        tmp.lm <- res$tmp.lm
-        dep <- res$dep
-        covs <- res$covs
-        
-        library(ggplot2)
-        
-        plot <- ggplot2::ggplot(tmp, aes(x = dep, y = covs)) +
-          geom_point() +
-          geom_abline(intercept = 0, slope = 1) +
-          geom_abline(data = tmp.lm,
-                      aes(intercept = alpha, slope = beta),
-                      linetype = "dashed") +
-          scale_x_continuous(name = self$options$dep) +
-          scale_y_continuous(name = self$options$covs) +
-          #    geom_text(data = tmp.lab, x = 0.5, y = 2.95, label = tmp.lab$lab) +
-          coord_fixed(ratio = 1 / 1)
-        
-        plot <- plot + ggtheme
-        print(plot)
-        TRUE
-      },
-      
-      .plot1 = function(image1,ggtheme, theme,...) {
-        if (!self$options$plot1)
-          return(FALSE)
-        
-        res <- private$.computeRES()
-        tmp.ccc <- res$tmp.ccc
-        
-        tmp1 <- data.frame(mean = tmp.ccc$blalt[, 1], delta = tmp.ccc$blalt[, 2])
-        est <- tmp.ccc$sblalt$est
-        lower <- tmp.ccc$sblalt$lower
-        upper <- tmp.ccc$sblalt$upper
-        
-        mean = tmp.ccc$blalt[, 1]
-        delta = tmp.ccc$blalt[, 2]
-        dat <- tmp.ccc$sblalt
-        
-        library(ggplot2)
-        plot1 <- ggplot2::ggplot(tmp1, aes(x = mean, y = delta)) +
-          geom_point() +
-          geom_hline(data = dat,
-                     aes(yintercept = lower),
-                     linetype = 2) +
-          geom_hline(data =  dat,
-                     aes(yintercept = upper),
-                     linetype = 2) +
-          geom_hline(data =  dat, aes(yintercept = est), linetype = 1) +
-          scale_x_continuous(name = "Average between measures") +
-          scale_y_continuous(name = "Difference between measures")
-        
-        plot1 <- plot1 + ggtheme
-        print(plot1)
-        TRUE
-      },
-      
-      .computeRES = function() {
         if (length(self$options$dep) < 1 |
             length(self$options$covs) < 1)
           return()
-        
+        #get the data--------
         data <- self$data
         dep <- self$options$dep
         covs <- self$options$covs
@@ -299,27 +215,101 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         #######################################################
         tmp.ccc <- epi.ccc(data[[dep]], data[[covs]])
         ######################################################
+        table <- self$results$table
+        r <-  tmp.ccc$rho.c[[1]]
+        lower <-  tmp.ccc$rho.c[[2]]
+        upper <-  tmp.ccc$rho.c[[3]]
+        row <- list()
+        row[['r']] <- r
+        row[['lower']] <- lower
+        row[['upper']] <- upper
+        table$setRow(rowNo = 1, values = row)
         
-        tmp <- data.frame(data[[dep]], data[[covs]])
+        if (isTRUE(self$options$ccp)) {
+          image <- self$results$plot
+          image$setState(list(
+            dep = dep,
+            covs = covs,
+            data_dep = data[[dep]],
+            data_covs = data[[covs]]
+          ))
+        }
         
-        z <- lm(data[[covs]] ~ data[[dep]])
-        alpha <- summary(z)$coefficients[1, 1]
-        beta <-  summary(z)$coefficients[2, 1]
-        tmp.lm <- data.frame(alpha, beta)
+        if (isTRUE(self$options$bap)) {
+          image1 <- self$results$plot1
+          image1$setState(list(
+            est = tmp.ccc$sblalt$est,
+            lower = tmp.ccc$sblalt$lower,
+            upper = tmp.ccc$sblalt$upper,
+            blalt = tmp.ccc$blalt
+          ))
+        }
+      },
+      
+      .plot1 = function(image1, ggtheme, theme, ...) {
+        if (is.null(image1$state))
+          return(FALSE)
         
-        dep <- data[[dep]]
-        covs <- data[[covs]]
+        est <- image1$state$est
+        lower <- image1$state$lower
+        upper <- image1$state$upper
+        blalt <- image1$state$blalt
         
-        res <- list(
-          tmp.ccc = tmp.ccc,
-          tmp = tmp,
-          alpha = alpha,
-          beta = beta,
-          tmp.lm = tmp.lm,
-          dep = dep,
-          covs = covs
+        tmp1 <- data.frame(mean = blalt[, 1], delta = blalt[, 2])
+        dat <- data.frame(
+          est = est,
+          lower = lower,
+          upper = upper
         )
-        return(res)
+        
+        library(ggplot2)
+        plot1 <- ggplot2::ggplot(tmp1, aes(x = mean, y = delta)) +
+          geom_point() +
+          geom_hline(data = dat,
+                     aes(yintercept = lower),
+                     linetype = 2) +
+          geom_hline(data = dat,
+                     aes(yintercept = upper),
+                     linetype = 2) +
+          geom_hline(data = dat, aes(yintercept = est), linetype = 1) +
+          scale_x_continuous(name = "Average between measures") +
+          scale_y_continuous(name = "Difference between measures")
+        
+        plot1 <- plot1 + ggtheme
+        print(plot1)
+        TRUE
+      },
+      
+      .plot = function(image, ggtheme, theme, ...) {
+        if (is.null(image$state))
+          return(FALSE)
+        
+        dep_name <- self$options$dep
+        covs_name <- self$options$covs
+        dep_data <- image$state$data_dep
+        covs_data <- image$state$data_covs
+        
+        z <- lm(covs_data ~ dep_data)
+        alpha <- summary(z)$coefficients[1, 1]
+        beta <- summary(z)$coefficients[2, 1]
+        
+        tmp <- data.frame(dep = dep_data, covs = covs_data)
+        tmp.lm <- data.frame(alpha = alpha, beta = beta)
+        
+        library(ggplot2)
+        plot <- ggplot2::ggplot(tmp, aes(x = dep, y = covs)) +
+          geom_point() +
+          geom_abline(intercept = 0, slope = 1) +
+          geom_abline(data = tmp.lm,
+                      aes(intercept = alpha, slope = beta),
+                      linetype = "dashed") +
+          scale_x_continuous(name = dep_name) +
+          scale_y_continuous(name = covs_name) +
+          coord_fixed(ratio = 1 / 1)
+        
+        plot <- plot + ggtheme
+        print(plot)
+        TRUE
       }
     )
   )
