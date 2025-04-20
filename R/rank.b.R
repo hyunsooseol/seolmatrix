@@ -196,7 +196,7 @@ rankClass <- if (requireNamespace('jmvcore'))
         if (is.null(image$state))
           return(FALSE)
         EBICgraph <- image$state
-        plot <- qgraph(EBICgraph, layout = "spring")
+        plot <- qgraph::qgraph(EBICgraph, layout = "spring")
         print(plot)
         TRUE
       },
@@ -224,7 +224,7 @@ rankClass <- if (requireNamespace('jmvcore'))
         if (is.null(image1$state))
           return(FALSE)
         res <- image1$state
-        plot1 <- qgraph(res, layout = "spring", details = TRUE)
+        plot1 <- qgraph::qgraph(res, layout = "spring", details = TRUE)
         print(plot1)
         TRUE
       },
