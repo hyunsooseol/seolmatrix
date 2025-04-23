@@ -9,6 +9,25 @@ items:
       type: Html
       visible: True
 
+    - name:  text
+      title: ''
+      type:  Preformatted
+
+    - name: matrix
+      title:  'Unweighted Kappa'
+      type: Table
+      visible: (matrix)
+      clearWith:
+        - vars
+        - type
+      refs: irr    
+      
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
     - name: interrater
       title: 'Interrater reliability'
       type: Table

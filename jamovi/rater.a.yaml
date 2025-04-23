@@ -41,6 +41,11 @@ options:
         - average
       default: single
 
+    - name: pair
+      title: 'Pairwise Kappa'
+      type: Bool
+      default: FALSE
+
     - name: interrater
       title: Interrater reliability
       type: Bool

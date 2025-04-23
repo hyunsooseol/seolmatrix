@@ -10,6 +10,7 @@ rater(
   model = "oneway",
   type = "agreement",
   unit = "single",
+  pair = FALSE,
   interrater = FALSE,
   icc = FALSE,
   bicc = FALSE,
@@ -38,6 +39,8 @@ rater(
 \item{type}{.}
 
 \item{unit}{.}
+
+\item{pair}{.}
 
 \item{interrater}{.}
 
@@ -75,6 +78,8 @@ rater(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
   \code{results$bt} \tab \tab \tab \tab \tab a table \cr
@@ -91,9 +96,9 @@ A results object containing:
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$interrater$asDF}
+\code{results$matrix$asDF}
 
-\code{as.data.frame(results$interrater)}
+\code{as.data.frame(results$matrix)}
 }
 \description{
 Rater Reliability

@@ -10,6 +10,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             model = "oneway",
             type = "agreement",
             unit = "single",
+            pair = FALSE,
             interrater = FALSE,
             icc = FALSE,
             bicc = FALSE,
@@ -57,6 +58,10 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "single",
                     "average"),
                 default="single")
+            private$..pair <- jmvcore::OptionBool$new(
+                "pair",
+                pair,
+                default=FALSE)
             private$..interrater <- jmvcore::OptionBool$new(
                 "interrater",
                 interrater,
@@ -136,6 +141,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..model)
             self$.addOption(private$..type)
             self$.addOption(private$..unit)
+            self$.addOption(private$..pair)
             self$.addOption(private$..interrater)
             self$.addOption(private$..icc)
             self$.addOption(private$..bicc)
@@ -158,6 +164,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         model = function() private$..model$value,
         type = function() private$..type$value,
         unit = function() private$..unit$value,
+        pair = function() private$..pair$value,
         interrater = function() private$..interrater$value,
         icc = function() private$..icc$value,
         bicc = function() private$..bicc$value,
@@ -179,6 +186,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..model = NA,
         ..type = NA,
         ..unit = NA,
+        ..pair = NA,
         ..interrater = NA,
         ..icc = NA,
         ..bicc = NA,
@@ -202,6 +210,8 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
+        text = function() private$.items[["text"]],
+        matrix = function() private$.items[["matrix"]],
         interrater = function() private$.items[["interrater"]],
         fk = function() private$.items[["fk"]],
         bt = function() private$.items[["bt"]],
@@ -227,6 +237,25 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text",
+                title=""))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="matrix",
+                title="Unweighted Kappa",
+                visible="(matrix)",
+                clearWith=list(
+                    "vars",
+                    "type"),
+                refs="irr",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="interrater",
@@ -637,6 +666,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param model .
 #' @param type .
 #' @param unit .
+#' @param pair .
 #' @param interrater .
 #' @param icc .
 #' @param bicc .
@@ -656,6 +686,8 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$interrater} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$fk} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$bt} \tab \tab \tab \tab \tab a table \cr
@@ -672,9 +704,9 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$interrater$asDF}
+#' \code{results$matrix$asDF}
 #'
-#' \code{as.data.frame(results$interrater)}
+#' \code{as.data.frame(results$matrix)}
 #'
 #' @export
 rater <- function(
@@ -683,6 +715,7 @@ rater <- function(
     model = "oneway",
     type = "agreement",
     unit = "single",
+    pair = FALSE,
     interrater = FALSE,
     icc = FALSE,
     bicc = FALSE,
@@ -715,6 +748,7 @@ rater <- function(
         model = model,
         type = type,
         unit = unit,
+        pair = pair,
         interrater = interrater,
         icc = icc,
         bicc = bicc,

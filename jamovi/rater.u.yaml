@@ -32,6 +32,8 @@ children:
             label: 'Kappa'
             children:
               - type: CheckBox
+                name: pair
+              - type: CheckBox
                 name: interrater
               - type: CheckBox
                 name: fk
