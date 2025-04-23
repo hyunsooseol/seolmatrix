@@ -176,8 +176,10 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         
         if (self$options$cr
             && self$results$cr$isNotFilled()) {
+          
+          self$results$cr$setRowNums(rownames(self$data))
           self$results$cr$setValues(cr)
-          self$results$cr$setRowNums(rownames(data))
+          
         }
       },
       
@@ -186,7 +188,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return(FALSE)
         
         error <- image$state
-        
+        library(ggplot2)
         plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
           geom_point() +
           geom_hline(yintercept = 0.05,
