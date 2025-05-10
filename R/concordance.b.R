@@ -11,7 +11,8 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         private$.htmlwidget <- HTMLWidget$new() # Initialize the HTMLWidget instance
         
         if (is.null(self$data) |
-            is.null(self$options$dep)  | is.null(self$options$covs)) {
+            is.null(self$options$dep)  |
+            is.null(self$options$covs)) {
           self$results$instructions$setVisible(visible = TRUE)
           
         }
@@ -42,26 +43,128 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         }
         
       },
+      
       .run = function() {
-        if (length(self$options$dep) < 1 |
-            length(self$options$covs) < 1)
-          return()
-        #get the data--------
         data <- self$data
-        dep <- self$options$dep
-        covs <- self$options$covs
-        
-        # convert to appropriate data types
-        data[[dep]] <- jmvcore::toNumeric(data[[dep]])
-        data[[covs]] <- jmvcore::toNumeric(data[[covs]])
-        data <- na.omit(data)
-        
-        #To work in Linux####################################
-        
-        #seolmatrix imports the epiR package, which in turn imports the sf package ...
-        # we can't build sf under linux at this time
-        # Therefore, delete epiR R package and added epi.ccc function directly.
-        
+        if (isTRUE(self$options$cc) ||
+            isTRUE(self$options$ccp) ||
+            isTRUE(self$options$bap)) {
+          if (length(self$options$dep) >= 1 &&
+              length(self$options$covs) >= 1) {
+            #get the data--------
+            #data <- self$data
+            dep <- self$options$dep
+            covs <- self$options$covs
+            
+            # convert to appropriate data types
+            data[[dep]] <- jmvcore::toNumeric(data[[dep]])
+            data[[covs]] <- jmvcore::toNumeric(data[[covs]])
+            
+            data <- na.omit(data)
+            
+            #To work in Linux####################################
+            
+            #seolmatrix imports the epiR package, which in turn imports the sf package ...
+            # we can't build sf under linux at this time
+            # Therefore, delete epiR R package and added epi.ccc function directly.
+            tmp.ccc <- private$.computeCCC(data[[dep]], data[[covs]])
+            
+            ######################################################
+            
+            if (isTRUE(self$options$cc)) {
+              table <- self$results$cc
+              r <-  tmp.ccc$rho.c[[1]]
+              lower <-  tmp.ccc$rho.c[[2]]
+              upper <-  tmp.ccc$rho.c[[3]]
+              row <- list()
+              row[['r']] <- r
+              row[['lower']] <- lower
+              row[['upper']] <- upper
+              table$setRow(rowNo = 1, values = row)
+            }
+            
+            if (isTRUE(self$options$ccp)) {
+              image <- self$results$plot
+              image$setState(list(
+                dep = dep,
+                covs = covs,
+                data_dep = data[[dep]],
+                data_covs = data[[covs]]
+              ))
+            }
+            
+            if (isTRUE(self$options$bap)) {
+              image1 <- self$results$plot1
+              image1$setState(
+                list(
+                  est = tmp.ccc$sblalt$est,
+                  lower = tmp.ccc$sblalt$lower,
+                  upper = tmp.ccc$sblalt$upper,
+                  blalt = tmp.ccc$blalt
+                )
+              )
+            }
+            
+          }
+        }
+        if (isTRUE(self$options$mat)) {
+          variables <- self$options$vars
+          
+          if (length(variables) < 2) return()
+          
+          data_subset <- as.data.frame(lapply(variables, function(var)
+            data[[var]]))
+          colnames(data_subset) <- variables
+          n_vars <- length(variables)
+          
+          ccc_mat <- matrix(NA, nrow = n_vars, ncol = n_vars)
+          rownames(ccc_mat) <- variables
+          colnames(ccc_mat) <- variables
+          
+          for (i in 1:n_vars) {
+            for (j in 1:n_vars) {
+              if (i == j) {
+                ccc_mat[i, j] <- 1
+              } else {
+                x <- data_subset[[i]]
+                y <- data_subset[[j]]
+                
+                valid_indices <- !is.na(x) & !is.na(y)
+                if (sum(valid_indices) < 2) {
+                  ccc_mat[i, j] <- NA
+                } else {
+                  x <- x[valid_indices]
+                  y <- y[valid_indices]
+                  # 누락된 CCC 계산 부분 추가
+                  tmp_ccc <- private$.computeCCC(x, y)
+                  ccc_mat[i, j] <- tmp_ccc$rho.c[[1]]  # CCC 추정값만 저장
+                }
+              }
+            }
+          }
+          
+          res <- as.data.frame(ccc_mat)
+          names <- dimnames(res)[[1]]
+          dims <- dimnames(res)[[2]]
+          table <- self$results$mat
+          
+           # creating table----------------
+          for (dim in dims) {
+            table$addColumn(name = paste0(dim), type = 'number')
+          }
+          
+           for (name in names) {
+            row <- list()
+            for (j in seq_along(dims)) {
+              row[[dims[j]]] <- res[name, j]
+            }
+            table$addRow(rowKey = name, values = row)
+          }
+          
+        }
+        #self$results$text$setContent(ccc_text)
+      },
+      .computeCCC = function(x, y, rep.measure = FALSE, subjectid = NULL) {
         #epi.ccc(  ) source codes##################################
         
         epi.ccc = function(x,
@@ -79,6 +182,22 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           dat <- dat[id, ]
           
           k <- length(dat$y)
+          
+          # 데이터가 충분하지 않은 경우 처리
+          if (k < 2) {
+            rho.c <- data.frame(NA, NA, NA)
+            names(rho.c) <- c("est", "lower", "upper")
+            return(list(
+              rho.c = rho.c,
+              s.shift = NA,
+              l.shift = NA,
+              C.b = NA,
+              blalt = data.frame(mean = numeric(0), delta = numeric(0)),
+              sblalt = data.frame(est = NA, delta.sd = NA, lower = NA, upper = NA),
+              nmissing = nmissing
+            ))
+          }
+          
           yb <- mean(dat$y)
           sy2 <- var(dat$y) * (k - 1) / k
           sd1 <- sd(dat$y)
@@ -124,41 +243,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           llt = (exp(2 * llt) - 1) / (exp(2 * llt) + 1)
           ult = (exp(2 * ult) - 1) / (exp(2 * ult) + 1)
           
-          # Calculate delta.sd if repeated measures:
-          if (rep.measure == TRUE) {
-            # Make sure subject is a factor:
-            dat$sub <- subjectid
-            if (!is.factor(dat$sub))
-              dat$sub <- as.factor(dat$sub)
-            
-            # Number of subjects:
-            nsub <- length(levels(dat$sub))
-            
-            # One way analysis of variance:
-            model <- aov(delta ~ dat$sub)
-            
-            # Degrees of freedom:
-            MSB <- anova(model)[[3]][1]
-            
-            # Sums of squares:
-            MSW <- anova(model)[[3]][2]
-            
-            # Calculate number of complete pairs for each subject:
-            pairs <- NULL
-            
-            for (i in 1:nsub) {
-              pairs[i] <- sum(is.na(delta[dat$sub == levels(dat$sub)[i]]) == FALSE)
-            }
-            
-            sig.dl <- (MSB - MSW) / ((sum(pairs) ^ 2 - sum(pairs ^
-                                                             2)) / ((nsub - 1) * sum(pairs)))
-            delta.sd <- sqrt(sig.dl + MSW)
-          }
-          
-          # Calculate delta.sd if no repeated measures:
-          if (rep.measure == FALSE) {
-            delta.sd <- sqrt(var(delta, na.rm = TRUE))
-          }
+          delta.sd <- sqrt(var(delta, na.rm = TRUE))
           
           # Upper and lower bounds for Bland Altmann plot:
           ba.p <- mean(delta)
@@ -198,52 +283,9 @@ concordanceClass <- if (requireNamespace('jmvcore'))
               nmissing = nmissing
             )
           }
-          
           return(rval)
         }
-        
-        # Example-------------
-        
-        # x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
-        #        478,178,423,427)
-        #
-        # y <- c(512,430,520,428,500,600,364,380,658,445,432,626,260,
-        #        477,259,350,451)
-        #
-        # res<- epi.ccc(x,y)
-        # res
-        #######################################################
-        tmp.ccc <- epi.ccc(data[[dep]], data[[covs]])
-        ######################################################
-        table <- self$results$table
-        r <-  tmp.ccc$rho.c[[1]]
-        lower <-  tmp.ccc$rho.c[[2]]
-        upper <-  tmp.ccc$rho.c[[3]]
-        row <- list()
-        row[['r']] <- r
-        row[['lower']] <- lower
-        row[['upper']] <- upper
-        table$setRow(rowNo = 1, values = row)
-        
-        if (isTRUE(self$options$ccp)) {
-          image <- self$results$plot
-          image$setState(list(
-            dep = dep,
-            covs = covs,
-            data_dep = data[[dep]],
-            data_covs = data[[covs]]
-          ))
-        }
-        
-        if (isTRUE(self$options$bap)) {
-          image1 <- self$results$plot1
-          image1$setState(list(
-            est = tmp.ccc$sblalt$est,
-            lower = tmp.ccc$sblalt$lower,
-            upper = tmp.ccc$sblalt$upper,
-            blalt = tmp.ccc$blalt
-          ))
-        }
+        return(epi.ccc(x, y))
       },
       
       .plot1 = function(image1, ggtheme, theme, ...) {

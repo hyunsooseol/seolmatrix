@@ -6,9 +6,11 @@
 \usage{
 concordance(
   data,
+  vars,
   dep,
   covs,
-  cc = TRUE,
+  cc = FALSE,
+  mat = FALSE,
   ccp = FALSE,
   bap = FALSE,
   width = 500,
@@ -20,11 +22,15 @@ concordance(
 \arguments{
 \item{data}{.}
 
+\item{vars}{.}
+
 \item{dep}{.}
 
 \item{covs}{.}
 
 \item{cc}{.}
+
+\item{mat}{.}
 
 \item{ccp}{.}
 
@@ -42,16 +48,17 @@ concordance(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-  \code{results$table} \tab \tab \tab \tab \tab a table \cr
+  \code{results$cc} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+  \code{results$mat} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$table$asDF}
+\code{results$cc$asDF}
 
-\code{as.data.frame(results$table)}
+\code{as.data.frame(results$cc)}
 }
 \description{
 Concordance Correlation

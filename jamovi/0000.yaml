@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 4.0.0
+version: 4.0.1
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2025-04-23'
+date: '2025-05-10'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,

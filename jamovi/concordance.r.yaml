@@ -9,7 +9,7 @@ items:
       type: Html
       visible: True
 
-    - name:  table
+    - name:  cc
       title: Estimated Correlation
       type: Table
       rows:  1
@@ -53,4 +53,18 @@ items:
         - width1
         - height1
       refs: epiR       
+
+    - name: mat
+      title: 'Concordance matrix'
+      type: Table
+      visible: (mat)
+      clearWith:
+        - vars
+      refs: epiR
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
 ...

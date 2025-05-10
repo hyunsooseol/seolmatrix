@@ -6,9 +6,11 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
+            vars = NULL,
             dep = NULL,
             covs = NULL,
-            cc = TRUE,
+            cc = FALSE,
+            mat = FALSE,
             ccp = FALSE,
             bap = FALSE,
             width = 500,
@@ -22,6 +24,12 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 requiresData=TRUE,
                 ...)
 
+            private$..vars <- jmvcore::OptionVariables$new(
+                "vars",
+                vars,
+                suggested=list(
+                    "nominal",
+                    "continuous"))
             private$..dep <- jmvcore::OptionVariable$new(
                 "dep",
                 dep,
@@ -39,7 +47,11 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             private$..cc <- jmvcore::OptionBool$new(
                 "cc",
                 cc,
-                default=TRUE)
+                default=FALSE)
+            private$..mat <- jmvcore::OptionBool$new(
+                "mat",
+                mat,
+                default=FALSE)
             private$..ccp <- jmvcore::OptionBool$new(
                 "ccp",
                 ccp,
@@ -65,9 +77,11 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 height1,
                 default=500)
 
+            self$.addOption(private$..vars)
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
             self$.addOption(private$..cc)
+            self$.addOption(private$..mat)
             self$.addOption(private$..ccp)
             self$.addOption(private$..bap)
             self$.addOption(private$..width)
@@ -76,9 +90,11 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$.addOption(private$..height1)
         }),
     active = list(
+        vars = function() private$..vars$value,
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
         cc = function() private$..cc$value,
+        mat = function() private$..mat$value,
         ccp = function() private$..ccp$value,
         bap = function() private$..bap$value,
         width = function() private$..width$value,
@@ -86,9 +102,11 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         width1 = function() private$..width1$value,
         height1 = function() private$..height1$value),
     private = list(
+        ..vars = NA,
         ..dep = NA,
         ..covs = NA,
         ..cc = NA,
+        ..mat = NA,
         ..ccp = NA,
         ..bap = NA,
         ..width = NA,
@@ -102,9 +120,10 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        table = function() private$.items[["table"]],
+        cc = function() private$.items[["cc"]],
         plot = function() private$.items[["plot"]],
-        plot1 = function() private$.items[["plot1"]]),
+        plot1 = function() private$.items[["plot1"]],
+        mat = function() private$.items[["mat"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -120,7 +139,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 visible=TRUE))
             self$add(jmvcore::Table$new(
                 options=options,
-                name="table",
+                name="cc",
                 title="Estimated Correlation",
                 rows=1,
                 refs="epiR",
@@ -165,7 +184,21 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "covs",
                     "width1",
                     "height1"),
-                refs="epiR"))}))
+                refs="epiR"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="mat",
+                title="Concordance matrix",
+                visible="(mat)",
+                clearWith=list(
+                    "vars"),
+                refs="epiR",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))}))
 
 concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "concordanceBase",
@@ -192,9 +225,11 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data .
+#' @param vars .
 #' @param dep .
 #' @param covs .
 #' @param cc .
+#' @param mat .
 #' @param ccp .
 #' @param bap .
 #' @param width .
@@ -204,23 +239,26 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$table} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$cc} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$mat} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$table$asDF}
+#' \code{results$cc$asDF}
 #'
-#' \code{as.data.frame(results$table)}
+#' \code{as.data.frame(results$cc)}
 #'
 #' @export
 concordance <- function(
     data,
+    vars,
     dep,
     covs,
-    cc = TRUE,
+    cc = FALSE,
+    mat = FALSE,
     ccp = FALSE,
     bap = FALSE,
     width = 500,
@@ -231,19 +269,23 @@ concordance <- function(
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("concordance requires jmvcore to be installed (restart may be required)")
 
+    if ( ! missing(vars)) vars <- jmvcore::resolveQuo(jmvcore::enquo(vars))
     if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
     if ( ! missing(covs)) covs <- jmvcore::resolveQuo(jmvcore::enquo(covs))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
+            `if`( ! missing(vars), vars, NULL),
             `if`( ! missing(dep), dep, NULL),
             `if`( ! missing(covs), covs, NULL))
 
 
     options <- concordanceOptions$new(
+        vars = vars,
         dep = dep,
         covs = covs,
         cc = cc,
+        mat = mat,
         ccp = ccp,
         bap = bap,
         width = width,

@@ -22,19 +22,17 @@ children:
             name: covs
             maxItemCount: 1
             isTarget: true
-  - type: LayoutBox
-    margin: large
-    stretchFactor: 1
+  - type: CollapseBox
+    label: Pairwise analysis
+    margin: normal
+    collapsed: true
     children:
       - type: LayoutBox
-        margin: large
-        cell:
-          column: 0
-          row: 0
         stretchFactor: 1
+        margin: large
         children:
           - type: Label
-            label: "Table"
+            label: Table
             children:
               - type: CheckBox
                 name: cc
@@ -46,7 +44,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Plots"
+            label: Plots
             children:
               - type: CheckBox
                 name: ccp
@@ -72,3 +70,34 @@ children:
                     name: height1
                     format: number
                     enable: (bap)
+  - type: CollapseBox
+    label: Concordance matrix
+    margin: normal
+    collapsed: true
+    children:
+      - type: VariableSupplier
+        persistentItems: false
+        stretchFactor: 1
+        children:
+          - type: TargetLayoutBox
+            label: Variables
+            children:
+              - type: VariablesListBox
+                name: vars
+                isTarget: true
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: ' '
+                children:
+                  - type: CheckBox
+                    name: mat

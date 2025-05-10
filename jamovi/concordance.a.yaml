@@ -10,6 +10,13 @@ options:
     - name: data
       type: Data
 
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+         - nominal
+         - continuous
+
     - name: dep
       title: Measure 1
       type: Variable
@@ -25,11 +32,16 @@ options:
          - continuous
       permitted:
         - numeric
-        
+
     - name: cc
       type: Bool
-      title: correlation coefficient
-      default: TRUE
+      title: Concordance coefficient
+      default: FALSE
+
+    - name: mat
+      type: Bool
+      title: Concordance matrix
+      default: FALSE
       
     - name: ccp
       title: Concordance 
