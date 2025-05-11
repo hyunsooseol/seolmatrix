@@ -74,17 +74,16 @@ concordanceClass <- if (requireNamespace('jmvcore'))
             # Therefore, delete epiR R package and added epi.ccc function directly.
             
             # saving tmp.ccc variable---
+            x <- data[[dep]]
+            y <- data[[covs]]
+            
             if (!is.null(self$options$id)) {
-              tmp.ccc <- private$.computeCCC(data[[dep]],
-                                             data[[covs]],
-                                             rep.measure = TRUE,
-                                             subjectid = id)
+              id <- data[[self$options$id]]
+              tmp.ccc <- private$.computeCCC(x, y, rep.measure = TRUE, subjectid = id)
             } else{
-              tmp.ccc <- private$.computeCCC(data[[dep]], 
-                                             data[[covs]], 
-                                             subjectid = NULL)
-              
+              tmp.ccc <- private$.computeCCC(x, y, subjectid = NULL)
             }
+            
             
             ######################################################
             
@@ -127,9 +126,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         
         if (isTRUE(self$options$mat)) {
           variables <- self$options$vars
-          
-          if (length(variables) < 2)
-            return()
+          if (length(variables) < 2) return()
           
           data_subset <- as.data.frame(lapply(variables, function(var)
             data[[var]]))
@@ -155,24 +152,13 @@ concordanceClass <- if (requireNamespace('jmvcore'))
                   x <- x[valid_indices]
                   y <- y[valid_indices]
                   
-                  #tmp_ccc <- private$.computeCCC(x, y)
-                  
+ 
                   if (!is.null(self$options$id)) {
-                    tmp_ccc <- private$.computeCCC(data[[dep]],
-                                                   data[[covs]],
-                                                   rep.measure = TRUE,
-                                                   subjectid = id)
+                    id <- data[[self$options$id]]
+                    tmp_ccc <- private$.computeCCC(x, y, rep.measure = TRUE, subjectid = id)
                   } else{
-                    tmp_ccc <- private$.computeCCC(data[[dep]], 
-                                                   data[[covs]], 
-                                                   subjectid = NULL)
-                    
+                    tmp_ccc <- private$.computeCCC(x, y, subjectid = NULL)
                   }
-                  
-                  
-                  
-                  
-                  
                   
                   ccc_mat[i, j] <- tmp_ccc$rho.c[[1]]
                 }
@@ -199,13 +185,12 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           }
           
         }
-        #self$results$text$setContent(ccc_text)
+        
       },
       .computeCCC = function(x,
                              y,
                              rep.measure = FALSE,
                              subjectid = NULL) {
-        # epi.ccc 함수 정의 (함수 내부에서 정의하지 않고 .computeCCC 내에서 바로 정의)
         epi.ccc = function(x,
                            y,
                            ci = "z-transform",
@@ -326,26 +311,19 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           return(rval)
         }
         
-        # subjectid가 제공되면 자동으로 반복 측정 데이터로 처리
         if (!is.null(subjectid)) {
-          # 반복 측정 데이터에 대한 처리
-          # subject별 평균 계산
           dat <- data.frame(subjectid = subjectid,
                             x = x,
                             y = y)
           dat <- na.omit(dat)
           
-          # subject별 평균 계산
           subj_means <- aggregate(dat[, c("x", "y")], by = list(dat$subjectid), FUN = mean)
           
-          # 평균 값으로 CCC 계산
           return(epi.ccc(subj_means$x, subj_means$y))
         } else {
-          # 기존 로직 유지
           return(epi.ccc(x, y))
         }
       },
-      
       
       .plot1 = function(image1, ggtheme, theme, ...) {
         if (is.null(image1$state))
