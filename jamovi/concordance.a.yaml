@@ -33,6 +33,24 @@ options:
       permitted:
         - numeric
 
+    - name: id
+      title: 'Subject(repeated measure only)'
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    # - name: rep.measure
+    #   title: 'Repeated measure'
+    #   type: List
+    #   options:
+    #     - title: 'TRUE'
+    #       name:  'TRUE'
+    #     - title: 'FALSE'
+    #       name: 'FALSE'
+    #   default: 'FALSE'
+
     - name: cc
       type: Bool
       title: Concordance coefficient

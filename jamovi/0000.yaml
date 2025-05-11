@@ -164,7 +164,7 @@ datasets:
     path: device.omv
     description: from K.J. van Stralen et.al.,2012
     tags:
-      - Concordance
+      - Repeated concordance
   - name: hci
     path: hci.omv
     description: correlation structure with binary items.

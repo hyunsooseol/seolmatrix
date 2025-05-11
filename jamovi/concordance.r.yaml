@@ -17,6 +17,7 @@ items:
       clearWith:
         - dep
         - covs
+        - id
       columns:
         - name: r
           title: Concordance
@@ -40,6 +41,7 @@ items:
         - covs
         - width
         - height
+        - id
       refs: epiR   
   
     - name: plot1
@@ -52,6 +54,7 @@ items:
         - covs
         - width1
         - height1
+        - id
       refs: epiR       
 
     - name: mat
@@ -60,6 +63,7 @@ items:
       visible: (mat)
       clearWith:
         - vars
+        - id
       refs: epiR
       columns:
           - name: name

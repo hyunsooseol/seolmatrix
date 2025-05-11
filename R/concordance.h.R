@@ -9,6 +9,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             vars = NULL,
             dep = NULL,
             covs = NULL,
+            id = NULL,
             cc = FALSE,
             mat = FALSE,
             ccp = FALSE,
@@ -44,6 +45,13 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..id <- jmvcore::OptionVariable$new(
+                "id",
+                id,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..cc <- jmvcore::OptionBool$new(
                 "cc",
                 cc,
@@ -80,6 +88,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$.addOption(private$..vars)
             self$.addOption(private$..dep)
             self$.addOption(private$..covs)
+            self$.addOption(private$..id)
             self$.addOption(private$..cc)
             self$.addOption(private$..mat)
             self$.addOption(private$..ccp)
@@ -93,6 +102,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         vars = function() private$..vars$value,
         dep = function() private$..dep$value,
         covs = function() private$..covs$value,
+        id = function() private$..id$value,
         cc = function() private$..cc$value,
         mat = function() private$..mat$value,
         ccp = function() private$..ccp$value,
@@ -105,6 +115,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         ..vars = NA,
         ..dep = NA,
         ..covs = NA,
+        ..id = NA,
         ..cc = NA,
         ..mat = NA,
         ..ccp = NA,
@@ -145,7 +156,8 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 refs="epiR",
                 clearWith=list(
                     "dep",
-                    "covs"),
+                    "covs",
+                    "id"),
                 columns=list(
                     list(
                         `name`="r", 
@@ -171,7 +183,8 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "dep",
                     "covs",
                     "width",
-                    "height"),
+                    "height",
+                    "id"),
                 refs="epiR"))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -183,7 +196,8 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "dep",
                     "covs",
                     "width1",
-                    "height1"),
+                    "height1",
+                    "id"),
                 refs="epiR"))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -191,7 +205,8 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 title="Concordance matrix",
                 visible="(mat)",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "id"),
                 refs="epiR",
                 columns=list(
                     list(
@@ -228,6 +243,7 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param dep .
 #' @param covs .
+#' @param id .
 #' @param cc .
 #' @param mat .
 #' @param ccp .
@@ -257,6 +273,7 @@ concordance <- function(
     vars,
     dep,
     covs,
+    id,
     cc = FALSE,
     mat = FALSE,
     ccp = FALSE,
@@ -272,18 +289,22 @@ concordance <- function(
     if ( ! missing(vars)) vars <- jmvcore::resolveQuo(jmvcore::enquo(vars))
     if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
     if ( ! missing(covs)) covs <- jmvcore::resolveQuo(jmvcore::enquo(covs))
+    if ( ! missing(id)) id <- jmvcore::resolveQuo(jmvcore::enquo(id))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(vars), vars, NULL),
             `if`( ! missing(dep), dep, NULL),
-            `if`( ! missing(covs), covs, NULL))
+            `if`( ! missing(covs), covs, NULL),
+            `if`( ! missing(id), id, NULL))
 
+    for (v in id) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- concordanceOptions$new(
         vars = vars,
         dep = dep,
         covs = covs,
+        id = id,
         cc = cc,
         mat = mat,
         ccp = ccp,

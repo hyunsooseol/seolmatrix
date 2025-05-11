@@ -52,13 +52,18 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           if (length(self$options$dep) >= 1 &&
               length(self$options$covs) >= 1) {
             #get the data--------
-            #data <- self$data
             dep <- self$options$dep
             covs <- self$options$covs
             
             # convert to appropriate data types
             data[[dep]] <- jmvcore::toNumeric(data[[dep]])
             data[[covs]] <- jmvcore::toNumeric(data[[covs]])
+            
+            id <- NULL
+            if (!is.null(self$options$id) &&
+                self$options$id != "") {
+              id <- data[[self$options$id]]
+            }
             
             data <- na.omit(data)
             
@@ -67,7 +72,19 @@ concordanceClass <- if (requireNamespace('jmvcore'))
             #seolmatrix imports the epiR package, which in turn imports the sf package ...
             # we can't build sf under linux at this time
             # Therefore, delete epiR R package and added epi.ccc function directly.
-            tmp.ccc <- private$.computeCCC(data[[dep]], data[[covs]])
+            
+            # saving tmp.ccc variable---
+            if (!is.null(self$options$id)) {
+              tmp.ccc <- private$.computeCCC(data[[dep]],
+                                             data[[covs]],
+                                             rep.measure = TRUE,
+                                             subjectid = id)
+            } else{
+              tmp.ccc <- private$.computeCCC(data[[dep]], 
+                                             data[[covs]], 
+                                             subjectid = NULL)
+              
+            }
             
             ######################################################
             
@@ -107,10 +124,12 @@ concordanceClass <- if (requireNamespace('jmvcore'))
             
           }
         }
+        
         if (isTRUE(self$options$mat)) {
           variables <- self$options$vars
           
-          if (length(variables) < 2) return()
+          if (length(variables) < 2)
+            return()
           
           data_subset <- as.data.frame(lapply(variables, function(var)
             data[[var]]))
@@ -135,9 +154,27 @@ concordanceClass <- if (requireNamespace('jmvcore'))
                 } else {
                   x <- x[valid_indices]
                   y <- y[valid_indices]
-                  # 누락된 CCC 계산 부분 추가
-                  tmp_ccc <- private$.computeCCC(x, y)
-                  ccc_mat[i, j] <- tmp_ccc$rho.c[[1]]  # CCC 추정값만 저장
+                  
+                  #tmp_ccc <- private$.computeCCC(x, y)
+                  
+                  if (!is.null(self$options$id)) {
+                    tmp_ccc <- private$.computeCCC(data[[dep]],
+                                                   data[[covs]],
+                                                   rep.measure = TRUE,
+                                                   subjectid = id)
+                  } else{
+                    tmp_ccc <- private$.computeCCC(data[[dep]], 
+                                                   data[[covs]], 
+                                                   subjectid = NULL)
+                    
+                  }
+                  
+                  
+                  
+                  
+                  
+                  
+                  ccc_mat[i, j] <- tmp_ccc$rho.c[[1]]
                 }
               }
             }
@@ -148,12 +185,12 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           dims <- dimnames(res)[[2]]
           table <- self$results$mat
           
-           # creating table----------------
+          # creating table----------------
           for (dim in dims) {
             table$addColumn(name = paste0(dim), type = 'number')
           }
           
-           for (name in names) {
+          for (name in names) {
             row <- list()
             for (j in seq_along(dims)) {
               row[[dims[j]]] <- res[name, j]
@@ -164,9 +201,11 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         }
         #self$results$text$setContent(ccc_text)
       },
-      .computeCCC = function(x, y, rep.measure = FALSE, subjectid = NULL) {
-        #epi.ccc(  ) source codes##################################
-        
+      .computeCCC = function(x,
+                             y,
+                             rep.measure = FALSE,
+                             subjectid = NULL) {
+        # epi.ccc 함수 정의 (함수 내부에서 정의하지 않고 .computeCCC 내에서 바로 정의)
         epi.ccc = function(x,
                            y,
                            ci = "z-transform",
@@ -183,19 +222,25 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           
           k <- length(dat$y)
           
-          # 데이터가 충분하지 않은 경우 처리
           if (k < 2) {
             rho.c <- data.frame(NA, NA, NA)
             names(rho.c) <- c("est", "lower", "upper")
-            return(list(
-              rho.c = rho.c,
-              s.shift = NA,
-              l.shift = NA,
-              C.b = NA,
-              blalt = data.frame(mean = numeric(0), delta = numeric(0)),
-              sblalt = data.frame(est = NA, delta.sd = NA, lower = NA, upper = NA),
-              nmissing = nmissing
-            ))
+            return(
+              list(
+                rho.c = rho.c,
+                s.shift = NA,
+                l.shift = NA,
+                C.b = NA,
+                blalt = data.frame(mean = numeric(0), delta = numeric(0)),
+                sblalt = data.frame(
+                  est = NA,
+                  delta.sd = NA,
+                  lower = NA,
+                  upper = NA
+                ),
+                nmissing = nmissing
+              )
+            )
           }
           
           yb <- mean(dat$y)
@@ -220,11 +265,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           v <- sd1 / sd2
           # Location shift relative to the scale:
           u <- (yb - xb) / ((sx2 * sy2) ^ 0.25)
-          # Variable C.b is a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees (a measure of accuracy).
-          # No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989 page 258).
-          # C.b <- (((v + 1) / (v + u^2)) / 2)^-1
-          
-          # The following taken from the Stata code for function "concord" (changed 290408):
+          # C.b 계산
           C.b <- p / r
           
           # Variance, test, and CI for asymptotic normal approximation (per Lin [March 2000] Biometrics 56:325-5):
@@ -235,7 +276,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           ll <- p - (zv * sep)
           ul <- p + (zv * sep)
           
-          # Statistic, variance, test, and CI for inverse hyperbolic tangent transform to improve asymptotic normality:
+          # Statistic, variance, test, and CI for inverse hyperbolic tangent transform
           t <- log((1 + p) / (1 - p)) / 2
           set = sep / (1 - ((p) ^ 2))
           llt = t - (zv * set)
@@ -269,7 +310,6 @@ concordanceClass <- if (requireNamespace('jmvcore'))
               nmissing = nmissing
             )
           }
-          
           else if (ci == "z-transform") {
             rho.c <- data.frame(p, llt, ult)
             names(rho.c) <- c("est", "lower", "upper")
@@ -285,8 +325,27 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           }
           return(rval)
         }
-        return(epi.ccc(x, y))
+        
+        # subjectid가 제공되면 자동으로 반복 측정 데이터로 처리
+        if (!is.null(subjectid)) {
+          # 반복 측정 데이터에 대한 처리
+          # subject별 평균 계산
+          dat <- data.frame(subjectid = subjectid,
+                            x = x,
+                            y = y)
+          dat <- na.omit(dat)
+          
+          # subject별 평균 계산
+          subj_means <- aggregate(dat[, c("x", "y")], by = list(dat$subjectid), FUN = mean)
+          
+          # 평균 값으로 CCC 계산
+          return(epi.ccc(subj_means$x, subj_means$y))
+        } else {
+          # 기존 로직 유지
+          return(epi.ccc(x, y))
+        }
       },
+      
       
       .plot1 = function(image1, ggtheme, theme, ...) {
         if (is.null(image1$state))
@@ -298,11 +357,9 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         blalt <- image1$state$blalt
         
         tmp1 <- data.frame(mean = blalt[, 1], delta = blalt[, 2])
-        dat <- data.frame(
-          est = est,
-          lower = lower,
-          upper = upper
-        )
+        dat <- data.frame(est = est,
+                          lower = lower,
+                          upper = upper)
         
         library(ggplot2)
         plot1 <- ggplot2::ggplot(tmp1, aes(x = mean, y = delta)) +

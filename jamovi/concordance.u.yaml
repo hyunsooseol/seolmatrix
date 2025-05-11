@@ -22,6 +22,12 @@ children:
             name: covs
             maxItemCount: 1
             isTarget: true
+      - type: TargetLayoutBox
+        children:
+          - type: VariablesListBox
+            name: id
+            isTarget: true
+            maxItemCount: 1
   - type: CollapseBox
     label: Pairwise analysis
     margin: normal

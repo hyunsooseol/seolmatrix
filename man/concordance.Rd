@@ -9,6 +9,7 @@ concordance(
   vars,
   dep,
   covs,
+  id,
   cc = FALSE,
   mat = FALSE,
   ccp = FALSE,
@@ -27,6 +28,8 @@ concordance(
 \item{dep}{.}
 
 \item{covs}{.}
+
+\item{id}{.}
 
 \item{cc}{.}
 
