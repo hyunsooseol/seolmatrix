@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 4.0.1
+version: 4.0.2
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2025-05-10'
+date: '2025-05-27'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -22,66 +22,77 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Partial Correlation
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Ordinal Correlation
     name: rank
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Ordinal Correlation
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Multilevel Correlation
     name: multilevel
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Multilevel Correlation
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Concordance Correlation
     name: concordance
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Concordance Correlation
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Correlation Structure
     name: cor
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Correlation Structure
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Repeated & Cross Correlation
     name: rmc
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Repeated & Cross Correlation
     menuSubgroup: Correlation
+    ribbon: analyses
   - title: Rater Reliability
     name: rater
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Rater Reliability
     menuSubgroup: Rater
+    ribbon: analyses
   - title: Generalizability Theory
     name: gtheory
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Generalizability Theory
     menuSubgroup: Rater
+    ribbon: analyses
   - title: Analytic Hierarchy Process
     name: ahp
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Analytic Hierarchy Process
     menuSubgroup: AHP
+    ribbon: analyses
   - title: AHP for survey data
     name: ahpsurvey
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: AHP for survey data
     menuSubgroup: AHP
+    ribbon: analyses
   - title: Directed Graph Centrality
     name: network
     ns: seolmatrix
     menuGroup: seolmatrix
     menuTitle: Directed Graph Centrality
     menuSubgroup: Network
+    ribbon: analyses
 datasets:
   - name: rater
     path: rater.omv
