@@ -23,6 +23,7 @@ analyses:
     menuTitle: Partial Correlation
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Ordinal Correlation
     name: rank
     ns: seolmatrix
@@ -30,6 +31,7 @@ analyses:
     menuTitle: Ordinal Correlation
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Multilevel Correlation
     name: multilevel
     ns: seolmatrix
@@ -37,6 +39,7 @@ analyses:
     menuTitle: Multilevel Correlation
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Concordance Correlation
     name: concordance
     ns: seolmatrix
@@ -44,6 +47,7 @@ analyses:
     menuTitle: Concordance Correlation
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Correlation Structure
     name: cor
     ns: seolmatrix
@@ -51,6 +55,7 @@ analyses:
     menuTitle: Correlation Structure
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Repeated & Cross Correlation
     name: rmc
     ns: seolmatrix
@@ -58,6 +63,7 @@ analyses:
     menuTitle: Repeated & Cross Correlation
     menuSubgroup: Correlation
     ribbon: analyses
+    category: analyses
   - title: Rater Reliability
     name: rater
     ns: seolmatrix
@@ -65,6 +71,7 @@ analyses:
     menuTitle: Rater Reliability
     menuSubgroup: Rater
     ribbon: analyses
+    category: analyses
   - title: Generalizability Theory
     name: gtheory
     ns: seolmatrix
@@ -72,6 +79,7 @@ analyses:
     menuTitle: Generalizability Theory
     menuSubgroup: Rater
     ribbon: analyses
+    category: analyses
   - title: Analytic Hierarchy Process
     name: ahp
     ns: seolmatrix
@@ -79,6 +87,7 @@ analyses:
     menuTitle: Analytic Hierarchy Process
     menuSubgroup: AHP
     ribbon: analyses
+    category: analyses
   - title: AHP for survey data
     name: ahpsurvey
     ns: seolmatrix
@@ -86,6 +95,7 @@ analyses:
     menuTitle: AHP for survey data
     menuSubgroup: AHP
     ribbon: analyses
+    category: analyses
   - title: Directed Graph Centrality
     name: network
     ns: seolmatrix
@@ -93,6 +103,7 @@ analyses:
     menuTitle: Directed Graph Centrality
     menuSubgroup: Network
     ribbon: analyses
+    category: analyses
 datasets:
   - name: rater
     path: rater.omv
