@@ -28,5 +28,10 @@ Imports:
     corrplot,
     lme4,
     rmcorr,
-    lattice
+    lattice,
+    magrittr,
+    R6,
+    ggplot2,
+    stats,
+    RColorBrewer
 Remotes: cran/gtheory
