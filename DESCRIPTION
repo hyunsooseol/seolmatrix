@@ -23,7 +23,6 @@ Imports:
     easyAHP,
     ggdendro,
     multilevel,
-    ShinyItemAnalysis,
     ahpsurvey,
     corrplot,
     lme4,

@@ -16,33 +16,54 @@ options:
     - name: vars
       title: Variables
       type: Variables
-      suggested:
-         - continuous
-      permitted:
-        - numeric  
-        
+
     - name: type
       title: 'Correlation type'
       type: List
       options:
         - pearson
         - spearman
+        - kendall
       default: pearson
+      
+    - name: mat
+      title: 'Correlation matrix'
+      type: Bool 
+      default: TRUE
+
+    - name: missing
+      title: 'Missing values'
+      type: List
+      options:
+        - complete.obs
+        - pairwise.complete.obs
+      default: pairwise.complete.obs
+
+    - name: order
+      title: 'Order'
+      type: List
+      options:
+        - hclust
+        - AOE
+        - FPC
+        - alphabet
+        - original        
+      default: hclust
 
     - name: method
       title: 'Clustering method'
       type: List
       options:
-        - none
+        - complete
+        - ward
         - ward.D
         - ward.D2
         - single
-        - complete
         - average
         - mcquitty
         - median
         - centroid
-      default: ward.D
+      default: complete
 
     - name: k
       title: Number of clusters
@@ -55,40 +76,55 @@ options:
       type: Integer
       default: 3
 
+    - name: color
+      title: Color
+      type: List
+      options:
+        - black
+        - red
+        - blue
+        - green
+        - purple
+        - orange
+        - navy
+      default: blue
+      
     - name: plot
-      title: 'Heatmap' 
+      title: 'Hierarchical clustering' 
       type: Bool
-      default: FALSE    
+      default: false    
       
-    - name: horiz
-      title: horizontal
-      type: Bool
-      default: FALSE
+    - name: method1
+      title: 'Visualization'
+      type: List
+      options:
+        - title: circle
+          name:  circle
+        - title: square
+          name:  square
+        - title: ellipse
+          name:  ellipse
+        - title: number
+          name:  number
+        - title: shade
+          name:  shade
+        - title: color
+          name:  color      
+        - title: pie
+          name:  pie      
+      default:  circle
 
-    - name: plot1
-      title: 'Dendrogram'
-      type: Bool
-      default: FALSE 
-      
-    - name: poly
-      title: Polychoric     
-      type: Bool
-      default: FALSE      
-      
-    - name: plot2
-      title: 'Heatmap'
-      type: Bool
-      default: FALSE     
-
-    - name: plot3
-      title: 'Dendrogram' 
-      type: Bool
-      default: FALSE        
-
-    - name: horiz1
-      title: horizontal
-      type: Bool
-      default: FALSE
+    - name: type1
+      title: Type
+      type: List
+      options:
+        - title: full
+          name:  full
+        - title: lower
+          name:  lower
+        - title: upper
+          name:  upper
+      default:  full 
 
     - name: width
       type: Integer
@@ -100,33 +136,4 @@ options:
       title: "X"
       default: 500
 
-    - name: width3
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height3
-      type: Integer
-      title: "Height"
-      default: 500         
-
-    - name: width4
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height4
-      type: Integer
-      title: "Height"
-      default: 500       
-
-    - name: width5
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height5
-      type: Integer
-      title: "Height"
-      default: 500             
 ...

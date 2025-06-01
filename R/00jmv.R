@@ -51,12 +51,12 @@
         `year`=2017, 
         `title`="easyAHP: Analytic Hierarchy Process (AHP)", 
         `publisher`="[R package]. URL https://CRAN.R-project.org/package=easyAHP"), 
-    `ShinyItemAnalysis`=list(
+    `corrplot`=list(
         `type`="software", 
-        `author`="Martinkova, P., & Drabinova, A.", 
-        `year`=2018, 
-        `title`="ShinyItemAnalysis: for teaching psychometrics and to enforce routine analysis of educational tests", 
-        `publisher`="[R package]. URL https://CRAN.R-project.org/package=ShinyItemAnalysis"), 
+        `author`="Taiyun, W., et al.", 
+        `year`=2024, 
+        `title`="corrplot: Visualization of a Correlation Matrix", 
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=corrplot"), 
     `multilevel`=list(
         `type`="software", 
         `author`="Bliese, P., Chen, G., Downes, P., Schepker, D., & Lang, J.", 

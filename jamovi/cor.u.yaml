@@ -31,6 +31,14 @@ children:
               - type: ComboBox
                 name: type
               - type: ComboBox
+                name: missing
+              - type: ComboBox
+                name: method1
+              - type: ComboBox
+                name: type1
+              - type: ComboBox
+                name: order
+              - type: ComboBox
                 name: method
               - type: TextBox
                 name: k
@@ -38,39 +46,8 @@ children:
               - type: TextBox
                 name: size
                 format: number
-          - type: Label
-            label: 'Polychoric correlation'
-            children:
-              - type: CheckBox
-                name: poly
-                children:              
-                  - type: CheckBox
-                    name: plot2
-                    enable: (poly)
-                  - type: TextBox
-                    name: width4
-                    format: number
-                    enable: (plot2)
-                  - type: TextBox
-                    name: height4
-                    format: number
-                    enable: (plot2)  
-                  - type: CheckBox
-                    name: plot3
-                    enable: (poly)
-                    children:
-                      - type: CheckBox
-                        name: horiz1
-                        enable: (poly)
-                      - type: TextBox
-                        name: width3
-                        format: number
-                        enable: (plot3)
-                      - type: TextBox
-                        name: height3
-                        format: number
-                        enable: (plot3)  
-
+              - type: ComboBox
+                name: color
       - type: LayoutBox
         stretchFactor: 1
         margin: large
@@ -80,8 +57,10 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: Plots
+            label: 'Tests'
             children:
+              - type: CheckBox
+                name: mat            
               - type: CheckBox
                 name: plot
                 style: list-inline
@@ -94,21 +73,3 @@ children:
                     name: height
                     format: number
                     enable: (plot)
-              - type: CheckBox
-                name: plot1
-                children:
-                  - type: CheckBox
-                    name: horiz
-                    enable: (plot1)
-                  - type: TextBox
-                    name: width5
-                    format: number
-                    enable: (plot1)
-                  - type: TextBox
-                    name: height5
-                    format: number
-                    enable: (plot1)  
-
-
- 
-

@@ -8,24 +8,18 @@ cor(
   data,
   vars,
   type = "pearson",
-  method = "ward.D",
+  mat = TRUE,
+  missing = "pairwise.complete.obs",
+  order = "hclust",
+  method = "complete",
   k = 2,
   size = 3,
+  color = "blue",
   plot = FALSE,
-  horiz = FALSE,
-  plot1 = FALSE,
-  poly = FALSE,
-  plot2 = FALSE,
-  plot3 = FALSE,
-  horiz1 = FALSE,
+  method1 = "circle",
+  type1 = "full",
   width = 500,
-  height = 500,
-  width3 = 500,
-  height3 = 500,
-  width4 = 500,
-  height4 = 500,
-  width5 = 500,
-  height5 = 500
+  height = 500
 )
 }
 \arguments{
@@ -35,51 +29,43 @@ cor(
 
 \item{type}{.}
 
+\item{mat}{.}
+
+\item{missing}{.}
+
+\item{order}{.}
+
 \item{method}{.}
 
 \item{k}{.}
 
 \item{size}{.}
 
+\item{color}{.}
+
 \item{plot}{.}
 
-\item{horiz}{.}
+\item{method1}{.}
 
-\item{plot1}{.}
-
-\item{poly}{.}
-
-\item{plot2}{.}
-
-\item{plot3}{.}
-
-\item{horiz1}{.}
+\item{type1}{.}
 
 \item{width}{.}
 
 \item{height}{.}
-
-\item{width3}{.}
-
-\item{height3}{.}
-
-\item{width4}{.}
-
-\item{height4}{.}
-
-\item{width5}{.}
-
-\item{height5}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$matrix$asDF}
+
+\code{as.data.frame(results$matrix)}
 }
 \description{
 Correlation Structure

@@ -9,11 +9,26 @@ items:
       type: Html
       visible: True
       
+    - name: matrix
+      title:  '`Correlation matrix - ${type}`'
+      type: Table
+      visible: (matrix)
+      clearWith:
+        - vars
+        - type
+        - missing
+
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
     - name:  plot
-      title: Heatmap 
+      title: 'Hierarchical clustering'
       type:  Image
       visible: (plot)
-      refs: ShinyItemAnalysis
+      refs: corrplot
       renderFun: .plot
       clearWith:
         - vars
@@ -21,55 +36,12 @@ items:
         - type
         - method
         - size
-        - horiz
+        - missing
+        - color
+        - order
+        - method1
+        - type1
         - width
         - height
 
-    - name:  plot1
-      title: Dendrogram
-      type:  Image
-      visible: (plot1)
-      renderFun: .plot1
-      clearWith:
-        - vars
-        - k
-        - type
-        - method
-        - size
-        - horiz
-        - width5
-        - height5
-
-    - name:  plot2
-      title: Polychoric Heatmap
-      type:  Image
-      requiresData: true
-      visible: (plot2)
-      renderFun: .plot2
-      clearWith:
-        - vars
-        - k
-        - type
-        - method
-        - size
-        - horiz
-        - horiz1
-        - width4
-        - height4
-
-    - name:  plot3
-      title: Polychoric Dendrogram
-      type:  Image
-      requiresData: true
-      visible: (plot3)
-      renderFun: .plot3
-      clearWith:
-        - vars
-        - k
-        - type
-        - method
-        - size
-        - horiz1 
-        - width3
-        - height3
 ...

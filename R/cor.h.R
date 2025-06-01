@@ -8,24 +8,18 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             type = "pearson",
-            method = "ward.D",
+            mat = TRUE,
+            missing = "pairwise.complete.obs",
+            order = "hclust",
+            method = "complete",
             k = 2,
             size = 3,
+            color = "blue",
             plot = FALSE,
-            horiz = FALSE,
-            plot1 = FALSE,
-            poly = FALSE,
-            plot2 = FALSE,
-            plot3 = FALSE,
-            horiz1 = FALSE,
+            method1 = "circle",
+            type1 = "full",
             width = 500,
-            height = 500,
-            width3 = 500,
-            height3 = 500,
-            width4 = 500,
-            height4 = 500,
-            width5 = 500,
-            height5 = 500, ...) {
+            height = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -35,32 +29,50 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
-                vars,
-                suggested=list(
-                    "continuous"),
-                permitted=list(
-                    "numeric"))
+                vars)
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
                 options=list(
                     "pearson",
-                    "spearman"),
+                    "spearman",
+                    "kendall"),
                 default="pearson")
+            private$..mat <- jmvcore::OptionBool$new(
+                "mat",
+                mat,
+                default=TRUE)
+            private$..missing <- jmvcore::OptionList$new(
+                "missing",
+                missing,
+                options=list(
+                    "complete.obs",
+                    "pairwise.complete.obs"),
+                default="pairwise.complete.obs")
+            private$..order <- jmvcore::OptionList$new(
+                "order",
+                order,
+                options=list(
+                    "hclust",
+                    "AOE",
+                    "FPC",
+                    "alphabet",
+                    "original"),
+                default="hclust")
             private$..method <- jmvcore::OptionList$new(
                 "method",
                 method,
                 options=list(
-                    "none",
+                    "complete",
+                    "ward",
                     "ward.D",
                     "ward.D2",
                     "single",
-                    "complete",
                     "average",
                     "mcquitty",
                     "median",
                     "centroid"),
-                default="ward.D")
+                default="complete")
             private$..k <- jmvcore::OptionInteger$new(
                 "k",
                 k,
@@ -70,34 +82,42 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "size",
                 size,
                 default=3)
+            private$..color <- jmvcore::OptionList$new(
+                "color",
+                color,
+                options=list(
+                    "black",
+                    "red",
+                    "blue",
+                    "green",
+                    "purple",
+                    "orange",
+                    "navy"),
+                default="blue")
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
                 default=FALSE)
-            private$..horiz <- jmvcore::OptionBool$new(
-                "horiz",
-                horiz,
-                default=FALSE)
-            private$..plot1 <- jmvcore::OptionBool$new(
-                "plot1",
-                plot1,
-                default=FALSE)
-            private$..poly <- jmvcore::OptionBool$new(
-                "poly",
-                poly,
-                default=FALSE)
-            private$..plot2 <- jmvcore::OptionBool$new(
-                "plot2",
-                plot2,
-                default=FALSE)
-            private$..plot3 <- jmvcore::OptionBool$new(
-                "plot3",
-                plot3,
-                default=FALSE)
-            private$..horiz1 <- jmvcore::OptionBool$new(
-                "horiz1",
-                horiz1,
-                default=FALSE)
+            private$..method1 <- jmvcore::OptionList$new(
+                "method1",
+                method1,
+                options=list(
+                    "circle",
+                    "square",
+                    "ellipse",
+                    "number",
+                    "shade",
+                    "color",
+                    "pie"),
+                default="circle")
+            private$..type1 <- jmvcore::OptionList$new(
+                "type1",
+                type1,
+                options=list(
+                    "full",
+                    "lower",
+                    "upper"),
+                default="full")
             private$..width <- jmvcore::OptionInteger$new(
                 "width",
                 width,
@@ -106,94 +126,52 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height",
                 height,
                 default=500)
-            private$..width3 <- jmvcore::OptionInteger$new(
-                "width3",
-                width3,
-                default=500)
-            private$..height3 <- jmvcore::OptionInteger$new(
-                "height3",
-                height3,
-                default=500)
-            private$..width4 <- jmvcore::OptionInteger$new(
-                "width4",
-                width4,
-                default=500)
-            private$..height4 <- jmvcore::OptionInteger$new(
-                "height4",
-                height4,
-                default=500)
-            private$..width5 <- jmvcore::OptionInteger$new(
-                "width5",
-                width5,
-                default=500)
-            private$..height5 <- jmvcore::OptionInteger$new(
-                "height5",
-                height5,
-                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
+            self$.addOption(private$..mat)
+            self$.addOption(private$..missing)
+            self$.addOption(private$..order)
             self$.addOption(private$..method)
             self$.addOption(private$..k)
             self$.addOption(private$..size)
+            self$.addOption(private$..color)
             self$.addOption(private$..plot)
-            self$.addOption(private$..horiz)
-            self$.addOption(private$..plot1)
-            self$.addOption(private$..poly)
-            self$.addOption(private$..plot2)
-            self$.addOption(private$..plot3)
-            self$.addOption(private$..horiz1)
+            self$.addOption(private$..method1)
+            self$.addOption(private$..type1)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
-            self$.addOption(private$..width3)
-            self$.addOption(private$..height3)
-            self$.addOption(private$..width4)
-            self$.addOption(private$..height4)
-            self$.addOption(private$..width5)
-            self$.addOption(private$..height5)
         }),
     active = list(
         vars = function() private$..vars$value,
         type = function() private$..type$value,
+        mat = function() private$..mat$value,
+        missing = function() private$..missing$value,
+        order = function() private$..order$value,
         method = function() private$..method$value,
         k = function() private$..k$value,
         size = function() private$..size$value,
+        color = function() private$..color$value,
         plot = function() private$..plot$value,
-        horiz = function() private$..horiz$value,
-        plot1 = function() private$..plot1$value,
-        poly = function() private$..poly$value,
-        plot2 = function() private$..plot2$value,
-        plot3 = function() private$..plot3$value,
-        horiz1 = function() private$..horiz1$value,
+        method1 = function() private$..method1$value,
+        type1 = function() private$..type1$value,
         width = function() private$..width$value,
-        height = function() private$..height$value,
-        width3 = function() private$..width3$value,
-        height3 = function() private$..height3$value,
-        width4 = function() private$..width4$value,
-        height4 = function() private$..height4$value,
-        width5 = function() private$..width5$value,
-        height5 = function() private$..height5$value),
+        height = function() private$..height$value),
     private = list(
         ..vars = NA,
         ..type = NA,
+        ..mat = NA,
+        ..missing = NA,
+        ..order = NA,
         ..method = NA,
         ..k = NA,
         ..size = NA,
+        ..color = NA,
         ..plot = NA,
-        ..horiz = NA,
-        ..plot1 = NA,
-        ..poly = NA,
-        ..plot2 = NA,
-        ..plot3 = NA,
-        ..horiz1 = NA,
+        ..method1 = NA,
+        ..type1 = NA,
         ..width = NA,
-        ..height = NA,
-        ..width3 = NA,
-        ..height3 = NA,
-        ..width4 = NA,
-        ..height4 = NA,
-        ..width5 = NA,
-        ..height5 = NA)
+        ..height = NA)
 )
 
 corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -201,10 +179,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
-        plot = function() private$.items[["plot"]],
-        plot1 = function() private$.items[["plot1"]],
-        plot2 = function() private$.items[["plot2"]],
-        plot3 = function() private$.items[["plot3"]]),
+        matrix = function() private$.items[["matrix"]],
+        plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -218,12 +194,27 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="instructions",
                 title="Instructions",
                 visible=TRUE))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="matrix",
+                title="`Correlation matrix - ${type}`",
+                visible="(matrix)",
+                clearWith=list(
+                    "vars",
+                    "type",
+                    "missing"),
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Heatmap",
+                title="Hierarchical clustering",
                 visible="(plot)",
-                refs="ShinyItemAnalysis",
+                refs="corrplot",
                 renderFun=".plot",
                 clearWith=list(
                     "vars",
@@ -231,57 +222,13 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "type",
                     "method",
                     "size",
-                    "horiz",
+                    "missing",
+                    "color",
+                    "order",
+                    "method1",
+                    "type1",
                     "width",
-                    "height")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot1",
-                title="Dendrogram",
-                visible="(plot1)",
-                renderFun=".plot1",
-                clearWith=list(
-                    "vars",
-                    "k",
-                    "type",
-                    "method",
-                    "size",
-                    "horiz",
-                    "width5",
-                    "height5")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot2",
-                title="Polychoric Heatmap",
-                requiresData=TRUE,
-                visible="(plot2)",
-                renderFun=".plot2",
-                clearWith=list(
-                    "vars",
-                    "k",
-                    "type",
-                    "method",
-                    "size",
-                    "horiz",
-                    "horiz1",
-                    "width4",
-                    "height4")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot3",
-                title="Polychoric Dendrogram",
-                requiresData=TRUE,
-                visible="(plot3)",
-                renderFun=".plot3",
-                clearWith=list(
-                    "vars",
-                    "k",
-                    "type",
-                    "method",
-                    "size",
-                    "horiz1",
-                    "width3",
-                    "height3")))}))
+                    "height")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",
@@ -310,56 +257,48 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param type .
+#' @param mat .
+#' @param missing .
+#' @param order .
 #' @param method .
 #' @param k .
 #' @param size .
+#' @param color .
 #' @param plot .
-#' @param horiz .
-#' @param plot1 .
-#' @param poly .
-#' @param plot2 .
-#' @param plot3 .
-#' @param horiz1 .
+#' @param method1 .
+#' @param type1 .
 #' @param width .
 #' @param height .
-#' @param width3 .
-#' @param height3 .
-#' @param width4 .
-#' @param height4 .
-#' @param width5 .
-#' @param height5 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$matrix$asDF}
+#'
+#' \code{as.data.frame(results$matrix)}
 #'
 #' @export
 cor <- function(
     data,
     vars,
     type = "pearson",
-    method = "ward.D",
+    mat = TRUE,
+    missing = "pairwise.complete.obs",
+    order = "hclust",
+    method = "complete",
     k = 2,
     size = 3,
+    color = "blue",
     plot = FALSE,
-    horiz = FALSE,
-    plot1 = FALSE,
-    poly = FALSE,
-    plot2 = FALSE,
-    plot3 = FALSE,
-    horiz1 = FALSE,
+    method1 = "circle",
+    type1 = "full",
     width = 500,
-    height = 500,
-    width3 = 500,
-    height3 = 500,
-    width4 = 500,
-    height4 = 500,
-    width5 = 500,
-    height5 = 500) {
+    height = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("cor requires jmvcore to be installed (restart may be required)")
@@ -374,24 +313,18 @@ cor <- function(
     options <- corOptions$new(
         vars = vars,
         type = type,
+        mat = mat,
+        missing = missing,
+        order = order,
         method = method,
         k = k,
         size = size,
+        color = color,
         plot = plot,
-        horiz = horiz,
-        plot1 = plot1,
-        poly = poly,
-        plot2 = plot2,
-        plot3 = plot3,
-        horiz1 = horiz1,
+        method1 = method1,
+        type1 = type1,
         width = width,
-        height = height,
-        width3 = width3,
-        height3 = height3,
-        width4 = width4,
-        height4 = height4,
-        width5 = width5,
-        height5 = height5)
+        height = height)
 
     analysis <- corClass$new(
         options = options,
