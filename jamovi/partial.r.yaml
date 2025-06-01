@@ -14,9 +14,9 @@ items:
       type:  Preformatted
       
     - name: matrix
-      title: Correlation Matrix
+      title: '`Correlation matrix - ${type}`' 
       type: Table
-      description: correlation matrix table
+      visible: (matrix)
       rows: (vars)
       clearWith:
           - vars
@@ -82,34 +82,6 @@ items:
           - height1
           - angle
  
-    # - name: plot3
-    #   title: 'Clustering plot '
-    #   type: Image
-    #   renderFun: .plot3
-    #   visible: (plot3)
-    #   refs: qgraph
-    #   clearWith:
-    #       - vars
-    #       - ctrlvars
-    #       - scale1
-    #       - width2
-    #       - height2
-    #       - angle1
-          
-    # - name:  text
-    #   title: EBICglasso matrix
-    #   type:  Preformatted
-    #   clearWith:
-    #     - vars
-    #     - ctrlvars
-    # 
-    # - name:  text1
-    #   title: Partial matrix
-    #   type:  Preformatted
-    #   clearWith:
-    #     - vars
-    #     - ctrlvars
-
     - name:  cen
       title: 'Centrality' 
       type:  Table

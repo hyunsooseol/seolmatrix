@@ -20,9 +20,6 @@ partialClass <- if (requireNamespace('jmvcore'))
             '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
             '<div style="text-align:justify;">',
             '<ul>',
-            '<li>When the <b>Controlling for</b> box is null, the result table shows Pearson correlation.</li>',
-            '<li>If you move the variables into <b>Controlling for</b> box, the result table shows Partial correlation.</li>',
-            '<li>When One variable is dichotomous, the other is continuous, the result table is equivalent to a point-biserial correlation.</li>',
             '<li>The network plots were implemented using the <b>qgraph</b> R package.</li>',
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
@@ -49,11 +46,11 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         # whether the procedure is controlling for variables or not-----------
         
-        matrix$setTitle(ifelse(
-          length(varCtl) > 0,
-          'Partial Correlation Matrix',
-          'Correlation Matrix'
-        ))
+        # matrix$setTitle(ifelse(
+        #   length(varCtl) > 0,
+        #   'Partial Correlation Matrix',
+        #   'Correlation Matrix'
+        # ))
         
         # Add Columns----------------------------------
         
@@ -89,22 +86,22 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         # initialize setNote-------------------------------------------------
         
-        matrix$setNote(
-          'ctlNte',
-          ifelse(
-            length(varCtl) > 0,
-            paste0('Controlling for ', paste(varCtl, collapse = ", ")),
-            'Not controlling for any variables, the result table shows Pearson correlation matrix'
-          )
-        )
+        # matrix$setNote(
+        #   'ctlNte',
+        #   ifelse(
+        #     length(varCtl) > 0,
+        #     paste0('Controlling for ', paste(varCtl, collapse = ", ")),
+        #     'Not controlling for any variables, the result table shows Pearson correlation matrix'
+        #   )
+        # )
         
         
         matrix$setNote('sigNte', paste0(
-          ifelse(
-            self$options$get('sidSig') == 'onetailed',
-            'One-tailed significance',
-            'Two-tailed significance'
-          ),
+          # ifelse(
+          #   self$options$get('sidSig') == 'onetailed',
+          #   'One-tailed significance',
+          #   'Two-tailed significance'
+          # ),
           ifelse(
             self$options$get('flgSig'),
             ': * p < .05, ** p < .01, *** p < .001',
@@ -134,8 +131,8 @@ partialClass <- if (requireNamespace('jmvcore'))
         if (nVar > 1) {
           m  <-
             as.matrix(stats::cor(data[, c(var, varCtl)], 
-                                 use = "pairwise.complete.obs", 
-                                 method = 'pearson'))
+                                 use = self$options$missing, 
+                                 method = self$options$type))
           X  <- m[var, var]
           
           if (nCtl > 0) {

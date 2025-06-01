@@ -232,7 +232,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="matrix",
-                title="Correlation Matrix",
+                title="`Correlation matrix - ${type}`",
+                visible="(matrix)",
                 rows="(vars)",
                 clearWith=list(
                     "vars",
@@ -369,7 +370,7 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
+#'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cen} \tab \tab \tab \tab \tab a table \cr

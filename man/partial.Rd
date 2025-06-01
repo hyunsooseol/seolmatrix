@@ -73,7 +73,7 @@ A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
-  \code{results$matrix} \tab \tab \tab \tab \tab correlation matrix table \cr
+  \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
