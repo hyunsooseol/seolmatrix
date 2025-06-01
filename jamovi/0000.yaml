@@ -115,12 +115,6 @@ datasets:
     description: Character data
     tags:
       - Rater
-  - name: anxiety
-    path: anxiety.omv
-    description: Kendall’s coefficient of concordance W
-    tags:
-      - Rater
-      - Kendall
   - name: onefacet
     path: onefacet.omv
     description: One facet design
@@ -142,11 +136,6 @@ datasets:
     tags:
       - Partial
       - Network
-  - name: big5
-    path: big5.omv
-    description: partial data
-    tags:
-      - Partial
   - name: dichotomous
     path: dicho.omv
     description: Tetrachoric Correlation
@@ -167,19 +156,9 @@ datasets:
     description: Multilevel Correlation
     tags:
       - Multilevel
-  - name: mtcars
-    path: mtcars.omv
-    description: Multilevel Correlation
-    tags:
-      - Multilevel
   - name: concordance
     path: concordance.omv
     description: Rating Big5 variable
-    tags:
-      - Concordance
-  - name: method
-    path: method.omv
-    description: comparing two methods
     tags:
       - Concordance
   - name: device

@@ -26,36 +26,34 @@ rankClass <- if (requireNamespace('jmvcore'))
               )
             )
           )
-          
-          if (isTRUE(self$options$plot)) {
-            width <- self$options$width
-            height <- self$options$height
-            self$results$plot$setSize(width, height)
-          }
-          
-          if (isTRUE(self$options$plot1)) {
-            width <- self$options$width1
-            height <- self$options$height1
-            self$results$plot1$setSize(width, height)
-          }
-          
-          if (isTRUE(self$options$plot2)) {
-            width <- self$options$width2
-            height <- self$options$height2
-            self$results$plot2$setSize(width, height)
-          }
-          
-          if (isTRUE(self$options$plot3)) {
-            width <- self$options$width3
-            height <- self$options$height3
-            self$results$plot3$setSize(width, height)
-          }
         }
-      },
+        if (isTRUE(self$options$plot)) {
+          width <- self$options$width
+          height <- self$options$height
+          self$results$plot$setSize(width, height)
+        }
+        if (isTRUE(self$options$plot1)) {
+          width <- self$options$width1
+          height <- self$options$height1
+          self$results$plot1$setSize(width, height)
+        }
+        
+        if (isTRUE(self$options$plot2)) {
+          width <- self$options$width2
+          height <- self$options$height2
+          self$results$plot2$setSize(width, height)
+        }
+        
+        if (isTRUE(self$options$plot3)) {
+          width <- self$options$width3
+          height <- self$options$height3
+          self$results$plot3$setSize(width, height)
+        }        
+        },
       
       .run = function() {
-        if (length(self$options$vars) < 2)
-          return()
+        if (length(self$options$vars) < 2) return()
+        
         vars <- self$options$vars
         type <- self$options$type
         mydata <- self$data
@@ -192,6 +190,22 @@ rankClass <- if (requireNamespace('jmvcore'))
           image3$setState(as.matrix(tetrarho))
         }
       },
+     
+      #Plot---
+      
+      .plot3 = function(image3, ggtheme, theme, ...) {
+        if (is.null(image3$state))
+          return(FALSE)
+        gram <- image3$state
+        plot3 <- corrplot::corrplot(
+          gram,
+          method=self$options$method,
+          type=self$options$type1
+         )
+        print(plot3)
+        TRUE
+      },
+      
       .plot = function(image, ...) {
         if (is.null(image$state))
           return(FALSE)
@@ -200,6 +214,7 @@ rankClass <- if (requireNamespace('jmvcore'))
         print(plot)
         TRUE
       },
+      
       # Centrality plot for EBIC------------
       
       .plot2 = function(image2, ggtheme, theme, ...) {
@@ -218,8 +233,7 @@ rankClass <- if (requireNamespace('jmvcore'))
         print(plot2)
         TRUE
       },
-      
-      
+
       .plot1 = function(image1, ...) {
         if (is.null(image1$state))
           return(FALSE)
@@ -227,20 +241,7 @@ rankClass <- if (requireNamespace('jmvcore'))
         plot1 <- qgraph::qgraph(res, layout = "spring", details = TRUE)
         print(plot1)
         TRUE
-      },
-      
-      .plot3 = function(image3, ggtheme, theme, ...) {
-        if (is.null(image3$state))
-          return(FALSE)
-        gram <- image3$state
-        plot3 <- corrplot::corrplot(
-          gram,
-          type = "lower",
-          col = c("black", "white"),
-          bg = "lightblue"
-        )
-        print(plot3)
-        TRUE
       }
+      
     )
   )

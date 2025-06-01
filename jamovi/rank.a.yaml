@@ -48,11 +48,6 @@ options:
           name:  relative      
       default:  raw0
 
-    - name: cor
-      title: Correlation matrix
-      type: Bool
-      default: TRUE
-
     - name: plot
       title: 'EBICglasso plot'
       type: Bool
@@ -95,17 +90,17 @@ options:
 
     - name: width3
       type: Integer
-      title: "Size: "
+      title: "Width"
       default: 500
       
     - name: height3
       type: Integer
-      title: "X"
+      title: "Height"
       default: 500
 
     - name: width2
       type: Integer
-      title: "Width "
+      title: "Width"
       default: 500
       
     - name: height2
@@ -119,4 +114,37 @@ options:
       min: 0
       max: 90
       default: 0
+
+    - name: method
+      title: Method
+      type: List
+      options:
+        - title: circle
+          name:  circle
+        - title: square
+          name:  square
+        - title: ellipse
+          name:  ellipse
+        - title: number
+          name:  number
+        - title: shade
+          name:  shade
+        - title: color
+          name:  color      
+        - title: pie
+          name:  pie      
+      default:  circle
+
+    - name: type1
+      title: Type
+      type: List
+      options:
+        - title: full
+          name:  full
+        - title: lower
+          name:  lower
+        - title: upper
+          name:  upper
+      default:  lower 
+
 ...

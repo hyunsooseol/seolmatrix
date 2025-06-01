@@ -9,7 +9,6 @@ rank(
   vars,
   type = "spearman",
   scale = "raw0",
-  cor = TRUE,
   plot = FALSE,
   plot1 = FALSE,
   plot2 = FALSE,
@@ -22,7 +21,9 @@ rank(
   height3 = 500,
   width2 = 500,
   height2 = 500,
-  angle = 0
+  angle = 0,
+  method = "circle",
+  type1 = "lower"
 )
 }
 \arguments{
@@ -33,8 +34,6 @@ rank(
 \item{type}{.}
 
 \item{scale}{.}
-
-\item{cor}{.}
 
 \item{plot}{.}
 
@@ -61,16 +60,20 @@ rank(
 \item{height2}{.}
 
 \item{angle}{.}
+
+\item{method}{.}
+
+\item{type1}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

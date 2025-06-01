@@ -9,7 +9,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             type = "spearman",
             scale = "raw0",
-            cor = TRUE,
             plot = FALSE,
             plot1 = FALSE,
             plot2 = FALSE,
@@ -22,7 +21,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             height3 = 500,
             width2 = 500,
             height2 = 500,
-            angle = 0, ...) {
+            angle = 0,
+            method = "circle",
+            type1 = "lower", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -55,10 +56,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "z-scores",
                     "relative"),
                 default="raw0")
-            private$..cor <- jmvcore::OptionBool$new(
-                "cor",
-                cor,
-                default=TRUE)
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -113,11 +110,30 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=0,
                 max=90,
                 default=0)
+            private$..method <- jmvcore::OptionList$new(
+                "method",
+                method,
+                options=list(
+                    "circle",
+                    "square",
+                    "ellipse",
+                    "number",
+                    "shade",
+                    "color",
+                    "pie"),
+                default="circle")
+            private$..type1 <- jmvcore::OptionList$new(
+                "type1",
+                type1,
+                options=list(
+                    "full",
+                    "lower",
+                    "upper"),
+                default="lower")
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
             self$.addOption(private$..scale)
-            self$.addOption(private$..cor)
             self$.addOption(private$..plot)
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
@@ -131,12 +147,13 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..width2)
             self$.addOption(private$..height2)
             self$.addOption(private$..angle)
+            self$.addOption(private$..method)
+            self$.addOption(private$..type1)
         }),
     active = list(
         vars = function() private$..vars$value,
         type = function() private$..type$value,
         scale = function() private$..scale$value,
-        cor = function() private$..cor$value,
         plot = function() private$..plot$value,
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
@@ -149,12 +166,13 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         height3 = function() private$..height3$value,
         width2 = function() private$..width2$value,
         height2 = function() private$..height2$value,
-        angle = function() private$..angle$value),
+        angle = function() private$..angle$value,
+        method = function() private$..method$value,
+        type1 = function() private$..type1$value),
     private = list(
         ..vars = NA,
         ..type = NA,
         ..scale = NA,
-        ..cor = NA,
         ..plot = NA,
         ..plot1 = NA,
         ..plot2 = NA,
@@ -167,7 +185,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..height3 = NA,
         ..width2 = NA,
         ..height2 = NA,
-        ..angle = NA)
+        ..angle = NA,
+        ..method = NA,
+        ..type1 = NA)
 )
 
 rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -176,10 +196,10 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
+        plot3 = function() private$.items[["plot3"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
-        plot1 = function() private$.items[["plot1"]],
-        plot3 = function() private$.items[["plot3"]]),
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -208,6 +228,20 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="", 
                         `type`="text", 
                         `content`="($key)"))))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot3",
+                title="Matrix plot",
+                renderFun=".plot3",
+                visible="(plot3)",
+                refs="corrplot",
+                clearWith=list(
+                    "vars",
+                    "type",
+                    "type1",
+                    "method",
+                    "width3",
+                    "height3")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -245,19 +279,7 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "type",
                     "width1",
-                    "height1")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot3",
-                title="Matrix plot",
-                renderFun=".plot3",
-                visible="(plot3)",
-                refs="corrgram",
-                clearWith=list(
-                    "vars",
-                    "type",
-                    "width3",
-                    "height3")))}))
+                    "height1")))}))
 
 rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "rankBase",
@@ -287,7 +309,6 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param type .
 #' @param scale .
-#' @param cor .
 #' @param plot .
 #' @param plot1 .
 #' @param plot2 .
@@ -301,14 +322,16 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param width2 .
 #' @param height2 .
 #' @param angle .
+#' @param method .
+#' @param type1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -323,7 +346,6 @@ rank <- function(
     vars,
     type = "spearman",
     scale = "raw0",
-    cor = TRUE,
     plot = FALSE,
     plot1 = FALSE,
     plot2 = FALSE,
@@ -336,7 +358,9 @@ rank <- function(
     height3 = 500,
     width2 = 500,
     height2 = 500,
-    angle = 0) {
+    angle = 0,
+    method = "circle",
+    type1 = "lower") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("rank requires jmvcore to be installed (restart may be required)")
@@ -353,7 +377,6 @@ rank <- function(
         vars = vars,
         type = type,
         scale = scale,
-        cor = cor,
         plot = plot,
         plot1 = plot1,
         plot2 = plot2,
@@ -366,7 +389,9 @@ rank <- function(
         height3 = height3,
         width2 = width2,
         height2 = height2,
-        angle = angle)
+        angle = angle,
+        method = method,
+        type1 = type1)
 
     analysis <- rankClass$new(
         options = options,

@@ -24,6 +24,20 @@ items:
             type: text
             content: ($key)
 
+    - name: plot3
+      title: 'Matrix plot'
+      type: Image
+      renderFun: .plot3
+      visible: (plot3)
+      refs: corrplot 
+      clearWith:
+          - vars
+          - type
+          - type1
+          - method
+          - width3
+          - height3
+
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
@@ -62,16 +76,5 @@ items:
         - width1
         - height1
 
-    - name: plot3
-      title: 'Matrix plot'
-      type: Image
-      renderFun: .plot3
-      visible: (plot3)
-      refs: corrgram 
-      clearWith:
-          - vars
-          - type
-          - width3
-          - height3
-              
+
 ...
