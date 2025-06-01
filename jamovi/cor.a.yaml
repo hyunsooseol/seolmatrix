@@ -51,7 +51,7 @@ options:
       default: hclust
 
     - name: method
-      title: 'Clustering method'
+      title: 'Method'
       type: List
       options:
         - complete
@@ -72,7 +72,7 @@ options:
       default: 2
 
     - name: size
-      title: Values display size
+      title: Display size
       type: Integer
       default: 3
 

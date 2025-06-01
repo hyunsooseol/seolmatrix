@@ -32,7 +32,14 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Test of significance
+            label: 'Data'
+            children:
+              - type: ComboBox
+                name: type
+              - type: ComboBox
+                name: missing                
+          - type: Label
+            label: 'Test of significance'
             children:
               - type: RadioButton
                 name: sidSig_onetailed

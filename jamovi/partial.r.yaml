@@ -21,6 +21,8 @@ items:
       clearWith:
           - vars
           - ctrlvars
+          - type
+          - missing
           - shwSig
           - sidSig
       refs: seolmatrix    

@@ -8,6 +8,8 @@ partial(
   data,
   vars,
   ctrlvars,
+  type = "pearson",
+  missing = "pairwise.complete.obs",
   sidSig = "twotailed",
   scale = "raw0",
   shwSig = FALSE,
@@ -31,6 +33,10 @@ partial(
 \item{vars}{.}
 
 \item{ctrlvars}{.}
+
+\item{type}{.}
+
+\item{missing}{.}
 
 \item{sidSig}{.}
 

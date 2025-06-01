@@ -26,20 +26,23 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Options'
+            label: 'Data'
             children:
               - type: ComboBox
                 name: type
               - type: ComboBox
                 name: missing
-              - type: ComboBox
-                name: method1
-              - type: ComboBox
-                name: type1
+          - type: Label
+            label: 'Clustering options'
+            children:
               - type: ComboBox
                 name: order
               - type: ComboBox
                 name: method
+              - type: ComboBox
+                name: method1
+              - type: ComboBox
+                name: type1
               - type: TextBox
                 name: k
                 format: number

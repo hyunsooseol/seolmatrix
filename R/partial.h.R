@@ -8,6 +8,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             ctrlvars = NULL,
+            type = "pearson",
+            missing = "pairwise.complete.obs",
             sidSig = "twotailed",
             scale = "raw0",
             shwSig = FALSE,
@@ -32,18 +34,25 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
-                vars,
-                suggested=list(
-                    "continuous"),
-                permitted=list(
-                    "numeric"))
+                vars)
             private$..ctrlvars <- jmvcore::OptionVariables$new(
                 "ctrlvars",
-                ctrlvars,
-                suggested=list(
-                    "continuous"),
-                permitted=list(
-                    "numeric"))
+                ctrlvars)
+            private$..type <- jmvcore::OptionList$new(
+                "type",
+                type,
+                options=list(
+                    "pearson",
+                    "spearman",
+                    "kendall"),
+                default="pearson")
+            private$..missing <- jmvcore::OptionList$new(
+                "missing",
+                missing,
+                options=list(
+                    "complete.obs",
+                    "pairwise.complete.obs"),
+                default="pairwise.complete.obs")
             private$..sidSig <- jmvcore::OptionList$new(
                 "sidSig",
                 sidSig,
@@ -133,6 +142,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
+            self$.addOption(private$..type)
+            self$.addOption(private$..missing)
             self$.addOption(private$..sidSig)
             self$.addOption(private$..scale)
             self$.addOption(private$..shwSig)
@@ -152,6 +163,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         vars = function() private$..vars$value,
         ctrlvars = function() private$..ctrlvars$value,
+        type = function() private$..type$value,
+        missing = function() private$..missing$value,
         sidSig = function() private$..sidSig$value,
         scale = function() private$..scale$value,
         shwSig = function() private$..shwSig$value,
@@ -170,6 +183,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
+        ..type = NA,
+        ..missing = NA,
         ..sidSig = NA,
         ..scale = NA,
         ..shwSig = NA,
@@ -222,6 +237,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "ctrlvars",
+                    "type",
+                    "missing",
                     "shwSig",
                     "sidSig"),
                 refs="seolmatrix",
@@ -331,6 +348,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param ctrlvars .
+#' @param type .
+#' @param missing .
 #' @param sidSig .
 #' @param scale .
 #' @param shwSig .
@@ -367,6 +386,8 @@ partial <- function(
     data,
     vars,
     ctrlvars,
+    type = "pearson",
+    missing = "pairwise.complete.obs",
     sidSig = "twotailed",
     scale = "raw0",
     shwSig = FALSE,
@@ -398,6 +419,8 @@ partial <- function(
     options <- partialOptions$new(
         vars = vars,
         ctrlvars = ctrlvars,
+        type = type,
+        missing = missing,
         sidSig = sidSig,
         scale = scale,
         shwSig = shwSig,

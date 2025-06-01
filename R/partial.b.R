@@ -133,7 +133,9 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         if (nVar > 1) {
           m  <-
-            as.matrix(stats::cor(data[, c(var, varCtl)], use = "pairwise.complete.obs", method = 'pearson'))
+            as.matrix(stats::cor(data[, c(var, varCtl)], 
+                                 use = "pairwise.complete.obs", 
+                                 method = 'pearson'))
           X  <- m[var, var]
           
           if (nCtl > 0) {
