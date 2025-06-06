@@ -35,8 +35,10 @@ options:
       title: 'Missing values'
       type: List
       options:
-        - complete.obs
-        - pairwise.complete.obs
+        - title: 'listwise'
+          name: 'complete.obs'
+        - title: 'pairwise'
+          name: 'pairwise.complete.obs'
       default: pairwise.complete.obs
 
     - name: order
