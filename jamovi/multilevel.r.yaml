@@ -72,7 +72,6 @@ items:
       requiresData: true
       visible: (plot)
       renderFun: .plot
-      refs: qgraph
       clearWith:
         - vars
         - facs

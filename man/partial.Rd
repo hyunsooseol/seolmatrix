@@ -26,7 +26,11 @@ partial(
   height1 = 500,
   angle = 0,
   robust = FALSE,
-  method = "percentage"
+  method = "percentage",
+  plot3 = FALSE,
+  angle1 = 45,
+  width3 = 500,
+  height3 = 500
 )
 }
 \arguments{
@@ -73,6 +77,14 @@ partial(
 \item{robust}{.}
 
 \item{method}{.}
+
+\item{plot3}{.}
+
+\item{angle1}{.}
+
+\item{width3}{.}
+
+\item{height3}{.}
 }
 \value{
 A results object containing:
@@ -84,6 +96,7 @@ A results object containing:
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
   \code{results$robust} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

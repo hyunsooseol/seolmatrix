@@ -137,6 +137,18 @@ items:
           title: 'Upper'
           type: number
           superTitle: '95% CI'
- 
+
+    - name:  plot3
+      title: 'Correlation Heatmap'
+      type:  Image
+      requiresData: true
+      visible: (plot3)
+      renderFun: .plot3
+      clearWith:
+        - vars
+        - angle1
+        - method
+        - width3
+        - height3 
 ...
 

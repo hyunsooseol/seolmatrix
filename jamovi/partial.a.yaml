@@ -173,11 +173,29 @@ options:
           name:  percentage
         - title: biweight
           name:  biweight
-        - title: shepherd
-          name:  shepherd          
       default: percentage
 
+    - name: plot3
+      title: 'Correlation Heatmap'
+      type: Bool
+      default: false
 
+    - name: angle1
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 45
+      
+    - name: width3
+      type: Integer
+      title: "Width "
+      default: 500
+
+    - name: height3
+      type: Integer
+      title: "Height"
+      default: 500            
 ...
 
 

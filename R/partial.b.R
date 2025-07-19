@@ -41,6 +41,13 @@ partialClass <- if (requireNamespace('jmvcore'))
           height <- self$options$height1
           self$results$plot2$setSize(width, height)
         }
+        
+        if (isTRUE(self$options$plot3)) {
+          width <- self$options$width3
+          height <- self$options$height3
+          self$results$plot3$setSize(width, height)
+        }        
+
         # get variables--------------------------------------
         
         matrix <- self$results$get('matrix')
@@ -264,7 +271,14 @@ partialClass <- if (requireNamespace('jmvcore'))
             table$addRow(rowKey = i, values = row)
           }
         }
-      },            
+      
+        if(isTRUE(self$options$plot3)){
+          
+          image <- self$results$plot3
+          image$setState(res)
+        }
+
+        },            
       
       .plot = function(image, ggtheme, theme, ...) {
         if (is.null(image$state))
@@ -302,6 +316,47 @@ partialClass <- if (requireNamespace('jmvcore'))
           plot2 <- plot2 + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = self$options$angle, hjust = 1))
         }
         print(plot2)
+        TRUE
+      },
+      
+      .plot3 = function(image, ggtheme, theme, ...) {
+        if (is.null(image$state))
+          return(FALSE)
+        
+        res <- image$state
+        
+        library(ggplot2)
+        
+        plot3<- ggplot(res, aes(x = Parameter1, y = Parameter2, fill = r)) +
+          geom_tile(color = "grey80", size = 0.7) +
+          scale_fill_gradient2(
+            low = "#4575b4",
+            mid = "white",
+            high = "#d73027",
+            limits = c(-1, 1),
+            midpoint = 0,
+            name = "Correlation"
+          ) +
+          geom_text(aes(label = sprintf("%.2f", r)), color = "black", size = 5, fontface = "bold") +
+          labs(
+            title = "",
+            subtitle = "",
+            x = NULL, y = NULL
+          ) +
+          theme_minimal(base_size = 15) +
+          theme(
+            axis.text.x = element_text(face = "bold"),
+            axis.text.y = element_text(face = "bold"),
+            panel.grid = element_blank(),
+            plot.title = element_text(face = "bold", size = 18)
+          )
+        
+        if (self$options$angle1 > 0) {
+          plot3 <- plot3 + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = self$options$angle1, hjust = 1))
+        }
+        
+        # plot <- plot + ggtheme
+        print(plot3)
         TRUE
       }
     )
