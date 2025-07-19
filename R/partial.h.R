@@ -338,7 +338,9 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "height",
                     "model",
                     "layout",
-                    "shape")))
+                    "shape",
+                    "type",
+                    "missing")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -352,7 +354,9 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "scale",
                     "width1",
                     "height1",
-                    "angle")))
+                    "angle",
+                    "type",
+                    "missing")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cen",
@@ -362,7 +366,9 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "ctrlvars",
-                    "scale"),
+                    "scale",
+                    "type",
+                    "missing"),
                 refs="qgraph",
                 columns=list(
                     list(
@@ -382,7 +388,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="`Robust correlation - ${method}`",
                 visible="(robust)",
                 clearWith=list(
-                    "vars"),
+                    "vars",
+                    "method"),
                 refs="correlation",
                 columns=list(
                     list(

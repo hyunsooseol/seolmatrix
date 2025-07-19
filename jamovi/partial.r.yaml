@@ -67,6 +67,8 @@ items:
           - model
           - layout
           - shape
+          - type
+          - missing
 
     - name: plot2
       title: 'Centrality plot '
@@ -81,6 +83,8 @@ items:
           - width1
           - height1
           - angle
+          - type
+          - missing
  
     - name:  cen
       title: 'Centrality' 
@@ -91,6 +95,8 @@ items:
         - vars
         - ctrlvars
         - scale
+        - type
+        - missing
       refs: qgraph
       columns:
         - name: name
@@ -109,6 +115,7 @@ items:
       visible: (robust)
       clearWith:
         - vars
+        - method
       refs: correlation
       
       columns:
