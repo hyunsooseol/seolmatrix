@@ -82,7 +82,7 @@ options:
     - name: plot
       title: 'Network plot'
       type: Bool
-      default: TRUE
+      default: false
 
     - name: model
       title: Model
@@ -159,6 +159,24 @@ options:
       min: 0
       max: 90
       default: 0
+
+    - name: robust
+      title: Robust correaltion
+      type: Bool
+      default: false
+
+    - name: method
+      title: Method
+      type: List
+      options:
+        - title: percentage
+          name:  percentage
+        - title: biweight
+          name:  biweight
+        - title: shepherd
+          name:  shepherd          
+      default: percentage
+
 
 ...
 

@@ -15,7 +15,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             shwSig = FALSE,
             flgSig = TRUE,
             cen = FALSE,
-            plot = TRUE,
+            plot = FALSE,
             model = "glasso",
             layout = "spring",
             shape = "circle",
@@ -24,7 +24,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             height = 500,
             width1 = 500,
             height1 = 500,
-            angle = 0, ...) {
+            angle = 0,
+            robust = FALSE,
+            method = "percentage", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -84,7 +86,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
-                default=TRUE)
+                default=FALSE)
             private$..model <- jmvcore::OptionList$new(
                 "model",
                 model,
@@ -139,6 +141,18 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=0,
                 max=90,
                 default=0)
+            private$..robust <- jmvcore::OptionBool$new(
+                "robust",
+                robust,
+                default=FALSE)
+            private$..method <- jmvcore::OptionList$new(
+                "method",
+                method,
+                options=list(
+                    "percentage",
+                    "biweight",
+                    "shepherd"),
+                default="percentage")
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
@@ -159,6 +173,8 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
             self$.addOption(private$..angle)
+            self$.addOption(private$..robust)
+            self$.addOption(private$..method)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -179,7 +195,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
         height1 = function() private$..height1$value,
-        angle = function() private$..angle$value),
+        angle = function() private$..angle$value,
+        robust = function() private$..robust$value,
+        method = function() private$..method$value),
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
@@ -199,7 +217,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..height = NA,
         ..width1 = NA,
         ..height1 = NA,
-        ..angle = NA)
+        ..angle = NA,
+        ..robust = NA,
+        ..method = NA)
 )
 
 partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -211,7 +231,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         matrix = function() private$.items[["matrix"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
-        cen = function() private$.items[["cen"]]),
+        cen = function() private$.items[["cen"]],
+        robust = function() private$.items[["robust"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -320,7 +341,50 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="Closeness"),
                     list(
                         `name`="bet", 
-                        `title`="Betweeness"))))}))
+                        `title`="Betweeness"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="robust",
+                title="`Robust correlation - ${method}`",
+                visible="(robust)",
+                clearWith=list(
+                    "vars"),
+                refs="correlation",
+                columns=list(
+                    list(
+                        `name`="v1", 
+                        `title`="Variable1", 
+                        `type`="text"),
+                    list(
+                        `name`="v2", 
+                        `title`="Variable2", 
+                        `type`="text"),
+                    list(
+                        `name`="r", 
+                        `type`="number"),
+                    list(
+                        `name`="t", 
+                        `type`="number"),
+                    list(
+                        `name`="df", 
+                        `type`="integer"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="n", 
+                        `type`="integer"),
+                    list(
+                        `name`="low", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="high", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"))))}))
 
 partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "partialBase",
@@ -366,6 +430,8 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param width1 .
 #' @param height1 .
 #' @param angle .
+#' @param robust .
+#' @param method .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -374,6 +440,7 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$robust} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -394,7 +461,7 @@ partial <- function(
     shwSig = FALSE,
     flgSig = TRUE,
     cen = FALSE,
-    plot = TRUE,
+    plot = FALSE,
     model = "glasso",
     layout = "spring",
     shape = "circle",
@@ -403,7 +470,9 @@ partial <- function(
     height = 500,
     width1 = 500,
     height1 = 500,
-    angle = 0) {
+    angle = 0,
+    robust = FALSE,
+    method = "percentage") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("partial requires jmvcore to be installed (restart may be required)")
@@ -436,7 +505,9 @@ partial <- function(
         height = height,
         width1 = width1,
         height1 = height1,
-        angle = angle)
+        angle = angle,
+        robust = robust,
+        method = method)
 
     analysis <- partialClass$new(
         options = options,

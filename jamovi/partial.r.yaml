@@ -101,6 +101,42 @@ items:
           title: Closeness
         - name: bet
           title: Betweeness
+
+
+    - name: robust
+      title: '`Robust correlation - ${method}`'
+      type: Table
+      visible: (robust)
+      clearWith:
+        - vars
+      refs: correlation
+      
+      columns:
+        - name: v1
+          title: 'Variable1'
+          type: 'text'
+        - name: v2
+          title: 'Variable2'
+          type: 'text'
+        - name: r
+          type: number
+        - name: t
+          type: number
+        - name: df
+          type: integer
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: n
+          type: integer
+        - name: low
+          title: 'Lower'
+          type: number
+          superTitle: '95% CI'
+        - name: high
+          title: 'Upper'
+          type: number
+          superTitle: '95% CI'
  
 ...
 

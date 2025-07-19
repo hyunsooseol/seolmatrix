@@ -15,7 +15,7 @@ partial(
   shwSig = FALSE,
   flgSig = TRUE,
   cen = FALSE,
-  plot = TRUE,
+  plot = FALSE,
   model = "glasso",
   layout = "spring",
   shape = "circle",
@@ -24,7 +24,9 @@ partial(
   height = 500,
   width1 = 500,
   height1 = 500,
-  angle = 0
+  angle = 0,
+  robust = FALSE,
+  method = "percentage"
 )
 }
 \arguments{
@@ -67,6 +69,10 @@ partial(
 \item{height1}{.}
 
 \item{angle}{.}
+
+\item{robust}{.}
+
+\item{method}{.}
 }
 \value{
 A results object containing:
@@ -77,6 +83,7 @@ A results object containing:
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
+  \code{results$robust} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

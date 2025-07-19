@@ -134,3 +134,21 @@ children:
             children:
               - type: CheckBox
                 name: cen
+  - type: CollapseBox
+    label: 'Robust correlation'
+    margin: normal
+    collapsed: true
+    children:
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        children:
+          - type: Label
+            label: 'Table'
+            children:
+              - type: CheckBox
+                name: robust
+                children:
+                  - type: ComboBox
+                    name: method
+                    enable: (robust)                

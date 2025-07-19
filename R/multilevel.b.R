@@ -51,6 +51,7 @@ multilevelClass <- if (requireNamespace('jmvcore'))
         data <- self$data
         vars  <- self$options$vars
         facs <- self$options$facs
+        
         if (self$options$multi == TRUE) {
           # convert to appropriate data types
           for (i in seq_along(vars))
@@ -59,7 +60,10 @@ multilevelClass <- if (requireNamespace('jmvcore'))
             data[[fac]] <- as.factor(data[[fac]])
           
           # data is now all of the appropriate type we can begin!
-          data <- na.omit(data)
+          #data <- na.omit(data)
+          
+          # correlation package is using pair wise automatically.
+          
           #############################################
           res <- correlation::correlation(data, multilevel = TRUE)
           #############################################

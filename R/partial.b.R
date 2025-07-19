@@ -111,32 +111,41 @@ partialClass <- if (requireNamespace('jmvcore'))
         if (length(self$options$vars) <= 1)
           self$setStatus('complete')
       },
+
       
       .run = function() {
         matrix <- self$results$get('matrix')
         var <- self$options$get('vars')
         nVar <- length(var)
         varCtl <- self$options$get('ctrlvars')
-        nCtl   <- length(varCtl)
+        nCtl <- length(varCtl)
         
         data <- self$data
         
-        for (v in var)
-          data[[v]] <- jmvcore::toNumeric(data[[v]])
+        #general---
         
-        for (v in varCtl)
-          data[[v]] <- jmvcore::toNumeric(data[[v]])
+        convertToNumeric <- function(data, variables) {
+          for (v in variables) {
+            data[[v]] <- jmvcore::toNumeric(data[[v]])
+          }
+          return(data)
+        }
+        
+        # partial and network data transformation---
+        
+        if (nVar > 1 || isTRUE(self$options$plot) || isTRUE(self$options$plot2) || isTRUE(self$options$cen)) {
+          data <- convertToNumeric(data, c(var, varCtl))
+        }
+        
         # Computing correlations----------
-        
         if (nVar > 1) {
-          m  <-
-            as.matrix(stats::cor(data[, c(var, varCtl)], 
-                                 use = self$options$missing, 
-                                 method = self$options$type))
-          X  <- m[var, var]
+          m <- as.matrix(stats::cor(data[, c(var, varCtl)], 
+                                    use = self$options$missing, 
+                                    method = self$options$type))
+          X <- m[var, var]
           
           if (nCtl > 0) {
-            Y  <- m[var, varCtl]
+            Y <- m[var, varCtl]
             pi <- solve(m[varCtl, varCtl])
             Rp <- cov2cor(X - Y %*% pi %*% t(Y))
           } else {
@@ -150,17 +159,14 @@ partialClass <- if (requireNamespace('jmvcore'))
           } else {
             nt = 2
           }
-          Pp <- -nt *  expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
+          Pp <- -nt * expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
           
           # populate results------------------------------------------------
-          
           for (i in 2:nVar) {
             for (j in seq_len(i - 1)) {
               values <- list()
-              values[[paste0(var[[j]], '[r]')]]  <-
-                Rp[i, j]
-              values[[paste0(var[[j]], '[rp]')]] <-
-                Pp[i, j]
+              values[[paste0(var[[j]], '[r]')]] <- Rp[i, j]
+              values[[paste0(var[[j]], '[rp]')]] <- Pp[i, j]
               matrix$setRow(rowNo = i, values)
               if (self$options$get('flgSig')) {
                 if (Pp[i, j] < .001)
@@ -170,95 +176,91 @@ partialClass <- if (requireNamespace('jmvcore'))
                 else if (Pp[i, j] < .05)
                   matrix$addSymbol(rowNo = i, paste0(var[[j]], '[r]'), '*')
               }
-              
+            }
+          }
+        }
+        
+        
+        if (isTRUE(self$options$plot) || isTRUE(self$options$plot2) || isTRUE(self$options$cen)) {
+          
+          CorMat <- qgraph::cor_auto(data)
+          
+          # Network PLOT
+          if (isTRUE(self$options$plot)) {
+            n = nrow(data)
+            image <- self$results$plot
+            state <- list(CorMat, n)  
+            image$setState(state)
+          }
+          
+          # Centrality 
+          if (isTRUE(self$options$cen)) {
+            vars <- self$options$vars
+            table <- self$results$cen
+            # Calculate centrality measures
+            res <- qgraph::centrality_auto(CorMat)
+            cen <- res[["node.centrality"]]
+            for (i in seq_along(vars)) {
+              row <- list()
+              row[["clo"]] <- cen[i, 2]
+              row[["bet"]] <- cen[i, 3]
+              table$setRow(rowKey = vars[i], values = row)
             }
           }
           
-        }
-        
-        # Patial plot----------------
-        
-        # var <- self$options$vars
-        # varCtl <- self$options$ctrlvars
-        #
-        # if(is.null(varCtl)){
-        #
-        #   partial <- psych::partial.r(data)
-        #
-        # } else{
-        #
-        # partial <- psych::partial.r(data,x=var, y=varCtl)
-        #
-        # }
-        
-        # if(isTRUE(self$options$pm)){
-        #   self$results$text1$setContent(partial)
-        # }
-        
-        #        image1 <- self$results$plot1
-        #        image1$setState(partial)
-        #
-        #        # Matrix plot-----------
-        #
-        #        image3 <- self$results$plot3
-        #        image3$setState(as.matrix(partial))
-        #
-        
-        # Network PLOT------------
-        
-        if (isTRUE(self$options$plot)) {
-          df <- qgraph::cor_auto(data)
-          n = nrow(data)
-          # Prepare Data For Plot -------
-          image <- self$results$plot
-          state <- list(df, n)
-          image$setState(state)
-        }
-        #if(isTRUE(self$options$plot2)){
-        
-        #     if(is.null(varCtl)){
-        #
-        # # Compute correlations:
-        CorMat <- qgraph::cor_auto(data)
-        #   } else{
-        #     CorMat <- qgraph::cor_auto(data, select = var)
-        #   }
-        
-        # Compute graph with tuning = 0.5 (EBIC)
-        EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-        
-        if (isTRUE(self$options$cen)) {
-          vars <- self$options$vars
-          table <- self$results$cen
-          # Calculate centrality measures
-          res <- qgraph::centrality_auto(CorMat)
-          cen <- res[["node.centrality"]]
-          #self$results$text2$setContent(cen)
-          for (i in seq_along(vars)) {
-            row <- list()
-            row[["clo"]] <- cen[i, 2]
-            row[["bet"]] <- cen[i, 3]
-            table$setRow(rowKey = vars[i], values = row)
+          # EBIC graph and Centrality plot
+          if (isTRUE(self$options$plot2)) {
+            # Compute graph with tuning = 0.5 (EBIC)
+            EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
+            # Centrality plot-------
+            image2 <- self$results$plot2
+            image2$setState(EBICgraph)
           }
         }
         
-        if (isTRUE(self$options$plot2)) {
-          # Centrality plot-------
-          image2 <- self$results$plot2
-          image2$setState(EBICgraph)
+        # Robust correlation ------------
+        if (isTRUE(self$options$robust)) {
+          
+          robust_data <- self$data
+          robust_vars <- self$options$vars
+          
+         
+          robust_data <- convertToNumeric(robust_data, robust_vars)
+          
+          # robust correlation 계산
+          res <- correlation::correlation(robust_data[, robust_vars, drop = FALSE], 
+                                          method = self$options$method)
+          
+          v1 <- res$Parameter1
+          v2 <- res$Parameter2
+          r <- res$r
+          low <- res$CI_low
+          high <- res$CI_high
+          t <- res$t
+          df <- res$df
+          p <- res$p
+          n <- res$n_Obs
+          
+          # populate robust correlation table---
+          table <- self$results$robust
+          nrows <- ncol(combn(robust_vars, 2))
+          
+          for (i in seq_len(nrows)) {
+            row <- list()
+            row[['v1']] <- v1[i]
+            row[['v2']] <- v2[i]
+            row[['r']] <- r[i]
+            row[['low']] <- low[i]
+            row[['high']] <- high[i]
+            row[['t']] <- t[i]
+            row[['df']] <- df[i]
+            row[['p']] <- p[i]
+            row[['n']] <- n[i]
+            
+            table$addRow(rowKey = i, values = row)
+          }
         }
-        
-        # # Clustering plot-------
-        # image3 <- self$results$plot3
-        # image3$setState(EBICgraph)
-        
-        #---------------------------------------
-        # if(isTRUE(self$options$ebic)){
-        #
-        #   self$results$text$setContent(CorMat)
-        # }
-        
-      },
+      },            
       
       .plot = function(image, ggtheme, theme, ...) {
         if (is.null(image$state))
@@ -300,3 +302,43 @@ partialClass <- if (requireNamespace('jmvcore'))
       }
     )
   )
+
+
+# Patial plot----------------
+
+# var <- self$options$vars
+# varCtl <- self$options$ctrlvars
+#
+# if(is.null(varCtl)){
+#
+#   partial <- psych::partial.r(data)
+#
+# } else{
+#
+# partial <- psych::partial.r(data,x=var, y=varCtl)
+#
+# }
+
+# if(isTRUE(self$options$pm)){
+#   self$results$text1$setContent(partial)
+# }
+
+#        image1 <- self$results$plot1
+#        image1$setState(partial)
+#
+#        # Matrix plot-----------
+#
+#        image3 <- self$results$plot3
+#        image3$setState(as.matrix(partial))
+#
+
+# # Clustering plot-------
+# image3 <- self$results$plot3
+# image3$setState(EBICgraph)
+
+#---------------------------------------
+# if(isTRUE(self$options$ebic)){
+#
+#   self$results$text$setContent(CorMat)
+# }
+
