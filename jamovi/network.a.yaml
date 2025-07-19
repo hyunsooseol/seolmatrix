@@ -37,12 +37,12 @@ options:
 
     - name: width
       type: Integer
-      title: "Width "
+      title: "Size: "
       default: 500
       
     - name: height
       type: Integer
-      title: "Height"
-      default: 500    
+      title: "X"
+      default: 500
 
 ...

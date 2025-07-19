@@ -4,7 +4,17 @@
 \alias{multilevel}
 \title{Multilevel Correlation}
 \usage{
-multilevel(data, vars, facs, icc = TRUE, multi = FALSE)
+multilevel(
+  data,
+  vars,
+  facs,
+  icc = TRUE,
+  multi = FALSE,
+  plot = FALSE,
+  angle = 45,
+  width = 500,
+  height = 500
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -16,6 +26,14 @@ multilevel(data, vars, facs, icc = TRUE, multi = FALSE)
 \item{icc}{.}
 
 \item{multi}{.}
+
+\item{plot}{.}
+
+\item{angle}{.}
+
+\item{width}{.}
+
+\item{height}{.}
 }
 \value{
 A results object containing:
@@ -23,6 +41,7 @@ A results object containing:
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$icc} \tab \tab \tab \tab \tab a table \cr
   \code{results$multi} \tab \tab \tab \tab \tab a table \cr
+  \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

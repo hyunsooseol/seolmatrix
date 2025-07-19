@@ -38,3 +38,34 @@ children:
                 name: icc
               - type: CheckBox
                 name: multi 
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: 'Plot'
+            children:
+              - type: CheckBox
+                name: plot
+                children:
+                  - type: TextBox
+                    name: angle
+                    enable: (plot)
+                    format: number
+                    suggestedValues:
+                      - value: 0
+                      - value: 45
+                      - value: 90
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (plot)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (plot)
+
+

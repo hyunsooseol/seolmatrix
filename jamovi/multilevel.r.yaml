@@ -16,6 +16,7 @@ items:
       visible: (icc)
       clearWith:
         - vars
+        - facs
       refs: multilevel    
 
       columns:
@@ -64,5 +65,19 @@ items:
           title: 'Upper'
           type: number
           superTitle: '95% CI'
+
+    - name:  plot
+      title: 'Correlation Heatmap'
+      type:  Image
+      requiresData: true
+      visible: (plot)
+      renderFun: .plot
+      refs: qgraph
+      clearWith:
+        - vars
+        - facs
+        - angle
+        - width
+        - height
 
 ...

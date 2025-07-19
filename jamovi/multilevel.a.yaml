@@ -39,6 +39,25 @@ options:
       type: Bool
       default: false
 
+    - name: plot
+      title: 'Correlation Heatmap'
+      type: Bool
+      default: false
 
-
+    - name: angle
+      title: Angle of x-axis labels
+      type: Number
+      min: 0
+      max: 90
+      default: 45
+      
+    - name: width
+      type: Integer
+      title: "Width "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "Height"
+      default: 500      
 ...
