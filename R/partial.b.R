@@ -26,6 +26,10 @@ partialClass <- if (requireNamespace('jmvcore'))
             
           )
         ))
+        
+        if (self$options$robust)
+          self$results$robust$setNote("Note", "Robust correlations handle missing data using pairwise deletion.")
+        
         if (isTRUE(self$options$plot)) {
           width <- self$options$width
           height <- self$options$height
