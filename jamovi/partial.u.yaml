@@ -20,52 +20,57 @@ children:
           - type: VariablesListBox
             name: ctrlvars
             isTarget: true
-  - type: LayoutBox
-    margin: large
-    stretchFactor: 1
+  - type: CollapseBox
+    label: 'Partial correlation'
+    margin: normal
+    collapsed: true
     children:
       - type: LayoutBox
         margin: large
-        cell:
-          column: 0
-          row: 0
         stretchFactor: 1
         children:
-          - type: Label
-            label: 'Data'
+          - type: LayoutBox
+            margin: large
+            cell:
+             column: 0
+             row: 0
+            stretchFactor: 1
             children:
-              - type: ComboBox
-                name: type
-              - type: ComboBox
-                name: missing                
-          - type: Label
-            label: 'Test of significance'
+              - type: Label
+                label: 'Data'
+                children:
+                  - type: ComboBox
+                    name: type
+                  - type: ComboBox
+                    name: missing                
+              - type: Label
+                label: 'Test of significance'
+                children:
+                  - type: RadioButton
+                    name: sidSig_onetailed
+                    optionName: sidSig
+                    optionPart: onetailed
+                  - type: RadioButton
+                    name: sidSig_twotailed
+                    optionName: sidSig
+                    optionPart: twotailed
+          - type: LayoutBox
+            stretchFactor: 1
+            margin: large
+            cell:
+             column: 1
+             row: 0
+            fitToGrid: true
             children:
-              - type: RadioButton
-                name: sidSig_onetailed
-                optionName: sidSig
-                optionPart: onetailed
-              - type: RadioButton
-                name: sidSig_twotailed
-                optionName: sidSig
-                optionPart: twotailed
-      - type: LayoutBox
-        stretchFactor: 1
-        margin: large
-        cell:
-          column: 1
-          row: 0
-        fitToGrid: true
-        children:
-          - type: Label
-            label: 'Options'
-            children:
-              - type: CheckBox
-                name: shwSig
-              - type: CheckBox
-                name: flgSig
+              - type: Label
+                label: 'Options'
+                children:
+                  - type: CheckBox
+                    name: shwSig
+                  - type: CheckBox
+                    name: flgSig
   - type: CollapseBox
-    label: 'Network plots'
+    label: 'Network plot'
     margin: normal
     collapsed: true
     children:
