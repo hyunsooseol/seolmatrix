@@ -8,10 +8,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       .htmlwidget = NULL,
       .init = function() {
         private$.htmlwidget <- HTMLWidget$new()
-        
         if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
-          
         }
         self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
           title = "Instructions",
@@ -22,11 +20,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             '<li>The R package <b>ahpsurvey</b> is described in the <a href="https://cran.r-project.org/web/packages/ahpsurvey/vignettes/my-vignette.html" target = "_blank">page</a>.</li>',
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
-            
           )
-          
         ))
-        
         if (self$options$sumcr)
           self$results$sumcr$setNote("Note", "Mean CR<0.1 is acceptable for consistency ratio.")
         if (isTRUE(self$options$plot1)) {
@@ -37,98 +32,79 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .run = function() {
-        # Ready--------
-        
         ready <- TRUE
-        
-        if (is.null(self$options$vars) ||
-            length(self$options$vars) < 2)
-          
+        if (is.null(self$options$vars) || length(self$options$vars) < 2)
           ready <- FALSE
-        
         if (ready) {
-          data <- private$.cleanData()
-          results <- private$.compute(data)
+          # 1. 결측 없는 행만 뽑은 data_clean
+          data_clean <- private$.cleanData()
+          if (nrow(data_clean) == 0) stop("No valid data rows after removing missing or infinite values.")
+          # 2. 원본 데이터에서 결측 없는 행 index (matching용)
+          valid_idx <- which(apply(self$data[, self$options$vars, drop=FALSE], 1, function(x) all(is.finite(as.numeric(x)))))
+          # 3. 분석 수행
+          results <- private$.compute(data_clean)
           
-          #populate 'Aggregated priorities'------------
           private$.populateApTable(results)
-          # populate 'Aggregated individual judgements' table----
           private$.populateAjTable(results)
-          # Consistency ratio of each decision-maker---------
-          private$.populateCrOutputs(results)
-          # populate sumcr table-----------
           private$.populateSumcrTable(results)
+          
+          # 4. CR 결과 매칭(보정) - 핵심!
+          if (self$options$cr && self$results$cr$isNotFilled()) {
+            cr_all <- rep(NA, nrow(self$data))     # 원본 길이만큼 NA로 초기화
+            cr <- results$cr                       # 결측 없는 행에 대한 결과만 있음
+            cr_all[valid_idx] <- cr                # 위치 맞춰서 결과 대입
+            self$results$cr$setRowNums(rownames(self$data))
+            self$results$cr$setValues(cr_all)
+          }
+          
+          # plot1 등 다른 결과는 기존과 동일
+          if (isTRUE(self$options$plot1)) {
+            me <- self$options$method2
+            me2 <- self$options$method3
+            atts <- strsplit(self$options$atts, ',')[[1]]
+            matahp <- ahpsurvey::ahp.mat(df = data_clean, atts = atts, negconvert = T)
+            m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
+            m2 <- ahpsurvey::ahp.indpref(matahp, atts, method = me2)
+            error <- data.frame(id = 1:length(matahp),
+                                maxdiff = apply(abs(m - m2), 1, max))
+            image <- self$results$plot1
+            image$setState(error)
+          }
         }
       },
       
-      
       .compute = function(data) {
-        # get variables---------------------------------
         vars <- self$options$vars
         method <- self$options$method
         method1 <- self$options$method1
-        
-        ############################################################
         atts <- strsplit(self$options$atts, ',')[[1]]
         
-        matahp <- ahpsurvey::ahp.mat(df = data,
-                                     atts = atts,
-                                     negconvert = T)
-        
-        ##########################################################
-        
-        # 'Aggregated priorities' table----------
-        
+        matahp <- ahpsurvey::ahp.mat(df = data, atts = atts, negconvert = T)
         geo <- ahpsurvey::ahp.aggpref(matahp, atts, method = method)
         df <- data.frame(Value = geo)
-        
-        # Aggregated individual judgements table--------
-        
         aj <- ahpsurvey::ahp.aggjudge(matahp, atts, aggmethod = method1)
-        
         item <- as.matrix(aj)
-        
-        # Consistency ratio of each decision-maker-------
-        
         cr <- ahpsurvey::ahp.cr(matahp, atts)
-        
         cr1 <- data %>%
           ahpsurvey::ahp.mat(atts, negconvert = T) %>%
           ahpsurvey::ahp.cr(atts)
-        
         tab <- as.vector(table(cr1 <= 0.1))
         
-        # Individual preference plot1----------
-        if (self$options$plot1 == TRUE) {
-          me <- self$options$method2
-          me2 <- self$options$method3
-          
-          m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
-          m2 <- ahpsurvey::ahp.indpref(matahp, atts, method = me2)
-          error <- data.frame(id = 1:length(matahp),
-                              maxdiff = apply(abs(m - m2), 1, max))
-          image <- self$results$plot1
-          image$setState(error)
-        }
-        results <-
-          list(
-            'df' = df,
-            'item' = item,
-            'cr' = cr,
-            'cr1' = cr1,
-            'tab' = tab
-          )
+        results <- list(
+          'df' = df,
+          'item' = item,
+          'cr' = cr,
+          'cr1' = cr1,
+          'tab' = tab
+        )
+        return(results)
       },
-      
-      #Populate table----------------------------
       
       .populateSumcrTable = function(results) {
         table <- self$results$sumcr
-        
         cr <- results$cr
         cr1 <- results$cr1
         tab <- results$tab
-        
         mcr <- round(mean(cr), 3)
         ve <- c(tab, mcr)
         row <- list()
@@ -142,7 +118,6 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         table <- self$results$ap
         df <- results$df
         names <- dimnames(df)[[1]]
-        table <- self$results$ap
         for (name in names) {
           row <- list()
           row[['value']] <- df[name, 1]
@@ -155,11 +130,9 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         item <- results$item
         names <- dimnames(item)[[1]]
         dims <- dimnames(item)[[2]]
-        table <- self$results$aj
         for (dim in dims) {
           table$addColumn(name = paste0(dim), type = 'number')
         }
-        
         for (name in names) {
           row <- list()
           for (j in seq_along(dims)) {
@@ -169,55 +142,33 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
       },
       
-      # COnsistency ration of each decision-maker-----
-      
-      .populateCrOutputs = function(results) {
-        cr <- results$cr
-        
-        if (self$options$cr
-            && self$results$cr$isNotFilled()) {
-          
-          self$results$cr$setRowNums(rownames(self$data))
-          self$results$cr$setValues(cr)
-          
-        }
-      },
-      
       .plot1 = function(image, ggtheme, theme, ...) {
         if (is.null(image$state))
           return(FALSE)
-        
         error <- image$state
         library(ggplot2)
         plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
           geom_point() +
-          geom_hline(yintercept = 0.05,
-                     linetype = "dashed",
-                     color = "red") +
+          geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
           geom_hline(yintercept = 0, color = "gray50") +
           scale_x_continuous("Respondent ID") +
           scale_y_continuous("Maximum difference")
-        plot1 + ggtheme
+        plot1 <- plot1 + ggtheme
         print(plot1)
         TRUE
       },
-
-      ### Helper functions =================================
       
       .cleanData = function() {
         items <- self$options$vars
-        
         data <- list()
-        
         for (item in items)
-          data[[item]] <-
-          jmvcore::toNumeric(self$data[[item]])
-        
-        attr(data, 'row.names') <-
-          seq_len(length(data[[1]]))
+          data[[item]] <- jmvcore::toNumeric(self$data[[item]])
+        attr(data, 'row.names') <- seq_len(length(data[[1]]))
         attr(data, 'class') <- 'data.frame'
-        data <- jmvcore::naOmit(data)
-        
+        # 결측 또는 Inf, NaN 포함 행 제거
+        idx <- apply(as.data.frame(data), 1, function(x) all(is.finite(as.numeric(x))))
+        data <- as.data.frame(data)
+        data <- data[idx, , drop = FALSE]
         return(data)
       }
     )
