@@ -9,7 +9,13 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             type = "pearson",
             eigen = TRUE,
-            avgCorr = FALSE, ...) {
+            avgCorr = FALSE,
+            screePlot = FALSE,
+            MapCurvePlot = FALSE,
+            width = 500,
+            height = 500,
+            width1 = 500,
+            height1 = 500, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -38,38 +44,89 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "avgCorr",
                 avgCorr,
                 default=FALSE)
+            private$..screePlot <- jmvcore::OptionBool$new(
+                "screePlot",
+                screePlot,
+                default=FALSE)
+            private$..MapCurvePlot <- jmvcore::OptionBool$new(
+                "MapCurvePlot",
+                MapCurvePlot,
+                default=FALSE)
+            private$..width <- jmvcore::OptionInteger$new(
+                "width",
+                width,
+                default=500)
+            private$..height <- jmvcore::OptionInteger$new(
+                "height",
+                height,
+                default=500)
+            private$..width1 <- jmvcore::OptionInteger$new(
+                "width1",
+                width1,
+                default=500)
+            private$..height1 <- jmvcore::OptionInteger$new(
+                "height1",
+                height1,
+                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
             self$.addOption(private$..eigen)
             self$.addOption(private$..avgCorr)
+            self$.addOption(private$..screePlot)
+            self$.addOption(private$..MapCurvePlot)
+            self$.addOption(private$..width)
+            self$.addOption(private$..height)
+            self$.addOption(private$..width1)
+            self$.addOption(private$..height1)
         }),
     active = list(
         vars = function() private$..vars$value,
         type = function() private$..type$value,
         eigen = function() private$..eigen$value,
-        avgCorr = function() private$..avgCorr$value),
+        avgCorr = function() private$..avgCorr$value,
+        screePlot = function() private$..screePlot$value,
+        MapCurvePlot = function() private$..MapCurvePlot$value,
+        width = function() private$..width$value,
+        height = function() private$..height$value,
+        width1 = function() private$..width1$value,
+        height1 = function() private$..height1$value),
     private = list(
         ..vars = NA,
         ..type = NA,
         ..eigen = NA,
-        ..avgCorr = NA)
+        ..avgCorr = NA,
+        ..screePlot = NA,
+        ..MapCurvePlot = NA,
+        ..width = NA,
+        ..height = NA,
+        ..width1 = NA,
+        ..height1 = NA)
 )
 
 mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "mapResults",
     inherit = jmvcore::Group,
     active = list(
+        instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
         eigen = function() private$.items[["eigen"]],
-        avgCorr = function() private$.items[["avgCorr"]]),
+        avgCorr = function() private$.items[["avgCorr"]],
+        screePlot = function() private$.items[["screePlot"]],
+        MapCurvePlot = function() private$.items[["MapCurvePlot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
             super$initialize(
                 options=options,
                 name="",
-                title="Velicer MAP Test")
+                title="Velicer MAP Test",
+                refs="seolmatrix")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="instructions",
+                title="Instructions",
+                visible=TRUE))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -79,6 +136,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="eigen",
                 title="Initial Eigenvalues",
                 visible="(eigen)",
+                refs="EFA.dimensions",
                 clearWith=list(
                     "vars",
                     "type"),
@@ -104,6 +162,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="avgCorr",
                 title="Velicer's Average Squared Correlations",
                 visible="(avgCorr)",
+                refs="EFA.dimensions",
                 clearWith=list(
                     "vars",
                     "type"),
@@ -114,12 +173,34 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="integer"),
                     list(
                         `name`="avgSq", 
-                        `title`="Avg.Corr.Sq.", 
+                        `title`="Average Squared Correlations", 
                         `type`="number"),
                     list(
                         `name`="avgPow4", 
-                        `title`="Avg.Corr.power4", 
-                        `type`="number"))))}))
+                        `title`="Average Squared Correlations (Fourth Power)", 
+                        `type`="number"))))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="screePlot",
+                title="Scree Plot (Initial Eigenvalues)",
+                renderFun=".screePlot",
+                visible="(screePlot)",
+                clearWith=list(
+                    "vars",
+                    "type",
+                    "width",
+                    "height")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="MapCurvePlot",
+                title="MAP Curves (Average Squared Correlations)",
+                renderFun=".MapCurvePlot",
+                visible="(MapCurvePlot)",
+                clearWith=list(
+                    "vars",
+                    "type",
+                    "width1",
+                    "height1")))}))
 
 mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "mapBase",
@@ -150,11 +231,20 @@ mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param type .
 #' @param eigen .
 #' @param avgCorr .
+#' @param screePlot .
+#' @param MapCurvePlot .
+#' @param width .
+#' @param height .
+#' @param width1 .
+#' @param height1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$MapCurvePlot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -169,7 +259,13 @@ map <- function(
     vars,
     type = "pearson",
     eigen = TRUE,
-    avgCorr = FALSE) {
+    avgCorr = FALSE,
+    screePlot = FALSE,
+    MapCurvePlot = FALSE,
+    width = 500,
+    height = 500,
+    width1 = 500,
+    height1 = 500) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("map requires jmvcore to be installed (restart may be required)")
@@ -185,7 +281,13 @@ map <- function(
         vars = vars,
         type = type,
         eigen = eigen,
-        avgCorr = avgCorr)
+        avgCorr = avgCorr,
+        screePlot = screePlot,
+        MapCurvePlot = MapCurvePlot,
+        width = width,
+        height = height,
+        width1 = width1,
+        height1 = height1)
 
     analysis <- mapClass$new(
         options = options,

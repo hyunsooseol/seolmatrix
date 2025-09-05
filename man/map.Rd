@@ -4,7 +4,19 @@
 \alias{map}
 \title{Velicer MAP Test}
 \usage{
-map(data, vars, type = "pearson", eigen = TRUE, avgCorr = FALSE)
+map(
+  data,
+  vars,
+  type = "pearson",
+  eigen = TRUE,
+  avgCorr = FALSE,
+  screePlot = FALSE,
+  MapCurvePlot = FALSE,
+  width = 500,
+  height = 500,
+  width1 = 500,
+  height1 = 500
+)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -16,13 +28,28 @@ map(data, vars, type = "pearson", eigen = TRUE, avgCorr = FALSE)
 \item{eigen}{.}
 
 \item{avgCorr}{.}
+
+\item{screePlot}{.}
+
+\item{MapCurvePlot}{.}
+
+\item{width}{.}
+
+\item{height}{.}
+
+\item{width1}{.}
+
+\item{height1}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
+  \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
+  \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$MapCurvePlot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

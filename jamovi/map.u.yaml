@@ -48,10 +48,45 @@ children:
                 type: RadioButton
                 optionName: type
                 optionPart: polychoric
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
           - type: Label
-            label: 'Table'
+            label: Table
             children:
               - type: CheckBox
                 name: eigen
               - type: CheckBox
-                name: avgCorr                
+                name: avgCorr
+          - type: Label
+            label: 'Plots'
+            children:
+              - type: CheckBox
+                name: screePlot
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                    enable: (screePlot)
+                  - type: TextBox
+                    name: height
+                    format: number
+                    enable: (screePlot)
+              - type: CheckBox
+                name: MapCurvePlot
+                style: list-inline
+                children:
+                  - type: TextBox
+                    name: width1
+                    format: number
+                    enable: (MapCurvePlot)
+                  - type: TextBox
+                    name: height1
+                    format: number
+                    enable: (MapCurvePlot)
+ 

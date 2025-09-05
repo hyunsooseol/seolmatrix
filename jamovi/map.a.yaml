@@ -33,7 +33,7 @@ options:
       default: pearson    
 
     - name: eigen
-      title: Initial eigenvalues
+      title: 'Initial eigenvalues'
       type: Bool
       default: true
 
@@ -41,4 +41,34 @@ options:
       title: 'Average Squared Correlations'
       type: Bool
       default: false
+
+    - name: screePlot
+      title: 'Scree Plot'
+      type: Bool
+      default: false       
+
+    - name: MapCurvePlot
+      title: 'MAP Curves'
+      type: Bool
+      default: false       
+
+    - name: width
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height
+      type: Integer
+      title: "X"
+      default: 500
+
+    - name: width1
+      type: Integer
+      title: "Size: "
+      default: 500
+      
+    - name: height1
+      type: Integer
+      title: "X"
+      default: 500
 ...
