@@ -1,0 +1,53 @@
+---
+name:  map
+title: Velicer MAP Test
+jrs:   '1.1'
+
+items:
+    - name:  text
+      title: Velicer MAP Test
+      type:  Preformatted
+
+    - name: eigen
+      title: 'Initial Eigenvalues'
+      visible: (eigen)
+      type: Table
+      clearWith:
+        - vars
+        - type
+
+      columns:
+          - name: factor
+            title: Factor
+            type: integer
+          - name: eigen
+            title: Eigenvalues
+            type: number
+          - name: propVar
+            title: '% of Variance'
+            type: number
+          - name: cumVar
+            title: 'Cumulative %'
+            type: number
+
+    - name: avgCorr
+      title: "Velicer's Average Squared Correlations"
+      type: Table
+      visible: (avgCorr)
+      clearWith:
+        - vars
+        - type
+
+      columns:
+        - name: root
+          title: Root
+          type: integer
+        - name: avgSq
+          title: Avg.Corr.Sq.
+          type: number
+        - name: avgPow4
+          title: Avg.Corr.power4
+          type: number
+
+
+...

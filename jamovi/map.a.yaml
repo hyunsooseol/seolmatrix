@@ -1,0 +1,44 @@
+---
+name:  map
+title: Velicer MAP Test
+menuGroup: seolmatrix
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: >
+            The data as a data frame.
+
+    - name: vars
+      title: Variables
+      type: Variables
+
+    - name: type
+      title: Type of correlation
+      type: List
+      options:
+        - title: Pearson
+          name:  pearson
+        - title: Kendall
+          name:  kendall
+        - title: Spearman
+          name:  spearman
+        - title: Gamma
+          name:  gamma
+        - title: Polychoric
+          name:  polychoric        
+      default: pearson    
+
+    - name: eigen
+      title: Initial eigenvalues
+      type: Bool
+      default: true
+
+    - name: avgCorr
+      title: 'Average Squared Correlations'
+      type: Bool
+      default: false
+...
