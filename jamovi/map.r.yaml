@@ -61,6 +61,26 @@ items:
           title: 'Average Squared Correlations (Fourth Power)'
           type: number
 
+    - name: empkcTable
+      title: "Empirical Kaiser Criterion"
+      type: Table
+      rows: 0
+      visible: (emp)
+      refs: EFA.dimensions      
+      clearWith:
+        - vars
+        - type
+      columns:
+        - name: component
+          title: "Component"
+          type: integer
+        - name: eigen
+          title: "Eigenvalue"
+          type: number
+        - name: ref
+          title: "Reference Value"
+          type: number
+
     - name: screePlot
       title: "Scree Plot with Parallel Analysis"
       type: Image

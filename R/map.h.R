@@ -129,6 +129,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         text1 = function() private$.items[["text1"]],
         eigen = function() private$.items[["eigen"]],
         avgCorr = function() private$.items[["avgCorr"]],
+        empkcTable = function() private$.items[["empkcTable"]],
         screePlot = function() private$.items[["screePlot"]],
         MapCurvePlot = function() private$.items[["MapCurvePlot"]]),
     private = list(),
@@ -200,6 +201,29 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="avgPow4", 
                         `title`="Average Squared Correlations (Fourth Power)", 
                         `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="empkcTable",
+                title="Empirical Kaiser Criterion",
+                rows=0,
+                visible="(emp)",
+                refs="EFA.dimensions",
+                clearWith=list(
+                    "vars",
+                    "type"),
+                columns=list(
+                    list(
+                        `name`="component", 
+                        `title`="Component", 
+                        `type`="integer"),
+                    list(
+                        `name`="eigen", 
+                        `title`="Eigenvalue", 
+                        `type`="number"),
+                    list(
+                        `name`="ref", 
+                        `title`="Reference Value", 
+                        `type`="number"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="screePlot",
@@ -267,6 +291,7 @@ mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$empkcTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$MapCurvePlot} \tab \tab \tab \tab \tab an image \cr
 #' }

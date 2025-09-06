@@ -55,6 +55,7 @@ A results object containing:
   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
+  \code{results$empkcTable} \tab \tab \tab \tab \tab a table \cr
   \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr
   \code{results$MapCurvePlot} \tab \tab \tab \tab \tab an image \cr
 }

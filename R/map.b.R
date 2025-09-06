@@ -9,7 +9,6 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
       .htmlwidget = NULL,
       
       .init = function() {
-        
         private$.htmlwidget <- HTMLWidget$new()
         
         if (is.null(self$data) | is.null(self$options$vars)) {
@@ -21,11 +20,13 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
             '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
             '<div style="text-align:justify;">',
             '<ul>',
+            '<li>The HULL method reports only the suggested number of factors, not detailed tables.</li>',  
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
           )
         ))
         
+
         if (isTRUE(self$options$screePlot))
           self$results$screePlot$setSize(self$options$width,  self$options$height)
         
@@ -34,16 +35,13 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
       },
       
       #---------------------------------
-      
       .run = function() {
-        
         if (is.null(self$options$vars) || length(self$options$vars) < 3) return()
         
         dat <- jmvcore::select(self$data, self$options$vars)
         dat <- jmvcore::naOmit(dat)
         dat <- jmvcore::toNumeric(dat)
         
-
         corType <- switch(
           self$options$type,
           pearson    = "pearson",
@@ -152,9 +150,8 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         self$results$screePlot$setState(dfScree)
         
         # ============================================================
-        # ==========  EMPKC & HULL : text1(Preformatted)  =====
+        # ==========  EMPKC & HULL  ==================================
         # ============================================================
-        
         .pickN <- function(obj) {
           nms <- names(obj)
           if (!is.null(nms)) {
@@ -171,13 +168,47 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           if (length(ux) > 0) ux[1] else NA_integer_
         }
         
-        m_emp  <- NA_integer_
-        m_hull <- NA_integer_
+        emp_res <- NULL
+        m_emp   <- NA_integer_
+        m_hull  <- NA_integer_
         
         if (isTRUE(self$options$emp)) {
           emp_try <- try(EFA.dimensions::EMPKC(data = dat, corkind = corType), silent = TRUE)
-          if (!inherits(emp_try, "try-error"))
-            m_emp <- .pickN(emp_try)
+          if (!inherits(emp_try, "try-error")) {
+            emp_res <- emp_try
+            if (!is.null(emp_res$NfactorsEMPKC)) {
+              m_emp <- suppressWarnings(as.integer(emp_res$NfactorsEMPKC[1]))
+            } else {
+              m_emp <- .pickN(emp_res)
+            }
+            
+            if (!is.null(self$results$empkcTable)) {
+              tblEMPKC <- self$results$empkcTable
+              
+              eigs <- emp_res[["eigenvalues"]]; if (is.null(eigs)) eigs <- emp_res$eigenvalues
+              refs <- emp_res[["refvalues"]];   if (is.null(refs)) refs <- emp_res$refvalues
+              
+              if (!is.null(eigs) && !is.null(refs)) {
+                eigs <- as.numeric(eigs); refs <- as.numeric(refs)
+                n <- min(length(eigs), length(refs))
+                for (i in seq_len(n)) {
+                  tblEMPKC$addRow(
+                    rowKey = as.character(i),      
+                    values = list(
+                      component = i,
+                      eigen     = eigs[i],
+                      ref       = refs[i]
+                    )
+                  )
+                }
+              }
+              
+              if (is.finite(m_emp) && is.function(tblEMPKC$setNote)) {
+                tblEMPKC$setNote("Note",
+                                 sprintf("Optimal number of factors : %d", m_emp))
+              }
+            }
+          }
         }
         
         if (isTRUE(self$options$hull)) {
