@@ -1,6 +1,5 @@
 # This file is a generated template, your changes will not be overwritten
 #' @importFrom magrittr %>%
-#' @importFrom EFA.dimensions MAP
 
 mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
   R6::R6Class(
@@ -11,7 +10,7 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
       
       .init = function() {
         
-        private$.htmlwidget <- HTMLWidget$new() 
+        private$.htmlwidget <- HTMLWidget$new()
         
         if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
@@ -27,17 +26,11 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           )
         ))
         
-        if (isTRUE(self$options$screePlot)) {
-          width  <- self$options$width
-          height <- self$options$height
-          self$results$screePlot$setSize(width, height)
-        }
+        if (isTRUE(self$options$screePlot))
+          self$results$screePlot$setSize(self$options$width,  self$options$height)
         
-        if (isTRUE(self$options$MapCurvePlot)) {
-          width  <- self$options$width1
-          height <- self$options$height1
-          self$results$MapCurvePlot$setSize(width, height)
-        }        
+        if (isTRUE(self$options$MapCurvePlot))
+          self$results$MapCurvePlot$setSize(self$options$width1, self$options$height1)
       },
       
       #---------------------------------
@@ -50,6 +43,7 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         dat <- jmvcore::naOmit(dat)
         dat <- jmvcore::toNumeric(dat)
         
+
         corType <- switch(
           self$options$type,
           pearson    = "pearson",
@@ -57,16 +51,24 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           spearman   = "spearman",
           gamma      = "gamma",
           polychoric = "polychoric",
-          default    = "pearson"
+          "pearson"
         )
         
+        if (!requireNamespace("EFA.dimensions", quietly = TRUE))
+          stop("Package 'EFA.dimensions' is required. Please install it.")
+        
+        if (identical(corType, "polychoric") &&
+            !requireNamespace("psych", quietly = TRUE)) {
+          stop("Polychoric correlations require the 'psych' package. Please install it.")
+        }
+        
+        # ----------------- MAP -----------------
         res <- EFA.dimensions::MAP(
           data    = dat,
           corkind = corType
         )
         
-        # table-------------------------------------------
-        
+        # ----- Initial Eigenvalues table -----
         mat <- NULL
         if (!is.null(res$totvarexplNOROT)) mat <- res$totvarexplNOROT
         if (is.null(mat) && !is.null(res$totvarexpl)) mat <- res$totvarexpl
@@ -77,13 +79,11 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         idxEigen <- grep("eigen",      cn, ignore.case = TRUE)[1]
         idxProp  <- grep("proportion", cn, ignore.case = TRUE)[1]
         idxCum   <- grep("cumulative", cn, ignore.case = TRUE)[1]
-        if (any(is.na(c(idxEigen, idxProp, idxCum))))
-          stop("Unexpected column names in MAP eigen table.")
         
-        tbl <- self$results$eigen  
+        tblEig <- self$results$eigen
         k <- nrow(mat)
         for (i in seq_len(k)) {
-          tbl$addRow(
+          tblEig$addRow(
             rowKey = as.character(i),
             values = list(
               factor  = i,
@@ -94,30 +94,19 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           )
         }
         
-        # ---- Fill "Velicer's Average Squared Correlations" table --------------
-        av <- NULL
-        if (!is.null(res$avgsqrs))
-          av <- res$avgsqrs
-        
-        if (!is.null(av)) {
-          av <- as.data.frame(av, stringsAsFactors = FALSE)
+        # ----- Velicer’s Average Squared Correlations table -----
+        if (!is.null(res$avgsqrs)) {
+          av <- as.data.frame(res$avgsqrs, stringsAsFactors = FALSE)
           
-          cn <- colnames(av)
-          idxRoot  <- grep("^root$", cn, ignore.case = TRUE)[1]
-          idxAvgSq <- grep("avg.*corr.*sq", cn, ignore.case = TRUE)[1]
-          idxPow4  <- grep("avg.*corr.*power4|power4", cn, ignore.case = TRUE)[1]
+          idxRoot  <- grep("^root$", colnames(av), ignore.case = TRUE)[1]
+          idxAvgSq <- grep("avg.*corr.*sq", colnames(av), ignore.case = TRUE)[1]
+          idxPow4  <- grep("avg.*corr.*power4|power4", colnames(av), ignore.case = TRUE)[1]
           
-          # if no explicit root column, create 0..(k-1)
-          if (is.na(idxRoot)) {
-            rootVals <- seq.int(0, nrow(av) - 1)
-          } else {
-            rootVals <- av[[idxRoot]]
-          }
+          rootVals <- if (is.na(idxRoot)) seq.int(0, nrow(av) - 1) else av[[idxRoot]]
           
-          tbl2 <- self$results$avgCorr  # <- r.yaml: items$name: avgCorr
-          k2 <- nrow(av)
-          for (i in seq_len(k2)) {
-            tbl2$addRow(
+          tblAvg <- self$results$avgCorr
+          for (i in seq_len(nrow(av))) {
+            tblAvg$addRow(
               rowKey = paste0("r", i),
               values = list(
                 root    = rootVals[i],
@@ -127,88 +116,127 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
             )
           }
           
+          # MAP Curve plot state
           dfMap <- data.frame(
             root    = rootVals,
             avgSq   = av[[idxAvgSq]],
             avgPow4 = av[[idxPow4]]
           )
-          minSq   <- which.min(dfMap$avgSq)
-          minPow4 <- which.min(dfMap$avgPow4)
-          
           self$results$MapCurvePlot$setState(list(
             df     = dfMap,
-            minSq  = minSq,
-            minPow4= minPow4
+            minSq  = which.min(dfMap$avgSq),
+            minPow4= which.min(dfMap$avgPow4)
           ))
         }
         
-        # Scree plot state + Parallel Analysis -------------------------------
-        pa_ncomp <- NULL  # PA 
-        if (!is.null(mat)) {
-          dfScree <- data.frame(
-            factor = seq_len(nrow(mat)),
-            eigen  = as.numeric(mat[, idxEigen])
-          )
-          
+        # ----- Scree plot + Parallel Analysis  -----
+        dfScree <- data.frame(
+          factor = seq_len(nrow(mat)),
+          eigen  = as.numeric(mat[, idxEigen])
+        )
+        
+        pa_ncomp <- NA_integer_
+        if (requireNamespace("psych", quietly = TRUE)) {
           pa_try <- try(psych::fa.parallel(dat, fa = "pc", n.iter = 100,
                                            show.legend = FALSE, plot = FALSE),
                         silent = TRUE)
           if (!inherits(pa_try, "try-error")) {
-            simVals <- NULL
-            if (!is.null(pa_try$pc.sim)) simVals <- pa_try$pc.sim
-            if (is.null(simVals) && !is.null(pa_try$fa.sim)) simVals <- pa_try$fa.sim  # fallback
-            if (!is.null(simVals)) {
-              simVals <- as.numeric(simVals)
-              simVals <- simVals[seq_len(nrow(dfScree))]     
-              dfScree$sim <- simVals
-              
-              pa_ncomp <- if (!is.null(pa_try$ncomp)) pa_try$ncomp
-              else sum(dfScree$eigen > dfScree$sim, na.rm = TRUE)
+            if (!is.null(pa_try$pc.sim))
+              dfScree$sim <- pa_try$pc.sim[seq_len(nrow(dfScree))]
+            if (!is.null(pa_try$ncomp))
+              pa_ncomp <- pa_try$ncomp
+            else if ("sim" %in% names(dfScree))
+              pa_ncomp <- sum(dfScree$eigen > dfScree$sim, na.rm = TRUE)
+          }
+        }
+        self$results$screePlot$setState(dfScree)
+        
+        # ============================================================
+        # ==========  EMPKC & HULL : text1(Preformatted)  =====
+        # ============================================================
+        
+        .pickN <- function(obj) {
+          nms <- names(obj)
+          if (!is.null(nms)) {
+            idx <- grep("n[fF]actors?|n[_]?comp|k$", nms, ignore.case = TRUE)
+            if (length(idx) > 0) {
+              val <- obj[[idx[1]]]
+              val <- suppressWarnings(as.integer(as.numeric(val)))
+              if (is.finite(val)) return(val)
             }
           }
-
-          self$results$screePlot$setState(dfScree)
+          ux <- unlist(obj, use.names = FALSE)
+          ux <- suppressWarnings(as.integer(as.numeric(ux)))
+          ux <- ux[is.finite(ux)]
+          if (length(ux) > 0) ux[1] else NA_integer_
         }
         
-        txt_lines <- character(0)
+        m_emp  <- NA_integer_
+        m_hull <- NA_integer_
         
-        # Original MAP
-        if (!is.null(res$NfactorsMAP)) {
-          txt_lines <- c(
-            txt_lines,
-            sprintf("The number of components according to the Original (1976) MAP Test is = %d",
-                    res[["NfactorsMAP"]])
-          )
+        if (isTRUE(self$options$emp)) {
+          emp_try <- try(EFA.dimensions::EMPKC(data = dat, corkind = corType), silent = TRUE)
+          if (!inherits(emp_try, "try-error"))
+            m_emp <- .pickN(emp_try)
         }
-        # Revised MAP
-        if (!is.null(res$NfactorsMAP4)) {
-          txt_lines <- c(
-            txt_lines,
-            sprintf("The number of components according to the Revised (2000) MAP Test is = %d",
-                    res[["NfactorsMAP4"]])
+        
+        if (isTRUE(self$options$hull)) {
+          hull_try <- try(
+            EFA.dimensions::DIMTESTS(
+              data    = dat,
+              corkind = corType,
+              Ncases  = nrow(dat),
+              tests   = "HULL",
+              display = 0
+            ),
+            silent = TRUE
           )
+          if (!inherits(hull_try, "try-error"))
+            m_hull <- .pickN(hull_try)
         }
-        # minima
-        if (exists("dfMap") && !is.null(dfMap)) {
-          min_avgSq   <- dfMap$avgSq[minSq]
-          min_avgPow4 <- dfMap$avgPow4[minPow4]
-          txt_lines <- c(
-            txt_lines,
-            sprintf("The smallest average squared correlation is %.5f",   min_avgSq),
-            sprintf("The smallest average 4rth power correlation is %.5f", min_avgPow4)
-          )
+        
+        # ----------------- MAP summary (text) -----------------
+        txt <- character()
+        if (!is.null(res$NfactorsMAP))
+          txt <- c(txt, sprintf("Original (1976) MAP suggests = %d", res$NfactorsMAP))
+        if (!is.null(res$NfactorsMAP4))
+          txt <- c(txt, sprintf("Revised (2000) MAP suggests = %d", res$NfactorsMAP4))
+        
+        if (exists("dfMap")) {
+          txt <- c(txt,
+                   sprintf("The smallest average squared correlation is %.5f",
+                           min(dfMap$avgSq,   na.rm = TRUE)),
+                   sprintf("The smallest average 4rth power correlation is %.5f",
+                           min(dfMap$avgPow4, na.rm = TRUE)))
         }
-        # PA 제안 요인 수
-        if (!is.null(pa_ncomp)) {
-          txt_lines <- c(
-            txt_lines,
-            sprintf("Parallel Analysis suggests retaining %d components.", pa_ncomp)
-          )
+        
+        if (is.finite(pa_ncomp))
+          txt <- c(txt, sprintf("Parallel Analysis suggests = %d", pa_ncomp))
+        
+        if (length(txt) > 0)
+          self$results$text$setContent(paste(txt, collapse = "\n"))
+        
+        # ----------------- EMPKC/HULL summary (text1) -----------------
+        txt1 <- character()
+        if (isTRUE(self$options$emp)) {
+          if (is.finite(m_emp))
+            txt1 <- c(txt1, sprintf("Empirical Kaiser Criterion suggests = %d", m_emp))
+          else
+            txt1 <- c(txt1, "Empirical Kaiser Criterion did not return a valid result.")
         }
-        if (length(txt_lines) > 0)
-          self$results$text$setContent(paste(txt_lines, collapse = "\n"))
+        if (isTRUE(self$options$hull)) {
+          if (is.finite(m_hull))
+            txt1 <- c(txt1, sprintf("HULL method suggests = %d", m_hull))
+          else
+            txt1 <- c(txt1, "HULL method did not return a valid result.")
+        }
+        if (length(txt1) == 0)
+          txt1 <- "No method was selected."
+        
+        self$results$text1$setContent(paste(txt1, collapse = "\n"))
       },
       
+      # ----------------- MAP Curve Plot -----------------
       .MapCurvePlot = function(image, ggtheme, theme, ...) {
         st <- image$state
         if (is.null(st) || is.null(st$df)) return(FALSE)
@@ -217,10 +245,8 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         library(ggplot2)
         library(tidyr)
         
-        # wide → long 
         df_long <- tidyr::pivot_longer(
-          df,
-          cols = c("avgSq", "avgPow4"),
+          df, cols = c("avgSq", "avgPow4"),
           names_to = "series", values_to = "value"
         )
         df_long$series <- factor(
@@ -233,26 +259,16 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
                                  color = series, linetype = series)) +
           geom_line() +
           geom_point() +
-          geom_point(
-            data = data.frame(
-              root   = df$root[c(st$minSq, st$minPow4)],
-              value  = c(df$avgSq[st$minSq], df$avgPow4[st$minPow4]),
-              series = c("Avg.Corr.Sq.", "Avg.Corr.power4")
-            ),
-            aes(x = root, y = value, color = series), inherit.aes = FALSE,
-            size = 3, shape = 16
-          ) +
           labs(x = "Root", y = "Avg.Corr.") +
           theme_bw() + ggtheme +
           theme(legend.title = element_blank(),
                 legend.position = "right",
                 plot.title = element_blank())
         
-        print(p)
-        TRUE
+        print(p); TRUE
       },
       
-      # ------------------------- Scree Plot ------------------------------
+      # ----------------- Scree Plot -----------------
       .screePlot = function(image, ggtheme, theme, ...) {
         df <- image$state
         if (is.null(df)) return(FALSE)
@@ -284,8 +300,7 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
                   plot.title = element_blank())
         }
         
-        print(p)
-        TRUE
+        print(p); TRUE
       }
     )
   )

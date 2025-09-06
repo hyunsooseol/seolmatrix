@@ -62,6 +62,10 @@ children:
                 name: eigen
               - type: CheckBox
                 name: avgCorr
+              - type: CheckBox
+                name: emp
+              - type: CheckBox
+                name: hull                
           - type: Label
             label: 'Plots'
             children:

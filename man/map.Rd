@@ -15,7 +15,9 @@ map(
   width = 500,
   height = 500,
   width1 = 500,
-  height1 = 500
+  height1 = 500,
+  emp = FALSE,
+  hull = FALSE
 )
 }
 \arguments{
@@ -40,12 +42,17 @@ map(
 \item{width1}{.}
 
 \item{height1}{.}
+
+\item{emp}{.}
+
+\item{hull}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
   \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr

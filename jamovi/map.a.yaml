@@ -71,4 +71,14 @@ options:
       type: Integer
       title: "X"
       default: 500
+
+    - name: emp
+      title: Empirical kaiser criterion
+      type: Bool
+      default: false
+
+    - name: hull
+      title: HULL method
+      type: Bool
+      default: false
 ...

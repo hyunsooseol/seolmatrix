@@ -11,7 +11,11 @@ items:
       visible: True
 
     - name:  text
-      title: 'Summary'
+      title: 'MAP summary'
+      type:  Preformatted
+
+    - name:  text1
+      title: 'Empirical Kaiser Criterion and Hull Method'
       type:  Preformatted
 
     - name: eigen

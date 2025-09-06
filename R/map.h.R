@@ -15,7 +15,9 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             width = 500,
             height = 500,
             width1 = 500,
-            height1 = 500, ...) {
+            height1 = 500,
+            emp = FALSE,
+            hull = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -68,6 +70,14 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "height1",
                 height1,
                 default=500)
+            private$..emp <- jmvcore::OptionBool$new(
+                "emp",
+                emp,
+                default=FALSE)
+            private$..hull <- jmvcore::OptionBool$new(
+                "hull",
+                hull,
+                default=FALSE)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
@@ -79,6 +89,8 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height)
             self$.addOption(private$..width1)
             self$.addOption(private$..height1)
+            self$.addOption(private$..emp)
+            self$.addOption(private$..hull)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -90,7 +102,9 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         width = function() private$..width$value,
         height = function() private$..height$value,
         width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value),
+        height1 = function() private$..height1$value,
+        emp = function() private$..emp$value,
+        hull = function() private$..hull$value),
     private = list(
         ..vars = NA,
         ..type = NA,
@@ -101,7 +115,9 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..width = NA,
         ..height = NA,
         ..width1 = NA,
-        ..height1 = NA)
+        ..height1 = NA,
+        ..emp = NA,
+        ..hull = NA)
 )
 
 mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -110,6 +126,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
+        text1 = function() private$.items[["text1"]],
         eigen = function() private$.items[["eigen"]],
         avgCorr = function() private$.items[["avgCorr"]],
         screePlot = function() private$.items[["screePlot"]],
@@ -130,7 +147,11 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Summary"))
+                title="MAP summary"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text1",
+                title="Empirical Kaiser Criterion and Hull Method"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="eigen",
@@ -237,10 +258,13 @@ mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height .
 #' @param width1 .
 #' @param height1 .
+#' @param emp .
+#' @param hull .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$eigen} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$avgCorr} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$screePlot} \tab \tab \tab \tab \tab an image \cr
@@ -265,7 +289,9 @@ map <- function(
     width = 500,
     height = 500,
     width1 = 500,
-    height1 = 500) {
+    height1 = 500,
+    emp = FALSE,
+    hull = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("map requires jmvcore to be installed (restart may be required)")
@@ -287,7 +313,9 @@ map <- function(
         width = width,
         height = height,
         width1 = width1,
-        height1 = height1)
+        height1 = height1,
+        emp = emp,
+        hull = hull)
 
     analysis <- mapClass$new(
         options = options,
