@@ -130,7 +130,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Velicer MAP Test"))
+                title="Summary"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="eigen",
@@ -182,7 +182,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="screePlot",
-                title="Scree Plot (Initial Eigenvalues)",
+                title="Scree Plot with Parallel Analysis",
                 renderFun=".screePlot",
                 visible="(screePlot)",
                 clearWith=list(

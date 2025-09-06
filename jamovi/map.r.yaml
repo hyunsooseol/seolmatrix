@@ -11,7 +11,7 @@ items:
       visible: True
 
     - name:  text
-      title: Velicer MAP Test
+      title: 'Summary'
       type:  Preformatted
 
     - name: eigen
@@ -58,7 +58,7 @@ items:
           type: number
 
     - name: screePlot
-      title: "Scree Plot (Initial Eigenvalues)"
+      title: "Scree Plot with Parallel Analysis"
       type: Image
       renderFun: .screePlot
       visible: (screePlot)

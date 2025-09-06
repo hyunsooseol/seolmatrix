@@ -26,7 +26,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Type of correlation
+            label: 'Type of correlation'
             children:
               - type: RadioButton
                 name: type_pearson
@@ -56,7 +56,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Table
+            label: 'Tables'
             children:
               - type: CheckBox
                 name: eigen

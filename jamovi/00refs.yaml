@@ -90,3 +90,10 @@ refs:
        year: 2023
        title: "rmcorr: Repeated Measures Correlation"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=rmcorr'
+
+   EFA.dimensions:
+       type: 'software'
+       author:  O'Connor, B.
+       year: 2024
+       title: "EFA.dimensions: Exploratory Factor Analysis Functions for Assessing Dimensionality"
+       publisher: '[R package]. URL https://CRAN.R-project.org/package=EFA.dimensions'

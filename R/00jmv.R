@@ -80,4 +80,10 @@
         `author`="Jonathan Z. Bakdash., & Laura R. Marusich.", 
         `year`=2023, 
         `title`="rmcorr: Repeated Measures Correlation", 
-        `publisher`="[R package]. URL https://CRAN.R-project.org/package=rmcorr"))
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=rmcorr"), 
+    `EFA.dimensions`=list(
+        `type`="software", 
+        `author`="O'Connor, B.", 
+        `year`=2024, 
+        `title`="EFA.dimensions: Exploratory Factor Analysis Functions for Assessing Dimensionality", 
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=EFA.dimensions"))

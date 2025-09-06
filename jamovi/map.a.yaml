@@ -38,17 +38,17 @@ options:
       default: true
 
     - name: avgCorr
-      title: 'Average Squared Correlations'
+      title: 'Average squared correlations'
       type: Bool
       default: false
 
     - name: screePlot
-      title: 'Scree Plot'
+      title: 'Scree plot with parallel analysis'
       type: Bool
       default: false       
 
     - name: MapCurvePlot
-      title: 'MAP Curves'
+      title: 'MAP curves'
       type: Bool
       default: false       
 

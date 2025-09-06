@@ -13,8 +13,8 @@ description: >-
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Multilevel
   correlation, Concordance correlation, Correlation structure, Repeated and
   Cross correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
-  Generalizability Theory, Analytic Hierarchy Process, Directed Graph Centrality
-  and allows users to produce Network plots.
+  Generalizability Theory, Analytic Hierarchy Process, Velicer's MAP test,
+  Directed Graph Centrality and allows users to produce Network plots.
 analyses:
   - title: Partial Correlation
     name: partial

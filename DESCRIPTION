@@ -6,7 +6,7 @@ Date: 2025-09-05
 Author: Hyunsoo Seol
 Maintainer: Hyunsoo Seol <snow@cau.ac.kr>
 Description: This module is a tool for calculating correlations such as Person, Partial,
-  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Rater Reliability, Generalizability Theory, Fleiss Kappa, Bootstrap agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy Process, Correlation structure, Repeated and Cross correlation, Directed Graph Centrality and allows users to
+  Tetrachoric, Polychoric, Spearman, Intraclass correlation, Rater Reliability, Generalizability Theory, Fleiss Kappa, Bootstrap agreement, Multilevel correlation, Concordance correlation, Analytic Hierarchy Process, Velicer's MAP test, Correlation structure, Repeated and Cross correlation, Directed Graph Centrality and allows users to
   produce Network plots.
 License: GPL (>= 2)
 Encoding: UTF-8
