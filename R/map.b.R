@@ -273,8 +273,10 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         if (is.null(st) || is.null(st$df)) return(FALSE)
         
         df <- st$df
-        library(ggplot2)
-        library(tidyr)
+        # library(ggplot2)
+        # library(tidyr)
+
+        has_ggrepel <- requireNamespace("ggrepel", quietly = TRUE)
         
         df_long <- tidyr::pivot_longer(
           df, cols = c("avgSq", "avgPow4"),
@@ -286,17 +288,54 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           labels = c("Avg.Corr.Sq.", "Avg.Corr.power4")
         )
         
+       
+        min_df <- do.call(rbind, lapply(split(df_long, df_long$series), function(d) {
+          d[which.min(d$value), , drop = FALSE]
+        }))
+        
+       
         p <- ggplot(df_long, aes(x = root, y = value,
                                  color = series, linetype = series)) +
-          geom_line() +
-          geom_point() +
-          labs(x = "Root", y = "Avg.Corr.") +
+          geom_line(linewidth = 0.9) +
+          geom_point(aes(shape = series), size = 3.2, stroke = 1.2, fill = "white") +
+          
+          geom_point(data = min_df,
+                     aes(x = root, y = value, color = series, shape = series),
+                     size = 5, stroke = 1.6, fill = "white") +
+          
+          geom_vline(data = min_df, aes(xintercept = root, color = series),
+                     linetype = "dotted", linewidth = 0.7, alpha = 0.5, show.legend = FALSE) +
+       
+          { if (has_ggrepel)
+            ggrepel::geom_label_repel(
+              data = min_df,
+              aes(label = paste0("", root)),
+              size = 3.2, label.size = 0.25, label.r = unit(2, "pt"),
+              seed = 123, show.legend = FALSE
+            ) else
+              geom_label(
+                data = min_df, aes(label = paste0("", root)),
+                size = 3.0, label.size = 0.25, label.r = unit(2, "pt"),
+                nudge_y = 0.05, show.legend = FALSE
+              )
+          } +
+         
+          scale_shape_manual(values = c("Avg.Corr.Sq." = 21, "Avg.Corr.power4" = 24)) +
+          scale_color_manual(values = c("Avg.Corr.Sq." = "#D55E00",  # 오렌지
+                                        "Avg.Corr.power4" = "#0072B2")) + # 블루
+          labs(x = "Root", y = "Avg.Corr.", title = NULL) +
           theme_bw() + ggtheme +
-          theme(legend.title = element_blank(),
-                legend.position = "right",
-                plot.title = element_blank())
+          theme(
+            legend.title = element_blank(),
+            legend.position = "right"
+          ) +
+          guides(
+            color = guide_legend(override.aes = list(size = 4, stroke = 1.4, fill = "white")),
+            shape = guide_legend(override.aes = list(size = 4, stroke = 1.4, fill = "white"))
+          )
         
-        print(p); TRUE
+        print(p)
+        TRUE
       },
       
       # ----------------- Scree Plot -----------------
