@@ -15,6 +15,10 @@ description: >-
   Cross correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
   Generalizability Theory, Analytic Hierarchy Process, Velicer's MAP test,
   Directed Graph Centrality and allows users to produce Network plots.
+  
+  Please submit feedback, bug reports, and feature requests via the links
+  provided <a href = "https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">
+  here</a>.
 analyses:
   - title: Partial Correlation
     name: partial
