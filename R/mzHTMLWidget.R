@@ -1,132 +1,62 @@
+# ---- put this near the top of b.R (before it's used) ----
+
+# minimal HTML escaper (to avoid htmltools dependency)
+.html_escape <- function(x) {
+  x <- gsub("&", "&amp;", x, fixed = TRUE)
+  x <- gsub("<", "&lt;",  x, fixed = TRUE)
+  x <- gsub(">", "&gt;",  x, fixed = TRUE)
+  x
+}
+
 HTMLWidget <- R6::R6Class("HTMLWidget",
-                             public = list(
-                                 initialize = function() {
-                                     # Inizializzazione della classe, non ha argomenti particolari.
-                                 },
-
-                                 generate_message = function(type = "info", message = "", animate_icon = TRUE) {
-                                     # Definisci l'HTML per diversi tipi di messaggio: info, warning, error
-                                     icon <- ""
-                                     style <- ""
-
-                                     animate_tag <- if (animate_icon) "<animate attributeName='r' values='20;25;20' dur='1.2s' repeatCount='3' />" else ""
-
-                                     if (type == "info") {
-                                         icon <- sprintf(
-                                             "<svg width='50' height='50' xmlns='http://www.w3.org/2000/svg'>
-                        <circle cx='25' cy='25' r='20' fill='#3e6da9'>%s</circle>
-                        <text x='25' y='29' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='30' font-family='Arial Black'>i</text>
-                    </svg>",
-                                             animate_tag
-                                         )
-                                         style <- "border-left: 5px solid #3e6da9; background-color: #f0f4fb; color: #3e6da9;"
-                                     } else if (type == "warning") {
-                                         icon <- sprintf(
-                                             "<svg width='50' height='50' xmlns='http://www.w3.org/2000/svg'>
-                        <circle cx='25' cy='25' r='20' fill='orange'>%s</circle>
-                        <text x='25' y='29' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='30' font-family='Arial Black'>!</text>
-                    </svg>",
-                                             animate_tag
-                                         )
-                                         style <- "border-left: 5px solid orange; background-color: #fff4e5; color: orange;"
-                                     } else if (type == "error") {
-                                         icon <- sprintf(
-                                             "<svg width='50' height='50' xmlns='http://www.w3.org/2000/svg'>
-                        <circle cx='25' cy='25' r='20' fill='red'>%s</circle>
-                        <text x='25' y='29' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='25' font-family='Arial Black'>X</text>
-                    </svg>",
-                                             animate_tag
-                                         )
-                                         style <- "border-left: 5px solid red; background-color: #fdecea; color: red;"
-                                     }
-
-                                     # Genera il contenuto HTML
-                                     html_content <- sprintf(
-                                         "<div style='display: flex; align-items: center; padding: 15px; margin: 10px; border-radius: 10px; %s'>
-                    <div style='margin-right: 15px;'>%s</div>
-                    <div>
-                        <div style='font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 5px;'>%s</div>
-                        <div style='font-family: Arial, sans-serif; font-size: 16px;'>%s</div>
-                    </div>
-                </div>",
-                                         style, icon, toupper(type), message
-                                     )
-
-                                     return(html_content)
-                                 },
-                                 # Funzione per generare un accordion HTML
-                                 generate_accordion = function(title = "Help", content = "") {
-                                     html_content <- paste0(
-                                         '<style>',
-                                         '.accordion {',
-                                         '  background-color: #3498db;',
-                                         '  color: white;',
-                                         '  cursor: pointer;',
-                                         '  padding: 8px 15px;',
-                                         '  width: 100%;',
-                                         '  border: none;',
-                                         '  text-align: left;',
-                                         '  outline: none;',
-                                         '  font-size: 16px;',
-                                         '  transition: 0.4s;',
-                                         '  display: flex;',
-                                         '  align-items: center;',
-                                         '  position: relative;',
-                                         '  border-top-left-radius: 8px;',
-                                         '  border-top-right-radius: 8px;',
-                                         '}',
-                                         '.accordion svg {',
-                                         '  margin-right: 15px;',
-                                         '  transition: fill 0.4s;',
-                                         '}',
-                                         '.accordion svg .circle {',
-                                         '  fill: white;',
-                                         '}',
-                                         '.accordion svg .horizontal,',
-                                         '.accordion svg .vertical {',
-                                         '  fill: #3498db;',
-                                         '  transition: transform 0.8s ease-in-out;',
-                                         '  transform-origin: center;',
-                                         '}',
-                                         '.accordion.active svg .vertical {',
-                                         '  transform: scaleY(0);',
-                                         '}',
-                                         '.panel {',
-                                         '  padding: 0 15px;',
-                                         '  display: none;',
-                                         '  background-color: white;',
-                                         '  overflow: hidden;',
-                                         '}',
-                                         '</style>',
-                                         '<script>',
-                                         'var acc = document.getElementsByClassName("accordion");',
-                                         'for (var i = 0; i < acc.length; i++) {',
-                                         '  acc[i].addEventListener("click", function() {',
-                                         '    this.classList.toggle("active");',
-                                         '    var panel = this.nextElementSibling;',
-                                         '    if (panel.style.display === "block") {',
-                                         '      panel.style.display = "none";',
-                                         '    } else {',
-                                         '      panel.style.display = "block";',
-                                         '    }',
-                                         '  });',
-                                         '}',
-                                         '</script>',
-                                         '<button class="accordion" style="margin-top: 20px;">',
-                                         '  <svg width="20" height="18" viewBox="0 0 24 24">',
-                                         '    <circle class="circle" cx="12" cy="12" r="11" />',
-                                         '    <rect class="horizontal" x="5" y="11" width="15" height="3" />',
-                                         '    <rect class="vertical" x="11" y="5" width="3" height="15" />',
-                                         '  </svg>',
-                                         '  <span style="font-size: 16px;">', title, '</span>',
-                                         '</button>',
-                                         '<div class="panel">',
-                                         content,
-                                         '</div>'
-                                     )
-                                     return(html_content)
-                                 }
-
-                             )
+                          public = list(
+                            initialize = function() {},
+                            
+                            # (옵션) 메시지 카드가 필요없다면 이 메서드는 삭제해도 됩니다.
+                            generate_message = function(type = "info", message = "") {
+                              style <- switch(type,
+                                              "warning" = "border-left:5px solid orange;background:#fff4e5;color:orange;",
+                                              "error"   = "border-left:5px solid red;background:#fdecea;color:red;",
+                                              "border-left:5px solid #3e6da9;background:#f0f4fb;color:#3e6da9;")
+                              sprintf(
+                                "<div style='padding:12px 14px;margin:8px;border-radius:10px;%s'>
+           <div style='font-weight:700;margin-bottom:4px'>%s</div>
+           <div>%s</div>
+         </div>",
+                                style, toupper(type), .html_escape(message))
+                            },
+                            
+                            # ✅ JS 없는 아코디언 (details/summary)
+                            generate_accordion = function(title = "Instructions", content = "") {
+                              
+                              css <- paste0(
+                                "<style>",
+                                "details.jacc{border:0;border-radius:8px;overflow:hidden;margin-top:20px}",
+                                "details.jacc>summary{list-style:none;cursor:pointer;background:#3498db;color:#fff;",
+                                "padding:8px 15px;display:flex;align-items:center;font-size:16px}",
+                                "details.jacc>summary::-webkit-details-marker{display:none}",
+                                "details.jacc>summary svg{margin-right:12px}",
+                                "details.jacc[open] summary .v{transform:scaleY(0);transition:transform .2s ease}",
+                                ".jacc .panel{background:#fff;padding:10px 15px}",
+                                ".jacc a{color:#2563eb;text-decoration:underline}",
+                                "</style>"
+                              )
+                              
+                              header <- sprintf(
+                                "<summary aria-expanded='false'>
+           <svg width='20' height='18' viewBox='0 0 24 24' aria-hidden='true'>
+             <circle cx='12' cy='12' r='11' fill='#fff'></circle>
+             <rect x='5' y='11' width='15' height='3' fill='#3498db'></rect>
+             <rect class='v' x='11' y='5' width='3' height='15' fill='#3498db'></rect>
+           </svg>
+           <span style='font-size:16px;'>%s</span>
+         </summary>",
+                                .html_escape(title)
+                              )
+                              
+                              panel <- paste0("<div class='panel'>", content, "</div>")
+                              paste0(css, "<details class='jacc'>", header, panel, "</details>")
+                            }
+                          )
 )
-
+# ---- end definition ----
