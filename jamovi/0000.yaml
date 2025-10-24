@@ -162,6 +162,7 @@ datasets:
     description: Spearman Correlation
     tags:
       - Spearman
+      - MAP Test
   - name: iris
     path: iris.omv
     description: Multilevel Correlation
