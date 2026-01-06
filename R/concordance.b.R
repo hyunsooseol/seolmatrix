@@ -30,18 +30,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           )
         ))
         
-        if (isTRUE(self$options$ccp)) {
-          width <- self$options$width
-          height <- self$options$height
-          self$results$plot$setSize(width, height)
-        }
-        
-        if (isTRUE(self$options$bap)) {
-          width <- self$options$width1
-          height <- self$options$height1
-          self$results$plot1$setSize(width, height)
-        }
-        
+      
       },
       
       .run = function() {

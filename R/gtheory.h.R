@@ -26,8 +26,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             mat = FALSE,
             bmat = FALSE,
             plot1 = FALSE,
-            width = 500,
-            height = 500,
             gco = "TRUE", ...) {
 
             super$initialize(
@@ -133,14 +131,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot1",
                 plot1,
                 default=FALSE)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
             private$..gco <- jmvcore::OptionList$new(
                 "gco",
                 gco,
@@ -169,8 +159,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..mat)
             self$.addOption(private$..bmat)
             self$.addOption(private$..plot1)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..gco)
         }),
     active = list(
@@ -194,8 +182,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         mat = function() private$..mat$value,
         bmat = function() private$..bmat$value,
         plot1 = function() private$..plot1$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         gco = function() private$..gco$value),
     private = list(
         ..dep = NA,
@@ -218,8 +204,6 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..mat = NA,
         ..bmat = NA,
         ..plot1 = NA,
-        ..width = NA,
-        ..height = NA,
         ..gco = NA)
 )
 
@@ -572,9 +556,7 @@ gtheoryResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "facet",
                     "sub",
                     "nf",
-                    "gco",
-                    "width",
-                    "height")))
+                    "gco")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -634,8 +616,6 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param mat .
 #' @param bmat .
 #' @param plot1 .
-#' @param width .
-#' @param height .
 #' @param gco .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -683,8 +663,6 @@ gtheory <- function(
     mat = FALSE,
     bmat = FALSE,
     plot1 = FALSE,
-    width = 500,
-    height = 500,
     gco = "TRUE") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -727,8 +705,6 @@ gtheory <- function(
         mat = mat,
         bmat = bmat,
         plot1 = plot1,
-        width = width,
-        height = height,
         gco = gco)
 
     analysis <- gtheoryClass$new(

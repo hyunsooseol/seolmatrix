@@ -17,9 +17,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             color = "blue",
             plot = FALSE,
             method1 = "circle",
-            type1 = "full",
-            width = 500,
-            height = 500, ...) {
+            type1 = "full", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -118,14 +116,6 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "lower",
                     "upper"),
                 default="full")
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
@@ -139,8 +129,6 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..plot)
             self$.addOption(private$..method1)
             self$.addOption(private$..type1)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -154,9 +142,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         color = function() private$..color$value,
         plot = function() private$..plot$value,
         method1 = function() private$..method1$value,
-        type1 = function() private$..type1$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value),
+        type1 = function() private$..type1$value),
     private = list(
         ..vars = NA,
         ..type = NA,
@@ -169,9 +155,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..color = NA,
         ..plot = NA,
         ..method1 = NA,
-        ..type1 = NA,
-        ..width = NA,
-        ..height = NA)
+        ..type1 = NA)
 )
 
 corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -226,9 +210,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "color",
                     "order",
                     "method1",
-                    "type1",
-                    "width",
-                    "height")))}))
+                    "type1")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",
@@ -267,8 +249,6 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot .
 #' @param method1 .
 #' @param type1 .
-#' @param width .
-#' @param height .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -296,9 +276,7 @@ cor <- function(
     color = "blue",
     plot = FALSE,
     method1 = "circle",
-    type1 = "full",
-    width = 500,
-    height = 500) {
+    type1 = "full") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("cor requires jmvcore to be installed (restart may be required)")
@@ -322,9 +300,7 @@ cor <- function(
         color = color,
         plot = plot,
         method1 = method1,
-        type1 = type1,
-        width = width,
-        height = height)
+        type1 = type1)
 
     analysis <- corClass$new(
         options = options,

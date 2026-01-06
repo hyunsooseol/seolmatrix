@@ -24,11 +24,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         ))
         if (self$options$sumcr)
           self$results$sumcr$setNote("Note", "Mean CR<0.1 is acceptable for consistency ratio.")
-        if (isTRUE(self$options$plot1)) {
-          width <- self$options$width1
-          height <- self$options$height1
-          self$results$plot1$setSize(width, height)
-        }
+       
       },
       
       .run = function() {

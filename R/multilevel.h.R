@@ -11,9 +11,7 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             icc = TRUE,
             multi = FALSE,
             plot = FALSE,
-            angle = 45,
-            width = 500,
-            height = 500, ...) {
+            angle = 45, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -53,14 +51,6 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=0,
                 max=90,
                 default=45)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..facs)
@@ -68,8 +58,6 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..multi)
             self$.addOption(private$..plot)
             self$.addOption(private$..angle)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -77,18 +65,14 @@ multilevelOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         icc = function() private$..icc$value,
         multi = function() private$..multi$value,
         plot = function() private$..plot$value,
-        angle = function() private$..angle$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value),
+        angle = function() private$..angle$value),
     private = list(
         ..vars = NA,
         ..facs = NA,
         ..icc = NA,
         ..multi = NA,
         ..plot = NA,
-        ..angle = NA,
-        ..width = NA,
-        ..height = NA)
+        ..angle = NA)
 )
 
 multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -189,9 +173,7 @@ multilevelResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "facs",
-                    "angle",
-                    "width",
-                    "height")))}))
+                    "angle")))}))
 
 multilevelBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multilevelBase",
@@ -224,8 +206,6 @@ multilevelBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param multi .
 #' @param plot .
 #' @param angle .
-#' @param width .
-#' @param height .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -248,9 +228,7 @@ multilevel <- function(
     icc = TRUE,
     multi = FALSE,
     plot = FALSE,
-    angle = 45,
-    width = 500,
-    height = 500) {
+    angle = 45) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multilevel requires jmvcore to be installed (restart may be required)")
@@ -271,9 +249,7 @@ multilevel <- function(
         icc = icc,
         multi = multi,
         plot = plot,
-        angle = angle,
-        width = width,
-        height = height)
+        angle = angle)
 
     analysis <- multilevelClass$new(
         options = options,

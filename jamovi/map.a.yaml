@@ -52,26 +52,6 @@ options:
       type: Bool
       default: false       
 
-    - name: width
-      type: Integer
-      title: "Size: "
-      default: 500
-      
-    - name: height
-      type: Integer
-      title: "X"
-      default: 500
-
-    - name: width1
-      type: Integer
-      title: "Size: "
-      default: 500
-      
-    - name: height1
-      type: Integer
-      title: "X"
-      default: 500
-
     - name: emp
       title: Empirical kaiser criterion
       type: Bool

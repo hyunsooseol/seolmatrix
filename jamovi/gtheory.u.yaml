@@ -91,14 +91,6 @@ children:
               - type: ComboBox
                 name: gco
                 enable: (plot1)
-              - type: TextBox
-                name: width
-                format: number
-                enable: (plot1)
-              - type: TextBox
-                name: height
-                format: number
-                enable: (plot1)  
   - type: CollapseBox
     label: 'Multivariate analysis'
     margin: normal

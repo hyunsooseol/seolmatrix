@@ -33,11 +33,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           )
         ))
         
-        if (isTRUE(self$options$plot1)) {
-          width <- self$options$width
-          height <- self$options$height
-          self$results$plot1$setSize(width, height)
-        }
+        
       },
       
       .getData = function() {

@@ -52,14 +52,6 @@ children:
                   - type: ComboBox
                     name: method
                     enable: (plot3)
-                  - type: TextBox
-                    name: width3
-                    format: number
-                    enable: (plot3)
-                  - type: TextBox
-                    name: height3
-                    format: number
-                    enable: (plot3)
       - type: LayoutBox
         margin: large
         cell:
@@ -72,29 +64,11 @@ children:
             children:
               - type: CheckBox
                 name: plot
-                style: list-inline
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                    enable: (plot)
-                  - type: TextBox
-                    name: height
-                    format: number
-                    enable: (plot)
               - type: CheckBox
                 name: plot2
                 children:
                   - type: ComboBox
                     name: scale
-                    enable: (plot2)
-                  - type: TextBox
-                    name: width2
-                    format: number
-                    enable: (plot2)
-                  - type: TextBox
-                    name: height2
-                    format: number
                     enable: (plot2)
                   - type: TextBox
                     name: angle
@@ -108,13 +82,3 @@ children:
             children:
               - type: CheckBox
                 name: plot1
-                style: list-inline
-                children:
-                  - type: TextBox
-                    name: width1
-                    format: number
-                    enable: (plot1)
-                  - type: TextBox
-                    name: height1
-                    format: number
-                    enable: (plot1)

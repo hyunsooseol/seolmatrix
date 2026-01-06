@@ -13,11 +13,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             cc = FALSE,
             mat = FALSE,
             ccp = FALSE,
-            bap = FALSE,
-            width = 500,
-            height = 500,
-            width1 = 500,
-            height1 = 500, ...) {
+            bap = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -68,22 +64,6 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 "bap",
                 bap,
                 default=FALSE)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
-            private$..width1 <- jmvcore::OptionInteger$new(
-                "width1",
-                width1,
-                default=500)
-            private$..height1 <- jmvcore::OptionInteger$new(
-                "height1",
-                height1,
-                default=500)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..dep)
@@ -93,10 +73,6 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$.addOption(private$..mat)
             self$.addOption(private$..ccp)
             self$.addOption(private$..bap)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
-            self$.addOption(private$..width1)
-            self$.addOption(private$..height1)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -106,11 +82,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         cc = function() private$..cc$value,
         mat = function() private$..mat$value,
         ccp = function() private$..ccp$value,
-        bap = function() private$..bap$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
-        width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value),
+        bap = function() private$..bap$value),
     private = list(
         ..vars = NA,
         ..dep = NA,
@@ -119,11 +91,7 @@ concordanceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         ..cc = NA,
         ..mat = NA,
         ..ccp = NA,
-        ..bap = NA,
-        ..width = NA,
-        ..height = NA,
-        ..width1 = NA,
-        ..height1 = NA)
+        ..bap = NA)
 )
 
 concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -182,8 +150,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 clearWith=list(
                     "dep",
                     "covs",
-                    "width",
-                    "height",
                     "id"),
                 refs="epiR"))
             self$add(jmvcore::Image$new(
@@ -195,8 +161,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 clearWith=list(
                     "dep",
                     "covs",
-                    "width1",
-                    "height1",
                     "id"),
                 refs="epiR"))
             self$add(jmvcore::Table$new(
@@ -248,10 +212,6 @@ concordanceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param mat .
 #' @param ccp .
 #' @param bap .
-#' @param width .
-#' @param height .
-#' @param width1 .
-#' @param height1 .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -277,11 +237,7 @@ concordance <- function(
     cc = FALSE,
     mat = FALSE,
     ccp = FALSE,
-    bap = FALSE,
-    width = 500,
-    height = 500,
-    width1 = 500,
-    height1 = 500) {
+    bap = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("concordance requires jmvcore to be installed (restart may be required)")
@@ -308,11 +264,7 @@ concordance <- function(
         cc = cc,
         mat = mat,
         ccp = ccp,
-        bap = bap,
-        width = width,
-        height = height,
-        width1 = width1,
-        height1 = height1)
+        bap = bap)
 
     analysis <- concordanceClass$new(
         options = options,

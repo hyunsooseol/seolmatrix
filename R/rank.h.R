@@ -13,14 +13,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             plot1 = FALSE,
             plot2 = FALSE,
             plot3 = FALSE,
-            width = 500,
-            height = 500,
-            width1 = 500,
-            height1 = 500,
-            width3 = 500,
-            height3 = 500,
-            width2 = 500,
-            height2 = 500,
             angle = 0,
             method = "circle",
             type1 = "lower", ...) {
@@ -72,38 +64,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot3",
                 plot3,
                 default=FALSE)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
-            private$..width1 <- jmvcore::OptionInteger$new(
-                "width1",
-                width1,
-                default=500)
-            private$..height1 <- jmvcore::OptionInteger$new(
-                "height1",
-                height1,
-                default=500)
-            private$..width3 <- jmvcore::OptionInteger$new(
-                "width3",
-                width3,
-                default=500)
-            private$..height3 <- jmvcore::OptionInteger$new(
-                "height3",
-                height3,
-                default=500)
-            private$..width2 <- jmvcore::OptionInteger$new(
-                "width2",
-                width2,
-                default=500)
-            private$..height2 <- jmvcore::OptionInteger$new(
-                "height2",
-                height2,
-                default=500)
             private$..angle <- jmvcore::OptionNumber$new(
                 "angle",
                 angle,
@@ -138,14 +98,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..plot1)
             self$.addOption(private$..plot2)
             self$.addOption(private$..plot3)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
-            self$.addOption(private$..width1)
-            self$.addOption(private$..height1)
-            self$.addOption(private$..width3)
-            self$.addOption(private$..height3)
-            self$.addOption(private$..width2)
-            self$.addOption(private$..height2)
             self$.addOption(private$..angle)
             self$.addOption(private$..method)
             self$.addOption(private$..type1)
@@ -158,14 +110,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot1 = function() private$..plot1$value,
         plot2 = function() private$..plot2$value,
         plot3 = function() private$..plot3$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
-        width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value,
-        width3 = function() private$..width3$value,
-        height3 = function() private$..height3$value,
-        width2 = function() private$..width2$value,
-        height2 = function() private$..height2$value,
         angle = function() private$..angle$value,
         method = function() private$..method$value,
         type1 = function() private$..type1$value),
@@ -177,14 +121,6 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..plot1 = NA,
         ..plot2 = NA,
         ..plot3 = NA,
-        ..width = NA,
-        ..height = NA,
-        ..width1 = NA,
-        ..height1 = NA,
-        ..width3 = NA,
-        ..height3 = NA,
-        ..width2 = NA,
-        ..height2 = NA,
         ..angle = NA,
         ..method = NA,
         ..type1 = NA)
@@ -251,9 +187,7 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="qgraph",
                 clearWith=list(
                     "vars",
-                    "type",
-                    "width",
-                    "height")))
+                    "type")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -265,8 +199,6 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "type",
                     "scale",
-                    "width2",
-                    "height2",
                     "angle")))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -277,9 +209,7 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="qgraph",
                 clearWith=list(
                     "vars",
-                    "type",
-                    "width1",
-                    "height1")))}))
+                    "type")))}))
 
 rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "rankBase",
@@ -313,14 +243,6 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param plot1 .
 #' @param plot2 .
 #' @param plot3 .
-#' @param width .
-#' @param height .
-#' @param width1 .
-#' @param height1 .
-#' @param width3 .
-#' @param height3 .
-#' @param width2 .
-#' @param height2 .
 #' @param angle .
 #' @param method .
 #' @param type1 .
@@ -350,14 +272,6 @@ rank <- function(
     plot1 = FALSE,
     plot2 = FALSE,
     plot3 = FALSE,
-    width = 500,
-    height = 500,
-    width1 = 500,
-    height1 = 500,
-    width3 = 500,
-    height3 = 500,
-    width2 = 500,
-    height2 = 500,
     angle = 0,
     method = "circle",
     type1 = "lower") {
@@ -381,14 +295,6 @@ rank <- function(
         plot1 = plot1,
         plot2 = plot2,
         plot3 = plot3,
-        width = width,
-        height = height,
-        width1 = width1,
-        height1 = height1,
-        width3 = width3,
-        height3 = height3,
-        width2 = width2,
-        height2 = height2,
         angle = angle,
         method = method,
         type1 = type1)

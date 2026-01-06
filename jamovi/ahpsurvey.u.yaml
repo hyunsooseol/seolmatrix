@@ -80,14 +80,6 @@ children:
                   - type: ComboBox
                     name: method3
                     enable: (plot1)                    
-                  - type: TextBox
-                    name: width1
-                    format: number
-                    enable: (plot1)
-                  - type: TextBox
-                    name: height1
-                    format: number
-                    enable: (plot1)
 
 
 

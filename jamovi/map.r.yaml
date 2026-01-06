@@ -89,8 +89,6 @@ items:
       clearWith:
         - vars
         - type
-        - width
-        - height
 
     - name: MapCurvePlot
       title: "MAP Curves (Average Squared Correlations)"
@@ -100,8 +98,6 @@ items:
       clearWith:
         - vars
         - type
-        - width1
-        - height1
 
 
 ...

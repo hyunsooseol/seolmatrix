@@ -133,26 +133,6 @@ options:
       type: Bool
       default: FALSE   
 
-    - name: width
-      type: Integer
-      title: "Size: "
-      default: 500
-      
-    - name: height
-      type: Integer
-      title: "X"
-      default: 500
-
-    - name: width1
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height1
-      type: Integer
-      title: "Height"
-      default: 500
-
     - name: angle
       title: Angle of x-axis labels
       type: Number
@@ -187,15 +167,6 @@ options:
       max: 90
       default: 45
       
-    - name: width3
-      type: Integer
-      title: "Width "
-      default: 500
-
-    - name: height3
-      type: Integer
-      title: "Height"
-      default: 500            
 ...
 
 

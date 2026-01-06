@@ -36,13 +36,7 @@ multilevelClass <- if (requireNamespace('jmvcore'))
             "ICC1= Individual-level variance that can be explained by group membership; ICC2= The reliability of the group means."
           )
       
-        if (isTRUE(self$options$plot)) {
-          width <- self$options$width
-          height <- self$options$height
-          
-          self$results$plot$setSize(width, height)
-        }
-        
+      
         },
       #---------------------------------
       .run = function() {

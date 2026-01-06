@@ -39,8 +39,6 @@ items:
       clearWith:
         - dep
         - covs
-        - width
-        - height
         - id
       refs: epiR   
   
@@ -52,8 +50,6 @@ items:
       clearWith:
         - dep
         - covs
-        - width1
-        - height1
         - id
       refs: epiR       
 

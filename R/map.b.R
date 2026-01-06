@@ -27,11 +27,6 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         ))
         
 
-        if (isTRUE(self$options$screePlot))
-          self$results$screePlot$setSize(self$options$width,  self$options$height)
-        
-        if (isTRUE(self$options$MapCurvePlot))
-          self$results$MapCurvePlot$setSize(self$options$width1, self$options$height1)
       },
       
       #---------------------------------

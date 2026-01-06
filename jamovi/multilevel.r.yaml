@@ -76,7 +76,5 @@ items:
         - vars
         - facs
         - angle
-        - width
-        - height
 
 ...

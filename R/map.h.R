@@ -12,10 +12,6 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             avgCorr = FALSE,
             screePlot = FALSE,
             MapCurvePlot = FALSE,
-            width = 500,
-            height = 500,
-            width1 = 500,
-            height1 = 500,
             emp = FALSE,
             hull = FALSE, ...) {
 
@@ -54,22 +50,6 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "MapCurvePlot",
                 MapCurvePlot,
                 default=FALSE)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
-            private$..width1 <- jmvcore::OptionInteger$new(
-                "width1",
-                width1,
-                default=500)
-            private$..height1 <- jmvcore::OptionInteger$new(
-                "height1",
-                height1,
-                default=500)
             private$..emp <- jmvcore::OptionBool$new(
                 "emp",
                 emp,
@@ -85,10 +65,6 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..avgCorr)
             self$.addOption(private$..screePlot)
             self$.addOption(private$..MapCurvePlot)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
-            self$.addOption(private$..width1)
-            self$.addOption(private$..height1)
             self$.addOption(private$..emp)
             self$.addOption(private$..hull)
         }),
@@ -99,10 +75,6 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         avgCorr = function() private$..avgCorr$value,
         screePlot = function() private$..screePlot$value,
         MapCurvePlot = function() private$..MapCurvePlot$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
-        width1 = function() private$..width1$value,
-        height1 = function() private$..height1$value,
         emp = function() private$..emp$value,
         hull = function() private$..hull$value),
     private = list(
@@ -112,10 +84,6 @@ mapOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..avgCorr = NA,
         ..screePlot = NA,
         ..MapCurvePlot = NA,
-        ..width = NA,
-        ..height = NA,
-        ..width1 = NA,
-        ..height1 = NA,
         ..emp = NA,
         ..hull = NA)
 )
@@ -232,9 +200,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(screePlot)",
                 clearWith=list(
                     "vars",
-                    "type",
-                    "width",
-                    "height")))
+                    "type")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="MapCurvePlot",
@@ -243,9 +209,7 @@ mapResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 visible="(MapCurvePlot)",
                 clearWith=list(
                     "vars",
-                    "type",
-                    "width1",
-                    "height1")))}))
+                    "type")))}))
 
 mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "mapBase",
@@ -278,10 +242,6 @@ mapBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param avgCorr .
 #' @param screePlot .
 #' @param MapCurvePlot .
-#' @param width .
-#' @param height .
-#' @param width1 .
-#' @param height1 .
 #' @param emp .
 #' @param hull .
 #' @return A results object containing:
@@ -311,10 +271,6 @@ map <- function(
     avgCorr = FALSE,
     screePlot = FALSE,
     MapCurvePlot = FALSE,
-    width = 500,
-    height = 500,
-    width1 = 500,
-    height1 = 500,
     emp = FALSE,
     hull = FALSE) {
 
@@ -335,10 +291,6 @@ map <- function(
         avgCorr = avgCorr,
         screePlot = screePlot,
         MapCurvePlot = MapCurvePlot,
-        width = width,
-        height = height,
-        width1 = width1,
-        height1 = height1,
         emp = emp,
         hull = hull)
 

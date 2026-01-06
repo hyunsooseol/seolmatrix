@@ -30,23 +30,6 @@ partialClass <- if (requireNamespace('jmvcore'))
         if (self$options$robust)
           self$results$robust$setNote("Note", "Robust correlations handle missing data using pairwise deletion.")
         
-        if (isTRUE(self$options$plot)) {
-          width <- self$options$width
-          height <- self$options$height
-          self$results$plot$setSize(width, height)
-        }
-        
-        if (isTRUE(self$options$plot2)) {
-          width <- self$options$width1
-          height <- self$options$height1
-          self$results$plot2$setSize(width, height)
-        }
-        
-        if (isTRUE(self$options$plot3)) {
-          width <- self$options$width3
-          height <- self$options$height3
-          self$results$plot3$setSize(width, height)
-        }        
 
         # get variables--------------------------------------
         

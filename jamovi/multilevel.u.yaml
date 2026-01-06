@@ -59,13 +59,5 @@ children:
                       - value: 0
                       - value: 45
                       - value: 90
-                  - type: TextBox
-                    name: width
-                    format: number
-                    enable: (plot)
-                  - type: TextBox
-                    name: height
-                    format: number
-                    enable: (plot)
 
 

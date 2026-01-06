@@ -51,7 +51,4 @@ items:
       clearWith:
         - vars
         - labels
-        - width
-        - height
-
 ...

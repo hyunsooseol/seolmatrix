@@ -9,9 +9,7 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             labels = NULL,
             vars = NULL,
             cen = TRUE,
-            plot = FALSE,
-            width = 500,
-            height = 500, ...) {
+            plot = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -38,36 +36,22 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot",
                 plot,
                 default=FALSE)
-            private$..width <- jmvcore::OptionInteger$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionInteger$new(
-                "height",
-                height,
-                default=500)
 
             self$.addOption(private$..labels)
             self$.addOption(private$..vars)
             self$.addOption(private$..cen)
             self$.addOption(private$..plot)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
         }),
     active = list(
         labels = function() private$..labels$value,
         vars = function() private$..vars$value,
         cen = function() private$..cen$value,
-        plot = function() private$..plot$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value),
+        plot = function() private$..plot$value),
     private = list(
         ..labels = NA,
         ..vars = NA,
         ..cen = NA,
-        ..plot = NA,
-        ..width = NA,
-        ..height = NA)
+        ..plot = NA)
 )
 
 networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -139,9 +123,7 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="qgraph",
                 clearWith=list(
                     "vars",
-                    "labels",
-                    "width",
-                    "height")))}))
+                    "labels")))}))
 
 networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "networkBase",
@@ -172,8 +154,6 @@ networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param cen .
 #' @param plot .
-#' @param width .
-#' @param height .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -194,9 +174,7 @@ network <- function(
     labels,
     vars,
     cen = TRUE,
-    plot = FALSE,
-    width = 500,
-    height = 500) {
+    plot = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("network requires jmvcore to be installed (restart may be required)")
@@ -214,9 +192,7 @@ network <- function(
         labels = labels,
         vars = vars,
         cen = cen,
-        plot = plot,
-        width = width,
-        height = height)
+        plot = plot)
 
     analysis <- networkClass$new(
         options = options,

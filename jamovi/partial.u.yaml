@@ -103,29 +103,11 @@ children:
             children:
               - type: CheckBox
                 name: plot
-                style: list-inline
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                    enable: (plot)
-                  - type: TextBox
-                    name: height
-                    format: number
-                    enable: (plot)
               - type: CheckBox
                 name: plot2
                 children:
                   - type: ComboBox
                     name: scale
-                    enable: (plot2)
-                  - type: TextBox
-                    name: width1
-                    format: number
-                    enable: (plot2)
-                  - type: TextBox
-                    name: height1
-                    format: number
                     enable: (plot2)
                   - type: TextBox
                     name: angle
@@ -178,11 +160,3 @@ children:
                       - value: 0
                       - value: 45
                       - value: 90
-                  - type: TextBox
-                    name: width3
-                    format: number
-                    enable: (plot3)
-                  - type: TextBox
-                    name: height3
-                    format: number
-                    enable: (plot3)                    

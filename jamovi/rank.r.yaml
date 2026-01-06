@@ -47,8 +47,6 @@ items:
       clearWith:
         - vars
         - type
-        - width
-        - height
 
     - name: plot2
       title: 'Centrality plot '
@@ -60,8 +58,6 @@ items:
           - vars
           - type
           - scale
-          - width2
-          - height2
           - angle
 
     - name: plot1
@@ -73,8 +69,6 @@ items:
       clearWith:
         - vars
         - type
-        - width1
-        - height1
 
 
 ...

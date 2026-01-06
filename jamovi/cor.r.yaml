@@ -41,7 +41,5 @@ items:
         - order
         - method1
         - type1
-        - width
-        - height
 
 ...

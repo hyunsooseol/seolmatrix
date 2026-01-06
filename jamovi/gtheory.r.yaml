@@ -301,9 +301,7 @@ items:
         - sub
         - nf
         - gco
-        - width
-        - height
- 
+
     - name:  text
       title: '`Coefficient based on the number of facet(${nf})`'
       type:  Preformatted

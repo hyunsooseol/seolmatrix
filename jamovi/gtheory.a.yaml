@@ -129,16 +129,6 @@ options:
       type: Bool
       default: false       
 
-    - name: width
-      type: Integer
-      title: "Width "
-      default: 500
-      
-    - name: height
-      type: Integer
-      title: "Height"
-      default: 500   
-
     - name: gco
       title: 'Generalizability coefficient'
       type: List

@@ -41,22 +41,12 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Repeated Correlation'
+            label: Repeated Correlation
             children:
               - type: CheckBox
                 name: rc
               - type: CheckBox
                 name: plot
-                style: list-inline
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                    enable: (plot)
-                  - type: TextBox
-                    name: height
-                    format: number
-                    enable: (plot) 
       - type: LayoutBox
         margin: large
         cell:
@@ -65,19 +55,9 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Cross Correlation'
+            label: Cross Correlation
             children:
               - type: CheckBox
                 name: cc
               - type: CheckBox
                 name: plot1
-                style: list-inline
-                children:
-                  - type: TextBox
-                    name: width1
-                    format: number
-                    enable: (plot1)
-                  - type: TextBox
-                    name: height1
-                    format: number
-                    enable: (plot1) 

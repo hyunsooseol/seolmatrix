@@ -50,12 +50,6 @@ items:
         - id
         - dep
         - covs
-        - width
-        - height
-
-    # - name:  text
-    #   title: 'Cross correlation values'
-    #   type:  Preformatted
 
     - name: cc
       title: 'Cross correlation values'
@@ -82,6 +76,5 @@ items:
       clearWith:
         - dep
         - covs
-        - width1
-        - height1
+
 ...

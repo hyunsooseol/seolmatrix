@@ -62,8 +62,6 @@ items:
       clearWith:
           - vars
           - ctrlvars
-          - width
-          - height
           - model
           - layout
           - shape
@@ -80,8 +78,6 @@ items:
           - vars
           - ctrlvars
           - scale
-          - width1
-          - height1
           - angle
           - type
           - missing
@@ -155,7 +151,5 @@ items:
         - vars
         - angle1
         - method
-        - width3
-        - height3 
 ...
 
