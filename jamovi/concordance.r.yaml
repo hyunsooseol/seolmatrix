@@ -13,6 +13,7 @@ items:
       title: Estimated Correlation
       type: Table
       rows:  1
+      visible: (cc)
       refs: epiR
       clearWith:
         - dep

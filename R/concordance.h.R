@@ -121,6 +121,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 name="cc",
                 title="Estimated Correlation",
                 rows=1,
+                visible="(cc)",
                 refs="epiR",
                 clearWith=list(
                     "dep",
