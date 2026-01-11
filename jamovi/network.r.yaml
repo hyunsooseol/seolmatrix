@@ -8,20 +8,35 @@ items:
     - name: instructions
       title: Instructions
       type: Html
-      visible: True 
+      visible: True
 
     - name:  text
-      title: '' 
+      title: ''
       type:  Preformatted
 
+# --- (NEW) Filter info shown above the Centrality table ---
+    - name: filterInfoTable
+      title: ''
+      type: Html
+      visible: (cen)
+      clearWith:
+        - vars
+        - labels
+        - cen
+        - threshold
+        - absWeight
+
     - name:  cen
-      title: 'Centrality' 
+      title: 'Centrality'
       type:  Table
       visible: (cen)
       rows: (vars)
       clearWith:
         - vars
         - labels
+        - threshold
+        - absWeight
+
       refs: qgraph
       columns:
         - name: name
@@ -39,7 +54,27 @@ items:
         - name: outex
           title: OutExpectedInfluence
         - name: inex
-          title: InExpectedInfluence         
+          title: InExpectedInfluence
+
+     # --- (NEW) Role/Influence measures for directed networks ---
+        - name: hub
+          title: Hub
+        - name: auth
+          title: Authority
+        - name: pr
+          title: PageRank
+
+# --- (NEW) Filter info shown above the plot ---
+    - name: filterInfoPlot
+      title: ''
+      type: Html
+      visible: (plot)
+      clearWith:
+        - vars
+        - labels
+        - plot
+        - threshold
+        - absWeight
 
     - name:  plot
       title: 'Directed Graph Centrality'
@@ -51,4 +86,7 @@ items:
       clearWith:
         - vars
         - labels
+        - threshold
+        - absWeight
+
 ...

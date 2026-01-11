@@ -9,7 +9,9 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             labels = NULL,
             vars = NULL,
             cen = TRUE,
-            plot = FALSE, ...) {
+            plot = FALSE,
+            absWeight = "TRUE",
+            threshold = 0, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -36,22 +38,41 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot",
                 plot,
                 default=FALSE)
+            private$..absWeight <- jmvcore::OptionList$new(
+                "absWeight",
+                absWeight,
+                options=list(
+                    "TRUE",
+                    "FALSE"),
+                default="TRUE")
+            private$..threshold <- jmvcore::OptionNumber$new(
+                "threshold",
+                threshold,
+                default=0,
+                min=0,
+                max=1)
 
             self$.addOption(private$..labels)
             self$.addOption(private$..vars)
             self$.addOption(private$..cen)
             self$.addOption(private$..plot)
+            self$.addOption(private$..absWeight)
+            self$.addOption(private$..threshold)
         }),
     active = list(
         labels = function() private$..labels$value,
         vars = function() private$..vars$value,
         cen = function() private$..cen$value,
-        plot = function() private$..plot$value),
+        plot = function() private$..plot$value,
+        absWeight = function() private$..absWeight$value,
+        threshold = function() private$..threshold$value),
     private = list(
         ..labels = NA,
         ..vars = NA,
         ..cen = NA,
-        ..plot = NA)
+        ..plot = NA,
+        ..absWeight = NA,
+        ..threshold = NA)
 )
 
 networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -60,7 +81,9 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         text = function() private$.items[["text"]],
+        filterInfoTable = function() private$.items[["filterInfoTable"]],
         cen = function() private$.items[["cen"]],
+        filterInfoPlot = function() private$.items[["filterInfoPlot"]],
         plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
@@ -79,6 +102,17 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="text",
                 title=""))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="filterInfoTable",
+                title="",
+                visible="(cen)",
+                clearWith=list(
+                    "vars",
+                    "labels",
+                    "cen",
+                    "threshold",
+                    "absWeight")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cen",
@@ -87,7 +121,9 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 rows="(vars)",
                 clearWith=list(
                     "vars",
-                    "labels"),
+                    "labels",
+                    "threshold",
+                    "absWeight"),
                 refs="qgraph",
                 columns=list(
                     list(
@@ -112,7 +148,27 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="OutExpectedInfluence"),
                     list(
                         `name`="inex", 
-                        `title`="InExpectedInfluence"))))
+                        `title`="InExpectedInfluence"),
+                    list(
+                        `name`="hub", 
+                        `title`="Hub"),
+                    list(
+                        `name`="auth", 
+                        `title`="Authority"),
+                    list(
+                        `name`="pr", 
+                        `title`="PageRank"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="filterInfoPlot",
+                title="",
+                visible="(plot)",
+                clearWith=list(
+                    "vars",
+                    "labels",
+                    "plot",
+                    "threshold",
+                    "absWeight")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -123,7 +179,9 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs="qgraph",
                 clearWith=list(
                     "vars",
-                    "labels")))}))
+                    "labels",
+                    "threshold",
+                    "absWeight")))}))
 
 networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "networkBase",
@@ -154,11 +212,15 @@ networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param cen .
 #' @param plot .
+#' @param absWeight .
+#' @param threshold .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$filterInfoTable} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$filterInfoPlot} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -174,7 +236,9 @@ network <- function(
     labels,
     vars,
     cen = TRUE,
-    plot = FALSE) {
+    plot = FALSE,
+    absWeight = "TRUE",
+    threshold = 0) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("network requires jmvcore to be installed (restart may be required)")
@@ -192,7 +256,9 @@ network <- function(
         labels = labels,
         vars = vars,
         cen = cen,
-        plot = plot)
+        plot = plot,
+        absWeight = absWeight,
+        threshold = threshold)
 
     analysis <- networkClass$new(
         options = options,

@@ -36,10 +36,18 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: "Table"
+            label: Table
             children:
               - type: CheckBox
-                name: cen 
+                name: cen
+                children:
+                  - type: ComboBox
+                    name: absWeight
+                    enable: (cen)
+                  - type: TextBox
+                    name: threshold
+                    format: number
+                    enable: (cen)
       - type: LayoutBox
         margin: large
         cell:
@@ -48,7 +56,8 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: 'Plot'
+            label: Plot
             children:
               - type: CheckBox
                 name: plot
+

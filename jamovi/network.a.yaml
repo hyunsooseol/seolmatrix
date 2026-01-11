@@ -20,20 +20,38 @@ options:
       permitted:
         - id
         - factor
-  
+
     - name: vars
       title: Variables
       type: Variables
 
     - name: cen
       title: 'Centrality'
-      type: Bool 
+      type: Bool
       default: TRUE
 
     - name: plot
       title: 'Directed Graph Centrality'
       type: Bool
       default: false
+
+    - name: absWeight
+      title: 'Use absolute weights (|w|)'
+      type: List
+      options:
+        - title: 'TRUE'
+          name:  'TRUE'
+        - title: 'FALSE'
+          name: 'FALSE'
+      default: 'TRUE'
+
+
+    - name: threshold
+      title: Edge weight threshold
+      type: Number
+      default: 0
+      min: 0
+      max: 1
 
 
 ...
