@@ -147,6 +147,7 @@ datasets:
     tags:
       - Partial
       - Network
+      - Correlation structure
   - name: dichotomous
     path: dicho.omv
     description: Tetrachoric Correlation
@@ -178,11 +179,6 @@ datasets:
     description: from K.J. van Stralen et.al.,2012
     tags:
       - Repeated concordance
-  - name: hci
-    path: hci.omv
-    description: correlation structure with binary items.
-    tags:
-      - Correlation structure
   - name: bland1995
     path: bland1995.omv
     description: Repeated correlation

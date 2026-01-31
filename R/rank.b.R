@@ -92,6 +92,45 @@ rankClass <- if (requireNamespace('jmvcore'))
         out
       },
 
+      # ✅ 추가: 상삼각(대각선 위) 숨기고 하삼각만 남기기
+      .keepLowerTriangle = function(mat, keepDiag = TRUE, blank = "") {
+        m <- as.matrix(mat)
+
+        ut <- upper.tri(m, diag = FALSE)
+
+        if (is.numeric(m)) {
+          m[ut] <- NA_real_
+        } else {
+          m[ut] <- blank
+        }
+
+        if (!keepDiag) {
+          if (is.numeric(m)) diag(m) <- NA_real_ else diag(m) <- blank
+        }
+
+        m
+      },
+
+      # ✅ 추가: p-value를 텍스트로 포맷(NA -> 공란)해서 NaN 방지
+      .format_p_as_text = function(pmat, digits = 3, blank = "") {
+        p <- as.matrix(pmat)
+        out <- matrix(blank, nrow(p), ncol(p))
+        colnames(out) <- colnames(p)
+        rownames(out) <- rownames(p)
+
+        for (i in 1:nrow(p)) for (j in 1:ncol(p)) {
+          if (is.na(p[i, j])) {
+            out[i, j] <- blank
+          } else if (p[i, j] < 0.001) {
+            out[i, j] <- "<.001"
+          } else {
+            out[i, j] <- sprintf(paste0("%.", digits, "f"), p[i, j])
+          }
+        }
+        out
+      },
+
+
       .as_binary_01 = function(df) {
         out <- df
         for (v in colnames(out)) {
@@ -135,9 +174,13 @@ rankClass <- if (requireNamespace('jmvcore'))
 
       .setMatrixNote = function(type) {
         if (is.null(self$results$matrix)) return()
-        approxTxt <- if (type %in% c("polychoric", "tetrachoric")) "; approx for poly/tetra" else ""
-        self$results$matrix$setNote("Note", paste0("* p<.05, ** p<.01, *** p<.001", approxTxt))
+
+        self$results$matrix$setNote(
+          "Note",
+          "* p < .05, ** p < .01, *** p < .001"
+        )
       },
+
 
       .setPmatrixNote = function() {
         pm <- private$.safeResult("pmatrix")
@@ -205,13 +248,17 @@ rankClass <- if (requireNamespace('jmvcore'))
 
           if (useStars && !is.null(pmat)) {
             mtxt <- private$.format_r_with_stars(rho, pmat, digits = 2)
+            mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            private$.buildMatrixTable(table_corr, rho, colType = 'number')
+            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
+            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
           }
 
           if (wantP && !is.null(pmat)) {
-            private$.buildMatrixTable(table_p, pmat, colType = 'number')
+            ptxt <- private$.format_p_as_text(pmat, digits = 2, blank = "")
+            ptxt <- private$.keepLowerTriangle(ptxt, keepDiag = FALSE, blank = "")
+            private$.buildMatrixTable(table_p, ptxt, colType = 'text')
             private$.setPmatrixNote()
           }
 
@@ -236,13 +283,17 @@ rankClass <- if (requireNamespace('jmvcore'))
 
           if (useStars) {
             mtxt <- private$.format_r_with_stars(rho, pmat, digits = 2)
+            mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            private$.buildMatrixTable(table_corr, rho, colType = 'number')
+            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
+            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
           }
 
           if (wantP) {
-            private$.buildMatrixTable(table_p, pmat, colType = 'number')
+            ptxt <- private$.format_p_as_text(pmat, digits = 3)
+            ptxt <- private$.keepLowerTriangle(ptxt, keepDiag = FALSE, blank = "")
+            private$.buildMatrixTable(table_p, ptxt, colType = 'text')
             private$.setPmatrixNote()
           }
 
@@ -268,13 +319,17 @@ rankClass <- if (requireNamespace('jmvcore'))
 
           if (useStars) {
             mtxt <- private$.format_r_with_stars(rho, pmat, digits = 2)
+            mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            private$.buildMatrixTable(table_corr, rho, colType = 'number')
+            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
+            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
           }
 
           if (wantP) {
-            private$.buildMatrixTable(table_p, pmat, colType = 'number')
+            ptxt <- private$.format_p_as_text(pmat, digits = 2, blank = "")
+            ptxt <- private$.keepLowerTriangle(ptxt, keepDiag = FALSE, blank = "")
+            private$.buildMatrixTable(table_p, ptxt, colType = 'text')
             private$.setPmatrixNote()
           }
 
@@ -321,7 +376,6 @@ rankClass <- if (requireNamespace('jmvcore'))
 
         TRUE
       },
-
 
       .plot2 = function(image2, ggtheme, theme, ...) {
         if (is.null(image2$state)) return(FALSE)
