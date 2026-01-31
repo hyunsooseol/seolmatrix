@@ -10,8 +10,8 @@ network(
   vars,
   cen = TRUE,
   plot = FALSE,
-  width = 500,
-  height = 500
+  absWeight = "TRUE",
+  threshold = 0
 )
 }
 \arguments{
@@ -25,16 +25,18 @@ network(
 
 \item{plot}{.}
 
-\item{width}{.}
+\item{absWeight}{.}
 
-\item{height}{.}
+\item{threshold}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+  \code{results$filterInfoTable} \tab \tab \tab \tab \tab a html \cr
   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
+  \code{results$filterInfoPlot} \tab \tab \tab \tab \tab a html \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 

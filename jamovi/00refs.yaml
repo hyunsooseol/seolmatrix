@@ -4,51 +4,51 @@ refs:
        author: Seol, H.
        year: 2026
        title: "seolmatrix: Correlations suite for jamovi"
-       publisher: '(Version 4.0.7) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix'
+       publisher: '(Version 4.0.8) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix'
        url: https://github.com/hyunsooseol/seolmatrix
-       
+
    psych:
        type: 'software'
        author: Revelle,W
        year: 2019
        title: "psych: Procedures for Personality and Psychological Research"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=psych'
-       
+
    qgraph:
        type: 'software'
-       author: Epskamp,S., et al. 
+       author: Epskamp,S., et al.
        year: 2012
        title: "qgraph: Network Visualizations of Relationships in Psychometric Data"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=qgraph'
 
    irr:
        type: 'software'
-       author: Gamer, M., Jim Lemon, J., & Singh, I. 
+       author: Gamer, M., Jim Lemon, J., & Singh, I.
        year: 2019
        title: "irr: Various Coefficients of Interrater Reliability and Agreement"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=irr'
 
    psy:
        type: 'software'
-       author: Falissard, B. 
+       author: Falissard, B.
        year: 2012
        title: "psy: Various procedures used in psychometry"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=psy'
-       
+
    correlation:
        type: 'software'
        author: Makowski, D., Ben-Shachar, M., Patil, I., & Ludecke, D.
        year: 2020
        title: "correlation: Methods and Algorithms for Correlation Analysis in R"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=correlation'
-             
+
    epiR:
        type: 'software'
        author: Stevenson, M., et al.
        year: 2021
        title: "epiR: Tools for the Analysis of Epidemiological Data"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=epiR'
-   
+
    easyAHP:
        type: 'software'
        author: Zhicheng D., & Yuantao H.
@@ -58,14 +58,14 @@ refs:
 
    corrplot:
        type: 'software'
-       author: Taiyun, W., et al.      
+       author: Taiyun, W., et al.
        year: 2024
        title: "corrplot: Visualization of a Correlation Matrix"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=corrplot'
 
    multilevel:
        type: 'software'
-       author: Bliese, P., Chen, G., Downes, P., Schepker, D., & Lang, J.     
+       author: Bliese, P., Chen, G., Downes, P., Schepker, D., & Lang, J.
        year: 2022
        title: "multilevel: Multilevel Functions"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=multilevel'
@@ -83,10 +83,10 @@ refs:
        year: 2016
        title: "gtheory: Apply Generalizability Theory with R"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=gtheory'
-  
+
    rmcorr:
        type: 'software'
-       author: Jonathan Z. Bakdash., & Laura R. Marusich.    
+       author: Jonathan Z. Bakdash., & Laura R. Marusich.
        year: 2023
        title: "rmcorr: Repeated Measures Correlation"
        publisher: '[R package]. URL https://CRAN.R-project.org/package=rmcorr'

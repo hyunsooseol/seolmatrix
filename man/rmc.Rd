@@ -4,20 +4,7 @@
 \alias{rmc}
 \title{Repeated & Cross Correlation}
 \usage{
-rmc(
-  data,
-  id,
-  dep,
-  covs,
-  rc = FALSE,
-  plot = FALSE,
-  width = 500,
-  height = 500,
-  cc = FALSE,
-  plot1 = FALSE,
-  width1 = 500,
-  height1 = 500
-)
+rmc(data, id, dep, covs, rc = FALSE, plot = FALSE, cc = FALSE, plot1 = FALSE)
 }
 \arguments{
 \item{data}{.}
@@ -32,17 +19,9 @@ rmc(
 
 \item{plot}{.}
 
-\item{width}{.}
-
-\item{height}{.}
-
 \item{cc}{.}
 
 \item{plot1}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
 }
 \value{
 A results object containing:

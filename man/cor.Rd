@@ -17,9 +17,7 @@ cor(
   color = "blue",
   plot = FALSE,
   method1 = "circle",
-  type1 = "full",
-  width = 500,
-  height = 500
+  type1 = "full"
 )
 }
 \arguments{
@@ -48,10 +46,6 @@ cor(
 \item{method1}{.}
 
 \item{type1}{.}
-
-\item{width}{.}
-
-\item{height}{.}
 }
 \value{
 A results object containing:

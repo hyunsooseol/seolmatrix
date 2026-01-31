@@ -20,17 +20,11 @@ partial(
   layout = "spring",
   shape = "circle",
   plot2 = FALSE,
-  width = 500,
-  height = 500,
-  width1 = 500,
-  height1 = 500,
   angle = 0,
   robust = FALSE,
   method = "percentage",
   plot3 = FALSE,
-  angle1 = 45,
-  width3 = 500,
-  height3 = 500
+  angle1 = 45
 )
 }
 \arguments{
@@ -64,14 +58,6 @@ partial(
 
 \item{plot2}{.}
 
-\item{width}{.}
-
-\item{height}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
-
 \item{angle}{.}
 
 \item{robust}{.}
@@ -81,10 +67,6 @@ partial(
 \item{plot3}{.}
 
 \item{angle1}{.}
-
-\item{width3}{.}
-
-\item{height3}{.}
 }
 \value{
 A results object containing:

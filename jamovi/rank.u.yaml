@@ -41,6 +41,15 @@ children:
                 optionName: type
                 optionPart: tetrachoric
           - type: Label
+            label: 'Options'
+            children:
+              - type: CheckBox
+                name: sigStars
+              - type: CheckBox
+                name: pmatrix
+              - type: CheckBox
+                name: tau
+          - type: Label
             label: Matrix plot
             children:
               - type: CheckBox

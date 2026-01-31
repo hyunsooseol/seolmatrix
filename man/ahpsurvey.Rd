@@ -15,9 +15,7 @@ ahpsurvey(
   method2 = "eigen",
   method3 = "geometric",
   sumcr = FALSE,
-  plot1 = FALSE,
-  width1 = 500,
-  height1 = 500
+  plot1 = FALSE
 )
 }
 \arguments{
@@ -42,10 +40,6 @@ ahpsurvey(
 \item{sumcr}{.}
 
 \item{plot1}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
 }
 \value{
 A results object containing:

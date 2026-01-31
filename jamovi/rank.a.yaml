@@ -31,8 +31,23 @@ options:
         - title: Polychoric
           name:  polychoric
         - title: Tetrachoric
-          name:  tetrachoric     
-      default: spearman    
+          name:  tetrachoric
+      default: spearman
+
+    - name: sigStars
+      title: Significance stars
+      type: Bool
+      default: false
+
+    - name: pmatrix
+      title: p-value matrix (approx.)
+      type: Bool
+      default: false
+
+    - name: tau
+      title: Tau (tetrachoric only)
+      type: Bool
+      default: false
 
     - name: scale
       title: Scale
@@ -45,28 +60,28 @@ options:
         - title: z-scores
           name:  z-scores
         - title: relative
-          name:  relative      
+          name:  relative
       default:  raw0
 
     - name: plot
       title: 'EBICglasso plot'
       type: Bool
       default: false
-      
+
     - name: plot1
       title: 'Partial plot'
       type: Bool
-      default: FALSE    
+      default: FALSE
 
     - name: plot2
       title: 'Centrality plot'
       type: Bool
-      default: FALSE   
+      default: FALSE
 
     - name: plot3
       title: 'Matrix plot'
       type: Bool
-      default: FALSE   
+      default: FALSE
 
     - name: angle
       title: Angle of x-axis labels
@@ -90,9 +105,9 @@ options:
         - title: shade
           name:  shade
         - title: color
-          name:  color      
+          name:  color
         - title: pie
-          name:  pie      
+          name:  pie
       default:  circle
 
     - name: type1
@@ -105,6 +120,6 @@ options:
           name:  lower
         - title: upper
           name:  upper
-      default:  lower 
+      default:  lower
 
 ...

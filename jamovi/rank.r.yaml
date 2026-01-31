@@ -2,13 +2,16 @@
 name:  rank
 title: Ordinal Correlation
 jrs:   '1.1'
-refs: seolmatrix 
+refs: seolmatrix
 items:
     - name: instructions
       title: Instructions
       type: Html
       visible: True
 
+    # ----------------------------
+    # Correlation matrix (common)
+    # ----------------------------
     - name: matrix
       title:  '`Correlation matrix - ${type}`'
       type: Table
@@ -16,20 +19,64 @@ items:
       clearWith:
         - vars
         - type
-      refs: psych    
-      
+      refs: psych
+
       columns:
           - name: name
             title: ""
             type: text
             content: ($key)
 
+    # ----------------------------
+    # p-value matrix (common)
+    # - Spearman: psych::corr.test p
+    # - Poly/Tetra: approx p computed in b.R (t-test style)
+    # ----------------------------
+    - name: pmatrix
+      title: '`p-value matrix - ${type}`'
+      type: Table
+      visible: (pmatrix)
+      clearWith:
+        - vars
+        - type
+      refs: stats
+
+      columns:
+          - name: name
+            title: ""
+            type: text
+            content: ($key)
+
+    # ----------------------------
+    # Tau table (tetrachoric only)
+    # teaching/reporting friendly
+    # ----------------------------
+    - name: tau
+      title: 'Thresholds (τ) by variable'
+      type: Table
+      visible: (tau)
+      clearWith:
+        - vars
+        - type
+      refs: psych
+
+      columns:
+          - name: variable
+            title: Variable
+            type: text
+          - name: tau
+            title: Tau
+            type: number
+          - name: p1
+            title: 'Pr(Y = 1)'
+            type: number
+
     - name: plot3
       title: 'Matrix plot'
       type: Image
       renderFun: .plot3
       visible: (plot3)
-      refs: corrplot 
+      refs: corrplot
       clearWith:
           - vars
           - type

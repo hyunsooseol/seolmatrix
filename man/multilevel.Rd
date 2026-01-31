@@ -11,9 +11,7 @@ multilevel(
   icc = TRUE,
   multi = FALSE,
   plot = FALSE,
-  angle = 45,
-  width = 500,
-  height = 500
+  angle = 45
 )
 }
 \arguments{
@@ -30,10 +28,6 @@ multilevel(
 \item{plot}{.}
 
 \item{angle}{.}
-
-\item{width}{.}
-
-\item{height}{.}
 }
 \value{
 A results object containing:

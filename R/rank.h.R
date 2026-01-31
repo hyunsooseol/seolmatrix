@@ -8,6 +8,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             type = "spearman",
+            sigStars = FALSE,
+            pmatrix = FALSE,
+            tau = FALSE,
             scale = "raw0",
             plot = FALSE,
             plot1 = FALSE,
@@ -39,6 +42,18 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "polychoric",
                     "tetrachoric"),
                 default="spearman")
+            private$..sigStars <- jmvcore::OptionBool$new(
+                "sigStars",
+                sigStars,
+                default=FALSE)
+            private$..pmatrix <- jmvcore::OptionBool$new(
+                "pmatrix",
+                pmatrix,
+                default=FALSE)
+            private$..tau <- jmvcore::OptionBool$new(
+                "tau",
+                tau,
+                default=FALSE)
             private$..scale <- jmvcore::OptionList$new(
                 "scale",
                 scale,
@@ -93,6 +108,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             self$.addOption(private$..vars)
             self$.addOption(private$..type)
+            self$.addOption(private$..sigStars)
+            self$.addOption(private$..pmatrix)
+            self$.addOption(private$..tau)
             self$.addOption(private$..scale)
             self$.addOption(private$..plot)
             self$.addOption(private$..plot1)
@@ -105,6 +123,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         vars = function() private$..vars$value,
         type = function() private$..type$value,
+        sigStars = function() private$..sigStars$value,
+        pmatrix = function() private$..pmatrix$value,
+        tau = function() private$..tau$value,
         scale = function() private$..scale$value,
         plot = function() private$..plot$value,
         plot1 = function() private$..plot1$value,
@@ -116,6 +137,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     private = list(
         ..vars = NA,
         ..type = NA,
+        ..sigStars = NA,
+        ..pmatrix = NA,
+        ..tau = NA,
         ..scale = NA,
         ..plot = NA,
         ..plot1 = NA,
@@ -132,6 +156,8 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         instructions = function() private$.items[["instructions"]],
         matrix = function() private$.items[["matrix"]],
+        pmatrix = function() private$.items[["pmatrix"]],
+        tau = function() private$.items[["tau"]],
         plot3 = function() private$.items[["plot3"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
@@ -164,6 +190,43 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="", 
                         `type`="text", 
                         `content`="($key)"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="pmatrix",
+                title="`p-value matrix - ${type}`",
+                visible="(pmatrix)",
+                clearWith=list(
+                    "vars",
+                    "type"),
+                refs="stats",
+                columns=list(
+                    list(
+                        `name`="name", 
+                        `title`="", 
+                        `type`="text", 
+                        `content`="($key)"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="tau",
+                title="Thresholds (\u03C4) by variable",
+                visible="(tau)",
+                clearWith=list(
+                    "vars",
+                    "type"),
+                refs="psych",
+                columns=list(
+                    list(
+                        `name`="variable", 
+                        `title`="Variable", 
+                        `type`="text"),
+                    list(
+                        `name`="tau", 
+                        `title`="Tau", 
+                        `type`="number"),
+                    list(
+                        `name`="p1", 
+                        `title`="Pr(Y = 1)", 
+                        `type`="number"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -238,6 +301,9 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param type .
+#' @param sigStars .
+#' @param pmatrix .
+#' @param tau .
 #' @param scale .
 #' @param plot .
 #' @param plot1 .
@@ -250,6 +316,8 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$pmatrix} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$tau} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
@@ -267,6 +335,9 @@ rank <- function(
     data,
     vars,
     type = "spearman",
+    sigStars = FALSE,
+    pmatrix = FALSE,
+    tau = FALSE,
     scale = "raw0",
     plot = FALSE,
     plot1 = FALSE,
@@ -290,6 +361,9 @@ rank <- function(
     options <- rankOptions$new(
         vars = vars,
         type = type,
+        sigStars = sigStars,
+        pmatrix = pmatrix,
+        tau = tau,
         scale = scale,
         plot = plot,
         plot1 = plot1,

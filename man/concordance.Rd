@@ -13,11 +13,7 @@ concordance(
   cc = FALSE,
   mat = FALSE,
   ccp = FALSE,
-  bap = FALSE,
-  width = 500,
-  height = 500,
-  width1 = 500,
-  height1 = 500
+  bap = FALSE
 )
 }
 \arguments{
@@ -38,14 +34,6 @@ concordance(
 \item{ccp}{.}
 
 \item{bap}{.}
-
-\item{width}{.}
-
-\item{height}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
 }
 \value{
 A results object containing:

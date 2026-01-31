@@ -8,19 +8,14 @@ rank(
   data,
   vars,
   type = "spearman",
+  sigStars = FALSE,
+  pmatrix = FALSE,
+  tau = FALSE,
   scale = "raw0",
   plot = FALSE,
   plot1 = FALSE,
   plot2 = FALSE,
   plot3 = FALSE,
-  width = 500,
-  height = 500,
-  width1 = 500,
-  height1 = 500,
-  width3 = 500,
-  height3 = 500,
-  width2 = 500,
-  height2 = 500,
   angle = 0,
   method = "circle",
   type1 = "lower"
@@ -33,6 +28,12 @@ rank(
 
 \item{type}{.}
 
+\item{sigStars}{.}
+
+\item{pmatrix}{.}
+
+\item{tau}{.}
+
 \item{scale}{.}
 
 \item{plot}{.}
@@ -42,22 +43,6 @@ rank(
 \item{plot2}{.}
 
 \item{plot3}{.}
-
-\item{width}{.}
-
-\item{height}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
-
-\item{width3}{.}
-
-\item{height3}{.}
-
-\item{width2}{.}
-
-\item{height2}{.}
 
 \item{angle}{.}
 
@@ -70,6 +55,8 @@ A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
   \code{results$matrix} \tab \tab \tab \tab \tab a table \cr
+  \code{results$pmatrix} \tab \tab \tab \tab \tab a table \cr
+  \code{results$tau} \tab \tab \tab \tab \tab a table \cr
   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr

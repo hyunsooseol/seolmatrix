@@ -12,10 +12,6 @@ map(
   avgCorr = FALSE,
   screePlot = FALSE,
   MapCurvePlot = FALSE,
-  width = 500,
-  height = 500,
-  width1 = 500,
-  height1 = 500,
   emp = FALSE,
   hull = FALSE
 )
@@ -34,14 +30,6 @@ map(
 \item{screePlot}{.}
 
 \item{MapCurvePlot}{.}
-
-\item{width}{.}
-
-\item{height}{.}
-
-\item{width1}{.}
-
-\item{height1}{.}
 
 \item{emp}{.}
 
