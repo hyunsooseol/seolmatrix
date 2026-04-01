@@ -41,5 +41,6 @@ items:
         - order
         - method1
         - type1
+        - colorp
 
 ...

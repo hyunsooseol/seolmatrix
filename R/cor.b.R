@@ -5,14 +5,14 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     inherit = corBase,
     private = list(
       .htmlwidget = NULL,
-
+      
       # ---------------------------
       # Helpers (추가)
       # ---------------------------
       .clearTable = function(table) {
         tryCatch({ table$clear() }, error = function(e) NULL)
       },
-
+      
       .pairwise_n = function(df) {
         p <- ncol(df)
         N <- matrix(NA_integer_, p, p)
@@ -22,7 +22,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         colnames(N) <- rownames(N) <- colnames(df)
         N
       },
-
+      
       .p_from_r_t = function(r, n_eff) {
         r <- max(min(r, 0.999999), -0.999999)
         df <- n_eff - 2
@@ -30,7 +30,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         tval <- r * sqrt(df / (1 - r^2))
         2 * stats::pt(abs(tval), df = df, lower.tail = FALSE)
       },
-
+      
       .p_matrix_approx = function(rho, df) {
         rho <- as.matrix(rho)
         N <- private$.pairwise_n(df)
@@ -43,7 +43,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         rownames(pmat) <- rownames(rho)
         pmat
       },
-
+      
       .stars_from_p = function(p) {
         if (is.na(p)) return("")
         if (p < .001) return("***")
@@ -51,15 +51,15 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         if (p < .05)  return("*")
         ""
       },
-
+      
       .format_r_with_stars = function(rho, pmat, digits = 2) {
         rho  <- as.matrix(rho)
         pmat <- as.matrix(pmat)
-
+        
         out <- matrix("", nrow(rho), ncol(rho))
         colnames(out) <- colnames(rho)
         rownames(out) <- rownames(rho)
-
+        
         for (i in 1:nrow(rho)) for (j in 1:ncol(rho)) {
           if (is.na(rho[i, j])) {
             out[i, j] <- ""
@@ -71,25 +71,25 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
         out
       },
-
+      
       .keepLowerTriangle = function(mat, keepDiag = TRUE, blank = "") {
         m <- as.matrix(mat)
         ut <- upper.tri(m, diag = FALSE)
-
+        
         if (is.numeric(m)) m[ut] <- NA_real_ else m[ut] <- blank
-
+        
         if (!keepDiag) {
           if (is.numeric(m)) diag(m) <- NA_real_ else diag(m) <- blank
         }
         m
       },
-
+      
       .format_p_as_text = function(pmat, digits = 3, blank = "") {
         p <- as.matrix(pmat)
         out <- matrix(blank, nrow(p), ncol(p))
         colnames(out) <- colnames(p)
         rownames(out) <- rownames(p)
-
+        
         for (i in 1:nrow(p)) for (j in 1:ncol(p)) {
           if (is.na(p[i, j])) {
             out[i, j] <- blank
@@ -101,10 +101,10 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
         out
       },
-
+      
       .setAPATableCaption = function(table, type, missing, lowerOnly = TRUE, hideDiag = FALSE) {
         if (is.null(table)) return()
-
+        
         # Title (APA: title above table)
         triTxt <- if (isTRUE(lowerOnly)) "Lower triangle" else "Full matrix"
         diagTxt <- if (isTRUE(hideDiag)) ", diagonal hidden" else ""
@@ -112,14 +112,27 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           "Correlation Matrix (", type, ")"
         )
         tryCatch(table$setTitle(title), error = function(e) NULL)
-
+        
         # Note (APA: note below table)
         tryCatch(
           table$setNote("Note", "* p < .05, ** p < .01, *** p < .001"),
           error = function(e) NULL
         )
       },
-
+      
+      .get_palette = function(name, n = 200) {
+        if (name == "RdBu")
+          return(grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdBu")))(n))
+        
+        if (name == "Spectral")
+          return(grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "Spectral")))(n))
+        
+        if (name == "Greys")
+          return(grDevices::colorRampPalette(RColorBrewer::brewer.pal(9, "Greys"))(n))
+        
+        grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdBu")))(n)
+      },
+      
       # ---------------------------
       # Init
       # ---------------------------
@@ -140,21 +153,21 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           )
         ))
       },
-
+      
       # ---------------------------
       # Run
       # ---------------------------
       .run = function() {
-
+        
         if (is.null(self$options$vars)) return()
-
+        
         vars  <- self$options$vars
         data  <- self$data
-
+        
         # 옵션(없어도 오류 안 나게 기본값 처리)
         hideDiag <- isTRUE(tryCatch(self$options$hideDiag, error = function(e) FALSE))
         wantPmat <- isTRUE(tryCatch(self$options$pmatrix, error = function(e) FALSE))
-
+        
         # pearson and spearman correlation------
         rho <- stats::cor(
           data,
@@ -162,28 +175,28 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           use    = self$options$missing
         )
         rho <- as.matrix(rho)
-
+        
         # p-value (t-test 근사; pairwise complete cases 기준)
         pmat <- private$.p_matrix_approx(rho, data)
-
+        
         # ----------------------------
         # matrix table (r + stars) : 하삼각 + (옵션)대각선 숨김
         # ----------------------------
         if (isTRUE(self$options$mat)) {
-
+          
           table <- self$results$matrix
           private$.clearTable(table)
-
+          
           # r + stars (text)
           mtxt <- private$.format_r_with_stars(rho, pmat, digits = 2)
           mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = !hideDiag, blank = "")
-
+          
           dims <- colnames(mtxt)
-
+          
           for (dim in dims) {
             table$addColumn(name = paste0(dim), type = 'text')
           }
-
+          
           for (i in seq_along(dims)) {
             row <- list()
             for (j in seq_along(dims)) {
@@ -191,7 +204,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             }
             table$addRow(rowKey = dims[i], values = row)
           }
-
+          
           # APA caption 자동 설정
           private$.setAPATableCaption(
             table   = table,
@@ -201,24 +214,24 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             hideDiag  = hideDiag
           )
         }
-
+        
         # ----------------------------
         # (선택) p-value matrix table : 하삼각 + <.001 표기 + (옵션)대각선 숨김
         # ----------------------------
         if (wantPmat && !is.null(self$results$pmatrix)) {
-
+          
           ptable <- self$results$pmatrix
           private$.clearTable(ptable)
-
+          
           ptxt <- private$.format_p_as_text(pmat, digits = 3, blank = "")
           ptxt <- private$.keepLowerTriangle(ptxt, keepDiag = !hideDiag, blank = "")
-
+          
           dims <- colnames(ptxt)
-
+          
           for (dim in dims) {
             ptable$addColumn(name = paste0(dim), type = 'text')
           }
-
+          
           for (i in seq_along(dims)) {
             row <- list()
             for (j in seq_along(dims)) {
@@ -226,14 +239,14 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             }
             ptable$addRow(rowKey = dims[i], values = row)
           }
-
+          
           # APA note (p-value 표에도 동일 적용)
           tryCatch(
             ptable$setNote("Note", "P-values are shown; values smaller than .001 are reported as <.001."),
             error = function(e) NULL
           )
         }
-
+        
         # ----------------------------
         # hclust plot----------
         # (원본 동작 유지: plot에는 원래 전체 rho를 state로 전달)
@@ -243,13 +256,14 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           image$setState(rho)
         }
       },
-
+      
       .plot = function(image, ggtheme, theme, ...) {
-
+        
         if (is.null(image$state)) return(FALSE)
-
+        
         mat1 <- image$state
-
+        pal  <- private$.get_palette(self$options$colorp)
+        
         plot <- corrplot::corrplot(
           mat1,
           method        = self$options$method1,
@@ -258,7 +272,9 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           hclust.method = self$options$method,
           addrect       = self$options$k,
           rect.lwd      = self$options$size,
-          rect.col      = self$options$color
+          rect.col      = self$options$color,
+          col           = pal,
+          cl.lim        = c(-1, 1)
         )
         print(plot)
         TRUE

@@ -91,6 +91,15 @@ options:
         - navy
       default: blue
       
+    - name: colorp
+      title: Color palette
+      type: List
+      options:
+        - RdBu
+        - Spectral
+        - Greys
+      default: RdBu
+
     - name: plot
       title: 'Hierarchical clustering' 
       type: Bool

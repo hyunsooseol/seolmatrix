@@ -15,6 +15,7 @@ cor(
   k = 2,
   size = 3,
   color = "blue",
+  colorp = "RdBu",
   plot = FALSE,
   method1 = "circle",
   type1 = "full"
@@ -40,6 +41,8 @@ cor(
 \item{size}{.}
 
 \item{color}{.}
+
+\item{colorp}{.}
 
 \item{plot}{.}
 

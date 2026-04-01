@@ -15,6 +15,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             k = 2,
             size = 3,
             color = "blue",
+            colorp = "RdBu",
             plot = FALSE,
             method1 = "circle",
             type1 = "full", ...) {
@@ -92,6 +93,14 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "orange",
                     "navy"),
                 default="blue")
+            private$..colorp <- jmvcore::OptionList$new(
+                "colorp",
+                colorp,
+                options=list(
+                    "RdBu",
+                    "Spectral",
+                    "Greys"),
+                default="RdBu")
             private$..plot <- jmvcore::OptionBool$new(
                 "plot",
                 plot,
@@ -126,6 +135,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..k)
             self$.addOption(private$..size)
             self$.addOption(private$..color)
+            self$.addOption(private$..colorp)
             self$.addOption(private$..plot)
             self$.addOption(private$..method1)
             self$.addOption(private$..type1)
@@ -140,6 +150,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         k = function() private$..k$value,
         size = function() private$..size$value,
         color = function() private$..color$value,
+        colorp = function() private$..colorp$value,
         plot = function() private$..plot$value,
         method1 = function() private$..method1$value,
         type1 = function() private$..type1$value),
@@ -153,6 +164,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..k = NA,
         ..size = NA,
         ..color = NA,
+        ..colorp = NA,
         ..plot = NA,
         ..method1 = NA,
         ..type1 = NA)
@@ -210,7 +222,8 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "color",
                     "order",
                     "method1",
-                    "type1")))}))
+                    "type1",
+                    "colorp")))}))
 
 corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "corBase",
@@ -246,6 +259,7 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param k .
 #' @param size .
 #' @param color .
+#' @param colorp .
 #' @param plot .
 #' @param method1 .
 #' @param type1 .
@@ -274,6 +288,7 @@ cor <- function(
     k = 2,
     size = 3,
     color = "blue",
+    colorp = "RdBu",
     plot = FALSE,
     method1 = "circle",
     type1 = "full") {
@@ -298,6 +313,7 @@ cor <- function(
         k = k,
         size = size,
         color = color,
+        colorp = colorp,
         plot = plot,
         method1 = method1,
         type1 = type1)

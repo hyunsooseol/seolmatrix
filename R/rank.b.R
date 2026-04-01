@@ -251,8 +251,9 @@ rankClass <- if (requireNamespace('jmvcore'))
             mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
-            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
+            rho_txt <- private$.format_p_as_text(rho, digits = 2, blank = "")
+            rho_txt <- private$.keepLowerTriangle(rho_txt, keepDiag = TRUE, blank = "")
+            private$.buildMatrixTable(table_corr, rho_txt, colType = 'text')
           }
 
           if (wantP && !is.null(pmat)) {
@@ -286,8 +287,9 @@ rankClass <- if (requireNamespace('jmvcore'))
             mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
-            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
+            rho_txt <- private$.format_p_as_text(rho, digits = 2, blank = "")
+            rho_txt <- private$.keepLowerTriangle(rho_txt, keepDiag = TRUE, blank = "")
+            private$.buildMatrixTable(table_corr, rho_txt, colType = 'text')
           }
 
           if (wantP) {
@@ -322,8 +324,9 @@ rankClass <- if (requireNamespace('jmvcore'))
             mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
             private$.buildMatrixTable(table_corr, mtxt, colType = 'text')
           } else {
-            rho2 <- private$.keepLowerTriangle(rho, keepDiag = TRUE)
-            private$.buildMatrixTable(table_corr, rho2, colType = 'number')
+            rho_txt <- private$.format_p_as_text(rho, digits = 2, blank = "")
+            rho_txt <- private$.keepLowerTriangle(rho_txt, keepDiag = TRUE, blank = "")
+            private$.buildMatrixTable(table_corr, rho_txt, colType = 'text')
           }
 
           if (wantP) {

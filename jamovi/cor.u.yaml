@@ -51,6 +51,8 @@ children:
                 format: number
               - type: ComboBox
                 name: color
+              - type: ComboBox
+                name: colorp
       - type: LayoutBox
         stretchFactor: 1
         margin: large
