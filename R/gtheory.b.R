@@ -73,6 +73,10 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .run = function() {
+        
+        if (!isTRUE(self$options$run))
+          return()
+        
         data <- private$.getData()
         if (is.null(data)) return()
         

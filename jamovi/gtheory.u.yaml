@@ -34,9 +34,24 @@ children:
             maxItemCount: 2
   - type: LayoutBox
     margin: large
+    stretchFactor: 1
     children:
-      - type: ComboBox
-        name: t
+      - type: LayoutBox
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: ActionButton
+            name: run
+      - type: LayoutBox
+        cell:
+          column: 3
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: ComboBox
+            name: t
   - type: CollapseBox
     label: 'Univariate analysis'
     margin: normal

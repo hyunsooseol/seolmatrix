@@ -14,63 +14,68 @@ children:
           - type: VariablesListBox
             name: vars
             isTarget: true
-  - type: LayoutBox
-    margin: large
-    stretchFactor: 1
+  - type: CollapseBox
+    label: 'Analysis'
+    margin: normal
+    collapsed: true
     children:
       - type: LayoutBox
         margin: large
-        cell:
-          column: 0
-          row: 0
         stretchFactor: 1
         children:
-          - type: Label
-            label: 'Type of correlation'
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
             children:
-              - type: RadioButton
-                name: type_pearson
-                optionName: type
-                optionPart: pearson
-              - name: type_kendall
-                type: RadioButton
-                optionName: type
-                optionPart: kendall
-              - name: type_spearman
-                type: RadioButton
-                optionName: type
-                optionPart: spearman
-              - name: type_gamma
-                type: RadioButton
-                optionName: type
-                optionPart: gamma
-              - name: type_polychoric
-                type: RadioButton
-                optionName: type
-                optionPart: polychoric
-      - type: LayoutBox
-        margin: large
-        cell:
-          column: 1
-          row: 0
-        stretchFactor: 1
-        children:
-          - type: Label
-            label: 'Tables'
+              - type: Label
+                label: 'Type of correlation'
+                children:
+                  - type: RadioButton
+                    name: type_pearson
+                    optionName: type
+                    optionPart: pearson
+                  - name: type_kendall
+                    type: RadioButton
+                    optionName: type
+                    optionPart: kendall
+                  - name: type_spearman
+                    type: RadioButton
+                    optionName: type
+                    optionPart: spearman
+                  - name: type_gamma
+                    type: RadioButton
+                    optionName: type
+                    optionPart: gamma
+                  - name: type_polychoric
+                    type: RadioButton
+                    optionName: type
+                    optionPart: polychoric
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
             children:
-              - type: CheckBox
-                name: eigen
-              - type: CheckBox
-                name: avgCorr
-              - type: CheckBox
-                name: emp
-              - type: CheckBox
-                name: hull                
-          - type: Label
-            label: 'Plots'
-            children:
-              - type: CheckBox
-                name: screePlot
-              - type: CheckBox
-                name: MapCurvePlot
-
+              - type: Label
+                label: 'Tables'
+                children:
+                  - type: CheckBox
+                    name: eigen
+                  - type: CheckBox
+                    name: avgCorr
+                  - type: CheckBox
+                    name: emp
+                  - type: CheckBox
+                    name: hull                
+              - type: Label
+                label: 'Plots'
+                children:
+                  - type: CheckBox
+                    name: screePlot
+                  - type: CheckBox
+                    name: MapCurvePlot
+    

@@ -19,6 +19,7 @@ gtheory(
   gmea = FALSE,
   item = FALSE,
   formula1 = "Score ~ (1 | Person) + (1 | Item)",
+  run,
   t = "uni",
   itemd = FALSE,
   comp = FALSE,
@@ -57,6 +58,8 @@ gtheory(
 \item{item}{.}
 
 \item{formula1}{.}
+
+\item{run}{.}
 
 \item{t}{.}
 

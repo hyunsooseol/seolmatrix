@@ -89,6 +89,10 @@ options:
       type: String
       default: "Score ~ (1 | Person) + (1 | Item)"
 
+    - name: run
+      type: Action
+      title: Run
+
     - name: t
       title: 'Analysis option'
       type: List

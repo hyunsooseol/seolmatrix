@@ -19,6 +19,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             gmea = FALSE,
             item = FALSE,
             formula1 = "Score ~ (1 | Person) + (1 | Item)",
+            run = NULL,
             t = "uni",
             itemd = FALSE,
             comp = FALSE,
@@ -100,6 +101,9 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "formula1",
                 formula1,
                 default="Score ~ (1 | Person) + (1 | Item)")
+            private$..run <- jmvcore::OptionAction$new(
+                "run",
+                run)
             private$..t <- jmvcore::OptionList$new(
                 "t",
                 t,
@@ -152,6 +156,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..gmea)
             self$.addOption(private$..item)
             self$.addOption(private$..formula1)
+            self$.addOption(private$..run)
             self$.addOption(private$..t)
             self$.addOption(private$..itemd)
             self$.addOption(private$..comp)
@@ -175,6 +180,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         gmea = function() private$..gmea$value,
         item = function() private$..item$value,
         formula1 = function() private$..formula1$value,
+        run = function() private$..run$value,
         t = function() private$..t$value,
         itemd = function() private$..itemd$value,
         comp = function() private$..comp$value,
@@ -197,6 +203,7 @@ gtheoryOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..gmea = NA,
         ..item = NA,
         ..formula1 = NA,
+        ..run = NA,
         ..t = NA,
         ..itemd = NA,
         ..comp = NA,
@@ -609,6 +616,7 @@ gtheoryBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param gmea .
 #' @param item .
 #' @param formula1 .
+#' @param run .
 #' @param t .
 #' @param itemd .
 #' @param comp .
@@ -656,6 +664,7 @@ gtheory <- function(
     gmea = FALSE,
     item = FALSE,
     formula1 = "Score ~ (1 | Person) + (1 | Item)",
+    run,
     t = "uni",
     itemd = FALSE,
     comp = FALSE,
@@ -698,6 +707,7 @@ gtheory <- function(
         gmea = gmea,
         item = item,
         formula1 = formula1,
+        run = run,
         t = t,
         itemd = itemd,
         comp = comp,
