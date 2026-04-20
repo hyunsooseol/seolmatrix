@@ -161,8 +161,23 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         
         if (is.null(self$options$vars)) return()
         
-        vars  <- self$options$vars
-        data  <- self$data
+        vars <- self$options$vars
+        data <- self$data[, vars, drop = FALSE]
+        
+        # ordinal/factor 허용
+        data[] <- lapply(data, function(x) {
+          if (is.numeric(x))
+            x
+          else if (is.factor(x) || is.ordered(x))
+            as.numeric(x)
+          else
+            x
+        })
+        
+        # 여전히 numeric이 아닌 열이 있으면 중단
+        is_num <- vapply(data, is.numeric, logical(1))
+        if (!all(is_num))
+          stop("'Variables' must be continuous or ordinal.")
         
         # 옵션(없어도 오류 안 나게 기본값 처리)
         hideDiag <- isTRUE(tryCatch(self$options$hideDiag, error = function(e) FALSE))
@@ -175,7 +190,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           use    = self$options$missing
         )
         rho <- as.matrix(rho)
-        
+
         # p-value (t-test 근사; pairwise complete cases 기준)
         pmat <- private$.p_matrix_approx(rho, data)
         
