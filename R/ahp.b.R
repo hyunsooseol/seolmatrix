@@ -42,14 +42,17 @@ ahpClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return()
         # get variables---------------------------------
         vars <- self$options$vars
-        nVars <- length(vars)
-        mydata <- self$data
-        mydata <- jmvcore::naOmit(mydata)
+        #nVars <- length(vars)
+        
+        mydata <- self$data[, vars, drop = FALSE]
+       
         for (v in vars)
           mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
-        
-        # compute AHP-------
+       
+        mydata <- jmvcore::naOmit(mydata)
+         
         res <- easyAHP::easyAHP(mydata)$Makers
+        
         # item matrix--------
         
         item <- res$Matrix

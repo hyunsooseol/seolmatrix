@@ -52,7 +52,13 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return(NULL)
         }
         
-        data <- self$data
+        # data <- self$data
+        # data <- na.omit(data)
+        cols <- unique(c(self$options$dep, self$options$id, self$options$facet, self$options$sub))
+        cols <- unlist(cols, use.names = FALSE)
+        cols <- cols[!is.na(cols) & nzchar(cols)]
+        
+        data <- self$data[, cols, drop = FALSE]
         data <- na.omit(data)
         data <- as.data.frame(data)
         
@@ -321,8 +327,9 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           
           # D study: Between universe score variance matrix----------
           if (isTRUE(self$options$bmat)) {
+            
             bmat <- ds1$between$var.universe
-            bmat <- as.data.frame(mat)
+            bmat <- as.data.frame(bmat)
             
             names <- dimnames(bmat)[[1]]
             dims <- dimnames(bmat)[[2]]
