@@ -177,24 +177,43 @@ concordanceClass <- if (requireNamespace('jmvcore'))
               }
             }
           }
+          res <- as.data.frame(ccc_mat, stringsAsFactors = FALSE)
           
-          res <- as.data.frame(ccc_mat)
-          names <- dimnames(res)[[1]]
-          dims <- dimnames(res)[[2]]
+          res_txt <- matrix("", nrow = nrow(res), ncol = ncol(res))
+          rownames(res_txt) <- rownames(res)
+          colnames(res_txt) <- colnames(res)
+          
+          for (i in 1:nrow(res)) {
+            for (j in 1:ncol(res)) {
+              if (j > i) {
+                res_txt[i, j] <- ""
+              } else {
+                res_txt[i, j] <- sprintf("%.3f", res[i, j])
+              }
+            }
+          }
+          
+          res_txt <- as.data.frame(res_txt, stringsAsFactors = FALSE)
+          
+          names <- dimnames(res_txt)[[1]]
+          dims <- dimnames(res_txt)[[2]]
           table <- self$results$mat
           
           for (dim in dims) {
-            table$addColumn(name = paste0(dim), type = 'number')
+            table$addColumn(name = paste0(dim), type = 'text')
           }
           
           for (name in names) {
             row <- list()
             for (j in seq_along(dims)) {
-              row[[dims[j]]] <- res[name, j]
+              row[[dims[j]]] <- res_txt[name, j]
             }
             table$addRow(rowKey = name, values = row)
-          }
-        }
+          }  
+
+          
+          
+                  }
         
         
         

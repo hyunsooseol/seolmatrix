@@ -29,126 +29,125 @@ rmcClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       
       #---------------------------------------------------------------
       .run = function() {
-        if (is.null(self$options$dep) |
-            is.null(self$options$covs))
+        if (is.null(self$options$dep) || is.null(self$options$covs))
           return()
         
-        # Example-----------
-        # library(rmcorr)
-        # bland1995 <- bland1995
-        # ## Bland Altman 1995 data
-        # rc<- rmcorr(Subject, PaCO2, pH, bland1995)
-        #get the data--------
-        data <- self$data
-        id <- self$options$id
-        dep <- self$options$dep
+        id   <- self$options$id
+        dep  <- self$options$dep
         covs <- self$options$covs
-        # convert to appropriate data types
-        data[[dep]] <- jmvcore::toNumeric(data[[dep]])
-        data[[covs]] <- jmvcore::toNumeric(data[[covs]])
-        data <- na.omit(data)
         
-        if (isTRUE(self$options$rc)) {  
-          # Repeated correlation-----------------------------------------------------
-          set.seed(1234)
-          res <- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
+        # -----------------------------
+        # Cross-correlation용 데이터
+        # -----------------------------
+        cols_cc <- unique(c(dep, covs))
+        cols_cc <- cols_cc[!is.na(cols_cc) & nzchar(cols_cc)]
+        
+        data_cc <- self$data[, cols_cc, drop = FALSE]
+        data_cc[[dep]]  <- jmvcore::toNumeric(data_cc[[dep]])
+        data_cc[[covs]] <- jmvcore::toNumeric(data_cc[[covs]])
+        data_cc <- na.omit(data_cc)
+        
+        # -----------------------------
+        # Repeated-correlation용 데이터
+        # -----------------------------
+        data_rc <- NULL
+        if (!is.null(id) && id != "") {
+          cols_rc <- unique(c(id, dep, covs))
+          cols_rc <- cols_rc[!is.na(cols_rc) & nzchar(cols_rc)]
           
-          #-----------------------------------------
-          
-          
-          table <- self$results$rc
-          r <-  res$r
-          df <- res$df
-          p <- res$p
-          lower <-  res$CI[[1]]
-          upper <-   res$CI[[2]]
-          
-          row <- list()
-          row[['r']] <- r
-          row[['df']] <- df
-          row[['p']] <- p
-          row[['lower']] <- lower
-          row[['upper']] <- upper
-          table$setRow(rowNo = 1, values = row)
+          data_rc <- self$data[, cols_rc, drop = FALSE]
+          data_rc[[dep]]  <- jmvcore::toNumeric(data_rc[[dep]])
+          data_rc[[covs]] <- jmvcore::toNumeric(data_rc[[covs]])
+          data_rc <- na.omit(data_rc)
         }
         
-        
-        # Cross correlation-----------------------
-        
-        if (isTRUE(self$options$cc)){ 
-          Measure1 <- as.vector(data[[dep]])
-          Measure2 <- as.vector(data[[covs]])
-          set.seed(1234)
-          r <- stats::ccf(Measure1, Measure2, plot = FALSE)
+        # Repeated correlation
+        if ((isTRUE(self$options$rc) || isTRUE(self$options$plot)) &&
+            !is.null(data_rc)) {
           
-          #self$results$text$setContent(res1)
+          res <- rmcorr::rmcorr(id, data_rc[[dep]], data_rc[[covs]], data_rc)
           
-          table <- self$results$cc
-          
-          res1 <- cbind(r[["lag"]], r[["acf"]])
-          res1 <- as.data.frame(res1)
-          names(res1) <- c("Lag", "Values")
-          
-          for (i in 1:nrow(res1)) {
-            row <- list()
-            row[['lag']] <- res1[i, 1]
-            row[['value']] <- res1[i, 2]
-            table$addRow(rowKey = i, values = row)
+          if (isTRUE(self$options$rc)) {
+            table <- self$results$rc
+            row <- list(
+              r     = res$r,
+              df    = res$df,
+              p     = res$p,
+              lower = res$CI[[1]],
+              upper = res$CI[[2]]
+            )
+            table$setRow(rowNo = 1, values = row)
           }
-          # image1 <- self$results$plot1
-          # image1$setState(r)
+          
+          if (isTRUE(self$options$plot)) {
+            image <- self$results$plot
+            image$setState(list(
+              res  = res,
+              dep  = dep,
+              covs = covs
+            ))
+          }
+        }
+        
+        # Cross correlation
+        if (isTRUE(self$options$cc) || isTRUE(self$options$plot1)) {
+          
+          Measure1 <- as.vector(data_cc[[dep]])
+          Measure2 <- as.vector(data_cc[[covs]])
+          ccf_res <- stats::ccf(Measure1, Measure2, plot = FALSE)
+          
+          if (isTRUE(self$options$cc)) {
+            table <- self$results$cc
+            res1 <- cbind(ccf_res[["lag"]], ccf_res[["acf"]])
+            res1 <- as.data.frame(res1)
+            names(res1) <- c("Lag", "Values")
+            
+            for (i in 1:nrow(res1)) {
+              row <- list()
+              row[['lag']] <- res1[i, 1]
+              row[['value']] <- res1[i, 2]
+              table$addRow(rowKey = i, values = row)
+            }
+          }
+          
+          if (isTRUE(self$options$plot1)) {
+            image1 <- self$results$plot1
+            image1$setState(ccf_res)
+          }
         }
       },
       
       .plot = function(image, ...) {
         
-        if (!self$options$plot)
+        if (!isTRUE(self$options$plot))
           return(FALSE)
         
-        data <- self$data
-        id <- self$options$id
-        dep <- self$options$dep
-        covs <- self$options$covs
-        # convert to appropriate data types
-        data[[dep]] <- jmvcore::toNumeric(data[[dep]])
-        data[[covs]] <- jmvcore::toNumeric(data[[covs]])
-        data <- na.omit(data)
+        if (is.null(image$state))
+          return(FALSE)
         
-        # Repeated correlation-----------------------------------------------------
-        set.seed(1234)
-        res <- rmcorr::rmcorr(id, data[[dep]], data[[covs]], data)
+        res <- image$state$res
+        dep <- image$state$dep
+        covs <- image$state$covs
         
-        plot <- plot(
+        plot(
           res,
           overall = FALSE,
           lty = 1,
           lwd = 3,
-          xlab = self$options$dep,
-          ylab = self$options$covs
+          xlab = dep,
+          ylab = covs
         )
-        print(plot)
+        
         TRUE
       },
       
       
       .plot1 = function(image1, ...) {
         
-        data <- self$data
-        id <- self$options$id
-        dep <- self$options$dep
-        covs <- self$options$covs
-        # convert to appropriate data types
-        data[[dep]] <- jmvcore::toNumeric(data[[dep]])
-        data[[covs]] <- jmvcore::toNumeric(data[[covs]])
-        data <- na.omit(data)
+        if (is.null(image1$state))
+          return(FALSE)
         
-        Measure1 <- as.vector(data[[dep]])
-        Measure2 <- as.vector(data[[covs]])
-        
-        set.seed(1234)
-        plot1 <- stats::ccf(Measure1, Measure2)
-        
-        print(plot1)
+        plot(image1$state)
         TRUE
       }
     )

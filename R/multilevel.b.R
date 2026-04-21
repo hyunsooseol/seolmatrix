@@ -41,9 +41,12 @@ multilevelClass <- if (requireNamespace('jmvcore'))
       .run = function() {
         if (length(self$options$facs) < 1)
           return()
-        data <- self$data
-        vars  <- self$options$vars
-        facs <- self$options$facs
+        # data <- self$data
+        # vars  <- self$options$vars
+        # facs <- self$options$facs
+
+        cols <- unique(c(vars, facs))
+        data <- self$data[, cols, drop = FALSE]
         
         res <- NULL  # ✅ 항상 정의 (multi OFF에서도 res not found 방지)
         
@@ -69,12 +72,18 @@ multilevelClass <- if (requireNamespace('jmvcore'))
           if (isTRUE(self$options$plot))
             image$setVisible(TRUE)
           
-          # convert to appropriate data types
-          for (i in seq_along(vars))
-            data[[i]] <- jmvcore::toNumeric(data[[i]])
+          # # convert to appropriate data types
+          # for (i in seq_along(vars))
+          #   data[[i]] <- jmvcore::toNumeric(data[[i]])
+          # for (fac in facs)
+          #   data[[fac]] <- as.factor(data[[fac]])
+
+          for (v in vars)
+            data[[v]] <- jmvcore::toNumeric(data[[v]])
           for (fac in facs)
             data[[fac]] <- as.factor(data[[fac]])
           
+                    
           #############################################
           res <- correlation::correlation(data, multilevel = TRUE)
           #############################################

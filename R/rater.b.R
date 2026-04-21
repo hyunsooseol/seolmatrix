@@ -6,10 +6,12 @@ raterClass <- if (requireNamespace('jmvcore'))
       .htmlwidget = NULL,
       .cachedResults = NULL,
       .transformedData = NULL,
+      .dataKey = NULL,
 
       .init = function() {
         # Initialize cache
         private$.cachedResults <- list()
+        private$.dataKey <- NULL
 
         private$.htmlwidget <- HTMLWidget$new()
 
@@ -44,21 +46,36 @@ raterClass <- if (requireNamespace('jmvcore'))
 
       # Helper function to get and prepare data only once
       .getData = function() {
-        if (!is.null(private$.transformedData))
-          return(private$.transformedData)
-
         if (is.null(self$options$vars) || length(self$options$vars) < 2)
           return(NULL)
-
-        data <- jmvcore::naOmit(self$data)
-
-        # Transform data if needed
+        
+        vars <- self$options$vars
+        currentKey <- paste(
+          paste(vars, collapse = "|"),
+          self$options$t,
+          sep = "||"
+        )
+        
+        if (!is.null(private$.transformedData) &&
+            !is.null(private$.dataKey) &&
+            identical(private$.dataKey, currentKey)) {
+          return(private$.transformedData)
+        }
+        
+        data <- self$data[, vars, drop = FALSE]
+        
+        for (v in vars)
+          data[[v]] <- jmvcore::toNumeric(data[[v]])
+        
+        data <- jmvcore::naOmit(data)
+        
         if (self$options$t == "row") {
           data <- t(data)
         }
-
-        # Convert to matrix once
+        
         private$.transformedData <- as.matrix(data)
+        private$.dataKey <- currentKey
+        
         return(private$.transformedData)
       },
 
@@ -89,26 +106,45 @@ raterClass <- if (requireNamespace('jmvcore'))
 
         if (isTRUE(self$options$pair)) {
 
-          res<- private$.pairwise()
+          res <- private$.pairwise()
           res <- res$matrix
-        #self$results$text$setContent(res$matrix)
-          res <- as.data.frame(res)
-          names <- dimnames(res)[[1]]
-          dims <- dimnames(res)[[2]]
-          table <- self$results$matrix
-
-          # creating table----------------
-          for (dim in dims) {
-            table$addColumn(name = paste0(dim), type = 'number')
+          res <- as.data.frame(res, stringsAsFactors = FALSE)
+          
+          # 숫자를 문자열로 변환
+          res_txt <- matrix("", nrow = nrow(res), ncol = ncol(res))
+          rownames(res_txt) <- rownames(res)
+          colnames(res_txt) <- colnames(res)
+          
+          for (i in 1:nrow(res)) {
+            for (j in 1:ncol(res)) {
+              if (j > i) {
+                res_txt[i, j] <- ""
+              } else {
+                res_txt[i, j] <- sprintf("%.3f", res[i, j])
+              }
+            }
           }
+          
+          res_txt <- as.data.frame(res_txt, stringsAsFactors = FALSE)
+          
+          names <- dimnames(res_txt)[[1]]
+          dims <- dimnames(res_txt)[[2]]
+          table <- self$results$matrix
+          
+          for (dim in dims) {
+            table$addColumn(name = paste0(dim), type = 'text')
+          }
+          
           for (name in names) {
             row <- list()
             for (j in seq_along(dims)) {
-              row[[dims[j]]] <- res[name, j]
+              row[[dims[j]]] <- res_txt[name, j]
             }
             table$addRow(rowKey = name, values = row)
           }
-
+          
+          
+          
         }
 
         # Compute Light's Kappa
@@ -355,13 +391,16 @@ raterClass <- if (requireNamespace('jmvcore'))
           method <- self$options$method
 
           # Prepare data for Krippendorff's alpha
-          krip_data <- data
-          if (self$options$t != "row") {
-            krip_data <- t(krip_data)
-          } else if (self$options$t == "row") {
-            krip_data <- t(krip_data)
-          }
+          # krip_data <- data
+          # if (self$options$t != "row") {
+          #   krip_data <- t(krip_data)
+          # } else if (self$options$t == "row") {
+          #   krip_data <- t(krip_data)
+          # }
 
+          krip_data <- t(data) 
+          
+          
           krip_key <- paste("krippendorff", method, sep = "_")
           krip <- private$.compute(krip_key, function() {
             irr::kripp.alpha(as.matrix(krip_data), method = method)
@@ -383,6 +422,7 @@ raterClass <- if (requireNamespace('jmvcore'))
       .clearCache = function() {
         private$.cachedResults <- list()
         private$.transformedData <- NULL
+        private$.dataKey <- NULL
       },
 
       .pairwise = function() {
