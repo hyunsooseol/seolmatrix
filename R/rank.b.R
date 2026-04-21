@@ -218,10 +218,15 @@ rankClass <- if (requireNamespace('jmvcore'))
         vars <- self$options$vars
         type <- self$options$type
 
-        mydata <- jmvcore::naOmit(self$data)
+        # mydata <- jmvcore::naOmit(self$data)
+        # for (v in vars)
+        #   mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
+        mydata <- self$data[, vars, drop = FALSE]
         for (v in vars)
           mydata[[v]] <- jmvcore::toNumeric(mydata[[v]])
-
+        mydata <- jmvcore::naOmit(mydata)
+        
+        
         table_corr <- self$results$matrix
         table_p    <- private$.safeResult("pmatrix")
         table_tau  <- private$.safeResult("tau")

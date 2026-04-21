@@ -36,18 +36,16 @@ networkClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return()
 
         vars <- self$options$vars
-        data <- self$data
+        lab  <- self$options$labels
+        
+        data <- self$data[, c(lab, vars), drop = FALSE]
         data <- jmvcore::naOmit(data)
-
-        # labels column -> rownames
-        if (!is.null(self$options$labels)) {
-          rownames(data) <- data[[self$options$labels]]
-          data[[self$options$labels]] <- NULL
-        }
-
-        # ensure numeric
-        for (i in seq_along(vars))
-          data[[i]] <- jmvcore::toNumeric(data[[i]])
+        
+        rownames(data) <- data[[lab]]
+        data[[lab]] <- NULL
+        
+        for (v in vars)
+          data[[v]] <- jmvcore::toNumeric(data[[v]])
 
         # Data handling---
         mat <- as.matrix(data)

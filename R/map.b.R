@@ -33,10 +33,19 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
       .run = function() {
         if (is.null(self$options$vars) || length(self$options$vars) < 3) return()
         
+        # dat <- jmvcore::select(self$data, self$options$vars)
+        # dat <- jmvcore::naOmit(dat)
+        # dat <- jmvcore::toNumeric(dat)
+
         dat <- jmvcore::select(self$data, self$options$vars)
-        dat <- jmvcore::naOmit(dat)
-        dat <- jmvcore::toNumeric(dat)
         
+        for (v in self$options$vars)
+          dat[[v]] <- jmvcore::toNumeric(dat[[v]])
+        
+        dat <- as.data.frame(dat)
+        dat <- jmvcore::naOmit(dat)
+        
+                
         corType <- switch(
           self$options$type,
           pearson    = "pearson",

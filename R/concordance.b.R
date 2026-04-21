@@ -41,20 +41,26 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           if (length(self$options$dep) >= 1 &&
               length(self$options$covs) >= 1) {
             #get the data--------
+
             dep <- self$options$dep
             covs <- self$options$covs
             
-            # convert to appropriate data types
+            cols <- unique(c(dep, covs, self$options$id))
+            cols <- cols[!is.na(cols) & nzchar(cols)]
+            
+            data <- self$data[, cols, drop = FALSE]
+            
             data[[dep]] <- jmvcore::toNumeric(data[[dep]])
             data[[covs]] <- jmvcore::toNumeric(data[[covs]])
             
-            id <- NULL
-            if (!is.null(self$options$id) &&
-                self$options$id != "") {
-              id <- data[[self$options$id]]
-            }
-            
             data <- na.omit(data)
+            
+            id <- NULL
+            if (!is.null(self$options$id) && self$options$id != "") {
+              id <- data[[self$options$id]]
+            }            
+            
+            
             
             #To work in Linux####################################
             
@@ -117,9 +123,16 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           variables <- self$options$vars
           if (length(variables) < 2) return()
           
-          data_subset <- as.data.frame(lapply(variables, function(var)
-            data[[var]]))
-          colnames(data_subset) <- variables
+          mat_cols <- unique(c(variables, self$options$id))
+          mat_cols <- mat_cols[!is.na(mat_cols) & nzchar(mat_cols)]
+          
+          data_mat <- self$data[, mat_cols, drop = FALSE]
+          
+          for (v in variables)
+            data_mat[[v]] <- jmvcore::toNumeric(data_mat[[v]])
+          
+          data_subset <- data_mat[, variables, drop = FALSE]
+          
           n_vars <- length(variables)
           
           ccc_mat <- matrix(NA, nrow = n_vars, ncol = n_vars)
@@ -127,30 +140,40 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           colnames(ccc_mat) <- variables
           
           for (i in 1:n_vars) {
-            for (j in 1:n_vars) {
-              if (i == j) {
-                ccc_mat[i, j] <- 1
-              } else {
+            ccc_mat[i, i] <- 1
+            
+            if (i < n_vars) {
+              for (j in (i + 1):n_vars) {
                 x <- data_subset[[i]]
                 y <- data_subset[[j]]
                 
                 valid_indices <- !is.na(x) & !is.na(y)
+                
                 if (sum(valid_indices) < 2) {
-                  ccc_mat[i, j] <- NA
+                  ccc_val <- NA
                 } else {
-                  x <- x[valid_indices]
-                  y <- y[valid_indices]
+                  x_valid <- x[valid_indices]
+                  y_valid <- y[valid_indices]
                   
- 
-                  if (!is.null(self$options$id)) {
-                    id <- data[[self$options$id]]
-                    tmp_ccc <- private$.computeCCC(x, y, rep.measure = TRUE, subjectid = id)
-                  } else{
-                    tmp_ccc <- private$.computeCCC(x, y, subjectid = NULL)
+                  if (!is.null(self$options$id) && self$options$id != "") {
+                    id_valid <- data_mat[[self$options$id]][valid_indices]
+                    tmp_ccc <- private$.computeCCC(
+                      x_valid, y_valid,
+                      rep.measure = TRUE,
+                      subjectid = id_valid
+                    )
+                  } else {
+                    tmp_ccc <- private$.computeCCC(
+                      x_valid, y_valid,
+                      subjectid = NULL
+                    )
                   }
                   
-                  ccc_mat[i, j] <- tmp_ccc$rho.c[[1]]
+                  ccc_val <- tmp_ccc$rho.c[[1]]
                 }
+                
+                ccc_mat[i, j] <- ccc_val
+                ccc_mat[j, i] <- ccc_val
               }
             }
           }
@@ -160,7 +183,6 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           dims <- dimnames(res)[[2]]
           table <- self$results$mat
           
-          # creating table----------------
           for (dim in dims) {
             table$addColumn(name = paste0(dim), type = 'number')
           }
@@ -172,8 +194,9 @@ concordanceClass <- if (requireNamespace('jmvcore'))
             }
             table$addRow(rowKey = name, values = row)
           }
-          
         }
+        
+        
         
       },
       .computeCCC = function(x,
