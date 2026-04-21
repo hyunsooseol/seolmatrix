@@ -31,82 +31,94 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         ready <- TRUE
         if (is.null(self$options$vars) || length(self$options$vars) < 2)
           ready <- FALSE
+        
         if (ready) {
-          # 1. 결측 없는 행만 뽑은 data_clean
-          data_clean <- private$.cleanData()
-          if (nrow(data_clean) == 0) stop("No valid data rows after removing missing or infinite values.")
-          # 2. 원본 데이터에서 결측 없는 행 index (matching용)
-          valid_idx <- which(apply(self$data[, self$options$vars, drop=FALSE], 1, function(x) all(is.finite(as.numeric(x)))))
-          # 3. 분석 수행
+          # 1. 전처리 결과 + 유효 행 index를 한 번에 받음
+          clean_res <- private$.cleanData()
+          data_clean <- clean_res$data
+          valid_idx  <- which(clean_res$idx)
+          
+          if (nrow(data_clean) == 0)
+            stop("No valid data rows after removing missing or infinite values.")
+          
+          # 2. 분석 수행
           results <- private$.compute(data_clean)
           
           private$.populateApTable(results)
           private$.populateAjTable(results)
           private$.populateSumcrTable(results)
           
-          # 4. CR 결과 매칭(보정) - 핵심!
+          # 3. CR 결과 매칭
           if (self$options$cr && self$results$cr$isNotFilled()) {
-            cr_all <- rep(NA, nrow(self$data))     # 원본 길이만큼 NA로 초기화
-            cr <- results$cr                       # 결측 없는 행에 대한 결과만 있음
-            cr_all[valid_idx] <- cr                # 위치 맞춰서 결과 대입
+            cr_all <- rep(NA, nrow(self$data))
+            cr <- results$cr
+            cr_all[valid_idx] <- cr
             self$results$cr$setRowNums(rownames(self$data))
             self$results$cr$setValues(cr_all)
           }
           
-          # plot1 등 다른 결과는 기존과 동일
+          # plot1
           if (isTRUE(self$options$plot1)) {
             me <- self$options$method2
             me2 <- self$options$method3
             atts <- strsplit(self$options$atts, ',')[[1]]
-            matahp <- ahpsurvey::ahp.mat(df = data_clean, atts = atts, negconvert = T)
+            matahp <- results$matahp
+            
             m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
             m2 <- ahpsurvey::ahp.indpref(matahp, atts, method = me2)
-            error <- data.frame(id = 1:length(matahp),
-                                maxdiff = apply(abs(m - m2), 1, max))
+            
+            error <- data.frame(
+              id = 1:length(matahp),
+              maxdiff = apply(abs(m - m2), 1, max)
+            )
+            
             image <- self$results$plot1
             image$setState(error)
           }
+          
+          
         }
       },
       
       .compute = function(data) {
-        vars <- self$options$vars
         method <- self$options$method
         method1 <- self$options$method1
         atts <- strsplit(self$options$atts, ',')[[1]]
         
-        matahp <- ahpsurvey::ahp.mat(df = data, atts = atts, negconvert = T)
+        matahp <- ahpsurvey::ahp.mat(df = data, atts = atts, negconvert = TRUE)
         geo <- ahpsurvey::ahp.aggpref(matahp, atts, method = method)
         df <- data.frame(Value = geo)
         aj <- ahpsurvey::ahp.aggjudge(matahp, atts, aggmethod = method1)
         item <- as.matrix(aj)
         cr <- ahpsurvey::ahp.cr(matahp, atts)
-        cr1 <- data %>%
-          ahpsurvey::ahp.mat(atts, negconvert = T) %>%
-          ahpsurvey::ahp.cr(atts)
-        tab <- as.vector(table(cr1 <= 0.1))
+        
+        tab <- c(
+          NO  = sum(cr > 0.1, na.rm = TRUE),
+          YES = sum(cr <= 0.1, na.rm = TRUE)
+        )
         
         results <- list(
+          'matahp' = matahp,
           'df' = df,
           'item' = item,
           'cr' = cr,
-          'cr1' = cr1,
           'tab' = tab
         )
+        
         return(results)
       },
       
       .populateSumcrTable = function(results) {
         table <- self$results$sumcr
         cr <- results$cr
-        cr1 <- results$cr1
         tab <- results$tab
-        mcr <- round(mean(cr), 3)
-        ve <- c(tab, mcr)
+        mcr <- round(mean(cr, na.rm = TRUE), 3)
+        
         row <- list()
-        row[['NO']] <- ve[[1]]
-        row[['YES']] <- ve[[2]]
-        row[['Mean CR']] <- ve[[3]]
+        row[['NO']] <- unname(tab['NO'])
+        row[['YES']] <- unname(tab['YES'])
+        row[['Mean CR']] <- mcr
+        
         table$setRow(rowNo = 1, values = row)
       },
       
@@ -157,15 +169,22 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       .cleanData = function() {
         items <- self$options$vars
         data <- list()
+        
         for (item in items)
           data[[item]] <- jmvcore::toNumeric(self$data[[item]])
+        
         attr(data, 'row.names') <- seq_len(length(data[[1]]))
         attr(data, 'class') <- 'data.frame'
-        # 결측 또는 Inf, NaN 포함 행 제거
-        idx <- apply(as.data.frame(data), 1, function(x) all(is.finite(as.numeric(x))))
+        
         data <- as.data.frame(data)
-        data <- data[idx, , drop = FALSE]
-        return(data)
+        
+        # 결측 또는 Inf, NaN 포함 행 제거용 index
+        idx <- apply(data, 1, function(x) all(is.finite(as.numeric(x))))
+        
+        list(
+          data = data[idx, , drop = FALSE],
+          idx  = idx
+        )
       }
     )
   )
