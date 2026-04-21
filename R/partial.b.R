@@ -10,7 +10,7 @@ partialClass <- if (requireNamespace('jmvcore'))
         private$.htmlwidget <- HTMLWidget$new()
         
         
-        if (is.null(self$dat) | is.null(self$options$vars)) {
+        if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
           
         }
@@ -146,14 +146,46 @@ partialClass <- if (requireNamespace('jmvcore'))
             Rp <- X
           }
           
-          df <- dim(data)[1] - nCtl
-          Rt <- (Rp * sqrt(df - 2)) / sqrt(1 - Rp ^ 2)
+          # df <- dim(data)[1] - nCtl
+          # Rt <- (Rp * sqrt(df - 2)) / sqrt(1 - Rp ^ 2)
+          # if (self$options$sidSig == 'onetailed') {
+          #   nt = 1
+          # } else {
+          #   nt = 2
+          # }
+          # Pp <- -nt * expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
+          
           if (self$options$sidSig == 'onetailed') {
-            nt = 1
+            nt <- 1
           } else {
-            nt = 2
+            nt <- 2
           }
-          Pp <- -nt * expm1(pt(abs(Rt), (df - 2), log.p = TRUE))
+          
+          # p-value matrix
+          Pp <- matrix(NA_real_, nrow = nVar, ncol = nVar)
+          diag(Pp) <- NA_real_
+          
+          for (i in 2:nVar) {
+            for (j in seq_len(i - 1)) {
+              # pairwise.complete.obs일 때 각 쌍마다 실제 사용 표본수를 다시 계산
+              needed_vars <- c(var[i], var[j], varCtl)
+              tmp <- data[, needed_vars, drop = FALSE]
+              nij <- sum(stats::complete.cases(tmp))
+              
+              df_ij <- nij - nCtl - 2
+              
+              r_ij <- Rp[i, j]
+              
+              if (is.na(r_ij) || is.na(df_ij) || df_ij <= 0 || abs(r_ij) >= 1) {
+                Pp[i, j] <- NA_real_
+              } else {
+                t_ij <- (r_ij * sqrt(df_ij)) / sqrt(1 - r_ij^2)
+                Pp[i, j] <- -nt * expm1(stats::pt(abs(t_ij), df_ij, log.p = TRUE))
+              }
+            }
+          }
+          
+          
           
           # populate results------------------------------------------------
           for (i in 2:nVar) {
@@ -177,21 +209,21 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         if (isTRUE(self$options$plot) || isTRUE(self$options$plot2) || isTRUE(self$options$cen)) {
           
-          CorMat <- qgraph::cor_auto(data)
+          net_data <- data[, var, drop = FALSE]
+          CorMat <- qgraph::cor_auto(net_data)
           
           # Network PLOT
           if (isTRUE(self$options$plot)) {
-            n = nrow(data)
+            n <- nrow(net_data)
             image <- self$results$plot
-            state <- list(CorMat, n)  
+            state <- list(CorMat, n)
             image$setState(state)
           }
           
-          # Centrality 
+          # Centrality
           if (isTRUE(self$options$cen)) {
             vars <- self$options$vars
             table <- self$results$cen
-            # Calculate centrality measures
             res <- qgraph::centrality_auto(CorMat)
             cen <- res[["node.centrality"]]
             for (i in seq_along(vars)) {
@@ -204,9 +236,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           
           # EBIC graph and Centrality plot
           if (isTRUE(self$options$plot2)) {
-            # Compute graph with tuning = 0.5 (EBIC)
-            EBICgraph <- qgraph::EBICglasso(CorMat, nrow(data), 0.5, threshold = TRUE)
-            # Centrality plot-------
+            EBICgraph <- qgraph::EBICglasso(CorMat, nrow(net_data), 0.5, threshold = TRUE)
             image2 <- self$results$plot2
             image2$setState(EBICgraph)
           }
@@ -255,8 +285,7 @@ partialClass <- if (requireNamespace('jmvcore'))
           }
         }
       
-        if(isTRUE(self$options$plot3)){
-          
+        if (isTRUE(self$options$plot3) && isTRUE(self$options$robust)) {
           image <- self$results$plot3
           image$setState(res)
         }
