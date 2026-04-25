@@ -1,0 +1,63 @@
+---
+name:  cc
+title: Canonical Correlation
+menuGroup: seolmatrix
+menuSubgroup: Correlation
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: set1
+      title: Set 1 variables
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: set2
+      title: Set 2 variables
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: cor
+      title: Canonical correlations
+      type: Bool
+      default: true
+
+    - name: test
+      title: Significance tests
+      type: Bool
+      default: false
+
+    - name: coef
+      title: Canonical coefficients for standardized variables
+      type: Bool
+      default: false
+
+    - name: load
+      title: Canonical loadings
+      type: Bool
+      default: false
+
+    - name: cross
+      title: Cross-loadings
+      type: Bool
+      default: false
+
+    - name: redun
+      title: Redundancy analysis
+      type: Bool
+      default: false
+
+    - name: plot
+      title: Canonical correlation plot
+      type: Bool
+      default: false
+...

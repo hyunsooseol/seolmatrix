@@ -68,6 +68,14 @@ analyses:
     menuSubgroup: Correlation
     ribbon: analyses
     category: analyses
+  - title: Canonical Correlation
+    name: cc
+    ns: seolmatrix
+    menuGroup: seolmatrix
+    menuTitle: Canonical Correlation
+    menuSubgroup: Correlation
+    ribbon: analyses
+    category: analyses
   - title: Rater Reliability
     name: rater
     ns: seolmatrix
@@ -166,9 +174,10 @@ datasets:
       - MAP Test
   - name: iris
     path: iris.omv
-    description: Multilevel Correlation
+    description: iris data
     tags:
       - Multilevel
+      - Canonical Correlation
   - name: concordance
     path: concordance.omv
     description: Rating Big5 variable

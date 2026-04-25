@@ -1,0 +1,61 @@
+title: Canonical Correlation
+name: cc
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    suggested:
+      - continuous
+    permitted:
+      - numeric
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Set 1 variables
+        children:
+          - type: VariablesListBox
+            name: set1
+            isTarget: true
+
+      - type: TargetLayoutBox
+        label: Set 2 variables
+        children:
+          - type: VariablesListBox
+            name: set2
+            isTarget: true
+
+  - type: CollapseBox
+    label: Analysis
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        style: inline
+        children:
+          - type: Label
+            label: Tables
+            children:
+              - type: CheckBox
+                name: cor
+              - type: CheckBox
+                name: test
+              - type: CheckBox
+                name: coef
+              - type: CheckBox
+                name: load
+              - type: CheckBox
+                name: cross
+              - type: CheckBox
+                name: redun
+
+          - type: LayoutBox
+            margin: large
+            style: inline
+            children:
+              - type: Label
+                label: Plots
+                children:
+                  - type: CheckBox
+                    name: plot

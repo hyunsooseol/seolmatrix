@@ -1,0 +1,166 @@
+---
+name:  cc
+title: Canonical Correlation
+jrs:   '1.1'
+refs: seolmatrix
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+      visible: true
+
+    - name: text
+      title: ''
+      type: Preformatted
+
+    - name: cor
+      title: Canonical correlations
+      type: Table
+      visible: (cor)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: func
+          title: Function
+          type: integer
+        - name: canonicalCorrelation
+          title: Canonical correlation
+          type: number
+          format: zto
+        - name: eigenvalue
+          title: Eigenvalue
+          type: number
+          format: zto
+        - name: variance
+          title: Variance explained
+          type: number
+          format: pc
+
+    - name: test
+      title: Significance tests
+      type: Table
+      visible: (test)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: testFunc
+          title: Function(s)
+          type: text
+        - name: wilks
+          title: Wilks' Lambda
+          type: number
+          format: zto
+        - name: chisq
+          title: Chi-square
+          type: number
+          format: zto
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+    - name: coef
+      title: 'Canonical coefficients for standardized variables'
+      type: Table
+      visible: (coef)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: set
+          title: Set
+          type: text
+        - name: variable
+          title: Variable
+          type: text
+        - name: func
+          title: Function
+          type: integer
+        - name: coefficient
+          title: Coefficient
+          type: number
+          format: zto
+
+    - name: load
+      title: Canonical loadings
+      type: Table
+      visible: (load)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: set
+          title: Set
+          type: text
+        - name: variable
+          title: Variable
+          type: text
+        - name: func
+          title: Function
+          type: integer
+        - name: loading
+          title: Loading
+          type: number
+          format: zto
+
+    - name: cross
+      title: Cross-loadings
+      type: Table
+      visible: (cross)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: set
+          title: Set
+          type: text
+        - name: variable
+          title: Variable
+          type: text
+        - name: func
+          title: Function
+          type: integer
+        - name: crossLoading
+          title: Cross-loading
+          type: number
+          format: zto
+
+    - name: redun
+      title: Redundancy analysis
+      type: Table
+      visible: (redun)
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: set
+          title: Set
+          type: text
+        - name: func
+          title: Function
+          type: integer
+        - name: varianceExtracted
+          title: Variance extracted
+          type: number
+          format: pc
+        - name: redundancy
+          title: Redundancy
+          type: number
+          format: pc
+
+    - name: plot
+      title: Canonical correlation plot
+      type: Image
+      visible: (plot)
+      renderFun: .plot
+      clearWith:
+        - set1
+        - set2
+
+
+...

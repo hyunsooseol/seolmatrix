@@ -2,6 +2,7 @@
 
 export(ahp)
 export(ahpsurvey)
+export(cc)
 export(concordance)
 export(cor)
 export(gtheory)
