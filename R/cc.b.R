@@ -509,7 +509,7 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         ylim = c(0, 1),
         xlab = "Function",
         ylab = "Canonical correlation",
-        main = "Canonical Correlations"
+        main = ""
       )
       
       graphics::abline(h = 0, lty = 1)
