@@ -12,9 +12,10 @@ description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
   Tetrachoric, Polychoric, Spearman, Intraclass correlation, Multilevel
   correlation, Concordance correlation, Correlation structure, Repeated and
-  Cross correlation, Bootstrap agreement, Fleiss Kappa, Rater Reliability,
-  Generalizability Theory, Analytic Hierarchy Process, Velicer's MAP test,
-  Directed Graph Centrality and allows users to produce Network plots.
+  Cross correlation, Canonical correlation, Bootstrap agreement, Fleiss Kappa,
+  Rater Reliability, Generalizability Theory, Analytic Hierarchy Process,
+  Velicer's MAP test, Directed Graph Centrality and allows users to produce
+  Network plots.
 
   Please submit feedback, bug reports, and feature requests via the links
   provided <a href = "https://github.com/hyunsooseol/seolmatrix/issues"
