@@ -52,10 +52,14 @@ children:
 
           - type: LayoutBox
             margin: large
-            style: inline
             children:
               - type: Label
                 label: Plot
                 children:
                   - type: CheckBox
                     name: plot
+              - type: Label
+                label: Save
+                children:
+                  - type: Output
+                    name: scores                    

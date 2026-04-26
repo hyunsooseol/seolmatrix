@@ -162,5 +162,11 @@ items:
         - set1
         - set2
 
+    - name: scores
+      title: Canonical scores
+      type: Output
+      clearWith:
+        - set1
+        - set2
 
 ...

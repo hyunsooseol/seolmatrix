@@ -64,6 +64,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot",
                 plot,
                 default=FALSE)
+            private$..scores <- jmvcore::OptionOutput$new(
+                "scores")
 
             self$.addOption(private$..set1)
             self$.addOption(private$..set2)
@@ -74,6 +76,7 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..cross)
             self$.addOption(private$..redun)
             self$.addOption(private$..plot)
+            self$.addOption(private$..scores)
         }),
     active = list(
         set1 = function() private$..set1$value,
@@ -84,7 +87,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         load = function() private$..load$value,
         cross = function() private$..cross$value,
         redun = function() private$..redun$value,
-        plot = function() private$..plot$value),
+        plot = function() private$..plot$value,
+        scores = function() private$..scores$value),
     private = list(
         ..set1 = NA,
         ..set2 = NA,
@@ -94,7 +98,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..load = NA,
         ..cross = NA,
         ..redun = NA,
-        ..plot = NA)
+        ..plot = NA,
+        ..scores = NA)
 )
 
 ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -109,7 +114,8 @@ ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         load = function() private$.items[["load"]],
         cross = function() private$.items[["cross"]],
         redun = function() private$.items[["redun"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        scores = function() private$.items[["scores"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -300,6 +306,13 @@ ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 renderFun=".plot",
                 clearWith=list(
                     "set1",
+                    "set2")))
+            self$add(jmvcore::Output$new(
+                options=options,
+                name="scores",
+                title="Canonical scores",
+                clearWith=list(
+                    "set1",
                     "set2")))}))
 
 ccBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -320,7 +333,7 @@ ccBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 pause = NULL,
                 completeWhenFilled = FALSE,
                 requiresMissings = FALSE,
-                weightsSupport = 'auto')
+                weightsSupport = 'none')
         }))
 
 #' Canonical Correlation
@@ -347,6 +360,7 @@ ccBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$cross} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$redun} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$scores} \tab \tab \tab \tab \tab an output \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

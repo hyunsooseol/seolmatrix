@@ -52,20 +52,28 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
       }
       
       vars <- unique(c(set1, set2))
-      dat <- self$data[, vars, drop = FALSE]
       
+      dat <- self$data[, vars, drop = FALSE]
       dat <- as.data.frame(dat)
       
       for (v in names(dat)) {
         if (!is.numeric(dat[[v]])) {
           self$results$text$setContent(
-            paste0("All selected variables must be numeric. Non-numeric variable: ", v)
+            paste0(
+              "Canonical correlation analysis requires continuous numeric variables. ",
+              "Please set the selected variables to Continuous measure type. ",
+              "Problem variable: ", v
+            )
           )
           return(NULL)
         }
       }
       
-      dat <- dat[stats::complete.cases(dat), , drop = FALSE]
+      rowIndex <- seq_len(nrow(dat))
+      completeRows <- stats::complete.cases(dat)
+      
+      dat <- dat[completeRows, , drop = FALSE]
+      usedRows <- rowIndex[completeRows]
       
       if (nrow(dat) < 3) {
         self$results$text$setContent("Not enough complete cases for canonical correlation analysis.")
@@ -96,7 +104,9 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         set2 = set2,
         n = nrow(dat),
         p = ncol(x),
-        q = ncol(y)
+        q = ncol(y),
+        usedRows = usedRows,
+        nTotal = length(rowIndex)
       )
     },
     
@@ -198,7 +208,11 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         coef = coefTable,
         load = loadTable,
         cross = crossTable,
-        redun = redunTable
+        redun = redunTable,
+        xScores = xScores,
+        yScores = yScores,
+        usedRows = clean$usedRows,
+        nTotal = clean$nTotal
       )
     },
     
@@ -488,6 +502,62 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
       }
     },
     
+    .saveScores = function(res) {
+      
+      if (is.null(res) ||
+          is.null(res$xScores) ||
+          is.null(res$yScores) ||
+          is.null(res$usedRows) ||
+          is.null(res$nTotal))
+        return()
+      
+      m <- min(ncol(res$xScores), ncol(res$yScores))
+      
+      if (m < 1)
+        return()
+      
+      keys <- seq_len(2 * m)
+      titles <- character(2 * m)
+      descriptions <- character(2 * m)
+      measureTypes <- rep("continuous", 2 * m)
+      
+      k <- 1
+      for (j in seq_len(m)) {
+        
+        titles[k] <- paste0("CC_Set1_", j)
+        descriptions[k] <- paste0("Set 1 canonical score ", j)
+        k <- k + 1
+        
+        titles[k] <- paste0("CC_Set2_", j)
+        descriptions[k] <- paste0("Set 2 canonical score ", j)
+        k <- k + 1
+      }
+      
+      self$results$scores$set(
+        keys = keys,
+        titles = titles,
+        descriptions = descriptions,
+        measureTypes = measureTypes
+      )
+      
+      self$results$scores$setRowNums(rownames(self$data))
+      
+      k <- 1
+      for (j in seq_len(m)) {
+        
+        score1 <- rep(NA_real_, res$nTotal)
+        score1[res$usedRows] <- as.numeric(res$xScores[, j])
+        self$results$scores$setValues(index = k, score1)
+        k <- k + 1
+        
+        score2 <- rep(NA_real_, res$nTotal)
+        score2[res$usedRows] <- as.numeric(res$yScores[, j])
+        self$results$scores$setValues(index = k, score2)
+        k <- k + 1
+      }
+    },
+    
+    
     .plot = function(image, ...) {
       
       if (!self$options$plot)
@@ -520,7 +590,7 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
     .run = function() {
       
       self$results$text$setContent("")
-      #self$results$instructions$setVisible(visible = FALSE)
+      # self$results$instructions$setVisible(visible = FALSE)
       
       if (is.null(self$data) ||
           is.null(self$options$set1) || length(self$options$set1) == 0 ||
@@ -530,14 +600,14 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         return()
       }
       
-      if (is.null(private$.allCache)) {
-        private$.allCache <- private$.computeRES()
-      }
+      private$.allCache <- NULL
       
-      res <- private$.allCache
+      res <- private$.computeRES()
       
       if (is.null(res))
         return()
+      
+      private$.allCache <- res
       
       if (self$options$cor)
         private$.populateCorTable(res)
@@ -556,6 +626,9 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
       
       if (self$options$redun)
         private$.populateRedunTable(res)
+      
+      if (isTRUE(self$options$scores))
+        private$.saveScores(res)
     }
   )
 )

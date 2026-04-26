@@ -60,4 +60,9 @@ options:
       title: Canonical correlation plot
       type: Bool
       default: false
+
+    - name: scores
+      title: 'Canonical scores'
+      type: Output
+      default: false
 ...
