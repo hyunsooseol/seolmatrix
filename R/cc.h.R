@@ -14,7 +14,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             load = FALSE,
             cross = FALSE,
             redun = FALSE,
-            plot = FALSE, ...) {
+            plot = FALSE,
+            multiv = FALSE, ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -66,6 +67,10 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=FALSE)
             private$..scores <- jmvcore::OptionOutput$new(
                 "scores")
+            private$..multiv <- jmvcore::OptionBool$new(
+                "multiv",
+                multiv,
+                default=FALSE)
 
             self$.addOption(private$..set1)
             self$.addOption(private$..set2)
@@ -77,6 +82,7 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..redun)
             self$.addOption(private$..plot)
             self$.addOption(private$..scores)
+            self$.addOption(private$..multiv)
         }),
     active = list(
         set1 = function() private$..set1$value,
@@ -88,7 +94,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         cross = function() private$..cross$value,
         redun = function() private$..redun$value,
         plot = function() private$..plot$value,
-        scores = function() private$..scores$value),
+        scores = function() private$..scores$value,
+        multiv = function() private$..multiv$value),
     private = list(
         ..set1 = NA,
         ..set2 = NA,
@@ -99,7 +106,8 @@ ccOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..cross = NA,
         ..redun = NA,
         ..plot = NA,
-        ..scores = NA)
+        ..scores = NA,
+        ..multiv = NA)
 )
 
 ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -110,6 +118,7 @@ ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         text = function() private$.items[["text"]],
         cor = function() private$.items[["cor"]],
         test = function() private$.items[["test"]],
+        multiv = function() private$.items[["multiv"]],
         coef = function() private$.items[["coef"]],
         load = function() private$.items[["load"]],
         cross = function() private$.items[["cross"]],
@@ -188,6 +197,45 @@ ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="df", 
                         `title`="df", 
                         `type`="integer"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="multiv",
+                title="Multivariate tests",
+                visible="(multiv)",
+                refs="CCP",
+                clearWith=list(
+                    "set1",
+                    "set2"),
+                columns=list(
+                    list(
+                        `name`="test", 
+                        `title`="Test", 
+                        `type`="text"),
+                    list(
+                        `name`="value", 
+                        `title`="Value", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="approxF", 
+                        `title`="Approx. F", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="df1", 
+                        `title`="Hypothesis df", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="df2", 
+                        `title`="Error df", 
+                        `type`="number", 
+                        `format`="zto"),
                     list(
                         `name`="p", 
                         `title`="p", 
@@ -349,12 +397,14 @@ ccBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param cross .
 #' @param redun .
 #' @param plot .
+#' @param multiv .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$cor} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$test} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$multiv} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$coef} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$load} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$cross} \tab \tab \tab \tab \tab a table \cr
@@ -380,7 +430,8 @@ cc <- function(
     load = FALSE,
     cross = FALSE,
     redun = FALSE,
-    plot = FALSE) {
+    plot = FALSE,
+    multiv = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("cc requires jmvcore to be installed (restart may be required)")
@@ -403,7 +454,8 @@ cc <- function(
         load = load,
         cross = cross,
         redun = redun,
-        plot = plot)
+        plot = plot,
+        multiv = multiv)
 
     analysis <- ccClass$new(
         options = options,

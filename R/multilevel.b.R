@@ -39,12 +39,15 @@ multilevelClass <- if (requireNamespace('jmvcore'))
       },
       #---------------------------------
       .run = function() {
-        if (length(self$options$facs) < 1)
+        if (is.null(self$options$vars) || length(self$options$vars) < 2)
           return()
-        # data <- self$data
-        # vars  <- self$options$vars
-        # facs <- self$options$facs
-
+        
+        if (is.null(self$options$facs) || length(self$options$facs) < 1)
+          return()
+        
+        vars <- self$options$vars
+        facs <- self$options$facs
+        
         cols <- unique(c(vars, facs))
         data <- self$data[, cols, drop = FALSE]
         

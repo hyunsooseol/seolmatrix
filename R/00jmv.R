@@ -86,4 +86,10 @@
         `author`="O'Connor, B.", 
         `year`=2024, 
         `title`="EFA.dimensions: Exploratory Factor Analysis Functions for Assessing Dimensionality", 
-        `publisher`="[R package]. URL https://CRAN.R-project.org/package=EFA.dimensions"))
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=EFA.dimensions"), 
+    `CCP`=list(
+        `type`="software", 
+        `author`="Menzel, U.", 
+        `year`=2022, 
+        `title`="CCP: Significance Tests for Canonical Correlation Analysis (CCA)", 
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=CCP"))

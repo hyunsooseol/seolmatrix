@@ -64,6 +64,40 @@ items:
           title: p
           type: number
           format: zto,pvalue
+
+    - name: multiv
+      title: Multivariate tests
+      type: Table
+      visible: (multiv)
+      refs: CCP
+      clearWith:
+        - set1
+        - set2
+      columns:
+        - name: test
+          title: Test
+          type: text
+        - name: value
+          title: Value
+          type: number
+          format: zto
+        - name: approxF
+          title: Approx. F
+          type: number
+          format: zto
+        - name: df1
+          title: Hypothesis df
+          type: number
+          format: zto
+        - name: df2
+          title: Error df
+          type: number
+          format: zto
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
     - name: coef
       title: 'Canonical coefficients for standardized variables'
       type: Table

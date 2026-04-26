@@ -65,4 +65,9 @@ options:
       title: 'Canonical scores'
       type: Output
       default: false
+
+    - name: multiv
+      title: Multivariate tests
+      type: Bool
+      default: false
 ...

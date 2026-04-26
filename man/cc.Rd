@@ -14,7 +14,8 @@ cc(
   load = FALSE,
   cross = FALSE,
   redun = FALSE,
-  plot = FALSE
+  plot = FALSE,
+  multiv = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ cc(
 \item{redun}{.}
 
 \item{plot}{.}
+
+\item{multiv}{.}
 }
 \value{
 A results object containing:
@@ -45,6 +48,7 @@ A results object containing:
   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
   \code{results$cor} \tab \tab \tab \tab \tab a table \cr
   \code{results$test} \tab \tab \tab \tab \tab a table \cr
+  \code{results$multiv} \tab \tab \tab \tab \tab a table \cr
   \code{results$coef} \tab \tab \tab \tab \tab a table \cr
   \code{results$load} \tab \tab \tab \tab \tab a table \cr
   \code{results$cross} \tab \tab \tab \tab \tab a table \cr

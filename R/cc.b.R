@@ -196,6 +196,13 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         m = m
       )
       
+      multivTable <- private$.computeMultivTable(
+        r = r,
+        n = clean$n,
+        p = clean$p,
+        q = clean$q
+      )
+      
       list(
         fit = fit,
         r = r,
@@ -205,6 +212,7 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
         q = clean$q,
         cor = corTable,
         test = testTable,
+        multiv = multivTable,
         coef = coefTable,
         load = loadTable,
         cross = crossTable,
@@ -251,6 +259,68 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
           stringsAsFactors = FALSE
         )
       }
+      
+      do.call(rbind, out)
+    },
+    
+    .computeMultivTable = function(r, n, p, q) {
+      
+      if (!requireNamespace("CCP", quietly = TRUE)) {
+        self$results$text$setContent(
+          "The CCP package is required for multivariate tests."
+        )
+        return(NULL)
+      }
+      
+      tests <- c(
+        "Pillai" = "Pillai",
+        "Hotelling-Lawley" = "Hotelling",
+        "Wilks" = "Wilks",
+        "Roy" = "Roy"
+      )
+      
+      out <- list()
+      k <- 1
+      
+      for (nm in names(tests)) {
+        
+        obj <- try(
+          CCP::p.asym(
+            rho = r,
+            N = n,
+            p = p,
+            q = q,
+            tstat = tests[[nm]]
+          ),
+          silent = TRUE
+        )
+        
+        if (inherits(obj, "try-error"))
+          next
+        
+        obj <- as.data.frame(obj)
+        
+        if (nrow(obj) < 1)
+          next
+        
+        # 논문식 Multivariate tests 표는 전체 정준함수 포함 검정만 사용
+        row <- obj[1, , drop = FALSE]
+        
+        out[[k]] <- data.frame(
+          test = nm,
+          value = row$stat[1],
+          approxF = row$approx[1],
+          df1 = row$df1[1],
+          df2 = row$df2[1],
+          p = row$p.value[1],
+          stringsAsFactors = FALSE
+        )
+        
+        k <- k + 1
+      }
+      
+      if (length(out) == 0)
+        return(NULL)
       
       do.call(rbind, out)
     },
@@ -424,6 +494,29 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
             wilks = d$wilks[i],
             chisq = d$chisq[i],
             df = d$df[i],
+            p = d$p[i]
+          )
+        )
+      }
+    },
+    
+    .populateMultivTable = function(res) {
+      
+      if (is.null(res$multiv))
+        return()
+      
+      table <- self$results$multiv
+      d <- res$multiv
+      
+      for (i in seq_len(nrow(d))) {
+        table$addRow(
+          rowKey = paste0("multiv_", i),
+          values = list(
+            test = d$test[i],
+            value = d$value[i],
+            approxF = d$approxF[i],
+            df1 = d$df1[i],
+            df2 = d$df2[i],
             p = d$p[i]
           )
         )
@@ -614,6 +707,9 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
       
       if (self$options$test)
         private$.populateTestTable(res)
+      
+      if (self$options$multiv)
+        private$.populateMultivTable(res)
       
       if (self$options$coef)
         private$.populateCoefTable(res)

@@ -33,5 +33,6 @@ Imports:
     ggplot2,
     stats,
     RColorBrewer,
+    CCP,
     EFA.dimensions
 Remotes: cran/gtheory
