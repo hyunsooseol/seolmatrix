@@ -4,13 +4,11 @@
 
 It is part of the snowsoft statistical module series for jamovi and provides correlation, reliability, agreement, dimensionality, AHP, and network analysis tools for education, research, and applied data analysis.
 
-<img width="208" height="559" alt="image" src="https://github.com/user-attachments/assets/b448e938-f28c-47fe-a4e7-1e6d2412718d" />
+<img width="211" height="590" alt="image" src="https://github.com/user-attachments/assets/41120fce-8639-41a9-af16-4f8ac188e574" />
 
-# Installation
 
-This module can be installed from the jamovi Library when available.
+# Support
 
-For development versions, it can also be installed from GitHub:
+Please use the Issues tab for bug reports, feature requests, and questions.
 
-```r
-devtools::install_github("hyunsooseol/seolmatrix")
+Please do not upload confidential data, personal information, or private research data when reporting issues.
