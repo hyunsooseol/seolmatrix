@@ -2,7 +2,7 @@
 
 `seolmatrix` is a jamovi module developed and maintained by snowsoft Inc.
 
-It is part of the Snowsoft statistical module series for jamovi and provides correlation, reliability, agreement, dimensionality, AHP, and network analysis tools for education, research, and applied data analysis.
+It is part of the snowsoft statistical module series for jamovi and provides correlation, reliability, agreement, dimensionality, AHP, and network analysis tools for education, research, and applied data analysis.
 
 <img width="208" height="559" alt="image" src="https://github.com/user-attachments/assets/b448e938-f28c-47fe-a4e7-1e6d2412718d" />
 
