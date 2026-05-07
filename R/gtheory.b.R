@@ -69,6 +69,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .computeWithCache = function(key, computeFn) {
+        key <- paste(key, collapse = " ")
+        
         if (!is.null(private$.cachedResults[[key]])) {
           return(private$.cachedResults[[key]])
         }
@@ -94,17 +96,19 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         ###### Generalizability theory--------------------
         
         if (self$options$t == 'uni') {
-          formula <- self$options$formula
+          formula <- gtheory_safe_formula(self$options$formula)
+          formulaKey <- paste(deparse(formula), collapse = " ")
           
           gstudy.out <- private$.computeWithCache(
-            paste("gstudy", formula, sep = "_"),
+            paste("gstudy", formulaKey, sep = "_"),
+            
             function() {
               gtheory::gstudy(data = data, formula = formula)
             }
           )
           
           ds <- private$.computeWithCache(
-            paste("dstudy", formula, id, dep, sep = "_"),
+            paste("dstudy", formulaKey, id, dep, sep = "_"),
             function() {
               gtheory::dstudy(
                 gstudy.out,
@@ -134,24 +138,44 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           
           if (isTRUE(self$options$gmea)) {
             gmea <- private$.computeWithCache(
-              paste("gmea", formula, id, sep = "_"),
+              paste("gmea", formulaKey, id, sep = "_"),
+              
               function() {
                 gtheory::dstudy(gstudy.out, colname.objects = id)
               }
             )
             
-            table <- self$results$gmea
-            table$setRow(
-              rowNo = 1,
-              values = with(gmea, list(
-                generalizability = generalizability,
-                dependability = dependability,
-                universe = var.universe,
-                relative = var.error.rel,
-                absolute = var.error.abs
-              ))
-            )
-          }
+             table <- self$results$gmea
+            # table$setRow(
+            #   rowNo = 1,
+            #   values = with(gmea, list(
+            #     generalizability = generalizability,
+            #     dependability = dependability,
+            #     universe = var.universe,
+            #     relative = var.error.rel,
+            #     absolute = var.error.abs
+            #   ))
+            # )
+            if (!is.null(gmea$generalizability) &&
+                !is.null(gmea$dependability) &&
+                !is.null(gmea$var.universe) &&
+                !is.null(gmea$var.error.rel) &&
+                !is.null(gmea$var.error.abs)) {
+              
+              table$setRow(
+                rowNo = 1,
+                values = list(
+                  generalizability = gmea$generalizability,
+                  dependability = gmea$dependability,
+                  universe = gmea$var.universe,
+                  relative = gmea$var.error.rel,
+                  absolute = gmea$var.error.abs
+                )
+              )
+            }
+            
+            
+            }
           
           # D study table(Variance components)----------------
           if (isTRUE(self$options$d)) {
@@ -175,13 +199,13 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             
             table$setRow(
               rowNo = 1,
-              values = with(ds, list(
-                generalizability = generalizability,
-                dependability = dependability,
-                universe = var.universe,
-                relative = var.error.rel,
-                absolute = var.error.abs
-              ))
+              values = list(
+                generalizability = ds$generalizability,
+                dependability = ds$dependability,
+                universe = ds$var.universe,
+                relative = ds$var.error.rel,
+                absolute = ds$var.error.abs
+              )
             )
           }
           
@@ -210,10 +234,11 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
         
         if (self$options$t == 'mul') {
-          formula1 <- self$options$formula1
+          formula1 <- gtheory_safe_formula(self$options$formula1)
+          formula1Key <- paste(deparse(formula1), collapse = " ")
           
           g1 <- private$.computeWithCache(
-            paste("mul_gstudy", formula1, id, sub, sep = "_"), 
+            paste("mul_gstudy", deparse(formula1), id, sub, sep = "_"), 
             function() {
               gtheory::gstudy(
                 data = data,
@@ -225,7 +250,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           )
           
           ds1 <- private$.computeWithCache(
-            paste("mul_dstudy", formula1, id, sub, dep, sep = "_"),
+            paste("mul_dstudy", formula1Key, id, sub, dep, sep = "_"),
             function() {
               gtheory::dstudy(
                 g1,
@@ -241,18 +266,18 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             ng <- self$options$ng
             res <- list()
             
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
             tab <- NULL
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               re <- as.data.frame.matrix(res[[i]][['components']])
               tab[[i]] <- re
             }
             tab <- tab
             tables <- self$results$item
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               table <- tables[[i]]
               item <- tab[[i]]
               
@@ -296,19 +321,19 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             ng <- self$options$ng
             res <- list()
             
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
               res[[i]] <- res.df
             }
             tab <- NULL
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               re <- as.data.frame.matrix(res[[i]][['components']])
               tab[[i]] <- re
             }
             tab <- tab
             tables <- self$results$itemd
             
-            for (i in seq_along(1:ng)) {
+            for (i in seq_len(ng)) {
               table <- tables[[i]]
               item <- tab[[i]]
               
@@ -404,9 +429,14 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         sub <- self$options$sub
         facets <- self$options$facet
         
-        lmer_key <- paste("lmer", self$options$formula, sep = "_")
+        formula <- gtheory_safe_formula(self$options$formula)
+        formulaKey <- paste(deparse(formula), collapse = " ")
+        
+        lmer_key <- paste("lmer", formulaKey, sep = "_")
+        
+        
         one_facet <- private$.computeWithCache(lmer_key, function() {
-          lme4::lmer(self$options$formula, data = data)
+          lme4::lmer(formula, data = data)
         })
         
         gstudy <- function(x, fixed = NULL) {

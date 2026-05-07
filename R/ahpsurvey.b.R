@@ -61,7 +61,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           if (isTRUE(self$options$plot1)) {
             me <- self$options$method2
             me2 <- self$options$method3
-            atts <- strsplit(self$options$atts, ',')[[1]]
+            #atts <- strsplit(self$options$atts, ',')[[1]]
+            atts <- trimws(strsplit(self$options$atts, ',')[[1]])
             matahp <- results$matahp
             
             m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
@@ -83,7 +84,8 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       .compute = function(data) {
         method <- self$options$method
         method1 <- self$options$method1
-        atts <- strsplit(self$options$atts, ',')[[1]]
+        #atts <- strsplit(self$options$atts, ',')[[1]]
+        atts <- trimws(strsplit(self$options$atts, ',')[[1]])
         
         matahp <- ahpsurvey::ahp.mat(df = data, atts = atts, negconvert = TRUE)
         geo <- ahpsurvey::ahp.aggpref(matahp, atts, method = method)
@@ -154,13 +156,20 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         if (is.null(image$state))
           return(FALSE)
         error <- image$state
-        library(ggplot2)
+        
+        # plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
+        #   geom_point() +
+        #   geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
+        #   geom_hline(yintercept = 0, color = "gray50") +
+        #   scale_x_continuous("Respondent ID") +
+        #   scale_y_continuous("Maximum difference")
         plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
-          geom_point() +
-          geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
-          geom_hline(yintercept = 0, color = "gray50") +
-          scale_x_continuous("Respondent ID") +
-          scale_y_continuous("Maximum difference")
+          ggplot2::geom_point() +
+          ggplot2::geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
+          ggplot2::geom_hline(yintercept = 0, color = "gray50") +
+          ggplot2::scale_x_continuous("Respondent ID") +
+          ggplot2::scale_y_continuous("Maximum difference")
+        
         plot1 <- plot1 + ggtheme
         print(plot1)
         TRUE
