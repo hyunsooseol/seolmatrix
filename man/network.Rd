@@ -10,6 +10,8 @@ network(
   vars,
   cen = TRUE,
   plot = FALSE,
+  plot1 = FALSE,
+  plotMetric = "pagerank",
   absWeight = "TRUE",
   threshold = 0
 )
@@ -25,6 +27,10 @@ network(
 
 \item{plot}{.}
 
+\item{plot1}{.}
+
+\item{plotMetric}{.}
+
 \item{absWeight}{.}
 
 \item{threshold}{.}
@@ -38,6 +44,7 @@ A results object containing:
   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
   \code{results$filterInfoPlot} \tab \tab \tab \tab \tab a html \cr
   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+  \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

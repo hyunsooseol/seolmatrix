@@ -89,4 +89,19 @@ items:
         - threshold
         - absWeight
 
+    - name:  plot1
+      title: 'Centrality plot'
+      type:  Image
+      requiresData: true
+      visible: (plot1)
+      renderFun: .plot1
+      refs: qgraph
+      clearWith:
+        - vars
+        - labels
+        - threshold
+        - absWeight
+        - plotMetric
+
+
 ...

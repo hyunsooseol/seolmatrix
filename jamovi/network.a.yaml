@@ -35,8 +35,37 @@ options:
       type: Bool
       default: false
 
+    - name: plot1
+      title: 'Centrality plot'
+      type: Bool
+      default: false
+
+    - name: plotMetric
+      title: Centrality index
+      type: List
+      options:
+        - name: pagerank
+          title: PageRank
+        - name: indegree
+          title: InDegree
+        - name: outdegree
+          title: OutDegree
+        - name: betweenness
+          title: Betweenness
+        - name: closeness
+          title: Closeness
+        - name: hub
+          title: Hub
+        - name: authority
+          title: Authority
+        - name: outex
+          title: OutExpectedInfluence
+        - name: inex
+          title: InExpectedInfluence
+      default: pagerank
+
     - name: absWeight
-      title: 'Use absolute weights (|w|)'
+      title: 'Absolute weights (|w|)'
       type: List
       options:
         - title: 'TRUE'
@@ -47,7 +76,7 @@ options:
 
 
     - name: threshold
-      title: Edge weight threshold
+      title: 'Edge threshold'
       type: Number
       default: 0
       min: 0

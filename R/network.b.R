@@ -156,28 +156,57 @@ networkClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         # ------------------------------------------------------------
         # Centrality Table (qgraph) + add Hub/Authority/PageRank
         # ------------------------------------------------------------
-        if (isTRUE(self$options$cen)) {
-
+        # ------------------------------------------------------------
+        # Centrality Table + Centrality Plot data
+        # ------------------------------------------------------------
+        need_centrality <- isTRUE(self$options$cen) || isTRUE(self$options$plot1)
+        
+        if (need_centrality) {
+          
           res <- qgraph::centrality_auto(W)
           cen <- res[["node.centrality"]]
-
-          table <- self$results$cen
-
-          for (i in seq_along(vars)) {
-            row <- list()
-            row[["bet"]]   <- cen[i, 1]
-            row[["clo"]]   <- cen[i, 2]
-            row[["ind"]]   <- cen[i, 3]
-            row[["out"]]   <- cen[i, 4]
-            row[["outex"]] <- cen[i, 5]
-            row[["inex"]]  <- cen[i, 6]
-
-            # (NEW) directed-role metrics
-            row[["hub"]]  <- hub_vec[i]
-            row[["auth"]] <- auth_vec[i]
-            row[["pr"]]   <- pr_vec[i]
-
-            table$setRow(rowKey = vars[i], values = row)
+          
+          # qgraph centrality_auto usually returns:
+          # Betweenness, Closeness, InDegree, OutDegree,
+          # OutExpectedInfluence, InExpectedInfluence
+          cen_df <- data.frame(
+            Node = vars,
+            Betweenness = as.numeric(cen[, 1]),
+            Closeness = as.numeric(cen[, 2]),
+            InDegree = as.numeric(cen[, 3]),
+            OutDegree = as.numeric(cen[, 4]),
+            OutExpectedInfluence = as.numeric(cen[, 5]),
+            InExpectedInfluence = as.numeric(cen[, 6]),
+            Hub = as.numeric(hub_vec),
+            Authority = as.numeric(auth_vec),
+            PageRank = as.numeric(pr_vec),
+            check.names = FALSE
+          )
+          
+          if (isTRUE(self$options$cen)) {
+            
+            table <- self$results$cen
+            
+            for (i in seq_along(vars)) {
+              row <- list()
+              row[["bet"]]   <- cen_df$Betweenness[i]
+              row[["clo"]]   <- cen_df$Closeness[i]
+              row[["ind"]]   <- cen_df$InDegree[i]
+              row[["out"]]   <- cen_df$OutDegree[i]
+              row[["outex"]] <- cen_df$OutExpectedInfluence[i]
+              row[["inex"]]  <- cen_df$InExpectedInfluence[i]
+              
+              row[["hub"]]  <- cen_df$Hub[i]
+              row[["auth"]] <- cen_df$Authority[i]
+              row[["pr"]]   <- cen_df$PageRank[i]
+              
+              table$setRow(rowKey = vars[i], values = row)
+            }
+          }
+          
+          if (isTRUE(self$options$plot1)) {
+            image <- self$results$plot1
+            image$setState(cen_df)
           }
         }
 
@@ -207,6 +236,99 @@ networkClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           color = node_colors
         )
         print(plot)
+        TRUE
+      },
+      
+      .plot1 = function(image, ...) {
+        
+        cen_df <- image$state
+        
+        if (is.null(cen_df))
+          return(FALSE)
+        
+        if (!is.data.frame(cen_df))
+          return(FALSE)
+        
+        if (!"Node" %in% names(cen_df))
+          return(FALSE)
+        
+        metric_opt <- self$options$plotMetric
+        
+        metric_name <- switch(metric_opt,
+                              pagerank    = "PageRank",
+                              indegree    = "InDegree",
+                              outdegree   = "OutDegree",
+                              betweenness = "Betweenness",
+                              closeness   = "Closeness",
+                              hub         = "Hub",
+                              authority   = "Authority",
+                              outex       = "OutExpectedInfluence",
+                              inex        = "InExpectedInfluence",
+                              "PageRank"
+        )
+        
+        if (!metric_name %in% names(cen_df))
+          return(FALSE)
+        
+        x <- as.numeric(cen_df[[metric_name]])
+        names(x) <- cen_df$Node
+        
+        # ------------------------------------------------------------
+        # Node colors: use the same pastel palette as the network plot
+        # ------------------------------------------------------------
+        n_nodes <- nrow(cen_df)
+        
+        if (n_nodes <= 8) {
+          base_cols <- RColorBrewer::brewer.pal(
+            n = max(3, n_nodes),
+            name = "Set3"
+          )[seq_len(n_nodes)]
+        } else {
+          base_cols <- grDevices::colorRampPalette(
+            RColorBrewer::brewer.pal(8, "Set3")
+          )(n_nodes)
+        }
+        
+        names(base_cols) <- cen_df$Node
+        bar_cols <- base_cols[names(x)]
+        bar_cols <- grDevices::adjustcolor(bar_cols, alpha.f = 0.95)
+        
+        # ------------------------------------------------------------
+        # Sort values: highest centrality should appear at the top
+        # ------------------------------------------------------------
+        ord <- order(x, decreasing = TRUE, na.last = TRUE)
+        
+        x <- x[ord]
+        bar_cols <- bar_cols[ord]
+        
+        # barplot(horiz = TRUE) draws the first value at the bottom,
+        # so reverse the order to place the highest value at the top.
+        x <- rev(x)
+        bar_cols <- rev(bar_cols)
+        
+        oldpar <- graphics::par(no.readonly = TRUE)
+        on.exit(graphics::par(oldpar), add = TRUE)
+        
+        graphics::par(
+          mar = c(4.5, 8, 3.5, 2),
+          las = 1
+        )
+        
+        graphics::barplot(
+          x,
+          horiz = TRUE,
+          main = paste(metric_name, "Centrality"),
+          xlab = metric_name,
+          col = bar_cols,
+          border = "white",
+          cex.names = 0.9,
+          cex.axis = 0.85,
+          cex.lab = 0.9,
+          cex.main = 1.0
+        )
+        
+        graphics::abline(v = 0, lty = 2, col = "gray60")
+        
         TRUE
       }
     )

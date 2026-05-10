@@ -10,6 +10,8 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             cen = TRUE,
             plot = FALSE,
+            plot1 = FALSE,
+            plotMetric = "pagerank",
             absWeight = "TRUE",
             threshold = 0, ...) {
 
@@ -38,6 +40,24 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "plot",
                 plot,
                 default=FALSE)
+            private$..plot1 <- jmvcore::OptionBool$new(
+                "plot1",
+                plot1,
+                default=FALSE)
+            private$..plotMetric <- jmvcore::OptionList$new(
+                "plotMetric",
+                plotMetric,
+                options=list(
+                    "pagerank",
+                    "indegree",
+                    "outdegree",
+                    "betweenness",
+                    "closeness",
+                    "hub",
+                    "authority",
+                    "outex",
+                    "inex"),
+                default="pagerank")
             private$..absWeight <- jmvcore::OptionList$new(
                 "absWeight",
                 absWeight,
@@ -56,6 +76,8 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..vars)
             self$.addOption(private$..cen)
             self$.addOption(private$..plot)
+            self$.addOption(private$..plot1)
+            self$.addOption(private$..plotMetric)
             self$.addOption(private$..absWeight)
             self$.addOption(private$..threshold)
         }),
@@ -64,6 +86,8 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         vars = function() private$..vars$value,
         cen = function() private$..cen$value,
         plot = function() private$..plot$value,
+        plot1 = function() private$..plot1$value,
+        plotMetric = function() private$..plotMetric$value,
         absWeight = function() private$..absWeight$value,
         threshold = function() private$..threshold$value),
     private = list(
@@ -71,6 +95,8 @@ networkOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..vars = NA,
         ..cen = NA,
         ..plot = NA,
+        ..plot1 = NA,
+        ..plotMetric = NA,
         ..absWeight = NA,
         ..threshold = NA)
 )
@@ -84,7 +110,8 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         filterInfoTable = function() private$.items[["filterInfoTable"]],
         cen = function() private$.items[["cen"]],
         filterInfoPlot = function() private$.items[["filterInfoPlot"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        plot1 = function() private$.items[["plot1"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -181,7 +208,21 @@ networkResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "labels",
                     "threshold",
-                    "absWeight")))}))
+                    "absWeight")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot1",
+                title="Centrality plot",
+                requiresData=TRUE,
+                visible="(plot1)",
+                renderFun=".plot1",
+                refs="qgraph",
+                clearWith=list(
+                    "vars",
+                    "labels",
+                    "threshold",
+                    "absWeight",
+                    "plotMetric")))}))
 
 networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "networkBase",
@@ -212,6 +253,8 @@ networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param cen .
 #' @param plot .
+#' @param plot1 .
+#' @param plotMetric .
 #' @param absWeight .
 #' @param threshold .
 #' @return A results object containing:
@@ -222,6 +265,7 @@ networkBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$cen} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$filterInfoPlot} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot1} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -237,6 +281,8 @@ network <- function(
     vars,
     cen = TRUE,
     plot = FALSE,
+    plot1 = FALSE,
+    plotMetric = "pagerank",
     absWeight = "TRUE",
     threshold = 0) {
 
@@ -257,6 +303,8 @@ network <- function(
         vars = vars,
         cen = cen,
         plot = plot,
+        plot1 = plot1,
+        plotMetric = plotMetric,
         absWeight = absWeight,
         threshold = threshold)
 
