@@ -33,6 +33,7 @@ Imports:
     stats,
     RColorBrewer,
     CCP,
-    EFA.dimensions
+    EFA.dimensions,
+    randomNames
 Remotes: cran/gtheory
          frankiecho/ahpsurvey
