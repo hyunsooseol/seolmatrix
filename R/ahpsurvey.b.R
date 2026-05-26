@@ -17,7 +17,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             '<div style="border: 2px solid #e6f4fe; border-radius: 15px; padding: 15px; background-color: #e6f4fe; margin-top: 10px;">',
             '<div style="text-align:justify;">',
             '<ul>',
-            '<li>The R package <b>ahpsurvey</b> is described in the <a href="https://cran.r-project.org/web/packages/ahpsurvey/vignettes/my-vignette.html" target = "_blank">page</a>.</li>',
+            '<li>The R package <b>ahpsurvey</b> is described in the <a href="https://github.com/hyunsooseol/ahpsurvey_manual" target = "_blank">page</a>.</li>',
             '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
             '</ul></div></div>'
           )
