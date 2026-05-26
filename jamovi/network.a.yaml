@@ -13,7 +13,7 @@ options:
             The data as a data frame.
 
     - name: labels
-      title: 'Labels(Required)'
+      title: 'Labels'
       type: Variable
       suggested:
          - nominal

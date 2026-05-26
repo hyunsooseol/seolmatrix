@@ -2,7 +2,7 @@
 % Please edit documentation in R/partial.h.R
 \name{partial}
 \alias{partial}
-\title{Partial Correlation}
+\title{Partial & Robust Correlation}
 \usage{
 partial(
   data,
@@ -88,5 +88,5 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$matrix)}
 }
 \description{
-Partial Correlation
+Partial & Robust Correlation
 }

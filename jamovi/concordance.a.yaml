@@ -34,7 +34,7 @@ options:
         - numeric
 
     - name: id
-      title: 'Subject(repeated measure only)'
+      title: 'Subject'
       type: Variable
       suggested:
         - nominal

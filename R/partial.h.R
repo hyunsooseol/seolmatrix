@@ -225,7 +225,7 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Partial Correlation",
+                title="Partial & Robust Correlation",
                 refs="seolmatrix")
             self$add(jmvcore::Html$new(
                 options=options,
@@ -407,7 +407,7 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Partial Correlation
+#' Partial & Robust Correlation
 #'
 #' 
 #' @param data The data as a data frame.

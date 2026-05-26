@@ -23,6 +23,7 @@ children:
           - type: VariablesListBox
             name: labels
             isTarget: true
+            ghostText: required
             maxItemCount: 1
   - type: LayoutBox
     margin: large

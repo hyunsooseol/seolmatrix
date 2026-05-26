@@ -1,4 +1,4 @@
-title: Partial Correlation
+title: Partial & Robust Correlation
 name: partial
 jus: '3.0'
 stage: 0
@@ -20,6 +20,7 @@ children:
           - type: VariablesListBox
             name: ctrlvars
             isTarget: true
+            ghostText: Partial correlation only
   - type: CollapseBox
     label: 'Partial correlation'
     margin: normal

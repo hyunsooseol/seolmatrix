@@ -9,12 +9,13 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: ID(Only for Repeated)
+        label: ID
         children:
           - type: VariablesListBox
             name: id
             maxItemCount: 1
             isTarget: true
+            ghostText: Repeated only
       - type: TargetLayoutBox
         label: Measure 1
         children:

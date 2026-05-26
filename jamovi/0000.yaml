@@ -21,11 +21,11 @@ description: >-
   provided <a href = "https://github.com/hyunsooseol/seolmatrix/issues"
   target="_blank"> here</a>.
 analyses:
-  - title: Partial Correlation
+  - title: Partial & Robust Correlation
     name: partial
     ns: seolmatrix
     menuGroup: seolmatrix
-    menuTitle: Partial Correlation
+    menuTitle: Partial & Robust Correlation
     menuSubgroup: Correlation
     ribbon: analyses
     category: analyses

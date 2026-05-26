@@ -1,6 +1,6 @@
 ---
 name:  partial
-title: Partial Correlation
+title: Partial & Robust Correlation
 menuGroup: seolmatrix
 menuSubgroup: Correlation
 version: '1.0.0'

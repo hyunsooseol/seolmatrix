@@ -18,6 +18,7 @@ children:
           - type: VariablesListBox
             name: facs
             isTarget: true
+            ghostText: Required
             maxItemCount: 1
 
   - type: LayoutBox

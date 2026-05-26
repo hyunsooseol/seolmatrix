@@ -1,6 +1,6 @@
 ---
 name:  partial
-title: Partial Correlation
+title: Partial & Robust Correlation
 jrs:   '1.1'
 refs: seolmatrix 
 items:

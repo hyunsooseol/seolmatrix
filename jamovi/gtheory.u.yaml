@@ -24,6 +24,7 @@ children:
           - type: VariablesListBox
             name: sub
             isTarget: true
+            ghostText: Multivariate only
             maxItemCount: 1
       - type: TargetLayoutBox
         label: Facets

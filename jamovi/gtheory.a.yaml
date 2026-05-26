@@ -11,7 +11,7 @@ options:
       type: Data
 
     - name: dep
-      title: 'Dependent variable'
+      title: 'Dependent'
       type: Variable
       suggested:
         - continuous
@@ -27,7 +27,7 @@ options:
         - factor
 
     - name: sub
-      title: 'Strata (Multivariate only)'
+      title: 'Strata'
       type: Variable
       suggested:
         - nominal

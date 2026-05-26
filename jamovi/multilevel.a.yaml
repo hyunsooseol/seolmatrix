@@ -22,7 +22,7 @@ options:
         - numeric  
 
     - name: facs
-      title: Grouping Variable(Required)
+      title: Grouping Variable
       type: Variable
       suggested:
          - nominal

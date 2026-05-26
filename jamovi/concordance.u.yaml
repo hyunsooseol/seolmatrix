@@ -27,6 +27,7 @@ children:
           - type: VariablesListBox
             name: id
             isTarget: true
+            ghostText: Repeated measure only
             maxItemCount: 1
   - type: CollapseBox
     label: Pairwise analysis
