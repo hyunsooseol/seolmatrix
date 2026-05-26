@@ -26,7 +26,7 @@ children:
         stretchFactor: 1
         children:
           - type: Label
-            label: Type of correlation
+            label: 'Correlation type'
             children:
               - type: RadioButton
                 name: type_spearman
@@ -41,7 +41,7 @@ children:
                 optionName: type
                 optionPart: tetrachoric
           - type: Label
-            label: 'Options'
+            label: 'Analysis options'
             children:
               - type: CheckBox
                 name: sigStars
@@ -49,6 +49,13 @@ children:
                 name: pmatrix
               - type: CheckBox
                 name: tau
+      - type: LayoutBox
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
           - type: Label
             label: Matrix plot
             children:
@@ -61,13 +68,6 @@ children:
                   - type: ComboBox
                     name: method
                     enable: (plot3)
-      - type: LayoutBox
-        margin: large
-        cell:
-          column: 1
-          row: 0
-        stretchFactor: 1
-        children:
           - type: Label
             label: Network plots
             children:
