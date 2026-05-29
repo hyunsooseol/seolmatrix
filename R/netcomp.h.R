@@ -139,6 +139,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         summary = function() private$.items[["summary"]],
         tests = function() private$.items[["tests"]],
         edges = function() private$.items[["edges"]],
+        progressBarHTML = function() private$.items[["progressBarHTML"]],
         note = function() private$.items[["note"]]),
     private = list(),
     public=list(
@@ -286,6 +287,10 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Html$new(
                 options=options,
+                name="progressBarHTML",
+                title="Progress"))
+            self$add(jmvcore::Html$new(
+                options=options,
                 name="note",
                 title="Note"))}))
 
@@ -334,6 +339,7 @@ netcompBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tests} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$edges} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$note} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'

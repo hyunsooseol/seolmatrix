@@ -118,6 +118,10 @@ items:
           type: number
           format: zto,pvalue
   
+    - name: progressBarHTML
+      title: Progress
+      type: Html
+
     - name: note
       title: Note
       type: Html

@@ -38,6 +38,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       self$results$tests$setVisible(FALSE)
       self$results$edges$setVisible(FALSE)
       self$results$note$setVisible(FALSE)
+      self$results$progressBarHTML$setVisible(FALSE)
       
       if (!is.null(self$results$groupPlots))
         self$results$groupPlots$setVisible(FALSE)
@@ -54,6 +55,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       self$results$tests$setVisible(FALSE)
       self$results$edges$setVisible(FALSE)
       self$results$note$setVisible(FALSE)
+      self$results$progressBarHTML$setVisible(FALSE)
       
       if (!is.null(self$results$groupPlots))
         self$results$groupPlots$setVisible(FALSE)
@@ -279,6 +281,14 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         
       } else {
         
+        self$results$progressBarHTML$setVisible(TRUE)
+        self$results$progressBarHTML$setContent(
+          progressSpinnerH(
+            message = "Running permutation-based network comparison. Please wait..."
+          )
+        )
+        private$.checkpoint()
+        
         nct <- tryCatch({
           
           NetworkComparisonTest::NCT(
@@ -303,10 +313,11 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           )
         }
       }
-
+      
       #---------------------
       
       if (inherits(nct, "error")) {
+        self$results$progressBarHTML$setVisible(FALSE)
         self$results$note$setVisible(TRUE)
         self$results$note$setContent(paste0(
           '<div style="color:#b91c1c;"><strong>Network Comparison Test failed.</strong><br>',
@@ -315,6 +326,16 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ))
         return()
       }
+      
+      self$results$progressBarHTML$setVisible(TRUE)
+      self$results$progressBarHTML$setContent(
+        progressSpinnerH(
+          message = "Preparing tables and network plots..."
+        )
+      )
+      private$.checkpoint()
+      
+      
       
       # -----------------------------
       # Prepare plot cache
@@ -441,7 +462,11 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           '</div>'
         ))
       }
-    },
+    
+      self$results$progressBarHTML$setVisible(FALSE)
+      
+      
+      },
     
     #---------------------------------------------------------------
     .preparePlotCache = function(data1, data2, groups, vars) {
@@ -622,3 +647,38 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     }
   )
 )
+
+progressSpinnerH <- function(message = '') {
+  
+  html <- paste0(
+    '<div style="text-align:center;padding:24px;">',
+    '<style>',
+    '@keyframes snowsoftDotPulse {',
+    '0%, 80%, 100% { transform: scale(0.7); opacity: 0.35; }',
+    '40% { transform: scale(1.15); opacity: 1; }',
+    '}',
+    '.snowsoft-dot {',
+    'display:inline-block;',
+    'width:10px;',
+    'height:10px;',
+    'margin:0 4px;',
+    'background-color:#3498db;',
+    'border-radius:50%;',
+    'animation:snowsoftDotPulse 1.2s infinite ease-in-out;',
+    '}',
+    '.snowsoft-dot:nth-child(2) { animation-delay: 0.15s; }',
+    '.snowsoft-dot:nth-child(3) { animation-delay: 0.30s; }',
+    '</style>',
+    '<div style="margin-bottom:10px;">',
+    '<span class="snowsoft-dot"></span>',
+    '<span class="snowsoft-dot"></span>',
+    '<span class="snowsoft-dot"></span>',
+    '</div>',
+    '<div style="font-size:12px;color:#666;">',
+    message,
+    '</div>',
+    '</div>'
+  )
+  
+  return(html)
+}
