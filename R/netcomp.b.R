@@ -399,11 +399,10 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       private$.drawNetworkPlot(
         mat = private$.plotCache$cor1,
-        title = private$.plotCache$group1
+        title = paste0("Group 1 Network: ", private$.plotCache$group1)
       )
     },
     
-    #---------------------------------------------------------------
     .plotGroup2 = function(image, ...) {
       
       if (is.null(private$.plotCache))
@@ -411,10 +410,9 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       private$.drawNetworkPlot(
         mat = private$.plotCache$cor2,
-        title = private$.plotCache$group2
+        title = paste0("Group 2 Network: ", private$.plotCache$group2)
       )
     },
-    
     #---------------------------------------------------------------
     .drawNetworkPlot = function(mat, title) {
       

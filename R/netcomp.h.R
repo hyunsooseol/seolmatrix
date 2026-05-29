@@ -156,7 +156,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="plotGroup1",
-                            title="Group 1 Network",
+                            title="",
                             renderFun=".plotGroup1",
                             clearWith=list(
                                 "vars",
@@ -169,7 +169,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="plotGroup2",
-                            title="Group 2 Network",
+                            title="",
                             renderFun=".plotGroup2",
                             clearWith=list(
                                 "vars",
