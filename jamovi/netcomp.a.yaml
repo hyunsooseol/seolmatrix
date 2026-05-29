@@ -15,6 +15,7 @@ options:
       type: Variables
       suggested:
         - continuous
+        - nominal
       permitted:
         - numeric
 
@@ -28,8 +29,18 @@ options:
         - factor
 
     - name: run
-      title: Run 
+      title: Run
       type: Action
+
+    - name: dataType
+      title: Data type
+      type: List
+      options:
+        - title: Continuous 
+          name: continuous
+        - title: Binary
+          name: binary
+      default: continuous
 
     - name: nPerm
       title: Number of permutations
@@ -39,22 +50,17 @@ options:
     - name: testStructure
       title: Network structure invariance
       type: Bool
-      default: false
+      default: TRUE
 
     - name: testGlobalStrength
       title: Global strength invariance
       type: Bool
-      default: false
+      default: TRUE
 
     - name: testEdges
       title: Edge differences
       type: Bool
       default: false
-
-    # - name: paired
-    #   title: Paired samples
-    #   type: Bool
-    #   default: false
 
     - name: showPlots
       title: Show group network plots

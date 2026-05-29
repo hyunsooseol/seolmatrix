@@ -6,6 +6,8 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     
     .htmlwidget = NULL,
     .plotCache = NULL,
+    .nctCache = NULL,
+    .hasRun = FALSE,
     
     .init = function() {
       
@@ -21,12 +23,14 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           '<div style="text-align:justify;">',
           '<p><strong>Group Network Comparison</strong> compares two networks across two groups using the Network Comparison Test.</p>',
           '<ul>',
-          '<li>Select two or more continuous variables.</li>',
+          '<li>Select two or more numeric variables for the network.</li>',
+          '<li>Choose <strong>Continuous</strong> for continuous or Likert-type variables, or <strong>Binary</strong> for binary-coded variables.</li>',
           '<li>Select one grouping variable with exactly 2 levels.</li>',
           '<li>Click <strong>Run</strong> to perform the analysis.</li>',
-          '<li>The analysis uses permutation-based tests, so larger numbers of permutations may take longer.</li>',
+          '<li>Permutation-based tests may take longer with more variables or permutations.</li>',
           '<li>Feature requests and bug reports can be made on my <a href="https://github.com/hyunsooseol/seolmatrix/issues" target="_blank">GitHub</a>.</li>',
-          '</ul></div></div>'
+          '</ul>',
+          '</div></div>'
         )
       ))
       
@@ -55,9 +59,15 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         self$results$groupPlots$setVisible(FALSE)
       
       
-      if (is.null(self$options$run) || self$options$run == 0)
+      runClicked <- !is.null(self$options$run) && self$options$run > 0
+      
+      if (runClicked)
+        private$.hasRun <- TRUE
+      
+      if (!private$.hasRun)
         return()
       
+            
       vars <- self$options$vars
       group <- self$options$group
       
@@ -100,10 +110,53 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       for (v in vars)
         dat[[v]] <- jmvcore::toNumeric(dat[[v]])
-      
+
       dat[[group]] <- as.factor(dat[[group]])
       dat <- stats::na.omit(dat)
+
+      # -----------------------------
+      # Data type
+      # -----------------------------
       
+      dataType <- self$options$dataType
+      
+      if (is.null(dataType) || dataType == "")
+        dataType <- "continuous"
+      
+      binaryData <- dataType == "binary"
+      
+      isBinaryVar <- function(x) {
+        ux <- sort(unique(stats::na.omit(x)))
+        length(ux) == 2
+      }
+      
+      binaryVars <- vars[vapply(dat[, vars, drop = FALSE], isBinaryVar, logical(1))]
+      
+      if (binaryData) {
+        
+        if (length(binaryVars) != length(vars)) {
+          
+          nonBinaryVars <- setdiff(vars, binaryVars)
+          
+          self$results$note$setVisible(TRUE)
+          self$results$note$setContent(paste0(
+            '<div style="color:#b91c1c;">',
+            '<strong>Binary data type was selected, but some variables are not binary.</strong><br>',
+            'When Data type is set to Binary, all selected network variables must have exactly two observed values.<br>',
+            'Non-binary variable(s): ',
+            paste(nonBinaryVars, collapse = ", "),
+            '</div>'
+          ))
+          return()
+        }
+        
+        for (v in vars) {
+          ux <- sort(unique(stats::na.omit(dat[[v]])))
+          dat[[v]] <- ifelse(dat[[v]] == ux[1], 0, 1)
+        }
+        
+      }
+            
       if (nrow(dat) < 6) {
         self$results$note$setVisible(TRUE)
         self$results$note$setContent(
@@ -124,6 +177,33 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       data1 <- dat[dat[[group]] == groups[1], vars, drop = FALSE]
       data2 <- dat[dat[[group]] == groups[2], vars, drop = FALSE]
+      
+      # Check variables with no variation within each group
+      noVar1 <- vars[vapply(data1, function(x) length(unique(stats::na.omit(x))) < 2, logical(1))]
+      noVar2 <- vars[vapply(data2, function(x) length(unique(stats::na.omit(x))) < 2, logical(1))]
+      
+      if (length(noVar1) > 0 || length(noVar2) > 0) {
+        
+        msg <- c()
+        
+        if (length(noVar1) > 0)
+          msg <- c(msg, paste0("Group 1: ", paste(noVar1, collapse = ", ")))
+        
+        if (length(noVar2) > 0)
+          msg <- c(msg, paste0("Group 2: ", paste(noVar2, collapse = ", ")))
+        
+        self$results$note$setVisible(TRUE)
+        self$results$note$setContent(paste0(
+          '<div style="color:#b91c1c;">',
+          '<strong>Some variables have no variation within a group.</strong><br>',
+          'Network comparison cannot be performed when a selected variable has only one observed value within a group.<br>',
+          paste(msg, collapse = "<br>"),
+          '</div>'
+        ))
+        return()
+      }
+      
+      
       
       if (nrow(data1) < 3 || nrow(data2) < 3) {
         self$results$note$setVisible(TRUE)
@@ -157,25 +237,67 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       testEdges <- isTRUE(self$options$testEdges)
       #paired <- isTRUE(self$options$paired)
       
-      nct <- tryCatch({
-        
-        NetworkComparisonTest::NCT(
-          data1 = data1,
-          data2 = data2,
-          it = nPerm,
-          binary.data = FALSE,
-         # paired = paired,
-          test.edges = testEdges,
-          edges = "all",
-          test.centrality = FALSE,
-          progressbar = FALSE
-        )
-        
-      }, error = function(e) {
-        e
-      })
+      # -----------------------------
+      # NCT cache key
+      # -----------------------------
       
+      dataKey <- paste(
+        nrow(dat),
+        ncol(dat),
+        paste(vapply(dat[, vars, drop = FALSE], function(x) sum(x, na.rm = TRUE), numeric(1)), collapse = "|"),
+        paste(vapply(dat[, vars, drop = FALSE], function(x) stats::var(x, na.rm = TRUE), numeric(1)), collapse = "|"),
+        paste(table(dat[[group]]), collapse = "|"),
+        sep = "||"
+      )
+      
+      nctKey <- paste(
+        dataKey,
+        paste(vars, collapse = "|"),
+        group,
+        paste(groups, collapse = "|"),
+        nPerm,
+        dataType,
+        binaryData,
+        testEdges,
+        sep = "||"
+      )
+      
+      useCache <- !is.null(private$.nctCache) &&
+        identical(private$.nctCache$key, nctKey)
+      
+      if (useCache) {
+        
+        nct <- private$.nctCache$nct
+        
+      } else {
+        
+        nct <- tryCatch({
+          
+          NetworkComparisonTest::NCT(
+            data1 = data1,
+            data2 = data2,
+            it = nPerm,
+            binary.data = binaryData,
+            test.edges = testEdges,
+            edges = "all",
+            test.centrality = FALSE,
+            progressbar = FALSE
+          )
+          
+        }, error = function(e) {
+          e
+        })
+        
+        if (!inherits(nct, "error")) {
+          private$.nctCache <- list(
+            key = nctKey,
+            nct = nct
+          )
+        }
+      }
 
+      #---------------------
+      
       if (inherits(nct, "error")) {
         self$results$note$setVisible(TRUE)
         self$results$note$setContent(paste0(

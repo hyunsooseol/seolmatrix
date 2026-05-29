@@ -19,13 +19,11 @@ items:
           type: Image
           renderFun: .plotGroup1
           clearWith:
-            - vars
-            - group
-            - run
-            - showPlots
-            - layout
-            - sameLayout
-            - minimum
+              - vars
+              - group
+              - dataType
+              - layout
+              - minimum
         - name: plotGroup2
           title: ''
           type: Image
@@ -33,10 +31,8 @@ items:
           clearWith:
             - vars
             - group
-            - run
-            - showPlots
+            - dataType
             - layout
-            - sameLayout
             - minimum
 
     - name: summary
@@ -47,8 +43,8 @@ items:
       clearWith:
         - vars
         - group
-        - run
         - nPerm
+        - dataType
       columns:
         - name: nVars
           title: Variables
@@ -78,10 +74,10 @@ items:
       rows: 0
       refs: NetworkComparisonTest
       clearWith:
-        - vars
-        - group
-        - run
-        - nPerm
+          - vars
+          - group
+          - nPerm
+          - dataType
       columns:
         - name: test
           title: Test
@@ -103,8 +99,9 @@ items:
       clearWith:
         - vars
         - group
-        - run
         - nPerm
+        - testEdges
+        - dataType
       columns:
         - name: node1
           title: Node 1

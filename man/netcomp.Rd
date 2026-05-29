@@ -9,9 +9,10 @@ netcomp(
   vars,
   group,
   run = FALSE,
+  dataType = "continuous",
   nPerm = 200,
-  testStructure = FALSE,
-  testGlobalStrength = FALSE,
+  testStructure = TRUE,
+  testGlobalStrength = TRUE,
   testEdges = FALSE,
   showPlots = TRUE,
   layout = "spring",
@@ -27,6 +28,8 @@ netcomp(
 \item{group}{.}
 
 \item{run}{.}
+
+\item{dataType}{.}
 
 \item{nPerm}{.}
 

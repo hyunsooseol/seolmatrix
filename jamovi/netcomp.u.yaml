@@ -34,6 +34,14 @@ children:
         children:
           - type: ActionButton
             name: run
+      - type: LayoutBox
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 0
+        children:
+          - type: ComboBox
+            name: dataType
   - type: CollapseBox
     label: Network Plots
     collapsed: true

@@ -9,9 +9,10 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             vars = NULL,
             group = NULL,
             run = FALSE,
+            dataType = "continuous",
             nPerm = 200,
-            testStructure = FALSE,
-            testGlobalStrength = FALSE,
+            testStructure = TRUE,
+            testGlobalStrength = TRUE,
             testEdges = FALSE,
             showPlots = TRUE,
             layout = "spring",
@@ -28,7 +29,8 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "vars",
                 vars,
                 suggested=list(
-                    "continuous"),
+                    "continuous",
+                    "nominal"),
                 permitted=list(
                     "numeric"))
             private$..group <- jmvcore::OptionVariable$new(
@@ -42,6 +44,13 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..run <- jmvcore::OptionAction$new(
                 "run",
                 run)
+            private$..dataType <- jmvcore::OptionList$new(
+                "dataType",
+                dataType,
+                options=list(
+                    "continuous",
+                    "binary"),
+                default="continuous")
             private$..nPerm <- jmvcore::OptionInteger$new(
                 "nPerm",
                 nPerm,
@@ -49,11 +58,11 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..testStructure <- jmvcore::OptionBool$new(
                 "testStructure",
                 testStructure,
-                default=FALSE)
+                default=TRUE)
             private$..testGlobalStrength <- jmvcore::OptionBool$new(
                 "testGlobalStrength",
                 testGlobalStrength,
-                default=FALSE)
+                default=TRUE)
             private$..testEdges <- jmvcore::OptionBool$new(
                 "testEdges",
                 testEdges,
@@ -83,6 +92,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..vars)
             self$.addOption(private$..group)
             self$.addOption(private$..run)
+            self$.addOption(private$..dataType)
             self$.addOption(private$..nPerm)
             self$.addOption(private$..testStructure)
             self$.addOption(private$..testGlobalStrength)
@@ -96,6 +106,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         vars = function() private$..vars$value,
         group = function() private$..group$value,
         run = function() private$..run$value,
+        dataType = function() private$..dataType$value,
         nPerm = function() private$..nPerm$value,
         testStructure = function() private$..testStructure$value,
         testGlobalStrength = function() private$..testGlobalStrength$value,
@@ -108,6 +119,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..vars = NA,
         ..group = NA,
         ..run = NA,
+        ..dataType = NA,
         ..nPerm = NA,
         ..testStructure = NA,
         ..testGlobalStrength = NA,
@@ -161,10 +173,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                             clearWith=list(
                                 "vars",
                                 "group",
-                                "run",
-                                "showPlots",
+                                "dataType",
                                 "layout",
-                                "sameLayout",
                                 "minimum")))
                         self$add(jmvcore::Image$new(
                             options=options,
@@ -174,10 +184,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                             clearWith=list(
                                 "vars",
                                 "group",
-                                "run",
-                                "showPlots",
+                                "dataType",
                                 "layout",
-                                "sameLayout",
                                 "minimum")))}))$new(options=options))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -188,8 +196,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "group",
-                    "run",
-                    "nPerm"),
+                    "nPerm",
+                    "dataType"),
                 columns=list(
                     list(
                         `name`="nVars", 
@@ -228,8 +236,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "group",
-                    "run",
-                    "nPerm"),
+                    "nPerm",
+                    "dataType"),
                 columns=list(
                     list(
                         `name`="test", 
@@ -254,8 +262,9 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "group",
-                    "run",
-                    "nPerm"),
+                    "nPerm",
+                    "testEdges",
+                    "dataType"),
                 columns=list(
                     list(
                         `name`="node1", 
@@ -308,6 +317,7 @@ netcompBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param vars .
 #' @param group .
 #' @param run .
+#' @param dataType .
 #' @param nPerm .
 #' @param testStructure .
 #' @param testGlobalStrength .
@@ -339,9 +349,10 @@ netcomp <- function(
     vars,
     group,
     run = FALSE,
+    dataType = "continuous",
     nPerm = 200,
-    testStructure = FALSE,
-    testGlobalStrength = FALSE,
+    testStructure = TRUE,
+    testGlobalStrength = TRUE,
     testEdges = FALSE,
     showPlots = TRUE,
     layout = "spring",
@@ -365,6 +376,7 @@ netcomp <- function(
         vars = vars,
         group = group,
         run = run,
+        dataType = dataType,
         nPerm = nPerm,
         testStructure = testStructure,
         testGlobalStrength = testGlobalStrength,
