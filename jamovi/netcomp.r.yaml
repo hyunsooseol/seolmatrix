@@ -1,0 +1,135 @@
+---
+name:  netcomp
+title: Group Network Comparison
+refs: seolmatrix  
+jrs:   '1.1'
+
+items:
+    - name: instructions
+      title: Instructions
+      type: Html
+
+    - name: groupPlots
+      title: Group Network Plots
+      type: Group
+      refs: NetworkComparisonTest
+      items:
+        - name: plotGroup1
+          title: Group 1 Network
+          type: Image
+          renderFun: .plotGroup1
+          clearWith:
+            - vars
+            - group
+            - run
+            - showPlots
+            - layout
+            - sameLayout
+            - minimum
+        - name: plotGroup2
+          title: Group 2 Network
+          type: Image
+          renderFun: .plotGroup2
+          clearWith:
+            - vars
+            - group
+            - run
+            - showPlots
+            - layout
+            - sameLayout
+            - minimum
+
+    - name: summary
+      title: Analysis Summary
+      type: Table
+      rows: 1
+      refs: NetworkComparisonTest
+      clearWith:
+        - vars
+        - group
+        - run
+        - nPerm
+      columns:
+        - name: nVars
+          title: Variables
+          type: integer
+        - name: groupVar
+          title: Grouping Variable
+          type: text
+        - name: group1
+          title: Group 1
+          type: text
+        - name: n1
+          title: N Group 1
+          type: integer
+        - name: group2
+          title: Group 2
+          type: text
+        - name: n2
+          title: N Group 2
+          type: integer
+        - name: permutations
+          title: Permutations
+          type: integer
+  
+    - name: tests
+      title: Invariance Tests
+      type: Table
+      rows: 0
+      refs: NetworkComparisonTest
+      clearWith:
+        - vars
+        - group
+        - run
+        - nPerm
+      columns:
+        - name: test
+          title: Test
+          type: text
+        - name: statistic
+          title: Statistic
+          type: number
+          format: zto
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+  
+    - name: edges
+      title: Edge Differences
+      type: Table
+      rows: 0
+      refs: NetworkComparisonTest
+      clearWith:
+        - vars
+        - group
+        - run
+        - nPerm
+      columns:
+        - name: node1
+          title: Node 1
+          type: text
+        - name: node2
+          title: Node 2
+          type: text
+        - name: diff
+          title: Test statistic E
+          type: number
+          format: zto
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+  
+    - name: note
+      title: Note
+      type: Html
+
+    # - name:  text1
+    #   title: ''
+    #   type:  Preformatted
+
+    # - name:  text2
+    #   title: '' 
+    #   type:  Preformatted
+...

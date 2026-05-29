@@ -1,12 +1,12 @@
 ---
 title: Correlations suite for jamovi
 name: seolmatrix
-version: 4.1.3
+version: 4.1.4
 jms: '1.0'
 authors:
   - Hyunsoo Seol
 maintainer: Hyunsoo Seol <snow@cau.ac.kr>
-date: '2026-05-26'
+date: '2026-05-29'
 type: R
 description: >-
   This module is a tool for calculating correlations such as Pearson, Partial,
@@ -124,6 +124,13 @@ analyses:
     menuGroup: seolmatrix
     menuTitle: Velicer MAP Test
     menuSubgroup: Dimensionality
+  - title: Group Network Comparison
+    name: netcomp
+    ns: seolmatrix
+    category: analyses
+    menuGroup: seolmatrix
+    menuTitle: Group Network Comparison
+    menuSubgroup: Network
 datasets:
   - name: rater
     path: rater.omv
@@ -214,6 +221,11 @@ datasets:
     description: Directed graph centrality
     tags:
       - Network
+  - name: groupnet
+    path: groupnet.omv
+    description: Group network comparison
+    tags:
+      - Network comparison
 usesNative: true
 minApp: 2.7.12
 

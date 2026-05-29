@@ -1,0 +1,87 @@
+---
+name:  netcomp
+title: Group Network Comparison
+menuGroup: seolmatrix
+menuSubgroup: Network
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: group
+      title: Grouping Variable
+      type: Variable
+      suggested:
+        - nominal
+        - ordinal
+      permitted:
+        - factor
+
+    - name: run
+      title: Run 
+      type: Action
+
+    - name: nPerm
+      title: Number of permutations
+      type: Integer
+      default: 200
+
+    - name: testStructure
+      title: Network structure invariance
+      type: Bool
+      default: false
+
+    - name: testGlobalStrength
+      title: Global strength invariance
+      type: Bool
+      default: false
+
+    - name: testEdges
+      title: Edge differences
+      type: Bool
+      default: false
+
+    # - name: paired
+    #   title: Paired samples
+    #   type: Bool
+    #   default: false
+
+    - name: showPlots
+      title: Show group network plots
+      type: Bool
+      default: true
+
+    - name: layout
+      title: Network layout
+      type: List
+      options:
+        - name: spring
+          title: Spring
+        - name: circle
+          title: Circle
+      default: spring
+
+    - name: sameLayout
+      title: Use same layout for both groups
+      type: Bool
+      default: true
+
+    - name: minimum
+      title: Minimum edge weight
+      type: Number
+      default: 0
+      min: 0
+      max: 1
+
+
+...

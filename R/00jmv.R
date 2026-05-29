@@ -7,7 +7,7 @@
         `author`="Seol, H.", 
         `year`=2026, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="(Version 4.1.3) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix", 
+        `publisher`="(Version 4.1.4) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix", 
         `url`="https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
@@ -92,4 +92,10 @@
         `author`="Menzel, U.", 
         `year`=2022, 
         `title`="CCP: Significance Tests for Canonical Correlation Analysis (CCA)", 
-        `publisher`="[R package]. URL https://CRAN.R-project.org/package=CCP"))
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=CCP"), 
+    `NetworkComparisonTest`=list(
+        `type`="software", 
+        `author`="van Borkulo, C. D., van Bork, R., Boschloo, L., Kossakowski, J. J., Tio, P., Schoevers, R. A., Borsboom, D., & Waldorp, L. J.", 
+        `year`=2021, 
+        `title`="NetworkComparisonTest: Statistical Comparison of Two Networks Based on Several Invariance Measures", 
+        `publisher`="[R package]. URL https://CRAN.R-project.org/package=NetworkComparisonTest"))

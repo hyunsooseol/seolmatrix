@@ -1,0 +1,101 @@
+title: Group Network Comparison
+name: netcomp
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Variables
+        children:
+          - type: VariablesListBox
+            name: vars
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Grouping Variable
+        children:
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
+            ghostText: 2 levels only
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: ActionButton
+            name: run
+  - type: CollapseBox
+    label: Network Plots
+    collapsed: true
+    children:
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 0
+          row: 0
+        fitToGrid: true
+        children:
+          - type: CheckBox
+            name: showPlots
+          - type: ComboBox
+            name: layout
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        fitToGrid: true
+        children:
+          - type: CheckBox
+            name: sameLayout
+          - type: TextBox
+            name: minimum
+            format: number
+  - type: CollapseBox
+    label: Invariance Tests
+    collapsed: true
+    children:
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 0
+          row: 0
+        fitToGrid: true
+        children:
+          - type: CheckBox
+            name: testStructure
+      - type: LayoutBox
+        stretchFactor: 1
+        margin: large
+        cell:
+          column: 1
+          row: 0
+        fitToGrid: true
+        children:
+          - type: CheckBox
+            name: testGlobalStrength
+  - type: CollapseBox
+    label: Advanced
+    collapsed: true
+    children:
+      - type: TextBox
+        name: nPerm
+        format: number
+      - type: CheckBox
+        name: testEdges
+      # - type: CheckBox
+      #   name: paired
+
