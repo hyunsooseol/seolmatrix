@@ -74,7 +74,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       if (is.null(vars) || length(vars) < 2) {
         self$results$note$setVisible(TRUE)
         self$results$note$setContent(
-          '<div style="color:#b91c1c;"><strong>Please select at least two continuous variables.</strong></div>'
+          '<div style="color:#b91c1c;"><strong>Please select at least two numeric variables.</strong></div>'
         )
         return()
       }
@@ -264,6 +264,14 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       useCache <- !is.null(private$.nctCache) &&
         identical(private$.nctCache$key, nctKey)
+      
+      if (!useCache && !runClicked) {
+        self$results$note$setVisible(TRUE)
+        self$results$note$setContent(
+          '<div style="color:#b91c1c;"><strong>Analysis settings have changed.</strong><br>Please click Run to update the analysis.</div>'
+        )
+        return()
+      }
       
       if (useCache) {
         
