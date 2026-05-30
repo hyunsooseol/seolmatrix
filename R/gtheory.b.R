@@ -6,15 +6,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     private = list(
       .htmlwidget = NULL,
       
-      .cachedData = NULL,
-      .cachedResults = NULL,
-      .dataKey = NULL,
-      
       .init = function() {
-        private$.cachedResults <- list()
-        private$.cachedData <- NULL
-        private$.dataKey <- NULL
-        
         private$.htmlwidget <- HTMLWidget$new()
         
         if (is.null(self$data) | is.null(self$options$facet)) {
@@ -32,8 +24,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             '</ul></div></div>'
           )
         ))
-        
-        
       },
       
       .getData = function() {
@@ -57,76 +47,11 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         if (length(cols) == 0)
           return(NULL)
         
-        rawData <- self$data[, cols, drop = FALSE]
-        
-        dataSignature <- paste(vapply(rawData, function(x) {
-          
-          if (is.numeric(x)) {
-            paste(
-              length(x),
-              sum(is.na(x)),
-              sum(x, na.rm = TRUE),
-              stats::var(x, na.rm = TRUE),
-              collapse = ":"
-            )
-          } else {
-            x_chr <- as.character(x)
-            ux <- unique(x_chr)
-            ux <- ux[!is.na(ux)]
-            
-            paste(
-              length(x_chr),
-              sum(is.na(x_chr)),
-              length(ux),
-              paste(head(sort(ux), 30), collapse = ","),
-              collapse = ":"
-            )
-          }
-          
-        }, character(1)), collapse = "|")
-        
-        currentDataKey <- paste(
-          paste(self$options$dep, collapse = "_"),
-          paste(self$options$id, collapse = "_"),
-          paste(self$options$facet, collapse = "_"),
-          paste(self$options$sub, collapse = "_"),
-          nrow(rawData),
-          ncol(rawData),
-          dataSignature,
-          sep = "||"
-        )
-        
-        if (!is.null(private$.cachedData) &&
-            !is.null(private$.dataKey) &&
-            identical(private$.dataKey, currentDataKey)) {
-          return(private$.cachedData)
-        }
-        
-        data <- rawData
+        data <- self$data[, cols, drop = FALSE]
         data <- stats::na.omit(data)
         data <- as.data.frame(data)
         
-        if (!is.null(private$.dataKey) &&
-            !identical(private$.dataKey, currentDataKey)) {
-          private$.cachedResults <- list()
-        }
-        
-        private$.cachedData <- data
-        private$.dataKey <- currentDataKey
-        
         return(data)
-      },
-      
-      .computeWithCache = function(key, computeFn) {
-        key <- paste(key, collapse = " ")
-        
-        if (!is.null(private$.cachedResults[[key]])) {
-          return(private$.cachedResults[[key]])
-        }
-        
-        result <- computeFn()
-        private$.cachedResults[[key]] <- result
-        return(result)
       },
       
       .run = function() {
@@ -146,25 +71,17 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         
         if (self$options$t == 'uni') {
           formula <- gtheory_safe_formula(self$options$formula)
-          formulaKey <- paste(deparse(formula), collapse = " ")
           
-          gstudy.out <- private$.computeWithCache(
-            paste("gstudy", private$.dataKey, formulaKey, sep = "_"),
-            function() {
-              gtheory::gstudy(data = data, formula = formula)
-            }
+          gstudy.out <- gtheory::gstudy(
+            data = data,
+            formula = formula
           )
           
-          ds <- private$.computeWithCache(
-            paste("dstudy", private$.dataKey, formulaKey, id, dep, sep = "_"),
-            function() {
-              gtheory::dstudy(
-                gstudy.out,
-                colname.objects = id,
-                data = data,
-                colname.scores = dep
-              )
-            }
+          ds <- gtheory::dstudy(
+            gstudy.out,
+            colname.objects = id,
+            data = data,
+            colname.scores = dep
           )
           
           # Univariate analysis(G study)----------
@@ -186,24 +103,13 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           
           if (isTRUE(self$options$gmea)) {
             
-            gmea <- private$.computeWithCache(
-              paste("gmea", private$.dataKey, formulaKey, id, sep = "_"),
-              function() {
-                gtheory::dstudy(gstudy.out, colname.objects = id)
-              }
+            gmea <- gtheory::dstudy(
+              gstudy.out,
+              colname.objects = id
             )
             
-             table <- self$results$gmea
-            # table$setRow(
-            #   rowNo = 1,
-            #   values = with(gmea, list(
-            #     generalizability = generalizability,
-            #     dependability = dependability,
-            #     universe = var.universe,
-            #     relative = var.error.rel,
-            #     absolute = var.error.abs
-            #   ))
-            # )
+            table <- self$results$gmea
+            
             if (!is.null(gmea$generalizability) &&
                 !is.null(gmea$dependability) &&
                 !is.null(gmea$var.universe) &&
@@ -221,9 +127,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 )
               )
             }
-            
-            
-            }
+          }
           
           # D study table(Variance components)----------------
           if (isTRUE(self$options$d)) {
@@ -264,11 +168,9 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             nf <- self$options$nf
             gco <- self$options$gco
             
-            gmea <- private$.computeWithCache(
-              paste("gmea", private$.dataKey, formulaKey, id, sep = "_"),
-              function() {
-                gtheory::dstudy(gstudy.out, colname.objects = id)
-              }
+            gmea <- gtheory::dstudy(
+              gstudy.out,
+              colname.objects = id
             )
             
             tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel / nf))
@@ -283,31 +185,20 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         
         if (self$options$t == 'mul') {
           formula1 <- gtheory_safe_formula(self$options$formula1)
-          formula1Key <- paste(deparse(formula1), collapse = " ")
           
-          g1 <- private$.computeWithCache(
-            paste("mul_gstudy", private$.dataKey, formula1Key, id, sub, sep = "_"), 
-            function() {
-              gtheory::gstudy(
-                data = data,
-                formula = formula1,
-                colname.strata = sub,
-                colname.objects = id
-              )
-            }
+          g1 <- gtheory::gstudy(
+            data = data,
+            formula = formula1,
+            colname.strata = sub,
+            colname.objects = id
           )
           
-          ds1 <- private$.computeWithCache(
-            paste("mul_dstudy", private$.dataKey, formula1Key, id, sub, dep, sep = "_"),
-            function() {
-              gtheory::dstudy(
-                g1,
-                colname.objects = id,
-                colname.strata = sub,
-                data = data,
-                colname.scores = dep
-              )
-            }
+          ds1 <- gtheory::dstudy(
+            g1,
+            colname.objects = id,
+            colname.strata = sub,
+            data = data,
+            colname.scores = dep
           )
           
           if (isTRUE(self$options$item)) {
@@ -460,12 +351,6 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         }
       },
       
-      .clearCache = function() {
-        private$.cachedResults <- list()
-        private$.cachedData <- NULL
-        private$.dataKey <- NULL
-      },
-      
       .plot1 = function(image, ...) {
         if (length(self$options$facet) > 1) return()
         
@@ -478,14 +363,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         facets <- self$options$facet
         
         formula <- gtheory_safe_formula(self$options$formula)
-        formulaKey <- paste(deparse(formula), collapse = " ")
         
-        lmer_key <- paste("lmer", private$.dataKey, formulaKey, sep = "_")
-        
-        
-        one_facet <- private$.computeWithCache(lmer_key, function() {
-          lme4::lmer(formula, data = data)
-        })
+        one_facet <- lme4::lmer(formula, data = data)
         
         gstudy <- function(x, fixed = NULL) {
           tmp <- as.data.frame(lme4::VarCorr(x))
@@ -519,10 +398,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return(output)
         }
         
-        gmodel_key <- paste("gmodel", lmer_key, sep = "_")
-        gmodel <- private$.computeWithCache(gmodel_key, function() {
-          gstudy(one_facet)
-        })
+        gmodel <- gstudy(one_facet)
         
         dstudy <- function(x, n, unit) {
           tmp <- x$gstudy.out
@@ -696,25 +572,12 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         nf <- self$options$nf
         gco <- self$options$gco
         
-        plot_key <- paste(
-          "plot",
-          private$.dataKey,
-          formulaKey,
-          id,
-          paste(facet, collapse = "_"),
-          nf,
-          gco,
-          sep = "_"
+        plot1 <- dstudy_plot(
+          gmodel,
+          unit = id,
+          facet = list(facet = c(1:nf)),
+          g_coef = gco
         )
-        
-        plot1 <- private$.computeWithCache(plot_key, function() {
-          dstudy_plot(
-            gmodel,
-            unit = id,
-            facet = list(facet = c(1:nf)),
-            g_coef = gco
-          )
-        })
         
         print(plot1)
         TRUE
