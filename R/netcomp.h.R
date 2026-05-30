@@ -180,6 +180,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                                 "group",
                                 "dataType",
                                 "layout",
+                                "sameLayout",
                                 "minimum")))
                         self$add(jmvcore::Image$new(
                             options=options,
@@ -191,6 +192,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                                 "group",
                                 "dataType",
                                 "layout",
+                                "sameLayout",
                                 "minimum")))}))$new(options=options))
             self$add(jmvcore::Table$new(
                 options=options,

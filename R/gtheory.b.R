@@ -56,6 +56,19 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       
       .run = function() {
         
+        # runValue <- self$options$run
+        # 
+        # self$results$instructions$setVisible(TRUE)
+        # self$results$instructions$setContent(paste0(
+        #   '<div style="border:1px solid #ddd; padding:10px; background:#f9fafb;">',
+        #   '<strong>Debug run option</strong><br>',
+        #   'value: ', paste(runValue, collapse = ", "), '<br>',
+        #   'class: ', paste(class(runValue), collapse = ", "), '<br>',
+        #   'typeof: ', typeof(runValue), '<br>',
+        #   'isTRUE: ', isTRUE(runValue),
+        #   '</div>'
+        # ))
+
         if (!isTRUE(self$options$run))
           return()
         

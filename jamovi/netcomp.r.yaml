@@ -27,6 +27,7 @@ items:
               - group
               - dataType
               - layout
+              - sameLayout
               - minimum
         - name: plotGroup2
           title: ''
@@ -37,6 +38,7 @@ items:
             - group
             - dataType
             - layout
+            - sameLayout
             - minimum
 
     - name: summary
