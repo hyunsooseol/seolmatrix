@@ -15,9 +15,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             testGlobalStrength = TRUE,
             testEdges = FALSE,
             showPlots = TRUE,
-            layout = "spring",
-            sameLayout = TRUE,
-            minimum = 0, ...) {
+            layout = "spring", ...) {
 
             super$initialize(
                 package="seolmatrix",
@@ -78,16 +76,6 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "spring",
                     "circle"),
                 default="spring")
-            private$..sameLayout <- jmvcore::OptionBool$new(
-                "sameLayout",
-                sameLayout,
-                default=TRUE)
-            private$..minimum <- jmvcore::OptionNumber$new(
-                "minimum",
-                minimum,
-                default=0,
-                min=0,
-                max=1)
 
             self$.addOption(private$..vars)
             self$.addOption(private$..group)
@@ -99,8 +87,6 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..testEdges)
             self$.addOption(private$..showPlots)
             self$.addOption(private$..layout)
-            self$.addOption(private$..sameLayout)
-            self$.addOption(private$..minimum)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -112,9 +98,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         testGlobalStrength = function() private$..testGlobalStrength$value,
         testEdges = function() private$..testEdges$value,
         showPlots = function() private$..showPlots$value,
-        layout = function() private$..layout$value,
-        sameLayout = function() private$..sameLayout$value,
-        minimum = function() private$..minimum$value),
+        layout = function() private$..layout$value),
     private = list(
         ..vars = NA,
         ..group = NA,
@@ -125,9 +109,7 @@ netcompOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..testGlobalStrength = NA,
         ..testEdges = NA,
         ..showPlots = NA,
-        ..layout = NA,
-        ..sameLayout = NA,
-        ..minimum = NA)
+        ..layout = NA)
 )
 
 netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -179,9 +161,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                                 "vars",
                                 "group",
                                 "dataType",
-                                "layout",
-                                "sameLayout",
-                                "minimum")))
+                                "layout")))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="plotGroup2",
@@ -191,9 +171,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                                 "vars",
                                 "group",
                                 "dataType",
-                                "layout",
-                                "sameLayout",
-                                "minimum")))}))$new(options=options))
+                                "layout")))}))$new(options=options))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="summary",
@@ -244,9 +222,7 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "group",
                     "nPerm",
-                    "dataType",
-                    "testStructure",
-                    "testGlobalStrength"),
+                    "dataType"),
                 columns=list(
                     list(
                         `name`="test", 
@@ -333,8 +309,6 @@ netcompBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param testEdges .
 #' @param showPlots .
 #' @param layout .
-#' @param sameLayout .
-#' @param minimum .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
@@ -365,9 +339,7 @@ netcomp <- function(
     testGlobalStrength = TRUE,
     testEdges = FALSE,
     showPlots = TRUE,
-    layout = "spring",
-    sameLayout = TRUE,
-    minimum = 0) {
+    layout = "spring") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("netcomp requires jmvcore to be installed (restart may be required)")
@@ -392,9 +364,7 @@ netcomp <- function(
         testGlobalStrength = testGlobalStrength,
         testEdges = testEdges,
         showPlots = showPlots,
-        layout = layout,
-        sameLayout = sameLayout,
-        minimum = minimum)
+        layout = layout)
 
     analysis <- netcompClass$new(
         options = options,

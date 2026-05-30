@@ -27,8 +27,6 @@ items:
               - group
               - dataType
               - layout
-              - sameLayout
-              - minimum
         - name: plotGroup2
           title: ''
           type: Image
@@ -38,8 +36,6 @@ items:
             - group
             - dataType
             - layout
-            - sameLayout
-            - minimum
 
     - name: summary
       title: Analysis Summary
@@ -84,8 +80,6 @@ items:
           - group
           - nPerm
           - dataType
-          - testStructure
-          - testGlobalStrength
       columns:
         - name: test
           title: Test

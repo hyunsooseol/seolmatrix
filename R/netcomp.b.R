@@ -264,7 +264,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         testEdges = testEdges
       )
       
-      # 8. 플롯 캐시 준비
+      # 8. 
       private$.preparePlotCache(
         data1  = data1,
         data2  = data2,
@@ -372,11 +372,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     #---------------------------------------------------------------
     .preparePlotCache = function(data1, data2, groups, vars) {
       
-      minimum <- self$options$minimum
-      if (is.null(minimum) || is.na(minimum)) minimum <- 0
-      minimum <- as.numeric(minimum)
-      if (minimum < 0) minimum <- 0
-      if (minimum > 1) minimum <- 1
+      minimum <- 0
       
       layoutOpt <- self$options$layout
       if (is.null(layoutOpt) || layoutOpt == "") layoutOpt <- "spring"
@@ -389,23 +385,34 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       diag(cor1) <- 0
       diag(cor2) <- 0
       
-      cor1[abs(cor1) < minimum] <- 0
-      cor2[abs(cor2) < minimum] <- 0
+      # cor1[abs(cor1) < minimum] <- 0
+      # cor2[abs(cor2) < minimum] <- 0
       
       maximum <- max(abs(cor1), abs(cor2), na.rm = TRUE)
       if (!is.finite(maximum) || maximum <= 0) maximum <- 1
       
       layout <- layoutOpt
       
-      if (isTRUE(self$options$sameLayout) && layoutOpt == "spring") {
+      if (layoutOpt == "spring") {
         avg <- (abs(cor1) + abs(cor2)) / 2
+        
         layout <- tryCatch({
-          qg <- qgraph::qgraph(avg, layout = "spring", DoNotPlot = TRUE, labels = vars, minimum = 0)
+          qg <- qgraph::qgraph(
+            avg,
+            layout    = "spring",
+            DoNotPlot = TRUE,
+            labels    = vars,
+            minimum   = 0
+          )
           qg$layout
-        }, error = function(e) "spring")
+        }, error = function(e) {
+          "spring"
+        })
       }
       
-      if (layoutOpt == "circle") layout <- "circle"
+      if (layoutOpt == "circle") {
+        layout <- "circle"
+      }
       
       private$.plotCache <- list(
         cor1    = cor1,

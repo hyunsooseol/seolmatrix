@@ -15,9 +15,7 @@ netcomp(
   testGlobalStrength = TRUE,
   testEdges = FALSE,
   showPlots = TRUE,
-  layout = "spring",
-  sameLayout = TRUE,
-  minimum = 0
+  layout = "spring"
 )
 }
 \arguments{
@@ -42,10 +40,6 @@ netcomp(
 \item{showPlots}{.}
 
 \item{layout}{.}
-
-\item{sameLayout}{.}
-
-\item{minimum}{.}
 }
 \value{
 A results object containing:

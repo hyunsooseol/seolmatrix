@@ -65,7 +65,7 @@ options:
     - name: showPlots
       title: Show group network plots
       type: Bool
-      default: true
+      default: TRUE
 
     - name: layout
       title: Network layout
@@ -76,18 +76,6 @@ options:
         - name: circle
           title: Circle
       default: spring
-
-    - name: sameLayout
-      title: Use same layout for both groups
-      type: Bool
-      default: true
-
-    - name: minimum
-      title: Minimum edge weight
-      type: Number
-      default: 0
-      min: 0
-      max: 1
 
 
 ...

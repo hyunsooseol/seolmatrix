@@ -43,58 +43,39 @@ children:
           - type: ComboBox
             name: dataType
   - type: CollapseBox
-    label: Network Plots
+    label: Network comparison
     collapsed: true
     children:
       - type: LayoutBox
-        stretchFactor: 1
         margin: large
         cell:
           column: 0
           row: 0
-        fitToGrid: true
-        children:
-          - type: CheckBox
-            name: showPlots
-          - type: ComboBox
-            name: layout
-      - type: LayoutBox
         stretchFactor: 1
+        children:
+          - type: Label
+            label: 'Network plot'
+            children:        
+              - type: CheckBox
+                name: showPlots
+                children:
+                  - type: ComboBox
+                    name: layout
+                    enable: (showPlots)
+      - type: LayoutBox
         margin: large
         cell:
           column: 1
           row: 0
-        fitToGrid: true
-        children:
-          - type: CheckBox
-            name: sameLayout
-          - type: TextBox
-            name: minimum
-            format: number
-  - type: CollapseBox
-    label: Invariance Tests
-    collapsed: true
-    children:
-      - type: LayoutBox
         stretchFactor: 1
-        margin: large
-        cell:
-          column: 0
-          row: 0
-        fitToGrid: true
         children:
-          - type: CheckBox
-            name: testStructure
-      - type: LayoutBox
-        stretchFactor: 1
-        margin: large
-        cell:
-          column: 1
-          row: 0
-        fitToGrid: true
-        children:
-          - type: CheckBox
-            name: testGlobalStrength
+          - type: Label
+            label: 'Tests'  
+            children:
+              - type: CheckBox
+                name: testStructure
+              - type: CheckBox
+                name: testGlobalStrength
   - type: CollapseBox
     label: Advanced
     collapsed: true
@@ -104,6 +85,4 @@ children:
         format: number
       - type: CheckBox
         name: testEdges
-      # - type: CheckBox
-      #   name: paired
 
