@@ -259,7 +259,6 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         paste(groups, collapse = "|"),
         nPerm,
         dataType,
-        binaryData,
         testEdges,
         sep = "||"
       )
