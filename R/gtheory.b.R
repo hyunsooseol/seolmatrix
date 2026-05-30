@@ -37,30 +37,79 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .getData = function() {
+        
+        if (is.null(self$options$dep) ||
+            is.null(self$options$id) ||
+            is.null(self$options$facet)) {
+          return(NULL)
+        }
+        
+        cols <- unique(c(
+          self$options$dep,
+          self$options$id,
+          self$options$facet,
+          self$options$sub
+        ))
+        
+        cols <- unlist(cols, use.names = FALSE)
+        cols <- cols[!is.na(cols) & nzchar(cols)]
+        
+        if (length(cols) == 0)
+          return(NULL)
+        
+        rawData <- self$data[, cols, drop = FALSE]
+        
+        dataSignature <- paste(vapply(rawData, function(x) {
+          
+          if (is.numeric(x)) {
+            paste(
+              length(x),
+              sum(is.na(x)),
+              sum(x, na.rm = TRUE),
+              stats::var(x, na.rm = TRUE),
+              collapse = ":"
+            )
+          } else {
+            x_chr <- as.character(x)
+            ux <- unique(x_chr)
+            ux <- ux[!is.na(ux)]
+            
+            paste(
+              length(x_chr),
+              sum(is.na(x_chr)),
+              length(ux),
+              paste(head(sort(ux), 30), collapse = ","),
+              collapse = ":"
+            )
+          }
+          
+        }, character(1)), collapse = "|")
+        
         currentDataKey <- paste(
           paste(self$options$dep, collapse = "_"),
           paste(self$options$id, collapse = "_"),
           paste(self$options$facet, collapse = "_"),
+          paste(self$options$sub, collapse = "_"),
+          nrow(rawData),
+          ncol(rawData),
+          dataSignature,
           sep = "||"
         )
         
-        if (!is.null(private$.cachedData) && private$.dataKey == currentDataKey) {
+        if (!is.null(private$.cachedData) &&
+            !is.null(private$.dataKey) &&
+            identical(private$.dataKey, currentDataKey)) {
           return(private$.cachedData)
         }
         
-        if (is.null(self$options$dep) || is.null(self$options$id) || is.null(self$options$facet)) {
-          return(NULL)
-        }
-        
-        # data <- self$data
-        # data <- na.omit(data)
-        cols <- unique(c(self$options$dep, self$options$id, self$options$facet, self$options$sub))
-        cols <- unlist(cols, use.names = FALSE)
-        cols <- cols[!is.na(cols) & nzchar(cols)]
-        
-        data <- self$data[, cols, drop = FALSE]
-        data <- na.omit(data)
+        data <- rawData
+        data <- stats::na.omit(data)
         data <- as.data.frame(data)
+        
+        if (!is.null(private$.dataKey) &&
+            !identical(private$.dataKey, currentDataKey)) {
+          private$.cachedResults <- list()
+        }
         
         private$.cachedData <- data
         private$.dataKey <- currentDataKey
@@ -100,15 +149,14 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           formulaKey <- paste(deparse(formula), collapse = " ")
           
           gstudy.out <- private$.computeWithCache(
-            paste("gstudy", formulaKey, sep = "_"),
-            
+            paste("gstudy", private$.dataKey, formulaKey, sep = "_"),
             function() {
               gtheory::gstudy(data = data, formula = formula)
             }
           )
           
           ds <- private$.computeWithCache(
-            paste("dstudy", formulaKey, id, dep, sep = "_"),
+            paste("dstudy", private$.dataKey, formulaKey, id, dep, sep = "_"),
             function() {
               gtheory::dstudy(
                 gstudy.out,
@@ -137,9 +185,9 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           }
           
           if (isTRUE(self$options$gmea)) {
+            
             gmea <- private$.computeWithCache(
-              paste("gmea", formulaKey, id, sep = "_"),
-              
+              paste("gmea", private$.dataKey, formulaKey, id, sep = "_"),
               function() {
                 gtheory::dstudy(gstudy.out, colname.objects = id)
               }
@@ -217,7 +265,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             gco <- self$options$gco
             
             gmea <- private$.computeWithCache(
-              paste("gmea", formula, id, sep = "_"),
+              paste("gmea", private$.dataKey, formulaKey, id, sep = "_"),
               function() {
                 gtheory::dstudy(gstudy.out, colname.objects = id)
               }
@@ -238,7 +286,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           formula1Key <- paste(deparse(formula1), collapse = " ")
           
           g1 <- private$.computeWithCache(
-            paste("mul_gstudy", deparse(formula1), id, sub, sep = "_"), 
+            paste("mul_gstudy", private$.dataKey, formula1Key, id, sub, sep = "_"), 
             function() {
               gtheory::gstudy(
                 data = data,
@@ -250,7 +298,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           )
           
           ds1 <- private$.computeWithCache(
-            paste("mul_dstudy", formula1Key, id, sub, dep, sep = "_"),
+            paste("mul_dstudy", private$.dataKey, formula1Key, id, sub, dep, sep = "_"),
             function() {
               gtheory::dstudy(
                 g1,
@@ -432,7 +480,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         formula <- gtheory_safe_formula(self$options$formula)
         formulaKey <- paste(deparse(formula), collapse = " ")
         
-        lmer_key <- paste("lmer", formulaKey, sep = "_")
+        lmer_key <- paste("lmer", private$.dataKey, formulaKey, sep = "_")
         
         
         one_facet <- private$.computeWithCache(lmer_key, function() {
@@ -648,8 +696,17 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         nf <- self$options$nf
         gco <- self$options$gco
         
-        # 플롯 생성 및 캐싱
-        plot_key <- paste("plot", id, paste(facet, collapse="_"), nf, gco, sep = "_")
+        plot_key <- paste(
+          "plot",
+          private$.dataKey,
+          formulaKey,
+          id,
+          paste(facet, collapse = "_"),
+          nf,
+          gco,
+          sep = "_"
+        )
+        
         plot1 <- private$.computeWithCache(plot_key, function() {
           dstudy_plot(
             gmodel,
