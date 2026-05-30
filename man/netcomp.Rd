@@ -51,12 +51,12 @@ netcomp(
 A results object containing:
 \tabular{llllll}{
   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+  \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
   \code{results$groupPlots$plotGroup1} \tab \tab \tab \tab \tab an image \cr
   \code{results$groupPlots$plotGroup2} \tab \tab \tab \tab \tab an image \cr
   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
   \code{results$tests} \tab \tab \tab \tab \tab a table \cr
   \code{results$edges} \tab \tab \tab \tab \tab a table \cr
-  \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
   \code{results$note} \tab \tab \tab \tab \tab a html \cr
 }
 

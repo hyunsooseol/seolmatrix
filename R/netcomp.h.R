@@ -135,11 +135,11 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         instructions = function() private$.items[["instructions"]],
+        progressBarHTML = function() private$.items[["progressBarHTML"]],
         groupPlots = function() private$.items[["groupPlots"]],
         summary = function() private$.items[["summary"]],
         tests = function() private$.items[["tests"]],
         edges = function() private$.items[["edges"]],
-        progressBarHTML = function() private$.items[["progressBarHTML"]],
         note = function() private$.items[["note"]]),
     private = list(),
     public=list(
@@ -153,6 +153,10 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="instructions",
                 title="Instructions"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="progressBarHTML",
+                title="Progress"))
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
@@ -232,13 +236,15 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="tests",
                 title="Invariance Tests",
-                rows=0,
+                rows=2,
                 refs="NetworkComparisonTest",
                 clearWith=list(
                     "vars",
                     "group",
                     "nPerm",
-                    "dataType"),
+                    "dataType",
+                    "testStructure",
+                    "testGlobalStrength"),
                 columns=list(
                     list(
                         `name`="test", 
@@ -287,10 +293,6 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Html$new(
                 options=options,
-                name="progressBarHTML",
-                title="Progress"))
-            self$add(jmvcore::Html$new(
-                options=options,
                 name="note",
                 title="Note"))}))
 
@@ -334,12 +336,12 @@ netcompBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$instructions} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$groupPlots$plotGroup1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$groupPlots$plotGroup2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tests} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$edges} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$progressBarHTML} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$note} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'

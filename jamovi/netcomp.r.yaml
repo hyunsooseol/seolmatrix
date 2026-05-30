@@ -9,6 +9,10 @@ items:
       title: Instructions
       type: Html
 
+    - name: progressBarHTML
+      title: Progress
+      type: Html
+
     - name: groupPlots
       title: Group Network Plots
       type: Group
@@ -71,13 +75,15 @@ items:
     - name: tests
       title: Invariance Tests
       type: Table
-      rows: 0
+      rows: 2
       refs: NetworkComparisonTest
       clearWith:
           - vars
           - group
           - nPerm
           - dataType
+          - testStructure
+          - testGlobalStrength
       columns:
         - name: test
           title: Test
@@ -118,10 +124,6 @@ items:
           type: number
           format: zto,pvalue
   
-    - name: progressBarHTML
-      title: Progress
-      type: Html
-
     - name: note
       title: Note
       type: Html

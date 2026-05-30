@@ -7,6 +7,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     .htmlwidget = NULL,
     .plotCache = NULL,
     .nctCache = NULL,
+    .tableCache = NULL,
     .hasRun = FALSE,
     
     .init = function() {
@@ -33,33 +34,16 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           '</div></div>'
         )
       ))
-      
-      self$results$summary$setVisible(FALSE)
-      self$results$tests$setVisible(FALSE)
-      self$results$edges$setVisible(FALSE)
-      self$results$note$setVisible(FALSE)
       self$results$progressBarHTML$setVisible(FALSE)
+      self$results$note$setVisible(FALSE)
       
       if (!is.null(self$results$groupPlots))
         self$results$groupPlots$setVisible(FALSE)
       
-     
     },
     
     #---------------------------------------------------------------
     .run = function() {
-      
-      private$.plotCache <- NULL
-      
-      self$results$summary$setVisible(FALSE)
-      self$results$tests$setVisible(FALSE)
-      self$results$edges$setVisible(FALSE)
-      self$results$note$setVisible(FALSE)
-      self$results$progressBarHTML$setVisible(FALSE)
-      
-      if (!is.null(self$results$groupPlots))
-        self$results$groupPlots$setVisible(FALSE)
-      
       
       runClicked <- !is.null(self$options$run) && self$options$run > 0
       
@@ -68,6 +52,9 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       if (!private$.hasRun)
         return()
+      
+      self$results$progressBarHTML$setVisible(FALSE)
+      self$results$note$setVisible(FALSE)
       
             
       vars <- self$options$vars
@@ -288,6 +275,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         )
         private$.checkpoint()
         
+        set.seed(1234)
         nct <- tryCatch({
           
           NetworkComparisonTest::NCT(
@@ -326,6 +314,17 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         return()
       }
       
+      private$.prepareTableCache(
+        nct = nct,
+        vars = vars,
+        group = group,
+        groups = groups,
+        data1 = data1,
+        data2 = data2,
+        nPerm = nPerm,
+        testEdges = testEdges
+      )
+      
       self$results$progressBarHTML$setVisible(TRUE)
       self$results$progressBarHTML$setContent(
         progressSpinnerH(
@@ -355,87 +354,7 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       }
       
-      # -----------------------------
-      # Summary table
-      # -----------------------------
-      
-      self$results$summary$setVisible(TRUE)
-      self$results$summary$setRow(rowNo = 1, values = list(
-        nVars = length(vars),
-        groupVar = group,
-        group1 = as.character(groups[1]),
-        n1 = nrow(data1),
-        group2 = as.character(groups[2]),
-        n2 = nrow(data2),
-        permutations = nPerm
-      ))
-      
-      # -----------------------------
-      # Invariance tests table
-      # -----------------------------
-      
-      self$results$tests$setVisible(TRUE)
-      
-      if (isTRUE(self$options$testStructure)) {
-        
-        nwinv.real <- private$.getNCTValue(nct, c("nwinv.real", "nwinv.statistic", "M"))
-        nwinv.pval <- private$.getNCTValue(nct, c("nwinv.pval", "nwinv.p", "pval.nwinv"))
-        
-        self$results$tests$addRow(rowKey = "structure", values = list(
-          test = "Network structure invariance",
-          statistic = nwinv.real,
-          p = nwinv.pval
-        ))
-      }
-      
-      if (isTRUE(self$options$testGlobalStrength)) {
-        
-        glstr.real <- private$.getNCTValue(nct, c("glstrinv.real", "glstrinv.statistic", "S"))
-        glstr.pval <- private$.getNCTValue(nct, c("glstrinv.pval", "glstrinv.p", "pval.glstrinv"))
-        
-        self$results$tests$addRow(rowKey = "global_strength", values = list(
-          test = "Global strength invariance",
-          statistic = glstr.real,
-          p = glstr.pval
-        ))
-      }
-      
-      # -----------------------------
-      # Edge differences table
-      # -----------------------------
-      
-      self$results$edges$setVisible(testEdges)
-      
-      if (testEdges) {
-        
-        edgeTable <- private$.extractEdgeTable(nct, vars)
-        
-        if (!is.null(edgeTable) && nrow(edgeTable) > 0) {
-          
-          for (i in seq_len(nrow(edgeTable))) {
-            
-            key <- paste0(
-              gsub("[^A-Za-z0-9_]", "_", edgeTable$node1[i]),
-              "_",
-              gsub("[^A-Za-z0-9_]", "_", edgeTable$node2[i])
-            )
-            
-            self$results$edges$addRow(rowKey = key, values = list(
-              node1 = edgeTable$node1[i],
-              node2 = edgeTable$node2[i],
-              diff = edgeTable$diff[i],
-              p = edgeTable$p[i]
-            ))
-          }
-          
-        } else {
-          
-          self$results$note$setVisible(TRUE)
-          self$results$note$setContent(
-            '<div><strong>Note.</strong> Edge differences were requested, but no edge-level table could be extracted from the NCT result object.</div>'
-          )
-        }
-      }
+      private$.fillTablesFromCache()
       
       # -----------------------------
       # Note
@@ -468,6 +387,143 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       },
     
     #---------------------------------------------------------------
+    .prepareTableCache = function(nct, vars, group, groups, data1, data2, nPerm, testEdges) {
+      
+      summary <- list(
+        nVars = length(vars),
+        groupVar = group,
+        group1 = as.character(groups[1]),
+        n1 = nrow(data1),
+        group2 = as.character(groups[2]),
+        n2 = nrow(data2),
+        permutations = nPerm
+      )
+      
+      tests <- list()
+      
+      if (isTRUE(self$options$testStructure)) {
+        
+        nwinv.real <- private$.getNCTValue(nct, c("nwinv.real", "nwinv.statistic", "M"))
+        nwinv.pval <- private$.getNCTValue(nct, c("nwinv.pval", "nwinv.p", "pval.nwinv"))
+        
+        tests[["structure"]] <- list(
+          test = "Network structure invariance",
+          statistic = nwinv.real,
+          p = nwinv.pval
+        )
+      }
+      
+      if (isTRUE(self$options$testGlobalStrength)) {
+        
+        glstr.real <- private$.getNCTValue(nct, c("glstrinv.real", "glstrinv.statistic", "S"))
+        glstr.pval <- private$.getNCTValue(nct, c("glstrinv.pval", "glstrinv.p", "pval.glstrinv"))
+        
+        tests[["global_strength"]] <- list(
+          test = "Global strength invariance",
+          statistic = glstr.real,
+          p = glstr.pval
+        )
+      }
+      
+      edges <- NULL
+      
+      if (testEdges) {
+        edges <- private$.extractEdgeTable(nct, vars)
+      }
+      
+      private$.tableCache <- list(
+        summary = summary,
+        tests = tests,
+        edges = edges,
+        testEdges = testEdges
+      )
+    },
+    
+    .fillTablesFromCache = function() {
+      
+      if (is.null(private$.tableCache))
+        return(FALSE)
+      
+      # Summary table
+      self$results$summary$setVisible(TRUE)
+      self$results$summary$setRow(
+        rowNo = 1,
+        values = private$.tableCache$summary
+      )
+      
+      # Invariance tests table
+      self$results$tests$setVisible(TRUE)
+      
+      tests <- private$.tableCache$tests
+      
+      # row 1: Network structure invariance
+      if (!is.null(tests[["structure"]])) {
+        self$results$tests$setRow(
+          rowNo = 1,
+          values = tests[["structure"]]
+        )
+      } else {
+        self$results$tests$setRow(
+          rowNo = 1,
+          values = list(
+            test = "Network structure invariance",
+            statistic = NA,
+            p = NA
+          )
+        )
+      }
+      
+      # row 2: Global strength invariance
+      if (!is.null(tests[["global_strength"]])) {
+        self$results$tests$setRow(
+          rowNo = 2,
+          values = tests[["global_strength"]]
+        )
+      } else {
+        self$results$tests$setRow(
+          rowNo = 2,
+          values = list(
+            test = "Global strength invariance",
+            statistic = NA,
+            p = NA
+          )
+        )
+      }
+      
+      # Edge differences table
+      self$results$edges$deleteRows()
+      self$results$edges$setVisible(isTRUE(private$.tableCache$testEdges))
+      
+      if (isTRUE(private$.tableCache$testEdges)) {
+        
+        edgeTable <- private$.tableCache$edges
+        
+        if (!is.null(edgeTable) && nrow(edgeTable) > 0) {
+          
+          for (i in seq_len(nrow(edgeTable))) {
+            
+            key <- paste0(
+              gsub("[^A-Za-z0-9_]", "_", edgeTable$node1[i]),
+              "_",
+              gsub("[^A-Za-z0-9_]", "_", edgeTable$node2[i])
+            )
+            
+            self$results$edges$addRow(
+              rowKey = key,
+              values = list(
+                node1 = edgeTable$node1[i],
+                node2 = edgeTable$node2[i],
+                diff = edgeTable$diff[i],
+                p = edgeTable$p[i]
+              )
+            )
+          }
+        }
+      }
+      
+      return(TRUE)
+    },
+    
     .preparePlotCache = function(data1, data2, groups, vars) {
       
       minimum <- self$options$minimum
@@ -549,23 +605,27 @@ netcompClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     .plotGroup1 = function(image, ...) {
       
       if (is.null(private$.plotCache))
-        return()
+        return(FALSE)
       
       private$.drawNetworkPlot(
         mat = private$.plotCache$cor1,
         title = paste0("Group 1 Network: ", private$.plotCache$group1)
       )
+      
+      TRUE
     },
     
     .plotGroup2 = function(image, ...) {
       
       if (is.null(private$.plotCache))
-        return()
+        return(FALSE)
       
       private$.drawNetworkPlot(
         mat = private$.plotCache$cor2,
         title = paste0("Group 2 Network: ", private$.plotCache$group2)
       )
+      
+      TRUE
     },
     #---------------------------------------------------------------
     .drawNetworkPlot = function(mat, title) {
