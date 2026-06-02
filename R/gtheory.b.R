@@ -1,4 +1,5 @@
 
+
 gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
   R6::R6Class(
     "gtheoryClass",
@@ -68,298 +69,306 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         #   'isTRUE: ', isTRUE(runValue),
         #   '</div>'
         # ))
-
+        
         if (!isTRUE(self$options$run))
           return()
         
         data <- private$.getData()
         if (is.null(data)) return()
         
+        if (self$options$t == 'uni')
+          return(private$.runUnivariate(data))
+        
+        if (self$options$t == 'mul')
+          return(private$.runMultivariate(data))
+      },
+      
+      .runUnivariate = function(data) {
+        
         dep <- self$options$dep
         id <- self$options$id
-        sub <- self$options$sub
-        facets <- self$options$facet
         
-        ###### Generalizability theory--------------------
+        formula <- gtheory_safe_formula(self$options$formula)
         
-        if (self$options$t == 'uni') {
-          formula <- gtheory_safe_formula(self$options$formula)
+        gstudy.out <- gtheory::gstudy(
+          data = data,
+          formula = formula
+        )
+        
+        ds <- gtheory::dstudy(
+          gstudy.out,
+          colname.objects = id,
+          data = data,
+          colname.scores = dep
+        )
+        
+        # Univariate analysis(G study)
+        if (isTRUE(self$options$g)) {
+          table <- self$results$g
+          gstudy <- as.data.frame(gstudy.out)
           
-          gstudy.out <- gtheory::gstudy(
-            data = data,
-            formula = formula
-          )
-          
-          ds <- gtheory::dstudy(
-            gstudy.out,
-            colname.objects = id,
-            data = data,
-            colname.scores = dep
-          )
-          
-          # Univariate analysis(G study)----------
-          if(isTRUE(self$options$g)) {
-            table <- self$results$g
-            gstudy <- as.data.frame(gstudy.out)
-            
-            for (i in seq_len(nrow(gstudy))) {
-              table$addRow(
-                rowKey = gstudy[i, 1],
-                values = list(
-                  var = gstudy[[2]][i],
-                  percent = gstudy[[3]][i],
-                  n = gstudy[[4]][i]
-                )
-              )
-            }
-          }
-          
-          if (isTRUE(self$options$gmea)) {
-            
-            gmea <- gtheory::dstudy(
-              gstudy.out,
-              colname.objects = id
-            )
-            
-            table <- self$results$gmea
-            
-            if (!is.null(gmea$generalizability) &&
-                !is.null(gmea$dependability) &&
-                !is.null(gmea$var.universe) &&
-                !is.null(gmea$var.error.rel) &&
-                !is.null(gmea$var.error.abs)) {
-              
-              table$setRow(
-                rowNo = 1,
-                values = list(
-                  generalizability = gmea$generalizability,
-                  dependability = gmea$dependability,
-                  universe = gmea$var.universe,
-                  relative = gmea$var.error.rel,
-                  absolute = gmea$var.error.abs
-                )
-              )
-            }
-          }
-          
-          # D study table(Variance components)----------------
-          if (isTRUE(self$options$d)) {
-            table <- self$results$d
-            dstudy <- as.data.frame(ds$components)
-            
-            for (i in seq_len(nrow(dstudy))) {
-              table$addRow(
-                rowKey = dstudy[i, 1],
-                values = list(
-                  var = dstudy[[2]][i],
-                  percent = dstudy[[3]][i],
-                  n = dstudy[[4]][i]
-                )
-              )
-            }
-          }
-          
-          if (isTRUE(self$options$mea)) {
-            table <- self$results$mea
-            
-            table$setRow(
-              rowNo = 1,
+          for (i in seq_len(nrow(gstudy))) {
+            table$addRow(
+              rowKey = gstudy[i, 1],
               values = list(
-                generalizability = ds$generalizability,
-                dependability = ds$dependability,
-                universe = ds$var.universe,
-                relative = ds$var.error.rel,
-                absolute = ds$var.error.abs
+                var = gstudy[[2]][i],
+                percent = gstudy[[3]][i],
+                n = gstudy[[4]][i]
               )
             )
-          }
-          
-          # D study plot(n=1)----------------
-          if (length(self$options$facet) == 1) {
-            if (length(self$options$facet) > 1) return()
-            
-            nf <- self$options$nf
-            gco <- self$options$gco
-            
-            gmea <- gtheory::dstudy(
-              gstudy.out,
-              colname.objects = id
-            )
-            
-            tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel / nf))
-            self$results$text$setContent(tex)
-            
-            if (!gco == FALSE) {
-              tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.abs / nf))
-              self$results$text$setContent(tex)
-            }
           }
         }
         
-        if (self$options$t == 'mul') {
-          formula1 <- gtheory_safe_formula(self$options$formula1)
+        if (isTRUE(self$options$gmea)) {
           
-          g1 <- gtheory::gstudy(
-            data = data,
-            formula = formula1,
-            colname.strata = sub,
+          gmea <- gtheory::dstudy(
+            gstudy.out,
             colname.objects = id
           )
           
-          ds1 <- gtheory::dstudy(
-            g1,
-            colname.objects = id,
-            colname.strata = sub,
-            data = data,
-            colname.scores = dep
-          )
+          table <- self$results$gmea
           
-          if (isTRUE(self$options$item)) {
-            ng <- self$options$ng
-            res <- list()
+          if (!is.null(gmea$generalizability) &&
+              !is.null(gmea$dependability) &&
+              !is.null(gmea$var.universe) &&
+              !is.null(gmea$var.error.rel) &&
+              !is.null(gmea$var.error.abs)) {
             
-            for (i in seq_len(ng)) {
-              res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
-              res[[i]] <- res.df
-            }
-            tab <- NULL
-            for (i in seq_len(ng)) {
-              re <- as.data.frame.matrix(res[[i]][['components']])
-              tab[[i]] <- re
-            }
-            tab <- tab
-            tables <- self$results$item
-            for (i in seq_len(ng)) {
-              table <- tables[[i]]
-              item <- tab[[i]]
-              
-              for (rNo in 1:3)
-                table$setRow(
-                  rowNo = rNo,
-                  values = list(
-                    'source' = item$source[[rNo]],
-                    'var' = item$var[[rNo]],
-                    'percent' = item$percent[[rNo]],
-                    'n' = item$n[[rNo]]
-                  )
-                )
-            }
-          }
-          
-          # G study: Observed variance and covariance matrix----------
-          if (isTRUE(self$options$mat)) {
-            mat <- g1$between$var.obs
-            mat <- as.data.frame(mat)
-            names <- dimnames(mat)[[1]]
-            dims <- dimnames(mat)[[2]]
-            
-            table <- self$results$mat
-            
-            for (dim in dims) {
-              table$addColumn(name = paste0(dim), type = 'number')
-            }
-            
-            for (name in names) {
-              row <- list()
-              for (j in seq_along(dims)) {
-                row[[dims[j]]] <- mat[name, j]
-              }
-              table$addRow(rowKey = name, values = row)
-            }
-          }
-          
-          # D study: variance components--------
-          if (isTRUE(self$options$itemd)) {
-            ng <- self$options$ng
-            res <- list()
-            
-            for (i in seq_len(ng)) {
-              res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
-              res[[i]] <- res.df
-            }
-            tab <- NULL
-            for (i in seq_len(ng)) {
-              re <- as.data.frame.matrix(res[[i]][['components']])
-              tab[[i]] <- re
-            }
-            tab <- tab
-            tables <- self$results$itemd
-            
-            for (i in seq_len(ng)) {
-              table <- tables[[i]]
-              item <- tab[[i]]
-              
-              for (rNo in 1:3)
-                table$setRow(
-                  rowNo = rNo,
-                  values = list(
-                    'source' = item$source[[rNo]],
-                    'var' = item$var[[rNo]],
-                    'percent' = item$percent[[rNo]],
-                    'n' = item$n[[rNo]]
-                  )
-                )
-            }
-          }
-          
-          # D study: Between universe score variance matrix----------
-          if (isTRUE(self$options$bmat)) {
-            
-            bmat <- ds1$between$var.universe
-            bmat <- as.data.frame(bmat)
-            
-            names <- dimnames(bmat)[[1]]
-            dims <- dimnames(bmat)[[2]]
-            table <- self$results$bmat
-            
-            for (dim in dims) {
-              table$addColumn(name = paste0(dim), type = 'number')
-            }
-            
-            for (name in names) {
-              row <- list()
-              for (j in seq_along(dims)) {
-                row[[dims[j]]] <- bmat[name, j]
-              }
-              table$addRow(rowKey = name, values = row)
-            }
-          }
-          
-          # D study (Composite table)------------
-          if (isTRUE(self$options$comp)) {
-            gen <- as.vector(ds1$composite$generalizability)
-            depe <- as.vector(ds1$composite$dependability)
-            uni <- as.vector(ds1$composite$var.universe)
-            rel <- as.vector(ds1$composite$var.error.rel)
-            abs <- as.vector(ds1$composite$var.error.abs)
-            
-            table <- self$results$comp
             table$setRow(
               rowNo = 1,
               values = list(
-                generalizability = gen,
-                dependability = depe,
-                universe = uni,
-                relative = rel,
-                absolute = abs
-              ))
+                generalizability = gmea$generalizability,
+                dependability = gmea$dependability,
+                universe = gmea$var.universe,
+                relative = gmea$var.error.rel,
+                absolute = gmea$var.error.abs
+              )
+            )
+          }
+        }
+        
+        # D study table(Variance components)
+        if (isTRUE(self$options$d)) {
+          table <- self$results$d
+          dstudy <- as.data.frame(ds$components)
+          
+          for (i in seq_len(nrow(dstudy))) {
+            table$addRow(
+              rowKey = dstudy[i, 1],
+              values = list(
+                var = dstudy[[2]][i],
+                percent = dstudy[[3]][i],
+                n = dstudy[[4]][i]
+              )
+            )
+          }
+        }
+        
+        if (isTRUE(self$options$mea)) {
+          table <- self$results$mea
+          
+          table$setRow(
+            rowNo = 1,
+            values = list(
+              generalizability = ds$generalizability,
+              dependability = ds$dependability,
+              universe = ds$var.universe,
+              relative = ds$var.error.rel,
+              absolute = ds$var.error.abs
+            )
+          )
+        }
+        
+        # D study plot(n=1)
+        if (length(self$options$facet) == 1) {
+          if (length(self$options$facet) > 1) return()
+          
+          nf <- self$options$nf
+          gco <- self$options$gco
+          
+          gmea <- gtheory::dstudy(
+            gstudy.out,
+            colname.objects = id
+          )
+          
+          tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.rel / nf))
+          self$results$text$setContent(tex)
+          
+          if (!gco == FALSE) {
+            tex <- gmea$var.universe / (gmea$var.universe + (gmea$var.error.abs / nf))
+            self$results$text$setContent(tex)
+          }
+        }
+      },
+      
+      .runMultivariate = function(data) {
+        
+        dep <- self$options$dep
+        id <- self$options$id
+        sub <- self$options$sub
+        
+        formula1 <- gtheory_safe_formula(self$options$formula1)
+        
+        g1 <- gtheory::gstudy(
+          data = data,
+          formula = formula1,
+          colname.strata = sub,
+          colname.objects = id
+        )
+        
+        ds1 <- gtheory::dstudy(
+          g1,
+          colname.objects = id,
+          colname.strata = sub,
+          data = data,
+          colname.scores = dep
+        )
+        
+        if (isTRUE(self$options$item)) {
+          ng <- self$options$ng
+          res <- list()
+          
+          for (i in seq_len(ng)) {
+            res.df <- lapply(g1$within[[as.character(i)]], as.data.frame)
+            res[[i]] <- res.df
+          }
+          tab <- NULL
+          for (i in seq_len(ng)) {
+            re <- as.data.frame.matrix(res[[i]][['components']])
+            tab[[i]] <- re
+          }
+          tab <- tab
+          tables <- self$results$item
+          for (i in seq_len(ng)) {
+            table <- tables[[i]]
+            item <- tab[[i]]
+            
+            for (rNo in 1:3)
+              table$setRow(
+                rowNo = rNo,
+                values = list(
+                  'source' = item$source[[rNo]],
+                  'var' = item$var[[rNo]],
+                  'percent' = item$percent[[rNo]],
+                  'n' = item$n[[rNo]]
+                )
+              )
+          }
+        }
+        
+        # G study: Observed variance and covariance matrix
+        if (isTRUE(self$options$mat)) {
+          mat <- g1$between$var.obs
+          mat <- as.data.frame(mat)
+          names <- dimnames(mat)[[1]]
+          dims <- dimnames(mat)[[2]]
+          
+          table <- self$results$mat
+          
+          for (dim in dims) {
+            table$addColumn(name = paste0(dim), type = 'number')
           }
           
-          if (isTRUE(self$options$bm)) {
-            table <- self$results$bm
-            all <- data.frame(
-              gen = diag(ds1$between$generalizability),
-              depe = diag(ds1$between$dependability),
-              rel = diag(ds1$between$var.error.rel),
-              abs = diag(ds1$between$var.error.abs)
-            )
-            
-            for (i in seq_len(nrow(all))) {
-              table$addRow(
-                rowKey = rownames(all)[i],
-                values = as.list(all[i, ])
-              )
+          for (name in names) {
+            row <- list()
+            for (j in seq_along(dims)) {
+              row[[dims[j]]] <- mat[name, j]
             }
+            table$addRow(rowKey = name, values = row)
+          }
+        }
+        
+        # D study: variance components
+        if (isTRUE(self$options$itemd)) {
+          ng <- self$options$ng
+          res <- list()
+          
+          for (i in seq_len(ng)) {
+            res.df <- lapply(ds1$within[[as.character(i)]], as.data.frame)
+            res[[i]] <- res.df
+          }
+          tab <- NULL
+          for (i in seq_len(ng)) {
+            re <- as.data.frame.matrix(res[[i]][['components']])
+            tab[[i]] <- re
+          }
+          tab <- tab
+          tables <- self$results$itemd
+          
+          for (i in seq_len(ng)) {
+            table <- tables[[i]]
+            item <- tab[[i]]
+            
+            for (rNo in 1:3)
+              table$setRow(
+                rowNo = rNo,
+                values = list(
+                  'source' = item$source[[rNo]],
+                  'var' = item$var[[rNo]],
+                  'percent' = item$percent[[rNo]],
+                  'n' = item$n[[rNo]]
+                )
+              )
+          }
+        }
+        
+        # D study: Between universe score variance matrix
+        if (isTRUE(self$options$bmat)) {
+          
+          bmat <- ds1$between$var.universe
+          bmat <- as.data.frame(bmat)
+          
+          names <- dimnames(bmat)[[1]]
+          dims <- dimnames(bmat)[[2]]
+          table <- self$results$bmat
+          
+          for (dim in dims) {
+            table$addColumn(name = paste0(dim), type = 'number')
+          }
+          
+          for (name in names) {
+            row <- list()
+            for (j in seq_along(dims)) {
+              row[[dims[j]]] <- bmat[name, j]
+            }
+            table$addRow(rowKey = name, values = row)
+          }
+        }
+        
+        # D study (Composite table)
+        if (isTRUE(self$options$comp)) {
+          gen <- as.vector(ds1$composite$generalizability)
+          depe <- as.vector(ds1$composite$dependability)
+          uni <- as.vector(ds1$composite$var.universe)
+          rel <- as.vector(ds1$composite$var.error.rel)
+          abs <- as.vector(ds1$composite$var.error.abs)
+          
+          table <- self$results$comp
+          table$setRow(
+            rowNo = 1,
+            values = list(
+              generalizability = gen,
+              dependability = depe,
+              universe = uni,
+              relative = rel,
+              absolute = abs
+            ))
+        }
+        
+        if (isTRUE(self$options$bm)) {
+          table <- self$results$bm
+          all <- data.frame(
+            gen = diag(ds1$between$generalizability),
+            depe = diag(ds1$between$dependability),
+            rel = diag(ds1$between$var.error.rel),
+            abs = diag(ds1$between$var.error.abs)
+          )
+          
+          for (i in seq_len(nrow(all))) {
+            table$addRow(
+              rowKey = rownames(all)[i],
+              values = as.list(all[i, ])
+            )
           }
         }
       },
@@ -597,6 +606,8 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       }
     )
   )
+
+
 
 # g theory with R-----------
 
