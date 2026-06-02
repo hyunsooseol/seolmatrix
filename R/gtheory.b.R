@@ -457,7 +457,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           return(output)
         }
         
-        library(lattice)
+        #library(lattice)
         
         # d_study plot---
         dstudy_plot <- function(x,
@@ -480,7 +480,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             names(data.df)[2:3] <- c("Generalizability", "Dependability")
             if (g_coef) {
               if (bw) {
-                xyplot(
+                lattice::xyplot(
                   data.df[, 2] ~ data.df[, 1],
                   type = c("p", "l"),
                   xlab = paste(names(data.df[1])),
@@ -489,7 +489,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                   col = "black"
                 )
               } else {
-                xyplot(
+                lattice::xyplot(
                   data.df[, 2] ~ data.df[, 1],
                   type = c("p", "l"),
                   xlab = paste(names(data.df[1])),
@@ -499,7 +499,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
               }
             } else {
               if (bw) {
-                xyplot(
+                lattice::xyplot(
                   data.df[, 3] ~ data.df[, 1],
                   type = c("p", "l"),
                   xlab = paste(names(data.df[1])),
@@ -508,7 +508,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                   col = "black"
                 )
               } else {
-                xyplot(
+                lattice::xyplot(
                   data.df[, 3] ~ data.df[, 1],
                   type = c("p", "l"),
                   xlab = paste(names(data.df[1])),
@@ -531,16 +531,16 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             names(data.df)[1:2] <- names(conds)
             names(data.df)[3:4] <- c("Generalizability", "Dependability")
             if (bw) {
-              par.settings <- simpleTheme(
+              par.settings <- lattice::simpleTheme(
                 lty = seq(1, length(unique(data.df[, 2]))),
                 pch = seq(1, length(unique(data.df[, 2]))),
                 col = "black"
               )
             } else {
-              par.settings <- simpleTheme(lty = seq(1, length(unique(data.df[, 2]))), pch = 1)
+              par.settings <- lattice::simpleTheme(lty = seq(1, length(unique(data.df[, 2]))), pch = 1)
             }
             if (g_coef) {
-              xyplot(
+              lattice::xyplot(
                 data.df[, 3] ~ data.df[, 1],
                 group = data.df[, 2],
                 type = "b",
@@ -558,7 +558,7 @@ gtheoryClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 scales = list(x = list(at = unique(data.df[, 1])))
               )
             } else {
-              xyplot(
+              lattice::xyplot(
                 data.df[, 4] ~ data.df[, 1],
                 group = data.df[, 2],
                 type = "b",

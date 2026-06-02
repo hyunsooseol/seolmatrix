@@ -165,16 +165,21 @@ multilevelClass <- if (requireNamespace('jmvcore'))
       
       .plot = function(image, ggtheme, theme, ...) {
         
-        if (!isTRUE(self$options$multi)) return(FALSE)
-        if (is.null(self$options$facs)) return(FALSE)
+        if (!isTRUE(self$options$multi))
+          return(FALSE)
+        if (is.null(self$options$facs))
+          return(FALSE)
         
         res <- image$state
-        if (is.null(res)) return(FALSE)
+        if (is.null(res))
+          return(FALSE)
         
-        library(ggplot2)
-        plot <- ggplot(res, aes(x = Parameter1, y = Parameter2, fill = r)) +
-          geom_tile(color = "grey80", size = 0.7) +
-          scale_fill_gradient2(
+        plot <- ggplot2::ggplot(
+          res,
+          ggplot2::aes(x = Parameter1, y = Parameter2, fill = r)
+        ) +
+          ggplot2::geom_tile(color = "grey80", size = 0.7) +
+          ggplot2::scale_fill_gradient2(
             low = "#4575b4",
             mid = "white",
             high = "#d73027",
@@ -182,25 +187,35 @@ multilevelClass <- if (requireNamespace('jmvcore'))
             midpoint = 0,
             name = "Correlation"
           ) +
-          geom_text(aes(label = sprintf("%.2f", r)), color = "black", size = 5, fontface = "bold") +
-          labs(
+          ggplot2::geom_text(
+            ggplot2::aes(label = sprintf("%.2f", r)),
+            color = "black",
+            size = 5,
+            fontface = "bold"
+          ) +
+          ggplot2::labs(
             title = "",
             subtitle = "",
-            x = NULL, y = NULL
+            x = NULL,
+            y = NULL
           ) +
-          theme_minimal(base_size = 15) +
-          theme(
-            axis.text.x = element_text(face = "bold"),
-            axis.text.y = element_text(face = "bold"),
-            panel.grid = element_blank(),
-            plot.title = element_text(face = "bold", size = 18)
+          ggplot2::theme_minimal(base_size = 15) +
+          ggplot2::theme(
+            axis.text.x = ggplot2::element_text(face = "bold"),
+            axis.text.y = ggplot2::element_text(face = "bold"),
+            panel.grid = ggplot2::element_blank(),
+            plot.title = ggplot2::element_text(face = "bold", size = 18)
           )
         
         if (self$options$angle > 0) {
-          plot <- plot + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = self$options$angle, hjust = 1))
+          plot <- plot + ggplot2::theme(
+            axis.text.x = ggplot2::element_text(
+              angle = self$options$angle,
+              hjust = 1
+            )
+          )
         }
         
-        # plot <- plot + ggtheme
         print(plot)
         TRUE
       }

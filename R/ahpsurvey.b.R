@@ -1,4 +1,3 @@
-
 #' @importFrom magrittr %>%
 ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
   R6::R6Class(
@@ -6,11 +5,14 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     inherit = ahpsurveyBase,
     private = list(
       .htmlwidget = NULL,
+      
       .init = function() {
         private$.htmlwidget <- HTMLWidget$new()
+        
         if (is.null(self$data) | is.null(self$options$vars)) {
           self$results$instructions$setVisible(visible = TRUE)
         }
+        
         self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
           title = "Instructions",
           content = paste(
@@ -22,18 +24,24 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             '</ul></div></div>'
           )
         ))
+        
         if (self$options$sumcr)
           self$results$sumcr$setNote("Note", "Mean CR<0.1 is acceptable for consistency ratio.")
-       
       },
       
       .run = function() {
+        
         ready <- TRUE
+        
         if (is.null(self$options$vars) || length(self$options$vars) < 2)
           ready <- FALSE
         
-        if (ready) {
-          # 1. 전처리 결과 + 유효 행 index를 한 번에 받음
+        if (!ready)
+          return()
+        
+        # Run analysis safely
+        results <- tryCatch({
+          
           clean_res <- private$.cleanData()
           data_clean <- clean_res$data
           valid_idx  <- which(clean_res$idx)
@@ -41,58 +49,132 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           if (nrow(data_clean) == 0)
             stop("No valid data rows after removing missing or infinite values.")
           
-          # 2. 분석 수행
           results <- private$.compute(data_clean)
           
-          private$.populateApTable(results)
-          private$.populateAjTable(results)
-          private$.populateSumcrTable(results)
+          list(
+            results = results,
+            valid_idx = valid_idx
+          )
           
-          # 3. CR 결과 매칭
-          if (self$options$cr && self$results$cr$isNotFilled()) {
-            cr_all <- rep(NA, nrow(self$data))
-            cr <- results$cr
-            cr_all[valid_idx] <- cr
-            self$results$cr$setRowNums(rownames(self$data))
-            self$results$cr$setValues(cr_all)
-          }
+        }, error = function(e) {
           
-          # plot1
-          if (isTRUE(self$options$plot1)) {
+          self$results$instructions$setVisible(TRUE)
+          self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
+            title = "Analysis error",
+            content = paste0(
+              '<div style="border: 1px solid #fecaca; border-radius: 12px; padding: 14px; background-color: #fef2f2; margin-top: 10px;">',
+              '<strong>Analysis could not be completed.</strong><br>',
+              'Please check whether the input data and attribute names are valid for AHP survey analysis.<br><br>',
+              '<strong>Possible causes:</strong>',
+              '<ul>',
+              '<li>The number of attributes may not match the data structure.</li>',
+              '<li>The attribute names may be incorrectly separated by commas.</li>',
+              '<li>The input data may contain invalid, missing, infinite, or non-numeric values.</li>',
+              '<li>The AHP pairwise comparison structure may be invalid.</li>',
+              '</ul>',
+              '<strong>Details:</strong> ',
+              htmltools::htmlEscape(e$message),
+              '</div>'
+            )
+          ))
+          
+          return(NULL)
+        })
+        
+        if (is.null(results))
+          return()
+        
+        res <- results$results
+        valid_idx <- results$valid_idx
+        
+        private$.populateApTable(res)
+        private$.populateAjTable(res)
+        private$.populateSumcrTable(res)
+        
+        # Save CR values
+        if (self$options$cr && self$results$cr$isNotFilled()) {
+          cr_all <- rep(NA, nrow(self$data))
+          cr <- res$cr
+          cr_all[valid_idx] <- cr
+          self$results$cr$setRowNums(rownames(self$data))
+          self$results$cr$setValues(cr_all)
+        }
+        
+        # Prepare plot data
+        if (isTRUE(self$options$plot1)) {
+          
+          plotState <- tryCatch({
+            
             me <- self$options$method2
             me2 <- self$options$method3
-            #atts <- strsplit(self$options$atts, ',')[[1]]
             atts <- trimws(strsplit(self$options$atts, ',')[[1]])
-            matahp <- results$matahp
+            matahp <- res$matahp
             
             m <- ahpsurvey::ahp.indpref(matahp, atts, method = me)
             m2 <- ahpsurvey::ahp.indpref(matahp, atts, method = me2)
             
-            error <- data.frame(
+            data.frame(
               id = 1:length(matahp),
               maxdiff = apply(abs(m - m2), 1, max)
             )
             
+          }, error = function(e) {
+            
+            self$results$instructions$setVisible(TRUE)
+            self$results$instructions$setContent(private$.htmlwidget$generate_accordion(
+              title = "Plot error",
+              content = paste0(
+                '<div style="border: 1px solid #fde68a; border-radius: 12px; padding: 14px; background-color: #fffbeb; margin-top: 10px;">',
+                '<strong>The plot could not be created.</strong><br>',
+                'The main AHP survey results may still be available, but the individual preference comparison plot failed.<br><br>',
+                '<strong>Details:</strong> ',
+                htmltools::htmlEscape(e$message),
+                '</div>'
+              )
+            ))
+            
+            return(NULL)
+          })
+          
+          if (!is.null(plotState)) {
             image <- self$results$plot1
-            image$setState(error)
+            image$setState(plotState)
           }
-          
-          
         }
       },
       
       .compute = function(data) {
+        
         method <- self$options$method
         method1 <- self$options$method1
-        #atts <- strsplit(self$options$atts, ',')[[1]]
         atts <- trimws(strsplit(self$options$atts, ',')[[1]])
         
-        matahp <- ahpsurvey::ahp.mat(df = data, atts = atts, negconvert = TRUE)
-        geo <- ahpsurvey::ahp.aggpref(matahp, atts, method = method)
+        matahp <- ahpsurvey::ahp.mat(
+          df = data,
+          atts = atts,
+          negconvert = TRUE
+        )
+        
+        geo <- ahpsurvey::ahp.aggpref(
+          matahp,
+          atts,
+          method = method
+        )
+        
         df <- data.frame(Value = geo)
-        aj <- ahpsurvey::ahp.aggjudge(matahp, atts, aggmethod = method1)
+        
+        aj <- ahpsurvey::ahp.aggjudge(
+          matahp,
+          atts,
+          aggmethod = method1
+        )
+        
         item <- as.matrix(aj)
-        cr <- ahpsurvey::ahp.cr(matahp, atts)
+        
+        cr <- ahpsurvey::ahp.cr(
+          matahp,
+          atts
+        )
         
         tab <- c(
           NO  = sum(cr > 0.1, na.rm = TRUE),
@@ -100,17 +182,18 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         )
         
         results <- list(
-          'matahp' = matahp,
-          'df' = df,
-          'item' = item,
-          'cr' = cr,
-          'tab' = tab
+          matahp = matahp,
+          df = df,
+          item = item,
+          cr = cr,
+          tab = tab
         )
         
         return(results)
       },
       
       .populateSumcrTable = function(results) {
+        
         table <- self$results$sumcr
         cr <- results$cr
         tab <- results$tab
@@ -125,9 +208,11 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .populateApTable = function(results) {
+        
         table <- self$results$ap
         df <- results$df
         names <- dimnames(df)[[1]]
+        
         for (name in names) {
           row <- list()
           row[['value']] <- df[name, 1]
@@ -136,13 +221,16 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .populateAjTable = function(results) {
+        
         table <- self$results$aj
         item <- results$item
         names <- dimnames(item)[[1]]
         dims <- dimnames(item)[[2]]
+        
         for (dim in dims) {
           table$addColumn(name = paste0(dim), type = 'number')
         }
+        
         for (name in names) {
           row <- list()
           for (j in seq_along(dims)) {
@@ -153,20 +241,26 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .plot1 = function(image, ggtheme, theme, ...) {
+        
         if (is.null(image$state))
           return(FALSE)
+        
         error <- image$state
         
-        # plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
-        #   geom_point() +
-        #   geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
-        #   geom_hline(yintercept = 0, color = "gray50") +
-        #   scale_x_continuous("Respondent ID") +
-        #   scale_y_continuous("Maximum difference")
-        plot1 <- ggplot2::ggplot(data = error, ggplot2::aes(x = id, y = maxdiff)) +
+        plot1 <- ggplot2::ggplot(
+          data = error,
+          ggplot2::aes(x = id, y = maxdiff)
+        ) +
           ggplot2::geom_point() +
-          ggplot2::geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +
-          ggplot2::geom_hline(yintercept = 0, color = "gray50") +
+          ggplot2::geom_hline(
+            yintercept = 0.05,
+            linetype = "dashed",
+            color = "red"
+          ) +
+          ggplot2::geom_hline(
+            yintercept = 0,
+            color = "gray50"
+          ) +
           ggplot2::scale_x_continuous("Respondent ID") +
           ggplot2::scale_y_continuous("Maximum difference")
         
@@ -176,6 +270,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       },
       
       .cleanData = function() {
+        
         items <- self$options$vars
         data <- list()
         
@@ -187,7 +282,7 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         
         data <- as.data.frame(data)
         
-        # 결측 또는 Inf, NaN 포함 행 제거용 index
+        # Keep rows with finite values only
         idx <- apply(data, 1, function(x) all(is.finite(as.numeric(x))))
         
         list(
@@ -197,6 +292,11 @@ ahpsurveyClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       }
     )
   )
+
+
+
+
+
 
 # if(self$options$plot2==TRUE){
 #

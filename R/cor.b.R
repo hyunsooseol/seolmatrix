@@ -102,12 +102,10 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         out
       },
       
-      .setAPATableCaption = function(table, type, missing, lowerOnly = TRUE, hideDiag = FALSE) {
+      .setAPATableCaption = function(table, type, missing, lowerOnly = TRUE) {
         if (is.null(table)) return()
         
         # Title (APA: title above table)
-        triTxt <- if (isTRUE(lowerOnly)) "Lower triangle" else "Full matrix"
-        diagTxt <- if (isTRUE(hideDiag)) ", diagonal hidden" else ""
         title <- paste0(
           "Correlation Matrix (", type, ")"
         )
@@ -179,10 +177,6 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
         if (!all(is_num))
           stop("'Variables' must be continuous or ordinal.")
         
-        # 옵션(없어도 오류 안 나게 기본값 처리)
-        hideDiag <- isTRUE(tryCatch(self$options$hideDiag, error = function(e) FALSE))
-        wantPmat <- isTRUE(tryCatch(self$options$pmatrix, error = function(e) FALSE))
-        
         # pearson and spearman correlation------
         rho <- stats::cor(
           data,
@@ -190,12 +184,12 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           use    = self$options$missing
         )
         rho <- as.matrix(rho)
-
+        
         # p-value (t-test 근사; pairwise complete cases 기준)
         pmat <- private$.p_matrix_approx(rho, data)
         
         # ----------------------------
-        # matrix table (r + stars) : 하삼각 + (옵션)대각선 숨김
+        # matrix table (r + stars) : 하삼각
         # ----------------------------
         if (isTRUE(self$options$mat)) {
           
@@ -204,7 +198,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
           
           # r + stars (text)
           mtxt <- private$.format_r_with_stars(rho, pmat, digits = 2)
-          mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = !hideDiag, blank = "")
+          mtxt <- private$.keepLowerTriangle(mtxt, keepDiag = TRUE, blank = "")
           
           dims <- colnames(mtxt)
           
@@ -225,40 +219,7 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             table   = table,
             type    = self$options$type,
             missing = self$options$missing,
-            lowerOnly = TRUE,
-            hideDiag  = hideDiag
-          )
-        }
-        
-        # ----------------------------
-        # (선택) p-value matrix table : 하삼각 + <.001 표기 + (옵션)대각선 숨김
-        # ----------------------------
-        if (wantPmat && !is.null(self$results$pmatrix)) {
-          
-          ptable <- self$results$pmatrix
-          private$.clearTable(ptable)
-          
-          ptxt <- private$.format_p_as_text(pmat, digits = 3, blank = "")
-          ptxt <- private$.keepLowerTriangle(ptxt, keepDiag = !hideDiag, blank = "")
-          
-          dims <- colnames(ptxt)
-          
-          for (dim in dims) {
-            ptable$addColumn(name = paste0(dim), type = 'text')
-          }
-          
-          for (i in seq_along(dims)) {
-            row <- list()
-            for (j in seq_along(dims)) {
-              row[[dims[j]]] <- ptxt[i, j]
-            }
-            ptable$addRow(rowKey = dims[i], values = row)
-          }
-          
-          # APA note (p-value 표에도 동일 적용)
-          tryCatch(
-            ptable$setNote("Note", "P-values are shown; values smaller than .001 are reported as <.001."),
-            error = function(e) NULL
+            lowerOnly = TRUE
           )
         }
         

@@ -337,11 +337,12 @@ partialClass <- if (requireNamespace('jmvcore'))
         
         res <- image$state
         
-        library(ggplot2)
-        
-        plot3<- ggplot(res, aes(x = Parameter1, y = Parameter2, fill = r)) +
-          geom_tile(color = "grey80", size = 0.7) +
-          scale_fill_gradient2(
+        plot3 <- ggplot2::ggplot(
+          res,
+          ggplot2::aes(x = Parameter1, y = Parameter2, fill = r)
+        ) +
+          ggplot2::geom_tile(color = "grey80", size = 0.7) +
+          ggplot2::scale_fill_gradient2(
             low = "#4575b4",
             mid = "white",
             high = "#d73027",
@@ -349,67 +350,39 @@ partialClass <- if (requireNamespace('jmvcore'))
             midpoint = 0,
             name = "Correlation"
           ) +
-          geom_text(aes(label = sprintf("%.2f", r)), color = "black", size = 5, fontface = "bold") +
-          labs(
+          ggplot2::geom_text(
+            ggplot2::aes(label = sprintf("%.2f", r)),
+            color = "black",
+            size = 5,
+            fontface = "bold"
+          ) +
+          ggplot2::labs(
             title = "",
             subtitle = "",
             x = NULL, y = NULL
           ) +
-          theme_minimal(base_size = 15) +
-          theme(
-            axis.text.x = element_text(face = "bold"),
-            axis.text.y = element_text(face = "bold"),
-            panel.grid = element_blank(),
-            plot.title = element_text(face = "bold", size = 18)
+          ggplot2::theme_minimal(base_size = 15) +
+          ggplot2::theme(
+            axis.text.x = ggplot2::element_text(face = "bold"),
+            axis.text.y = ggplot2::element_text(face = "bold"),
+            panel.grid = ggplot2::element_blank(),
+            plot.title = ggplot2::element_text(face = "bold", size = 18)
           )
         
         if (self$options$angle1 > 0) {
-          plot3 <- plot3 + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = self$options$angle1, hjust = 1))
+          plot3 <- plot3 + ggplot2::theme(
+            axis.text.x = ggplot2::element_text(
+              angle = self$options$angle1,
+              hjust = 1
+            )
+          )
         }
         
-        # plot <- plot + ggtheme
         print(plot3)
         TRUE
       }
+            
     )
   )
 
-
-# Patial plot----------------
-
-# var <- self$options$vars
-# varCtl <- self$options$ctrlvars
-#
-# if(is.null(varCtl)){
-#
-#   partial <- psych::partial.r(data)
-#
-# } else{
-#
-# partial <- psych::partial.r(data,x=var, y=varCtl)
-#
-# }
-
-# if(isTRUE(self$options$pm)){
-#   self$results$text1$setContent(partial)
-# }
-
-#        image1 <- self$results$plot1
-#        image1$setState(partial)
-#
-#        # Matrix plot-----------
-#
-#        image3 <- self$results$plot3
-#        image3$setState(as.matrix(partial))
-#
-
-# # Clustering plot-------
-# image3 <- self$results$plot3
-# image3$setState(EBICgraph)
-
-#---------------------------------------
-# if(isTRUE(self$options$ebic)){
-#
-#   self$results$text$setContent(CorMat)
-# }
 

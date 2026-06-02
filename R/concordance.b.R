@@ -366,22 +366,34 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         blalt <- image1$state$blalt
         
         tmp1 <- data.frame(mean = blalt[, 1], delta = blalt[, 2])
-        dat <- data.frame(est = est,
-                          lower = lower,
-                          upper = upper)
+        dat <- data.frame(
+          est = est,
+          lower = lower,
+          upper = upper
+        )
         
-        library(ggplot2)
-        plot1 <- ggplot2::ggplot(tmp1, aes(x = mean, y = delta)) +
-          geom_point() +
-          geom_hline(data = dat,
-                     aes(yintercept = lower),
-                     linetype = 2) +
-          geom_hline(data = dat,
-                     aes(yintercept = upper),
-                     linetype = 2) +
-          geom_hline(data = dat, aes(yintercept = est), linetype = 1) +
-          scale_x_continuous(name = "Average between measures") +
-          scale_y_continuous(name = "Difference between measures")
+        plot1 <- ggplot2::ggplot(
+          tmp1,
+          ggplot2::aes(x = mean, y = delta)
+        ) +
+          ggplot2::geom_point() +
+          ggplot2::geom_hline(
+            data = dat,
+            ggplot2::aes(yintercept = lower),
+            linetype = 2
+          ) +
+          ggplot2::geom_hline(
+            data = dat,
+            ggplot2::aes(yintercept = upper),
+            linetype = 2
+          ) +
+          ggplot2::geom_hline(
+            data = dat,
+            ggplot2::aes(yintercept = est),
+            linetype = 1
+          ) +
+          ggplot2::scale_x_continuous(name = "Average between measures") +
+          ggplot2::scale_y_continuous(name = "Difference between measures")
         
         plot1 <- plot1 + ggtheme
         print(plot1)
@@ -404,16 +416,20 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         tmp <- data.frame(dep = dep_data, covs = covs_data)
         tmp.lm <- data.frame(alpha = alpha, beta = beta)
         
-        library(ggplot2)
-        plot <- ggplot2::ggplot(tmp, aes(x = dep, y = covs)) +
-          geom_point() +
-          geom_abline(intercept = 0, slope = 1) +
-          geom_abline(data = tmp.lm,
-                      aes(intercept = alpha, slope = beta),
-                      linetype = "dashed") +
-          scale_x_continuous(name = dep_name) +
-          scale_y_continuous(name = covs_name) +
-          coord_fixed(ratio = 1 / 1)
+        plot <- ggplot2::ggplot(
+          tmp,
+          ggplot2::aes(x = dep, y = covs)
+        ) +
+          ggplot2::geom_point() +
+          ggplot2::geom_abline(intercept = 0, slope = 1) +
+          ggplot2::geom_abline(
+            data = tmp.lm,
+            ggplot2::aes(intercept = alpha, slope = beta),
+            linetype = "dashed"
+          ) +
+          ggplot2::scale_x_continuous(name = dep_name) +
+          ggplot2::scale_y_continuous(name = covs_name) +
+          ggplot2::coord_fixed(ratio = 1 / 1)
         
         plot <- plot + ggtheme
         print(plot)

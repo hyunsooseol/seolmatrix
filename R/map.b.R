@@ -277,9 +277,7 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
         if (is.null(st) || is.null(st$df)) return(FALSE)
         
         df <- st$df
-        # library(ggplot2)
-        # library(tidyr)
-
+        
         has_ggrepel <- requireNamespace("ggrepel", quietly = TRUE)
         
         df_long <- tidyr::pivot_longer(
@@ -292,50 +290,85 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
           labels = c("Avg.Corr.Sq.", "Avg.Corr.power4")
         )
         
-       
         min_df <- do.call(rbind, lapply(split(df_long, df_long$series), function(d) {
           d[which.min(d$value), , drop = FALSE]
         }))
         
-       
-        p <- ggplot(df_long, aes(x = root, y = value,
-                                 color = series, linetype = series)) +
-          geom_line(linewidth = 0.9) +
-          geom_point(aes(shape = series), size = 3.2, stroke = 1.2, fill = "white") +
-          
-          geom_point(data = min_df,
-                     aes(x = root, y = value, color = series, shape = series),
-                     size = 5, stroke = 1.6, fill = "white") +
-          
-          geom_vline(data = min_df, aes(xintercept = root, color = series),
-                     linetype = "dotted", linewidth = 0.7, alpha = 0.5, show.legend = FALSE) +
-       
-          { if (has_ggrepel)
-            ggrepel::geom_label_repel(
-              data = min_df,
-              aes(label = paste0("", root)),
-              size = 3.2, label.size = 0.25, label.r = unit(2, "pt"),
-              seed = 123, show.legend = FALSE
-            ) else
-              geom_label(
-                data = min_df, aes(label = paste0("", root)),
-                size = 3.0, label.size = 0.25, label.r = unit(2, "pt"),
-                nudge_y = 0.05, show.legend = FALSE
+        p <- ggplot2::ggplot(
+          df_long,
+          ggplot2::aes(
+            x = root,
+            y = value,
+            color = series,
+            linetype = series
+          )
+        ) +
+          ggplot2::geom_line(linewidth = 0.9) +
+          ggplot2::geom_point(
+            ggplot2::aes(shape = series),
+            size = 3.2,
+            stroke = 1.2,
+            fill = "white"
+          ) +
+          ggplot2::geom_point(
+            data = min_df,
+            ggplot2::aes(x = root, y = value, color = series, shape = series),
+            size = 5,
+            stroke = 1.6,
+            fill = "white"
+          ) +
+          ggplot2::geom_vline(
+            data = min_df,
+            ggplot2::aes(xintercept = root, color = series),
+            linetype = "dotted",
+            linewidth = 0.7,
+            alpha = 0.5,
+            show.legend = FALSE
+          ) +
+          {
+            if (has_ggrepel)
+              ggrepel::geom_label_repel(
+                data = min_df,
+                ggplot2::aes(label = paste0("", root)),
+                size = 3.2,
+                label.size = 0.25,
+                label.r = grid::unit(2, "pt"),
+                seed = 123,
+                show.legend = FALSE
+              )
+            else
+              ggplot2::geom_label(
+                data = min_df,
+                ggplot2::aes(label = paste0("", root)),
+                size = 3.0,
+                label.size = 0.25,
+                label.r = grid::unit(2, "pt"),
+                nudge_y = 0.05,
+                show.legend = FALSE
               )
           } +
-         
-          scale_shape_manual(values = c("Avg.Corr.Sq." = 21, "Avg.Corr.power4" = 24)) +
-          scale_color_manual(values = c("Avg.Corr.Sq." = "#D55E00",  # 오렌지
-                                        "Avg.Corr.power4" = "#0072B2")) + # 블루
-          labs(x = "Root", y = "Avg.Corr.", title = NULL) +
-          theme_bw() + ggtheme +
-          theme(
-            legend.title = element_blank(),
+          ggplot2::scale_shape_manual(
+            values = c("Avg.Corr.Sq." = 21, "Avg.Corr.power4" = 24)
+          ) +
+          ggplot2::scale_color_manual(
+            values = c(
+              "Avg.Corr.Sq." = "#D55E00",
+              "Avg.Corr.power4" = "#0072B2"
+            )
+          ) +
+          ggplot2::labs(x = "Root", y = "Avg.Corr.", title = NULL) +
+          ggplot2::theme_bw() + ggtheme +
+          ggplot2::theme(
+            legend.title = ggplot2::element_blank(),
             legend.position = "right"
           ) +
-          guides(
-            color = guide_legend(override.aes = list(size = 4, stroke = 1.4, fill = "white")),
-            shape = guide_legend(override.aes = list(size = 4, stroke = 1.4, fill = "white"))
+          ggplot2::guides(
+            color = ggplot2::guide_legend(
+              override.aes = list(size = 4, stroke = 1.4, fill = "white")
+            ),
+            shape = ggplot2::guide_legend(
+              override.aes = list(size = 4, stroke = 1.4, fill = "white")
+            )
           )
         
         print(p)
@@ -345,36 +378,53 @@ mapClass <- if (requireNamespace("jmvcore", quietly = TRUE))
       # ----------------- Scree Plot -----------------
       .screePlot = function(image, ggtheme, theme, ...) {
         df <- image$state
-        if (is.null(df)) return(FALSE)
-        
-        library(ggplot2)
+        if (is.null(df))
+          return(FALSE)
         
         if ("sim" %in% names(df)) {
           df_long <- data.frame(
             factor = rep(df$factor, 2),
-            series = factor(rep(c("Data", "Simulations"), each = nrow(df)),
-                            levels = c("Data", "Simulations")),
-            value  = c(df$eigen, df$sim)
+            series = factor(
+              rep(c("Data", "Simulations"), each = nrow(df)),
+              levels = c("Data", "Simulations")
+            ),
+            value = c(df$eigen, df$sim)
           )
-          p <- ggplot(df_long, aes(x = factor, y = value,
-                                   color = series, linetype = series)) +
-            geom_line() +
-            geom_point() +
-            labs(x = "Component", y = "Eigenvalue") +
-            theme_bw() + ggtheme +
-            theme(legend.title = element_blank(),
-                  plot.title = element_blank())
+          
+          p <- ggplot2::ggplot(
+            df_long,
+            ggplot2::aes(
+              x = factor,
+              y = value,
+              color = series,
+              linetype = series
+            )
+          ) +
+            ggplot2::geom_line() +
+            ggplot2::geom_point() +
+            ggplot2::labs(x = "Component", y = "Eigenvalue") +
+            ggplot2::theme_bw() + ggtheme +
+            ggplot2::theme(
+              legend.title = ggplot2::element_blank(),
+              plot.title = ggplot2::element_blank()
+            )
         } else {
-          p <- ggplot(df, aes(x = factor, y = eigen)) +
-            geom_line() +
-            geom_point() +
-            labs(x = "Component", y = "Eigenvalue") +
-            theme_bw() + ggtheme +
-            theme(legend.title = element_blank(),
-                  plot.title = element_blank())
+          p <- ggplot2::ggplot(
+            df,
+            ggplot2::aes(x = factor, y = eigen)
+          ) +
+            ggplot2::geom_line() +
+            ggplot2::geom_point() +
+            ggplot2::labs(x = "Component", y = "Eigenvalue") +
+            ggplot2::theme_bw() + ggtheme +
+            ggplot2::theme(
+              legend.title = ggplot2::element_blank(),
+              plot.title = ggplot2::element_blank()
+            )
         }
         
-        print(p); TRUE
+        print(p)
+        TRUE
       }
     )
   )
