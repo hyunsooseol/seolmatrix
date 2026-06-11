@@ -376,21 +376,31 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           tmp1,
           ggplot2::aes(x = mean, y = delta)
         ) +
-          ggplot2::geom_point() +
+          ggplot2::geom_point(
+            color = "#2F6DB3",
+            size = 2.2,
+            alpha = 0.85
+          ) +
           ggplot2::geom_hline(
             data = dat,
             ggplot2::aes(yintercept = lower),
-            linetype = 2
+            color = "#E15759",
+            linetype = 2,
+            linewidth = 0.8
           ) +
           ggplot2::geom_hline(
             data = dat,
             ggplot2::aes(yintercept = upper),
-            linetype = 2
+            color = "#E15759",
+            linetype = 2,
+            linewidth = 0.8
           ) +
           ggplot2::geom_hline(
             data = dat,
             ggplot2::aes(yintercept = est),
-            linetype = 1
+            color = "#444444",
+            linetype = 1,
+            linewidth = 0.8
           ) +
           ggplot2::scale_x_continuous(name = "Average between measures") +
           ggplot2::scale_y_continuous(name = "Difference between measures")
@@ -409,7 +419,7 @@ concordanceClass <- if (requireNamespace('jmvcore'))
         dep_data <- image$state$data_dep
         covs_data <- image$state$data_covs
         
-        z <- lm(covs_data ~ dep_data)
+        z <- stats::lm(covs_data ~ dep_data)
         alpha <- summary(z)$coefficients[1, 1]
         beta <- summary(z)$coefficients[2, 1]
         
@@ -420,12 +430,23 @@ concordanceClass <- if (requireNamespace('jmvcore'))
           tmp,
           ggplot2::aes(x = dep, y = covs)
         ) +
-          ggplot2::geom_point() +
-          ggplot2::geom_abline(intercept = 0, slope = 1) +
+          ggplot2::geom_point(
+            color = "#2F6DB3",
+            size = 2.2,
+            alpha = 0.85
+          ) +
+          ggplot2::geom_abline(
+            intercept = 0,
+            slope = 1,
+            color = "#444444",
+            linewidth = 0.8
+          ) +
           ggplot2::geom_abline(
             data = tmp.lm,
             ggplot2::aes(intercept = alpha, slope = beta),
-            linetype = "dashed"
+            color = "#E15759",
+            linetype = "dashed",
+            linewidth = 0.8
           ) +
           ggplot2::scale_x_continuous(name = dep_name) +
           ggplot2::scale_y_continuous(name = covs_name) +
