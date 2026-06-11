@@ -666,16 +666,52 @@ ccClass <- if (requireNamespace('jmvcore', quietly=TRUE))
       
       r <- res$r
       
-      graphics::barplot(
+      if (length(r) < 1)
+        return(FALSE)
+      
+      cols <- c(
+        "#4E79A7",  # blue
+        "#F28E2B",  # orange
+        "#59A14F",  # green
+        "#E15759",  # red
+        "#76B7B2",  # teal
+        "#EDC948",  # yellow
+        "#B07AA1",  # purple
+        "#9C755F"   # brown
+      )
+      
+      barCols <- rep(cols, length.out = length(r))
+      
+      oldPar <- graphics::par(no.readonly = TRUE)
+      on.exit(graphics::par(oldPar), add = TRUE)
+      
+      graphics::par(
+        mar = c(4.5, 4.5, 1.5, 1),
+        las = 1
+      )
+      
+      bp <- graphics::barplot(
         r,
         names.arg = seq_along(r),
         ylim = c(0, 1),
         xlab = "Function",
         ylab = "Canonical correlation",
-        main = ""
+        main = "",
+        col = barCols,
+        border = grDevices::adjustcolor("black", alpha.f = 0.45),
+        axes = FALSE
       )
       
-      graphics::abline(h = 0, lty = 1)
+      graphics::axis(1, at = bp, labels = seq_along(r), las = 1)
+      graphics::axis(2, at = seq(0, 1, by = 0.2), las = 1)
+      
+      graphics::abline(
+        h = seq(0, 1, by = 0.2),
+        col = "#E6E6E6",
+        lty = "dotted"
+      )
+      
+      graphics::box(bty = "l")
       
       TRUE
     },
