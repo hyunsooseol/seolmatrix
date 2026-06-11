@@ -179,7 +179,6 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="matrix",
                 title="`Correlation matrix - ${type}`",
-                visible="(matrix)",
                 clearWith=list(
                     "vars",
                     "type"),
@@ -198,7 +197,6 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "type"),
-                refs="stats",
                 columns=list(
                     list(
                         `name`="name", 
@@ -238,9 +236,7 @@ rankResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "vars",
                     "type",
                     "type1",
-                    "method",
-                    "width3",
-                    "height3")))
+                    "method")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",

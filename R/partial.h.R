@@ -240,7 +240,6 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="matrix",
                 title="`Correlation matrix - ${type}`",
-                visible="(matrix)",
                 rows="(vars)",
                 clearWith=list(
                     "vars",
@@ -384,7 +383,8 @@ partialResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "vars",
                     "angle1",
-                    "method")))}))
+                    "method",
+                    "robust")))}))
 
 partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "partialBase",

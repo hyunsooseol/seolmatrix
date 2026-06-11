@@ -245,7 +245,7 @@ raterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="matrix",
                 title="Unweighted Kappa",
-                visible="(matrix)",
+                visible="(pair)",
                 clearWith=list(
                     "vars",
                     "type"),

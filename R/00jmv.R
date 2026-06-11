@@ -7,7 +7,7 @@
         `author`="Seol, H.", 
         `year`=2026, 
         `title`="seolmatrix: Correlations suite for jamovi", 
-        `publisher`="(Version 4.1.5) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix", 
+        `publisher`="(Version 4.1.6) [jamovi module]. URL https://github.com/hyunsooseol/seolmatrix", 
         `url`="https://github.com/hyunsooseol/seolmatrix"), 
     `psych`=list(
         `type`="software", 
@@ -39,12 +39,6 @@
         `year`=2020, 
         `title`="correlation: Methods and Algorithms for Correlation Analysis in R", 
         `publisher`="[R package]. URL https://CRAN.R-project.org/package=correlation"), 
-    `epiR`=list(
-        `type`="software", 
-        `author`="Stevenson, M., et al.", 
-        `year`=2021, 
-        `title`="epiR: Tools for the Analysis of Epidemiological Data", 
-        `publisher`="[R package]. URL https://CRAN.R-project.org/package=epiR"), 
     `easyAHP`=list(
         `type`="software", 
         `author`="Zhicheng D., & Yuantao H.", 

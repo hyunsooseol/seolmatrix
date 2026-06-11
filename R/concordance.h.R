@@ -122,7 +122,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 title="Estimated Correlation",
                 rows=1,
                 visible="(cc)",
-                refs="epiR",
                 clearWith=list(
                     "dep",
                     "covs",
@@ -151,8 +150,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 clearWith=list(
                     "dep",
                     "covs",
-                    "id"),
-                refs="epiR"))
+                    "id")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot1",
@@ -162,8 +160,7 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 clearWith=list(
                     "dep",
                     "covs",
-                    "id"),
-                refs="epiR"))
+                    "id")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="mat",
@@ -172,7 +169,6 @@ concordanceResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 clearWith=list(
                     "vars",
                     "id"),
-                refs="epiR",
                 columns=list(
                     list(
                         `name`="name", 

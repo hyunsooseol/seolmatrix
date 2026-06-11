@@ -16,7 +16,7 @@ items:
     - name: matrix
       title:  'Unweighted Kappa'
       type: Table
-      visible: (matrix)
+      visible: (pair)
       clearWith:
         - vars
         - type

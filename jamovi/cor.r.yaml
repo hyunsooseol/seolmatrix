@@ -12,7 +12,7 @@ items:
     - name: matrix
       title:  '`Correlation matrix - ${type}`'
       type: Table
-      visible: (matrix)
+      visible: (mat)
       clearWith:
         - vars
         - type

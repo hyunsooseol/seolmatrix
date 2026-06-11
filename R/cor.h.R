@@ -194,7 +194,7 @@ corResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="matrix",
                 title="`Correlation matrix - ${type}`",
-                visible="(matrix)",
+                visible="(mat)",
                 clearWith=list(
                     "vars",
                     "type",

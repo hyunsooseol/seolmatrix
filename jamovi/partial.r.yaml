@@ -16,7 +16,6 @@ items:
     - name: matrix
       title: '`Correlation matrix - ${type}`' 
       type: Table
-      visible: (matrix)
       rows: (vars)
       clearWith:
           - vars
@@ -151,5 +150,6 @@ items:
         - vars
         - angle1
         - method
+        - robust
 ...
 

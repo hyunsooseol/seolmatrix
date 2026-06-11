@@ -14,7 +14,6 @@ items:
       type: Table
       rows:  1
       visible: (cc)
-      refs: epiR
       clearWith:
         - dep
         - covs
@@ -41,8 +40,7 @@ items:
         - dep
         - covs
         - id
-      refs: epiR   
-  
+
     - name: plot1
       title: 'Bland-Altman Plot'
       type: Image
@@ -52,7 +50,6 @@ items:
         - dep
         - covs
         - id
-      refs: epiR       
 
     - name: mat
       title: 'Concordance matrix'
@@ -61,7 +58,6 @@ items:
       clearWith:
         - vars
         - id
-      refs: epiR
       columns:
           - name: name
             title: ""

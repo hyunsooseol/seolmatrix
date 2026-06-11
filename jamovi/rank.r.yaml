@@ -15,7 +15,6 @@ items:
     - name: matrix
       title:  '`Correlation matrix - ${type}`'
       type: Table
-      visible: (matrix)
       clearWith:
         - vars
         - type
@@ -39,7 +38,6 @@ items:
       clearWith:
         - vars
         - type
-      refs: stats
 
       columns:
           - name: name
@@ -82,8 +80,6 @@ items:
           - type
           - type1
           - method
-          - width3
-          - height3
 
     - name: plot
       title: 'Gaussian Graphical Model'
