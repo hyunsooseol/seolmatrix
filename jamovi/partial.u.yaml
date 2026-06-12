@@ -21,6 +21,19 @@ children:
             name: ctrlvars
             isTarget: true
             ghostText: Partial correlation only
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: ActionButton
+            name: run
+
   - type: CollapseBox
     label: 'Partial correlation'
     margin: normal

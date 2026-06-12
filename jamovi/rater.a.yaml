@@ -17,6 +17,10 @@ options:
       title: Variables
       type: Variables
 
+    - name: run
+      type: Action
+      title: Run
+
     - name: model
       title: Model
       type: List
@@ -120,7 +124,8 @@ options:
       title: 'Bootstrap N'
       type: Integer
       min: 100
-      default: 1000
+      max: 1000
+      default: 500
 
     - name: bt
       title: 'Confidence intervals of Fleiss Kappa'
@@ -131,7 +136,8 @@ options:
       title: 'Bootstrap N'
       type: Integer
       min: 100
-      default: 1000
+      max: 1000
+      default: 500
 
     - name: kend
       title: 'Coefficient of concordance W'

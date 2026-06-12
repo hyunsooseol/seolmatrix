@@ -22,6 +22,10 @@ options:
       permitted:
         - factor
 
+    - name: run
+      type: Action
+      title: Run
+
     - name: type
       title: Type of correlation
       type: List

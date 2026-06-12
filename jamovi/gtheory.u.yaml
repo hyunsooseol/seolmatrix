@@ -49,7 +49,6 @@ children:
         cell:
           column: 3
           row: 0
-        stretchFactor: 1
         children:
           - type: ComboBox
             name: t

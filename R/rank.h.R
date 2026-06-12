@@ -7,6 +7,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
+            run = FALSE,
             type = "spearman",
             sigStars = FALSE,
             pmatrix = FALSE,
@@ -34,6 +35,9 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ordinal"),
                 permitted=list(
                     "factor"))
+            private$..run <- jmvcore::OptionAction$new(
+                "run",
+                run)
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
@@ -107,6 +111,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default="lower")
 
             self$.addOption(private$..vars)
+            self$.addOption(private$..run)
             self$.addOption(private$..type)
             self$.addOption(private$..sigStars)
             self$.addOption(private$..pmatrix)
@@ -122,6 +127,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         }),
     active = list(
         vars = function() private$..vars$value,
+        run = function() private$..run$value,
         type = function() private$..type$value,
         sigStars = function() private$..sigStars$value,
         pmatrix = function() private$..pmatrix$value,
@@ -136,6 +142,7 @@ rankOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         type1 = function() private$..type1$value),
     private = list(
         ..vars = NA,
+        ..run = NA,
         ..type = NA,
         ..sigStars = NA,
         ..pmatrix = NA,
@@ -296,6 +303,7 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data The data as a data frame.
 #' @param vars .
+#' @param run .
 #' @param type .
 #' @param sigStars .
 #' @param pmatrix .
@@ -330,6 +338,7 @@ rankBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 rank <- function(
     data,
     vars,
+    run = FALSE,
     type = "spearman",
     sigStars = FALSE,
     pmatrix = FALSE,
@@ -356,6 +365,7 @@ rank <- function(
 
     options <- rankOptions$new(
         vars = vars,
+        run = run,
         type = type,
         sigStars = sigStars,
         pmatrix = pmatrix,

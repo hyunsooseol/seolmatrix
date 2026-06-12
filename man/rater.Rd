@@ -7,6 +7,7 @@
 rater(
   data,
   vars,
+  run = FALSE,
   model = "oneway",
   type = "agreement",
   unit = "single",
@@ -23,9 +24,9 @@ rater(
   method = "nominal",
   t = "col",
   pa = FALSE,
-  boot = 1000,
+  boot = 500,
   bt = FALSE,
-  boot1 = 1000,
+  boot1 = 500,
   kend = FALSE
 )
 }
@@ -33,6 +34,8 @@ rater(
 \item{data}{The data as a data frame.}
 
 \item{vars}{.}
+
+\item{run}{.}
 
 \item{model}{.}
 

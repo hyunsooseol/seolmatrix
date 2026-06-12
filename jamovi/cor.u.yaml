@@ -19,52 +19,70 @@ children:
     stretchFactor: 1
     children:
       - type: LayoutBox
-        margin: large
         cell:
           column: 0
           row: 0
         stretchFactor: 1
         children:
-          - type: Label
-            label: 'Analysis options'
-            children:
-              - type: ComboBox
-                name: type
-              - type: ComboBox
-                name: missing
-          - type: Label
-            label: 'Clustering options'
-            children:
-              - type: ComboBox
-                name: order
-              - type: ComboBox
-                name: method
-              - type: ComboBox
-                name: method1
-              - type: ComboBox
-                name: type1
-              - type: TextBox
-                name: k
-                format: number
-              - type: TextBox
-                name: size
-                format: number
-              - type: ComboBox
-                name: color
-              - type: ComboBox
-                name: colorp
+          - type: ActionButton
+            name: run
+
+  - type: CollapseBox
+    label: 'Analysis'
+    margin: normal
+    collapsed: true
+    children:
       - type: LayoutBox
-        stretchFactor: 1
         margin: large
-        cell:
-          column: 1
-          row: 0
-        fitToGrid: true
+        stretchFactor: 1
         children:
-          - type: Label
-            label: 'Tests'
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
             children:
-              - type: CheckBox
-                name: mat            
-              - type: CheckBox
-                name: plot
+              - type: Label
+                label: 'Analysis options'
+                children:
+                  - type: ComboBox
+                    name: type
+                  - type: ComboBox
+                    name: missing
+              - type: Label
+                label: 'Clustering options'
+                children:
+                  - type: ComboBox
+                    name: order
+                  - type: ComboBox
+                    name: method
+                  - type: ComboBox
+                    name: method1
+                  - type: ComboBox
+                    name: type1
+                  - type: TextBox
+                    name: k
+                    format: number
+                  - type: TextBox
+                    name: size
+                    format: number
+                  - type: ComboBox
+                    name: color
+                  - type: ComboBox
+                    name: colorp
+          - type: LayoutBox
+            stretchFactor: 1
+            margin: large
+            cell:
+              column: 1
+              row: 0
+            fitToGrid: true
+            children:
+              - type: Label
+                label: 'Tests'
+                children:
+                  - type: CheckBox
+                    name: mat            
+                  - type: CheckBox
+                    name: plot

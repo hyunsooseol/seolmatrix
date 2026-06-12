@@ -8,6 +8,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             vars = NULL,
             ctrlvars = NULL,
+            run = FALSE,
             type = "pearson",
             missing = "pairwise.complete.obs",
             sidSig = "twotailed",
@@ -38,6 +39,9 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ctrlvars <- jmvcore::OptionVariables$new(
                 "ctrlvars",
                 ctrlvars)
+            private$..run <- jmvcore::OptionAction$new(
+                "run",
+                run)
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
@@ -147,6 +151,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
             self$.addOption(private$..vars)
             self$.addOption(private$..ctrlvars)
+            self$.addOption(private$..run)
             self$.addOption(private$..type)
             self$.addOption(private$..missing)
             self$.addOption(private$..sidSig)
@@ -168,6 +173,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         vars = function() private$..vars$value,
         ctrlvars = function() private$..ctrlvars$value,
+        run = function() private$..run$value,
         type = function() private$..type$value,
         missing = function() private$..missing$value,
         sidSig = function() private$..sidSig$value,
@@ -188,6 +194,7 @@ partialOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     private = list(
         ..vars = NA,
         ..ctrlvars = NA,
+        ..run = NA,
         ..type = NA,
         ..missing = NA,
         ..sidSig = NA,
@@ -413,6 +420,7 @@ partialBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param vars .
 #' @param ctrlvars .
+#' @param run .
 #' @param type .
 #' @param missing .
 #' @param sidSig .
@@ -453,6 +461,7 @@ partial <- function(
     data,
     vars,
     ctrlvars,
+    run = FALSE,
     type = "pearson",
     missing = "pairwise.complete.obs",
     sidSig = "twotailed",
@@ -486,6 +495,7 @@ partial <- function(
     options <- partialOptions$new(
         vars = vars,
         ctrlvars = ctrlvars,
+        run = run,
         type = type,
         missing = missing,
         sidSig = sidSig,

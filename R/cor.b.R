@@ -157,6 +157,13 @@ corClass <- if (requireNamespace('jmvcore', quietly = TRUE))
       # ---------------------------
       .run = function() {
         
+        # Run button guard -------------------------------------------------
+        if (is.null(self$options$run) || self$options$run == 0) {
+          self$results$instructions$setVisible(TRUE)
+          return()
+        }
+        
+        
         if (is.null(self$options$vars)) return()
         
         vars <- self$options$vars

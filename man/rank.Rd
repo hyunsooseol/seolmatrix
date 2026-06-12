@@ -7,6 +7,7 @@
 rank(
   data,
   vars,
+  run = FALSE,
   type = "spearman",
   sigStars = FALSE,
   pmatrix = FALSE,
@@ -25,6 +26,8 @@ rank(
 \item{data}{The data as a data frame.}
 
 \item{vars}{.}
+
+\item{run}{.}
 
 \item{type}{.}
 

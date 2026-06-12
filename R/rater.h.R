@@ -7,6 +7,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
+            run = FALSE,
             model = "oneway",
             type = "agreement",
             unit = "single",
@@ -23,9 +24,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             method = "nominal",
             t = "col",
             pa = FALSE,
-            boot = 1000,
+            boot = 500,
             bt = FALSE,
-            boot1 = 1000,
+            boot1 = 500,
             kend = FALSE, ...) {
 
             super$initialize(
@@ -37,6 +38,9 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
                 vars)
+            private$..run <- jmvcore::OptionAction$new(
+                "run",
+                run)
             private$..model <- jmvcore::OptionList$new(
                 "model",
                 model,
@@ -122,7 +126,8 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "boot",
                 boot,
                 min=100,
-                default=1000)
+                max=1000,
+                default=500)
             private$..bt <- jmvcore::OptionBool$new(
                 "bt",
                 bt,
@@ -131,13 +136,15 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "boot1",
                 boot1,
                 min=100,
-                default=1000)
+                max=1000,
+                default=500)
             private$..kend <- jmvcore::OptionBool$new(
                 "kend",
                 kend,
                 default=FALSE)
 
             self$.addOption(private$..vars)
+            self$.addOption(private$..run)
             self$.addOption(private$..model)
             self$.addOption(private$..type)
             self$.addOption(private$..unit)
@@ -161,6 +168,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         }),
     active = list(
         vars = function() private$..vars$value,
+        run = function() private$..run$value,
         model = function() private$..model$value,
         type = function() private$..type$value,
         unit = function() private$..unit$value,
@@ -183,6 +191,7 @@ raterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         kend = function() private$..kend$value),
     private = list(
         ..vars = NA,
+        ..run = NA,
         ..model = NA,
         ..type = NA,
         ..unit = NA,
@@ -663,6 +672,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data The data as a data frame.
 #' @param vars .
+#' @param run .
 #' @param model .
 #' @param type .
 #' @param unit .
@@ -712,6 +722,7 @@ raterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 rater <- function(
     data,
     vars,
+    run = FALSE,
     model = "oneway",
     type = "agreement",
     unit = "single",
@@ -728,9 +739,9 @@ rater <- function(
     method = "nominal",
     t = "col",
     pa = FALSE,
-    boot = 1000,
+    boot = 500,
     bt = FALSE,
-    boot1 = 1000,
+    boot1 = 500,
     kend = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -745,6 +756,7 @@ rater <- function(
 
     options <- raterOptions$new(
         vars = vars,
+        run = run,
         model = model,
         type = type,
         unit = unit,

@@ -209,6 +209,14 @@ rankClass <- if (requireNamespace('jmvcore'))
       # Run
       # ---------------------------
       .run = function() {
+        
+        # Run button guard -------------------------------------------------
+        if (is.null(self$options$run) || self$options$run == 0) {
+          self$results$instructions$setVisible(TRUE)
+          return()
+        }
+        
+        
         if (length(self$options$vars) < 2) {
           private$.hideTable(private$.safeResult("pmatrix"))
           private$.hideTable(private$.safeResult("tau"))

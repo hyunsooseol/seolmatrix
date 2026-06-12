@@ -16,9 +16,23 @@ children:
             isTarget: true
   - type: LayoutBox
     margin: large
+    stretchFactor: 1
     children:
-      - type: ComboBox
-        name: t
+      - type: LayoutBox
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: ActionButton
+            name: run
+      - type: LayoutBox
+        cell:
+          column: 3
+          row: 0
+        children:
+          - type: ComboBox
+            name: t
   - type: CollapseBox
     label: Rater reliability
     margin: normal
@@ -29,7 +43,7 @@ children:
         margin: large
         children:
           - type: Label
-            label: 'Kappa'
+            label: Kappa
             children:
               - type: CheckBox
                 name: pair
@@ -43,7 +57,7 @@ children:
                   - name: boot1
                     type: TextBox
                     format: number
-                    enable: (bt)                
+                    enable: (bt)
               - type: CheckBox
                 name: ek
               - type: CheckBox
@@ -57,24 +71,24 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: 'Agreement'
+            label: Agreement
             children:
               - type: CheckBox
-                name: pa    
+                name: pa
               - type: CheckBox
                 name: icc
               - type: CheckBox
-                name: bicc    
+                name: bicc
                 children:
                   - name: boot
                     type: TextBox
                     format: number
                     enable: (bicc)
           - type: Label
-            label: 'Kendall'
+            label: Kendall
             children:
               - type: CheckBox
-                name: kend  
+                name: kend
   - type: CollapseBox
     label: ICC for oneway and twoway models
     margin: normal
@@ -85,7 +99,7 @@ children:
         margin: large
         children:
           - type: Label
-            label: 'Options'
+            label: Options
             children:
               - type: ComboBox
                 name: model
@@ -102,19 +116,19 @@ children:
         fitToGrid: true
         children:
           - type: Label
-            label: 'ICC'
+            label: ICC
             children:
               - type: CheckBox
                 name: ic
               - type: CheckBox
                 name: ftest
   - type: CollapseBox
-    label: 'Krippendorff alpha' 
+    label: Krippendorff alpha
     margin: normal
     collapsed: true
     children:
       - type: Label
-        label: 'Table'
+        label: Table
         children:
           - type: CheckBox
             name: krip

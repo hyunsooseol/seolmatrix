@@ -19,75 +19,93 @@ children:
     stretchFactor: 1
     children:
       - type: LayoutBox
-        margin: large
         cell:
           column: 0
           row: 0
         stretchFactor: 1
         children:
-          - type: Label
-            label: 'Correlation type'
-            children:
-              - type: RadioButton
-                name: type_spearman
-                optionName: type
-                optionPart: spearman
-              - name: type_polychoric
-                type: RadioButton
-                optionName: type
-                optionPart: polychoric
-              - name: type_tetrachoric
-                type: RadioButton
-                optionName: type
-                optionPart: tetrachoric
-          - type: Label
-            label: 'Analysis options'
-            children:
-              - type: CheckBox
-                name: sigStars
-              - type: CheckBox
-                name: pmatrix
-              - type: CheckBox
-                name: tau
+          - type: ActionButton
+            name: run
+
+  - type: CollapseBox
+    label: 'Analysis'
+    margin: normal
+    collapsed: true
+    children:
       - type: LayoutBox
         margin: large
-        cell:
-          column: 1
-          row: 0
         stretchFactor: 1
         children:
-          - type: Label
-            label: Matrix plot
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
             children:
-              - type: CheckBox
-                name: plot3
+              - type: Label
+                label: 'Correlation type'
                 children:
-                  - type: ComboBox
-                    name: type1
-                    enable: (plot3)
-                  - type: ComboBox
-                    name: method
-                    enable: (plot3)
-          - type: Label
-            label: Network plots
-            children:
-              - type: CheckBox
-                name: plot
-              - type: CheckBox
-                name: plot2
+                  - type: RadioButton
+                    name: type_spearman
+                    optionName: type
+                    optionPart: spearman
+                  - name: type_polychoric
+                    type: RadioButton
+                    optionName: type
+                    optionPart: polychoric
+                  - name: type_tetrachoric
+                    type: RadioButton
+                    optionName: type
+                    optionPart: tetrachoric
+              - type: Label
+                label: 'Analysis options'
                 children:
-                  - type: ComboBox
-                    name: scale
-                    enable: (plot2)
-                  - type: TextBox
-                    name: angle
-                    format: number
-                    suggestedValues:
-                      - value: 0
-                      - value: 45
-                      - value: 90
-          - type: Label
-            label: Partial plot
+                  - type: CheckBox
+                    name: sigStars
+                  - type: CheckBox
+                    name: pmatrix
+                  - type: CheckBox
+                    name: tau
+          - type: LayoutBox
+            margin: large
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
             children:
-              - type: CheckBox
-                name: plot1
+              - type: Label
+                label: Matrix plot
+                children:
+                  - type: CheckBox
+                    name: plot3
+                    children:
+                      - type: ComboBox
+                        name: type1
+                        enable: (plot3)
+                      - type: ComboBox
+                        name: method
+                        enable: (plot3)
+              - type: Label
+                label: Network plots
+                children:
+                  - type: CheckBox
+                    name: plot
+                  - type: CheckBox
+                    name: plot2
+                    children:
+                      - type: ComboBox
+                        name: scale
+                        enable: (plot2)
+                      - type: TextBox
+                        name: angle
+                        format: number
+                        suggestedValues:
+                          - value: 0
+                          - value: 45
+                          - value: 90
+              - type: Label
+                label: Partial plot
+                children:
+                  - type: CheckBox
+                    name: plot1

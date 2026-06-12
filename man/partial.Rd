@@ -8,6 +8,7 @@ partial(
   data,
   vars,
   ctrlvars,
+  run = FALSE,
   type = "pearson",
   missing = "pairwise.complete.obs",
   sidSig = "twotailed",
@@ -33,6 +34,8 @@ partial(
 \item{vars}{.}
 
 \item{ctrlvars}{.}
+
+\item{run}{.}
 
 \item{type}{.}
 

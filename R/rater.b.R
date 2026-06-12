@@ -92,6 +92,12 @@ raterClass <- if (requireNamespace('jmvcore'))
 
       .run = function() {
 
+        # Run button guard -------------------------------------------------
+        if (is.null(self$options$run) || self$options$run == 0) {
+          self$results$instructions$setVisible(TRUE)
+          return()
+        }
+        
         data <- private$.getData()
         if (is.null(data)) return()
 

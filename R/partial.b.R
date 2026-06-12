@@ -108,6 +108,13 @@ partialClass <- if (requireNamespace('jmvcore'))
 
       
       .run = function() {
+        
+        # Run button guard -------------------------------------------------
+        if (is.null(self$options$run) || self$options$run == 0) {
+          self$results$instructions$setVisible(TRUE)
+          return()
+        }
+        
         matrix <- self$results$get('matrix')
         var <- self$options$get('vars')
         nVar <- length(var)

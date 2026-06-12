@@ -7,6 +7,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             vars = NULL,
+            run = FALSE,
             type = "pearson",
             mat = TRUE,
             missing = "pairwise.complete.obs",
@@ -29,6 +30,9 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..vars <- jmvcore::OptionVariables$new(
                 "vars",
                 vars)
+            private$..run <- jmvcore::OptionAction$new(
+                "run",
+                run)
             private$..type <- jmvcore::OptionList$new(
                 "type",
                 type,
@@ -127,6 +131,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default="full")
 
             self$.addOption(private$..vars)
+            self$.addOption(private$..run)
             self$.addOption(private$..type)
             self$.addOption(private$..mat)
             self$.addOption(private$..missing)
@@ -142,6 +147,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         }),
     active = list(
         vars = function() private$..vars$value,
+        run = function() private$..run$value,
         type = function() private$..type$value,
         mat = function() private$..mat$value,
         missing = function() private$..missing$value,
@@ -156,6 +162,7 @@ corOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         type1 = function() private$..type1$value),
     private = list(
         ..vars = NA,
+        ..run = NA,
         ..type = NA,
         ..mat = NA,
         ..missing = NA,
@@ -251,6 +258,7 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data The data as a data frame.
 #' @param vars .
+#' @param run .
 #' @param type .
 #' @param mat .
 #' @param missing .
@@ -280,6 +288,7 @@ corBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 cor <- function(
     data,
     vars,
+    run = FALSE,
     type = "pearson",
     mat = TRUE,
     missing = "pairwise.complete.obs",
@@ -305,6 +314,7 @@ cor <- function(
 
     options <- corOptions$new(
         vars = vars,
+        run = run,
         type = type,
         mat = mat,
         missing = missing,

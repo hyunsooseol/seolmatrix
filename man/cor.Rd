@@ -7,6 +7,7 @@
 cor(
   data,
   vars,
+  run = FALSE,
   type = "pearson",
   mat = TRUE,
   missing = "pairwise.complete.obs",
@@ -25,6 +26,8 @@ cor(
 \item{data}{The data as a data frame.}
 
 \item{vars}{.}
+
+\item{run}{.}
 
 \item{type}{.}
 
