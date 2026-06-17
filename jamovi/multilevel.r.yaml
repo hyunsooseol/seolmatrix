@@ -69,6 +69,8 @@ items:
     - name:  plot
       title: 'Correlation Heatmap'
       type:  Image
+      width: 600
+      height: 450      
       requiresData: true
       visible: (plot)
       renderFun: .plot

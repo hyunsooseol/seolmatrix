@@ -55,6 +55,8 @@ items:
     - name: plot
       title: 'Network plot'
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot
       visible: (plot)
       refs: qgraph
@@ -70,6 +72,8 @@ items:
     - name: plot2
       title: 'Centrality plot '
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot2
       visible: (plot2)
       refs: qgraph
@@ -143,6 +147,8 @@ items:
     - name:  plot3
       title: 'Correlation Heatmap'
       type:  Image
+      width: 600
+      height: 450      
       requiresData: true
       visible: (plot3)
       renderFun: .plot3

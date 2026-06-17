@@ -72,6 +72,8 @@ items:
     - name: plot3
       title: 'Matrix plot'
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot3
       visible: (plot3)
       refs: corrplot
@@ -84,6 +86,8 @@ items:
     - name: plot
       title: 'Gaussian Graphical Model'
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot
       visible: (plot)
       refs: qgraph
@@ -94,6 +98,8 @@ items:
     - name: plot2
       title: 'Centrality plot '
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot2
       visible: (plot2)
       refs: qgraph
@@ -106,6 +112,8 @@ items:
     - name: plot1
       title: 'Partial plot'
       type: Image
+      width: 600
+      height: 450      
       renderFun: .plot1
       visible: (plot1)
       refs: qgraph

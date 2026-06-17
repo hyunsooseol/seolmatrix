@@ -84,6 +84,8 @@ items:
     - name: screePlot
       title: "Scree Plot with Parallel Analysis"
       type: Image
+      width: 600
+      height: 450      
       renderFun: .screePlot
       visible: (screePlot)
       clearWith:
@@ -93,6 +95,8 @@ items:
     - name: MapCurvePlot
       title: "MAP Curves (Average Squared Correlations)"
       type: Image
+      width: 600
+      height: 450      
       renderFun: .MapCurvePlot
       visible: (MapCurvePlot)
       clearWith:

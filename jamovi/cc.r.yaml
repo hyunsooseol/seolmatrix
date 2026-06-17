@@ -192,6 +192,8 @@ items:
       type: Image
       visible: (plot)
       renderFun: .plot
+      width: 600
+      height: 450      
       clearWith:
         - set1
         - set2

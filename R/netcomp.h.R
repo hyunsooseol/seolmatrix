@@ -156,6 +156,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                             options=options,
                             name="plotGroup1",
                             title="",
+                            width=600,
+                            height=450,
                             renderFun=".plotGroup1",
                             clearWith=list(
                                 "vars",
@@ -166,6 +168,8 @@ netcompResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                             options=options,
                             name="plotGroup2",
                             title="",
+                            width=600,
+                            height=450,
                             renderFun=".plotGroup2",
                             clearWith=list(
                                 "vars",

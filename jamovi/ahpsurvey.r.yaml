@@ -78,6 +78,8 @@ items:
       title:  "Compare different average methods"
       type:  Image
       visible: (plot1)
+      width: 600
+      height: 450
       renderFun: .plot1
       refs: ahpsurvey
       requiresData: true

@@ -27,6 +27,8 @@ items:
     - name:  plot
       title: 'Hierarchical clustering'
       type:  Image
+      width: 600
+      height: 450      
       visible: (plot)
       refs: corrplot
       renderFun: .plot

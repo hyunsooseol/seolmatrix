@@ -290,6 +290,8 @@ items:
     - name: plot1
       title: 'D study for one facet design'
       type:  Image
+      width: 600
+      height: 450      
       visible: (plot1)
       renderFun: .plot1
       requiresData: TRUE

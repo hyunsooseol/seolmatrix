@@ -352,6 +352,8 @@ ccResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Canonical correlation plot",
                 visible="(plot)",
                 renderFun=".plot",
+                width=600,
+                height=450,
                 clearWith=list(
                     "set1",
                     "set2")))

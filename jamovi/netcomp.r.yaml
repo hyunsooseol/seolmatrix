@@ -21,6 +21,8 @@ items:
         - name: plotGroup1
           title: ''
           type: Image
+          width: 600
+          height: 450
           renderFun: .plotGroup1
           clearWith:
               - vars
@@ -30,6 +32,8 @@ items:
         - name: plotGroup2
           title: ''
           type: Image
+          width: 600
+          height: 450          
           renderFun: .plotGroup2
           clearWith:
             - vars
